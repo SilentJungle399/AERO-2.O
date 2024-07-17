@@ -99,11 +99,6 @@ export default function Scene() {
         </Suspense>
       </Canvas>
     </div>
-      {/* Render ContactUsPage outside of the Canvas */}
-      <div>
-
-      {/* <ContactUsPage /> */}
-      </div>
     </>
   );
 }

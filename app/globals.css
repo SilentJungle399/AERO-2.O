@@ -2,6 +2,22 @@
 @tailwind components;
 @tailwind utilities;
 
+@keyframes blob {
+  0% {
+    transform: translate(0px, 0px) scale(1);
+  }
+  33% {
+    transform: translate(30px, -50px) scale(1.1);
+  }
+  66% {
+    transform: translate(-20px, 20px) scale(0.9);
+  }
+  100% {
+    transform: translate(0px, 0px) scale(1);
+  }
+}
+
+
 :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 255, 255, 255; /* White background */
@@ -14,6 +30,109 @@
     --background-start-rgb: 34, 34, 34;  /* Dark background start */
     --background-end-rgb: 34, 34, 34;    /* Dark background end */
   }
+}
+
+@keyframes move-twink-back {
+  from {background-position:0 0;}
+  to {background-position:-10000px 5000px;}
+}
+
+@keyframes move-clouds-back {
+  from {background-position:0 0;}
+  to {background-position:10000px 0;}
+}
+
+.stars, .twinkling, .clouds {
+  position:absolute;
+  top:0;
+  left:0;
+  right:0;
+  bottom:0;
+  width:100%;
+  height:100%;
+  display:block;
+}
+
+.stars {
+  background:#000 url(http://www.script-tutorials.com/demos/360/images/stars.png) repeat top center;
+  z-index:0;
+}
+
+.twinkling{
+  background:transparent url(http://www.script-tutorials.com/demos/360/images/twinkling.png) repeat top center;
+  z-index:1;
+  animation:move-twink-back 200s linear infinite;
+}
+@keyframes twinkle {
+  0% { opacity: 0; }
+  50% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+.clouds{
+  background:transparent url(http://www.script-tutorials.com/demos/360/images/clouds.png) repeat top center;
+  z-index:2;
+  opacity: .4;
+  animation:move-clouds-back 200s linear infinite;
+}
+@keyframes wave {
+  0% { transform: translateX(0) translateZ(0) scaleY(1); }
+  50% { transform: translateX(-25%) translateZ(0) scaleY(0.55); }
+  100% { transform: translateX(-50%) translateZ(0) scaleY(1); }
+}
+
+.wave {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  position: absolute;
+  width: 200%;
+  height: 200%;
+  animation: wave 10s -3s linear infinite;
+  transform-origin: 50% 48%;
+  left: -50%;
+  top: 3%;
+}
+
+.wave:nth-of-type(2) {
+  top: 10%;
+  animation: wave 18s linear reverse infinite;
+  opacity: 0.8;
+}
+
+.wave:nth-of-type(3) {
+  top: 15%;
+  animation: wave 20s -1s linear infinite;
+  opacity: 0.6;
+}
+@keyframes blob {
+  0% {
+    transform: translate(0px, 0px) scale(1);
+  }
+  33% {
+    transform: translate(30px, -50px) scale(1.1);
+  }
+  66% {
+    transform: translate(-20px, 20px) scale(0.9);
+  }
+  100% {
+    transform: translate(0px, 0px) scale(1);
+  }
+}
+
+.animate-blob {
+  animation: blob 7s infinite;
+}
+
+.animation-delay-2000 {
+  animation-delay: 2s;
+}
+
+.animation-delay-4000 {
+  animation-delay: 4s;
+}
+
+.perspective-1000 {
+  perspective: 1000px;
 }
 
 html,
@@ -239,6 +358,37 @@ body {
   .planes-heading-text {
     top: 1080px;
     left: 850px;
+    font-size: 40px;
+    line-height: 70px;
+  }
+} 
+
+/* //samsung z flip */
+@media only screen and (max-width: 361px) {
+  .aero-heading-text {
+    top: -190px;
+    left: 1190px;
+    font-size: 50px;
+    line-height: 45px;
+  }
+ ;
+
+  .subtitle {
+    font-size: 11px;
+    padding-top: 7px;
+    margin-left: 10px;
+  }
+
+  .drones-heading-text {
+    top: 355px;
+    left: 940px;
+    font-size: 40px;
+    line-height: 70px;
+  }
+
+  .planes-heading-text {
+    top: 1080px;
+    left: 940px;
     font-size: 40px;
     line-height: 70px;
   }
