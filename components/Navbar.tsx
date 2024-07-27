@@ -5,22 +5,209 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { div } from "three/examples/jsm/nodes/Nodes.js";
 import { useRouter } from "next/navigation";
+import { FaArrowCircleDown, FaBell, FaChevronCircleDown, FaDropbox } from "react-icons/fa";
 
+import { initializeApp } from "firebase/app";
+import firebaseConfig from "@/Backend/Firebseconfig/FirebaseConfig";
+import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const googleProvider = new GoogleAuthProvider();
+
+// NotificationModal component
+const NotificationModal = ({ notifications, closeModal }) => {
+  // Sort notifications: Unread first, then Read
+  const sortedNotifications = notifications.sort((a, b) => {
+    return a.read === b.read
+      ? new Date(b.notification.created_at) -
+          new Date(a.notification.created_at)
+      : a.read
+      ? 1
+      : -1;
+  });
+
+  const unreadNotifications = sortedNotifications.filter(
+    (notification) => !notification.read
+  );
+  const readNotifications = sortedNotifications.filter(
+    (notification) => notification.read
+  );
+
+  return (
+    <div className="fixed inset-0 z-10 flex items-center justify-center bg-black bg-opacity-50">
+      <div className="bg-white text-gray-900 rounded-lg shadow-lg w-1/2 p-6">
+        <div className="flex justify-between items-center border-b pb-2 mb-4">
+          <h2 className="flex items-center space-x-2 text-xl font-semibold">
+            <FaBell className="text-yellow-400 mr-3" /> Notifications
+          </h2>
+          <button
+            onClick={closeModal}
+            className="text-gray-500 hover:text-gray-700"
+          >
+            &times;
+          </button>
+        </div>
+        <div className="overflow-y-auto max-h-80">
+          {/* Unread Notifications */}
+          {unreadNotifications.length > 0 && (
+            <div className="mb-4">
+              <h3 className="text-lg font-semibold text-gray-800 mb-2">
+                Unread Notifications
+              </h3>
+              {unreadNotifications.map((notification, index) => (
+                <Link
+                  key={index}
+                  href={`/notifications/${notification.notification._id}`}
+                  onClick={closeModal}
+                >
+                  <div className="mb-4 p-3 bg-blue-50 border-l-4 border-blue-500 rounded-lg">
+                    <p className="text-sm text-gray-700 font-medium">
+                      {notification.notification.notifications_title}
+                    </p>
+                    <span className="text-xs text-gray-500">
+                      {new Date(
+                        notification.notification.created_at
+                      ).toLocaleDateString()}
+                    </span>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          )}
+
+          {/* Read Notifications */}
+          {readNotifications.length > 0 && (
+            <div>
+              <h3 className="text-lg font-semibold text-gray-800 mb-2">
+                Read Notifications
+              </h3>
+              {readNotifications.map((notification, index) => (
+                <Link
+                  key={index}
+                  href={`/notifications/${notification.notification._id}`}
+                  onClick={closeModal}
+                >
+                  <div className="mb-4 p-3 bg-gray-100 rounded-lg">
+                    <p className="text-sm text-gray-700">
+                      {notification.notification.notifications_title}
+                    </p>
+                    <span className="text-xs text-gray-500">
+                      {new Date(
+                        notification.notification.created_at
+                      ).toLocaleDateString()}
+                    </span>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          )}
+
+          {/* No notifications available */}
+          {unreadNotifications.length === 0 &&
+            readNotifications.length === 0 && (
+              <p className="text-sm text-gray-500">
+                No notifications available
+              </p>
+            )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Main Navbar component
 const Navbar: React.FC = () => {
+  const [eventsDropdownOpen, setEventsDropdownOpen] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [profileOpen, setProfileOpen] = useState(false); // State for profile dropdown
+  const [profileOpen, setProfileOpen] = useState(false);
   const [username, setUserName] = useState("");
   const [profile, setProfile] = useState("");
+  const [error, setError] = useState("");
+  const [newNotificationCount, setNewNotificationCount] = useState(0);
+  const [isAdmin, setAdmin] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [notifications, setNotifications] = useState([]);
+  const [id, setId] = useState("");
 
   const router = useRouter();
+  const pathname = usePathname();
+
+  // Google Sign In function
+  const signInWithGoogle = async () => {
+    try {
+      const result = await signInWithPopup(auth, googleProvider);
+      const user = result.user;
+      const token = await user.getIdToken();
+  
+      const res = await fetch("http://localhost:5000/api/auth/google-signin", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ user }),
+      });
+  
+      if (res.ok) {
+        const data = await res.json();
+        console.log(data);
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("_id", data._id);
+        localStorage.setItem("name", data.full_name);
+        localStorage.setItem("profile_pic", data.profile_pic);
+        localStorage.setItem("role", data.role);        
+          window.location.reload();
+        
+      } else {
+        setError("Failed to sign in with Google");
+      }
+    } catch (error) {
+      setError("Error signing in with Google");
+    }
+  };
+  
+
+  // Fetch notifications function
+  const fetchNotifications = async () => {
+    const id = localStorage.getItem("_id");
+    if (!id) {
+      console.error("User ID not found in localStorage");
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        `http://localhost:5000/api/users/notifications/${id}`
+      );
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      const data = await response.json();
+
+      const notifications = data.notifications;
+      const unreadCount = data.unreadCount;
+
+      const sortedNotifications = notifications.sort((a, b) => {
+        if (a.read === b.read) {
+          return new Date(b.created_at) - new Date(a.created_at);
+        }
+        return a.read ? 1 : -1;
+      });
+
+      setNewNotificationCount(unreadCount);
+      setNotifications(sortedNotifications);
+    } catch (error) {
+      console.error("Failed to fetch notifications:", error);
+    }
+  };
+
+  // Logout function
   const logout = async () => {
     try {
-      // Clear localStorage
       localStorage.clear();
-
-      // Send a logout request to the backend
       const response = await fetch("http://localhost:5000/api/auth/logout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -30,162 +217,46 @@ const Navbar: React.FC = () => {
       if (response.ok) {
         console.log("Logout successful");
         router.push("/login");
-        router.refresh()
-        window.location.reload() 
-        // router.push('/');
-        // Optionally redirect to login or homepage after successful logout
-        // router.push('/login'); // if using Next.js router
+        router.refresh();
+        window.location.reload();
       } else {
         console.error("Logout failed");
-        // Handle logout failure as needed
       }
     } catch (error) {
       console.error("Logout error:", error);
-      // Handle logout error as needed
     }
   };
 
-  const pathname = usePathname();
-  const [id, setId] = useState("");
+  // useEffect for initial data fetching and setup
   useEffect(() => {
+    fetchNotifications();
     const name = localStorage.getItem("name");
     const profile_pic = localStorage.getItem("profile_pic");
     const id = localStorage.getItem("_id");
-    
+    const userRole = localStorage.getItem("role");
 
     if (name && profile_pic) {
       setUserName(name);
       setProfile(profile_pic);
     }
 
-    setId(id || ""); // Use an empty string as fallback if id is null
+    setId(id || "");
+    if(userRole=="admin"){
+      setAdmin(true);
+
+    }
+
+    if (!id) {
+      const timeoutId = setTimeout(() => {
+        signInWithGoogle();
+      }, 1000);
+      return () => clearTimeout(timeoutId);
+    }
   }, []);
 
-  const renderLinks = () => {
-    if (pathname.startsWith("/drones")) {
-      return (
-        <>
-          <Link
-            href="/"
-            className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium caesar-dressing-regular"
-          >
-            Home
-          </Link>
-          <Link
-            href="/drones/blogs"
-            className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium caesar-dressing-regular"
-          >
-            Blogs
-          </Link>
-          <Link
-            href="/drones/events"
-            className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium caesar-dressing-regular"
-          >
-            Events
-          </Link>
-          <Link
-            href="/drones/workshops"
-            className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium caesar-dressing-regular"
-          >
-            Workshops
-          </Link>
-          <Link
-            href="/drones/members"
-            className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium caesar-dressing-regular"
-          >
-            Members
-          </Link>
-        </>
-      );
-    }
-    if (pathname.startsWith("/rcplanes")) {
-      return (
-        <>
-          <Link
-            href="/"
-            className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium caesar-dressing-regular"
-          >
-            Home
-          </Link>
-          <Link
-            href="/rcplanes/blogs"
-            className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium caesar-dressing-regular"
-          >
-            Blogs
-          </Link>
-          <Link
-            href="/rcplanes/events"
-            className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium caesar-dressing-regular"
-          >
-            Events
-          </Link>
-          <Link
-            href="/rcplanes/workshops"
-            className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium caesar-dressing-regular"
-          >
-            Workshops
-          </Link>
-          <Link
-            href="/rcplanes/members"
-            className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium caesar-dressing-regular"
-          >
-            Members
-          </Link>
-        </>
-      );
-    }
-    return (
-      <>
-        <Link
-          href="/"
-          className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium caesar-dressing-regular"
-        >
-          Home
-        </Link>
-        <Link
-          href="/drones"
-          className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium caesar-dressing-regular"
-        >
-          Drones
-        </Link>
-        <Link
-          href="/rcplanes"
-          className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium caesar-dressing-regular"
-        >
-          Rc Planes
-        </Link>
-        <Link
-          href="/meets"
-          className="md:block text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium caesar-dressing-regular"
-        >
-          Meets
-        </Link>
-        <Link
-          href="/inductions"
-          className="md:block text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium caesar-dressing-regular"
-        >
-          Inductions
-        </Link>
-        <Link
-          href="/gallery"
-          className="md:block text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium caesar-dressing-regular"
-        >
-          Gallery
-        </Link>
-        <Link
-          href="/alluminai"
-          className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium caesar-dressing-regular"
-        >
-          ALLuminai
-        </Link>
-        <Link
-          href="/about"
-          className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium caesar-dressing-regular"
-        >
-          About Us
-        </Link>
-      </>
-    );
+  // Handle bell icon click
+  const handleBellClick = () => {
+    setIsModalOpen(true);
   };
 
   return (
@@ -229,38 +300,165 @@ const Navbar: React.FC = () => {
 
             {/* Links for Desktop */}
             <div className="hidden md:flex items-center space-x-2 md:space-x-4 w-full justify-end mr-20">
-              {renderLinks()}
+              {/* admin routes */}
+              {isAdmin&&<Link
+                href="/admin/blogs"
+                className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium caesar-dressing-regular"
+              >
+                Blogs-dashboard
+              </Link>}
+              {isAdmin&&<Link
+                href="/admin/blogs"
+                className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium caesar-dressing-regular"
+              >
+                Events-dashboard
+              </Link>}
+              {isAdmin&&<Link
+                href="/admin/blogs"
+                className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium caesar-dressing-regular"
+              >
+                Inductions-dashboard
+              </Link>}
+              {isAdmin&&<Link
+                href="/admin/blogs"
+                className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium caesar-dressing-regular"
+              >
+                Meets-dashboard
+              </Link>}
+              
+              {/* //usermode routes */}
+              {!isAdmin&&<Link
+                href="/rcplanes/blogs"
+                className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium caesar-dressing-regular"
+              >
+                Blogs
+              </Link>}
+              {!isAdmin&&<Link
+                href="/drones"
+                className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium caesar-dressing-regular"
+              >
+                Drones
+              </Link>}
+              {!isAdmin&&<Link
+                href="/rcplanes"
+                className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium caesar-dressing-regular"
+              >
+                Rc Planes
+              </Link>}
+              {!isAdmin&& <div className="relative group">
+                <button
+                  onMouseOver={() => setEventsDropdownOpen(!eventsDropdownOpen)}
+                  className="flex items-center text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium caesar-dressing-regular"
+                >
+                  Activities <FaChevronCircleDown className="ml-1 w-5 h-5"/>
+                </button>
+                {eventsDropdownOpen && (
+                  <div className="absolute left-0 mt-2 w-48 rounded-md shadow-lg ring-1 ring-black ring-opacity-5">
+                    <div
+                      className="py-1"
+                      role="menu"
+                      aria-orientation="vertical"
+                    >
+                      {<Link
+                        href="/events"
+                        className="caesar-dressing-regular block px-4 py-2 text-md text-gray-300 hover:text-[#3494D1]"
+                        onClick={() => setEventsDropdownOpen(!eventsDropdownOpen)}
+                      >
+                        Events
+                      </Link>}
+                      {<Link
+                        href="/workshops"
+                        className="caesar-dressing-regular block px-4 py-2 text-md text-gray-300 hover:text-[#3494D1]"
+                        onClick={() => setEventsDropdownOpen(!eventsDropdownOpen)}
+                      >
+                        Workshops
+                      </Link>}
+                      {<Link
+                        href="/techevents"
+                        className="caesar-dressing-regular block px-4 py-2 text-md text-gray-300 hover:text-[#3494D1]"
+                        onClick={() => setEventsDropdownOpen(!eventsDropdownOpen)}
+                      >
+                        Techspardha Events
+                      </Link>}
+                    </div>
+                  </div>
+                )}
+              </div>}
+              {!isAdmin&&<Link
+                href="/meets"
+                className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium caesar-dressing-regular"
+              >
+                Meets
+              </Link>}
+              {!isAdmin&&<Link
+                href="/inductions"
+                className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium caesar-dressing-regular"
+              >
+                Inductions
+              </Link>}
+             { !isAdmin&&<Link
+                href="/gallery"
+                className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium caesar-dressing-regular"
+              >
+                Gallery
+              </Link>}
+              {!isAdmin&&<Link
+                href="/members"
+                className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium caesar-dressing-regular"
+              >
+                Members
+              </Link>}
+
               {!id ? (
                 <Link
-                  href="/login"
-                  style={{ marginLeft: "77px", marginBottom: "3px" }}
-                  className="bg-[#3494D1] text-white hover:text-[#3494D1] hover:bg-white px-7 py-1 rounded-sm text-sm font-medium caesar-dressing-regular "
+                  href="/signup"
+                  className="bg-[#3494D1] text-white hover:text-[#3494D1] hover:bg-white px-7 py-1 rounded-sm text-sm font-medium caesar-dressing-regular"
                 >
-                  Login
+                  Signup
                 </Link>
               ) : (
-                <div className="relative">
-                  <button
-                    className="nav-link ml-10"
-                    onClick={() => setProfileOpen(!profileOpen)}
-                  >
-                    <img
-                      src={profile}
-                      alt="Profile Picture"
-                      width={44}
-                      height={44}
-                      className="rounded-full mr-2"
-                    />
-                  </button>
+                <div className="relative flex items-center text-yellow-300 justify-center">
+                  <div className="flex items-center cursor-pointer">
+                    <div className="relative flex items-center">
+                      <FaBell
+                        className={`w-8 h-8 cursor-pointer ${
+                          newNotificationCount > 0
+                            ? "text-yellow-400"
+                            : "text-white"
+                        }`}
+                        onClick={handleBellClick}
+                      />
+
+                      {newNotificationCount > 0 && (
+                        <div
+                          className="absolute top-0 right-0 flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-red-500 rounded-full -translate-x-1/2 translate-y-1/2"
+                          onClick={handleBellClick}
+                        >
+                          {newNotificationCount}
+                        </div>
+                      )}
+                    </div>
+                    <button
+                      className="nav-link ml-3"
+                      onClick={() => setProfileOpen(!profileOpen)}
+                    >
+                      <img
+                        src={profile}
+                        alt="Profile Picture"
+                        width={44}
+                        height={44}
+                        className="rounded-full"
+                      />
+                    </button>
+                  </div>
                   {profileOpen && (
-                    <div className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+                    <div className="top-16 absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
                       <div
                         className="py-1"
                         role="menu"
                         aria-orientation="vertical"
                         aria-labelledby="options-menu"
                       >
-                        {/* Example dropdown items */}
                         <Link
                           href="/profile"
                           className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-200"
@@ -280,15 +478,22 @@ const Navbar: React.FC = () => {
                             "My Profile"
                           )}
                         </Link>
+                        {isAdmin === "admin" && (
+                          <Link
+                            href="/admin-dashboard"
+                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                          >
+                            Admin Dashboard
+                          </Link>
+                        )}
                         <Link
-                          href="/settings"
+                          href="/notifications"
                           className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                         >
                           Notifications
                         </Link>
-                        
                         <Link
-                          href="/settings"
+                          href="/complete-profile"
                           className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                         >
                           Complete Profile
@@ -308,6 +513,13 @@ const Navbar: React.FC = () => {
                         </button>
                       </div>
                     </div>
+                  )}
+
+                  {isModalOpen && (
+                    <NotificationModal
+                      notifications={notifications}
+                      closeModal={() => setIsModalOpen(false)}
+                    />
                   )}
                 </div>
               )}
@@ -343,46 +555,65 @@ const Navbar: React.FC = () => {
           {!id && (
             <Link
               href="/login"
-              style={{ marginLeft: "77px", marginBottom: "3px" }}
-              className="bg-[#3494D1] text-white hover:text-[#3494D1]  px-4 rounded-sm text-sm font-medium caesar-dressing-regular "
+              className="bg-[#3494D1] text-white hover:text-[#3494D1] px-4 rounded-sm text-sm font-medium caesar-dressing-regular"
             >
               Login
             </Link>
           )}
-          {/* Profile dropdown */}
-
-          <button
-            className="nav-link"
-            style={{
-              marginLeft: "140px",
-              marginBottom: "3px",
-              zIndex: "12",
-              position: "relative",
-            }}
-            onClick={() => setProfileOpen(!profileOpen)}
-          >
-            <img
-              src={profile}
-              alt="Profile Picture"
-              width={44}
-              height={44}
-              className="rounded-full mr-2"
-            />
-          </button>
+          {/* Profile dropdown for mobile */}
+          {id && (
+            <button
+              className="nav-link"
+              style={{
+                marginLeft: "140px",
+                marginBottom: "3px",
+                zIndex: "12",
+                position: "relative",
+              }}
+              onClick={() => setProfileOpen(!profileOpen)}
+            >
+              <img
+                src={profile}
+                alt="Profile Picture"
+                width={44}
+                height={44}
+                className="rounded-full mr-2"
+              />
+            </button>
+          )}
           {profileOpen && (
-            <div className="origin-top-right absolute right-90  w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+            <div className="origin-top-right absolute right-0 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
               <div
                 className="py-1"
                 role="menu"
                 aria-orientation="vertical"
                 aria-labelledby="options-menu"
               >
-                {/* Example dropdown items */}
                 <Link
                   href="/profile"
                   className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                 >
                   My Profile
+                </Link>
+                {isAdmin === "admin" && (
+                  <Link
+                    href="/admin-dashboard"
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  >
+                    Admin Dashboard
+                  </Link>
+                )}
+                <Link
+                  href="/notifications"
+                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                >
+                  Notifications
+                </Link>
+                <Link
+                  href="/complete-profile"
+                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                >
+                  Complete Profile
                 </Link>
                 <Link
                   href="/settings"
@@ -401,7 +632,62 @@ const Navbar: React.FC = () => {
             </div>
           )}
 
-          <div className="flex flex-col space-y-4">{renderLinks()}</div>
+          <div className="flex flex-col space-y-4">
+            <Link
+              href="/rcplanes/blogs"
+              className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium caesar-dressing-regular"
+            >
+              Blogs
+            </Link>
+            <Link
+              href="/rcplanes/events"
+              className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium caesar-dressing-regular"
+            >
+              Events
+            </Link>
+            <Link
+              href="/drones"
+              className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium caesar-dressing-regular"
+            >
+              Drones
+            </Link>
+            <Link
+              href="/rcplanes"
+              className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium caesar-dressing-regular"
+            >
+              Rc Planes
+            </Link>
+            <Link
+              href="/meets"
+              className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium caesar-dressing-regular"
+            >
+              Meets
+            </Link>
+            <Link
+              href="/inductions"
+              className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium caesar-dressing-regular"
+            >
+              Inductions
+            </Link>
+            <Link
+              href="/gallery"
+              className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium caesar-dressing-regular"
+            >
+              Gallery
+            </Link>
+            <Link
+              href="/alluminai"
+              className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium caesar-dressing-regular"
+            >
+              ALLuminai
+            </Link>
+            <Link
+              href="/about"
+              className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium caesar-dressing-regular"
+            >
+              About Us
+            </Link>
+          </div>
         </div>
       </nav>
     </div>

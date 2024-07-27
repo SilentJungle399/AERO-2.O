@@ -1,3 +1,4 @@
+const { authDomain } = require("../Firebseconfig/FirebaseConfig");
 const {
   sendVerificationEmail,
   sendSignupEmailNotification,
@@ -6,6 +7,103 @@ const OtpVerification = require("../models/OtpVerification");
 const User = require("../models/usermodel");
 const bcrypt = require("bcrypt");
 
+var admin = require("firebase-admin");
+
+var serviceAccount = require("../Firebseconfig/Servicekeys.json")
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount)
+});
+
+const getourmembers = async (req, res) => {
+  try {
+    // Fetch all users from the database
+    const users = await User.find();
+
+    // Return the users in the response
+    res.status(200).json(users);
+  } catch (error) {
+    // Handle any errors that might occur
+    console.error('Error fetching users:', error);
+    res.status(500).json({ message: 'Failed to fetch users' });
+  }
+};
+
+
+const googleSignup = async (req, res) => {
+  const firebase_token = req.headers.authorization?.split(' ')[1]; // Extract token from Authorization header
+
+  if (!firebase_token) {
+    return res.status(401).json({ message: 'No token provided' });
+  }
+
+  try {
+    // Verify the Firebase ID token
+    const decodedToken = await admin.auth().verifyIdToken(firebase_token);
+    const { uid, email, name } = decodedToken;
+
+    // Check if the user already exists in the database
+    let user = await User.findOne({ email: email });
+
+    if (!user) {
+      let profile_pic = `https://avatar.iran.liara.run/public/boy?username=${
+        Math.random() * 9000
+      }`;
+      // If the user does not exist, create a new user
+      user = new User({
+        googleId: uid,
+        email,
+        full_name:name,
+        profile_pic
+      });
+
+      await user.save(); // Save the user to the database
+    }
+
+
+    let expiresIn;
+    switch (user.role) {
+      case "admin":
+        expiresIn = 6 * 60 * 60 * 1000; // 6 hours in milliseconds
+        break;
+      case "blogger":
+        expiresIn = 24 * 60 * 60 * 1000; // 1 day in milliseconds
+        break;
+      default:
+        expiresIn = 50 * 24 * 60 * 60 * 1000; // 50 days in milliseconds
+    }
+
+    const token = user.generateAuthToken({ expiresIn });
+    const _id = user._id;
+    const full_name = user.full_name;
+    let profile_pic = user.profile_pic;
+    const role=user.role;
+
+
+    // Set the cookie
+    res.cookie("token", token, {
+      httpOnly: false, // Allow client-side access for development
+      maxAge: expiresIn,
+      path: "/",
+      sameSite: "lax",
+      secure: false, // Allow over HTTP for development
+    });
+
+    // Ensure the cookie is set before sending the response
+    res.setHeader("Set-Cookie", res.getHeader("Set-Cookie"));
+
+    // Send the response after setting the cookie
+    res.status(200).json({ token, _id, full_name, profile_pic,role});
+    // Respond with the user data
+    // res.status(200).json({
+    //   message: 'User signed in successfully',
+    //   user,
+    // });
+  } catch (error) {
+    console.error('Error during Google sign-in:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
 
 
 const uploadProfile = async (req, res) => {
@@ -135,7 +233,7 @@ const otpcheck = async (req, res) => {
 };
 
 const Signup = async (req, res) => {
-  const { email, password } = req.body;
+  const { email, password ,gender} = req.body;
 
   try {
     const existingUser = await User.findOne({ email });
@@ -149,6 +247,7 @@ const Signup = async (req, res) => {
     }
 
     const full_name = verification.full_name;
+
     console.log("Verification:", verification);
 
     if (!verification || !verification.status) {
@@ -167,6 +266,7 @@ const Signup = async (req, res) => {
     const newUser = new User({
       full_name,
       email,
+      gender,
       password,
       date_of_joining,
       profile_pic,
@@ -252,4 +352,4 @@ const logout = async (req, res) => {
   }
 };
 
-module.exports = { Signup, Login, logout, emailVerification, otpcheck,uploadProfile};
+module.exports = { getourmembers,Signup, Login, logout, emailVerification, otpcheck,uploadProfile,googleSignup};

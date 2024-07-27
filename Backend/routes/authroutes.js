@@ -1,5 +1,5 @@
 const express = require('express');
-const { emailVerification, otpcheck, Signup, Login, logout } = require('../controllers/Authentication');
+const { emailVerification, otpcheck, Signup, Login, logout, googleSignup } = require('../controllers/Authentication');
 const { uploadMiddleware } = require('../controllers/uploadMiddleware');
 const multer = require("multer");
 const upload = multer({ storage: multer.memoryStorage() });
@@ -10,6 +10,8 @@ authRoutes.post("/profileupload", upload.single("profile"), uploadMiddleware)
 authRoutes.post("/emailverification", emailVerification);
 authRoutes.post("/otpcheck", otpcheck);
 authRoutes.post('/signup',Signup)
+authRoutes.post('/google-signin',googleSignup)
+
 authRoutes.post("/login", Login);
 authRoutes.post("/logout", logout);
 

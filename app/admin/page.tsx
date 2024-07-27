@@ -4,53 +4,40 @@ import { FaPlane, FaUsers, FaCalendarAlt, FaTools, FaTrophy, FaCog, FaSignOutAlt
 
 export default function AeroClubAdminDashboard() {
   return (
-    <div className="flex h-screen bg-gray-100">
-      {/* Sidebar */}
-      <div className="w-68 bg-blue-800 text-white h-screen fixed">
-        <div className="p-6">
-          <h1 className="text-2xl font-bold">NIT KKR AERO CLUB</h1>
-          <p className="text- mt-1 font-medium">Admin Dashboard</p>
-        </div>
-        <nav className="mt-6">
-          <Link href="/admin" className="flex items-center py-3 px-6 bg-blue-900">
-            <FaPlane className="mr-3" />
-            Dashboard
+    <div className="flex flex-col h-screen bg-gray-100">
+      {/* Top Navigation */}
+      <div className="bg-blue-800 text-white h-16 flex items-center justify-between px-6 fixed w-full top-0 z-10">
+        <h1 className="text-2xl font-bold">NIT KKR AERO CLUB</h1>
+        <nav className="flex items-center space-x-4">
+          <Link href="/admin" className="flex items-center hover:bg-blue-700 p-2 rounded">
+            <FaPlane className="mr-2" /> Dashboard
           </Link>
-          <Link href="/admin/blogs" className="flex items-center py-3 px-6 hover:bg-blue-700">
-            <FaUsers className="mr-3" />
-            Blogs
+          <Link href="/admin/blogs" className="flex items-center hover:bg-blue-700 p-2 rounded">
+            <FaUsers className="mr-2" /> Blogs
           </Link>
-          <Link href="/admin/members" className="flex items-center py-3 px-6 hover:bg-blue-700">
-            <FaUsers className="mr-3" />
-            Members
+          <Link href="/admin/members" className="flex items-center hover:bg-blue-700 p-2 rounded">
+            <FaUsers className="mr-2" /> Members
           </Link>
-          <Link href="/admin/events/create" className="flex items-center py-3 px-6 hover:bg-blue-700">
-            <FaCalendarAlt className="mr-3" />
-            Events
+          <Link href="/admin/events/create" className="flex items-center hover:bg-blue-700 p-2 rounded">
+            <FaCalendarAlt className="mr-2" /> Events
           </Link>
-          <Link href="/admin/projects" className="flex items-center py-3 px-6 hover:bg-blue-700">
-            <FaTools className="mr-3" />
-            Projects
+          <Link href="/admin/projects" className="flex items-center hover:bg-blue-700 p-2 rounded">
+            <FaTools className="mr-2" /> Projects
           </Link>
-          <Link href="/admin/competitions" className="flex items-center py-3 px-6 hover:bg-blue-700">
-            <FaTrophy className="mr-3" />
-            Competitions
+          <Link href="/admin/competitions" className="flex items-center hover:bg-blue-700 p-2 rounded">
+            <FaTrophy className="mr-2" /> Competitions
           </Link>
-          <Link href="/admin/settings" className="flex items-center py-3 px-6 hover:bg-blue-700">
-            <FaCog className="mr-3" />
-            Settings
+          <Link href="/admin/settings" className="flex items-center hover:bg-blue-700 p-2 rounded">
+            <FaCog className="mr-2" /> Settings
+          </Link>
+          <Link href="/logout" className="flex items-center hover:bg-blue-700 p-2 rounded">
+            <FaSignOutAlt className="mr-2" /> Logout
           </Link>
         </nav>
-        <div className="absolute bottom-0 w-64 p-6">
-          <Link href="/logout" className="flex items-center text-white opacity-75 hover:opacity-100">
-            <FaSignOutAlt className="mr-3" />
-            Logout
-          </Link>
-        </div>
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 ml-64 p-8">
+      <div className="flex-1 mt-16 p-8">
         <header className="bg-white shadow-md rounded-lg mb-8">
           <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
             <h1 className="text-3xl font-bold text-gray-900">Aeromodelling Club Dashboard</h1>

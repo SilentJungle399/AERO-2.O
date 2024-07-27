@@ -13,9 +13,10 @@ const storage = getStorage();
 
 const galleryUploadMiddleware = async (req, res, next) => {
   try {
-    if (!req.files || req.files.length === 0) {
-      return res.status(400).json({ message: 'No files uploaded' });
-    }
+    // if (!req.files || req.files.length === 0) {
+
+    //   return res.status(400).json({ message: 'No files uploaded' });
+    // }
 
     const uploadPromises = req.files.map(async (file) => {
       const dateTime = new Date().toISOString();

@@ -7,6 +7,8 @@ const {
   getAllInductions,
   getInduction,
   saveParticipants,
+  getInductionforSelections,
+  sendNotification,
 } = require("../controllers/InductionController");
 const {
   create_meet,
@@ -44,6 +46,8 @@ const { uploadMiddleware } = require("../controllers/uploadMiddleware");
 const { getBlogPostBySlug } = require("../controllers/BlogController");
 const { getAlbum, getAllAlbums, createAlbum, addImageToAlbum } = require("../controllers/GalleryControllers");
 const { galleryUploadMiddleware } = require("../middlewares/GalleryUploadMiddleware");
+const { showAllNotification, showOneNotification } = require("../controllers/NotificationsController");
+const { getourmembers } = require("../controllers/Authentication");
 const upload = multer({
   storage: multer.memoryStorage(),
   limits: {
@@ -51,14 +55,27 @@ const upload = multer({
   },
 });
 
+userRoutes.get("/notifications/:id",showAllNotification);
+
+userRoutes.get("/getourmembers",getourmembers);
+
+userRoutes.post("/:id/notifications",showOneNotification);
+
 userRoutes.post("/createinduction", authMiddleware(["admin"]), createInduction);
 userRoutes.get("/getallinduction", getAllInductions);
 userRoutes.get("/getinduction/:id", getInduction);
+userRoutes.get("/getinductionforselectingstudent/:id", getInductionforSelections);
 userRoutes.post(
   "/register/:id",
-  authMiddleware(["admin", "user", "blogger"]),
+  authMiddleware(["admin", "user", "blogger"]),upload.array('ppt', 100),galleryUploadMiddleware,
   saveParticipants
 );
+userRoutes.post("/sendnotification/:id",authMiddleware(["admin"]),upload.array('notification_file',100),galleryUploadMiddleware,sendNotification);
+
+//////////////////////////////////////////////////////////////////////////////////////////
+
+
+
 userRoutes.post("/createmeet", authMiddleware(["admin"]), create_meet);
 userRoutes.get("/getallmeets", getAllMeets);
 userRoutes.get("/getmeets/:id", getMeet);
@@ -91,22 +108,17 @@ userRoutes.delete("/deleteblog/:id", deleteBlog);
 
 //gallery routes
 userRoutes.post('/createalbum', createAlbum);
-
 // Upload multiple images to an album
 userRoutes.post('/album/:id', upload.array('album_images', 100),galleryUploadMiddleware, addImageToAlbum);
-
 // Get all albums
 userRoutes.get('/albums', getAllAlbums);
-
 // Get a specific album
 userRoutes.get('/albums/:id', getAlbum);
-
-
-
-
-
-
 // .............
+
+
+// notifications route
+// userRoutes.post('/sendnotifiacions',galleryUploadMiddleware,sen)
 
 // Create a new user (Admin only)
 userRoutes.post("/create", authMiddleware(["admin"]), async (req, res) => {

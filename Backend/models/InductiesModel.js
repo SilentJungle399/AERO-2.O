@@ -3,29 +3,37 @@ const { type } = require("os");
 const Schema = mongoose.Schema;
 
 const inductionSchema = new mongoose.Schema({
+    user_id:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    },
+    gender:{
+        type:String,
+        default:""
+    },
     name:{
         type:String,
-        require:true,
+        default:""
     },
     email:{
         type:String,
-        required:true,
+        deafult:""
     },
     roll_no:{
         type:String,
-        required:true
+        default:""
     },
     branch:{
         type:String,
-        required:true,
+        default:""
     },
     phone_number:{
         type:String,
-        required:true,
+        default:""
     },
     year:{
         type:String,
-        required:true,
+        default:""
     },
     answers: [{
         question: {
@@ -41,10 +49,18 @@ const inductionSchema = new mongoose.Schema({
         type: String,
         default: ""
     },
-    files: {
-        type: [],
-        default: ""
-    },
+    uploaded_files: [
+        {
+          url: {
+            type: String,
+            default: "",
+          },
+          file_type: {
+            type: String,
+            default: "",
+          },
+        },
+      ],
     team_preference: {
         type: String,
         default: ""

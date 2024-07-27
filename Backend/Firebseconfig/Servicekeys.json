@@ -1,0 +1,14 @@
+{
+    "type": "service_account",
+    "project_id": "aeromodelling-faeee",
+    "private_key_id": "24d2e2dc559ad3fc44ce98568ae131a2f37518bc",
+    "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQDIUNSPnQpxj1Zb\nwhxFM2qPP7IJs9ZNINQTmcobzTRSNAJFgUDtk7ldsZrappfeAeARHBbfAeNfk7zF\nV9CLXrqS+vLQd3+En8ucxGc98hykQ3bpYAgPcTuVnQCrQwudm3buBhzz0eqP1rlF\nxblCZ68RUp0s1k41Tz6j83V9Uo/Pp39MI8d8Cd3PkbIXMwQ1+foHeI5dkSOgjAgQ\n8N0TKUnEVlNuZdVG345FOgoCt01bxWOhhksnIH2yFtcCutfc9CCYXpGL1p1mUUgD\ndCrWpt+hfzKbiraArlaVMwCzWOhGZVTqSlj+A+GD/w5aJyFddB52wJ0Q0wMMvDbZ\n2wJgJXI7AgMBAAECggEABTrPAdzYu/RBDe44bLoV6x1/mW8/hg34W3alZyppVkgT\nUxs3xbwYl9CeOV0mE966qdew5SuYcxNZV1GemTTk7BdvJXApPR4q47Hg/CYJB2TX\ngupF65lKM/LAZLhAYmH/reEs+lSdqhmyBpdN6eTpFiuw/M2vhwbFnOQrShVQudwa\nu28tFuNe3F2KgC4gpCL3SoKt/SPMHbLHEjYzvsDz+zj6SK6nhyYUwkwJwEH+4Lyy\nVeJQCJ3KcqavHxjuccbtKsr6365LEqX/qEe0/tmDGexZs24aTlo+4q993q/CvUw5\n1+cQare3n53CbGEg7J5VbfcDAEroekQVbVeGd7SGmQKBgQD77/yCk8ZxjQNaMiR8\njJhz+4QSQLr8T76AwKwymFHIeuqvjg9GM9Wnqf5exTzZ8jDm2ugVTEpzIAFpFHju\nk8tLK7EzzjH6nYhHKyyu7G4DwYrbWTd5LnAoC5hrE50WbgVM+TEHUCKqjBHVr2yF\nXhdgqqTG1ZcTd6RyK5cN2YOXtwKBgQDLi78OIv7I6hIHcNuJRJiFE+OnFKOxfY4f\nxyzh/toWlNXLbUob5XaJ71mV8yewy/Gwm24x02Ggks/j3TFfOuPd/q82JGg56MsN\nXwhNmVnuqWzXXeJ3J/es08JM4cV7NNh0P10y499eRMYqIgsPPioDU3LruyxCmHM7\nalhU/xPRnQKBgDdXVCRqyaCP1Tiu4wzo5WQ0z6IizfA2pCYsLKdAhlZ/iaXeksRd\nBoW59cJjmSZW6R8M3wYup/v5/9VRRe9CT9nHUzmKBbiDejgH59zU2qXAkfv08RaR\neNmTEnwS5uLScB+kbXypwbOs6Q4DZtc0//WgBmoW6QTBt0HNCXVlXl6pAoGAKOAq\ngQNEGULwVfAzFjDhVDA3UnFRoi4toXIVMFlGoKxI9u4+qLV/BZo8amGHQfji022T\nRoxFmcKB3yenZ5Fi+0zPENdk2uRGCqxf9X1rUwNRKTrgZL9w/JMV/OyGBQUKxuWG\nqNacH8k95m4pvGjmdP6IIJDZBZKp6W+kx4TmDP0CgYA89J/ergqDK+WhHvCm7BHS\n/D2ZGD5i+6fqsHchYNFKtAol1mbz6kF1xT8C+/UJrmaVutyKcDkenkNR6eJUWnpj\nxujBr1hFIpX5CkRYfaTAgIhYkegUSQowJavw2erXm2KewJf/TcLufEUMdxRBkx9X\nKLzLU/9pbJ/uT9KyW40CAg==\n-----END PRIVATE KEY-----\n",
+    "client_email": "firebase-adminsdk-86fgr@aeromodelling-faeee.iam.gserviceaccount.com",
+    "client_id": "108381181691805086347",
+    "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+    "token_uri": "https://oauth2.googleapis.com/token",
+    "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+    "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-86fgr%40aeromodelling-faeee.iam.gserviceaccount.com",
+    "universe_domain": "googleapis.com"
+  }
+  

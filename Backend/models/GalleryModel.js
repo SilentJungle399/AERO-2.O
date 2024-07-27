@@ -35,6 +35,12 @@ const gallerySchema = new mongoose.Schema({
         type: String,
         default: "",
       },
+      album_likes: [
+        {
+          type: Schema.Types.ObjectId,
+          ref: "User",
+        },
+      ],
     },
   ],
   album_author: [
@@ -43,12 +49,7 @@ const gallerySchema = new mongoose.Schema({
       ref: "User",
     },
   ],
-  album_likes: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: "User",
-    },
-  ],
+  
 });
 
 const GalleryModel = mongoose.model("Gallery", gallerySchema);
