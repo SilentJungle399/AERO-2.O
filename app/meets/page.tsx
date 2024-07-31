@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
@@ -29,7 +29,11 @@ const MeetListPage = () => {
   }, []);
 
   if (loading) {
-    return <div className="text-center text-2xl mt-10 text-white">Loading...</div>;
+    return(
+      <div className='flex items-center justify-center h-screen'>
+        <div className='w-32 h-32 border-b-4 border-t-2 border-blue-500 rounded-full animate-spin'></div>
+      </div>
+    );
   }
 
   return (
@@ -80,7 +84,7 @@ const MeetCard = ({ meet, index }) => {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <div className={`w-5/12 ${isLeft ? 'pr-8' : 'pl-8'}`}>
+      <div className={`md:w-5/6 lg:w-5/12 ${isLeft ? 'pr-8' : 'pl-8'}`}>
         <div className="bg-gray-800 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-102 hover:translate-y-[-2px] relative overflow-hidden group">
           <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-purple-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
           <div className="relative z-10 flex flex-col p-4">

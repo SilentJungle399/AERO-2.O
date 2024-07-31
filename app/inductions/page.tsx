@@ -34,7 +34,12 @@ const InductionSessionsList = () => {
   });
 
   if (loading) {
-    return <p className=" animate-spin rounded-full h-32 w-32 border-t-2 border-b-4 border-blue-500"></p>;
+    return(
+      <div className='flex items-center justify-center h-screen'>
+        <div className='w-32 h-32 border-b-4 border-t-2 border-blue-500 rounded-full animate-spin'></div>
+      </div>
+    )
+    // return <p className=" animate-spin rounded-full h-32 w-32 border-t-2 border-b-4 border-blue-500"></p>;
   }
 
   return (
@@ -53,7 +58,7 @@ const InductionSessionsList = () => {
           <h3 className='text-xl monoton md:text-4xl text-gray-300'>Induction &nbsp;&nbsp; Sessions</h3>
           <h2 className='text-2xl monoton md:text-3xl  text-blue-400 mb-8'>NIT&nbsp;&nbsp; Kurukshetra</h2>
         </div>
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-1">
+        <div className=" mb-4 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-1">
           {sortedSessions.map(session => (
             <div key={session._id} className="bg-gray-800 border  border-gray-700 rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105 hover:border-blue-500">
               <div className="lg:flex">
@@ -76,7 +81,7 @@ const InductionSessionsList = () => {
                       <p><FaClock className="inline mr-2" /><span className="font-semibold">Timing:</span> {session.I_timing}</p>
                     </div>
                     <div className="mt-2 sm:mt-0 text-right">
-                      <p className="mb-1"><FaCalendarAlt className="inline mr-2" /><span className="font-semibold">Deadline:</span> {session.I_deadline}</p>
+                      <p className="text-left mb-1"><FaCalendarAlt className="inline mr-2" /><span className="font-semibold">Deadline:</span> {session.I_deadline}</p>
                       <p className={session.I_active_status ? "text-green-400" : "text-red-400"}>
                         {session.I_active_status ? "Active now " : "Submission closed"}
                       <FaMouse className="inline mr-2" />

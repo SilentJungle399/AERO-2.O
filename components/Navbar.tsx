@@ -23,10 +23,10 @@ const NotificationModal = ({ notifications, closeModal }) => {
   const sortedNotifications = notifications.sort((a, b) => {
     return a.read === b.read
       ? new Date(b.notification.created_at) -
-          new Date(a.notification.created_at)
+      new Date(a.notification.created_at)
       : a.read
-      ? 1
-      : -1;
+        ? 1
+        : -1;
   });
 
   const unreadNotifications = sortedNotifications.filter(
@@ -141,7 +141,7 @@ const Navbar: React.FC = () => {
       const result = await signInWithPopup(auth, googleProvider);
       const user = result.user;
       const token = await user.getIdToken();
-  
+
       const res = await fetch("http://localhost:5000/api/auth/google-signin", {
         method: "POST",
         headers: {
@@ -150,7 +150,7 @@ const Navbar: React.FC = () => {
         },
         body: JSON.stringify({ user }),
       });
-  
+
       if (res.ok) {
         const data = await res.json();
         console.log(data);
@@ -158,9 +158,9 @@ const Navbar: React.FC = () => {
         localStorage.setItem("_id", data._id);
         localStorage.setItem("name", data.full_name);
         localStorage.setItem("profile_pic", data.profile_pic);
-        localStorage.setItem("role", data.role);        
-          window.location.reload();
-        
+        localStorage.setItem("role", data.role);
+        window.location.reload();
+
       } else {
         setError("Failed to sign in with Google");
       }
@@ -168,7 +168,7 @@ const Navbar: React.FC = () => {
       setError("Error signing in with Google");
     }
   };
-  
+
 
   // Fetch notifications function
   const fetchNotifications = async () => {
@@ -241,7 +241,7 @@ const Navbar: React.FC = () => {
     }
 
     setId(id || "");
-    if(userRole=="admin"){
+    if (userRole == "admin") {
       setAdmin(true);
 
     }
@@ -301,110 +301,104 @@ const Navbar: React.FC = () => {
             {/* Links for Desktop */}
             <div className="hidden md:flex items-center space-x-2 md:space-x-4 w-full justify-end mr-20">
               {/* admin routes */}
-              {isAdmin&&<Link
+              {isAdmin && <Link
                 href="/admin/blogs"
-                className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium caesar-dressing-regular"
+                className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular"
               >
                 Blogs-dashboard
               </Link>}
-              {isAdmin&&<Link
+              {isAdmin && <Link
                 href="/admin/blogs"
-                className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium caesar-dressing-regular"
+                className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular"
               >
                 Events-dashboard
               </Link>}
-              {isAdmin&&<Link
+              {isAdmin && <Link
                 href="/admin/blogs"
-                className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium caesar-dressing-regular"
+                className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular"
               >
                 Inductions-dashboard
               </Link>}
-              {isAdmin&&<Link
+              {isAdmin && <Link
                 href="/admin/blogs"
-                className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium caesar-dressing-regular"
+                className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular"
               >
                 Meets-dashboard
               </Link>}
-              
+
               {/* //usermode routes */}
-              {!isAdmin&&<Link
+              {!isAdmin && <Link
                 href="/rcplanes/blogs"
-                className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium caesar-dressing-regular"
+                className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular"
               >
                 Blogs
               </Link>}
-              {!isAdmin&&<Link
+              {!isAdmin && <Link
                 href="/drones"
-                className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium caesar-dressing-regular"
+                className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular"
               >
                 Drones
               </Link>}
-              {!isAdmin&&<Link
+              {!isAdmin && <Link
                 href="/rcplanes"
-                className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium caesar-dressing-regular"
+                className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular"
               >
                 Rc Planes
               </Link>}
-              {!isAdmin&& <div className="relative group">
-                <button
-                  onMouseOver={() => setEventsDropdownOpen(!eventsDropdownOpen)}
-                  className="flex items-center text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium caesar-dressing-regular"
-                >
-                  Activities <FaChevronCircleDown className="ml-1 w-5 h-5"/>
-                </button>
-                {eventsDropdownOpen && (
-                  <div className="absolute left-0 mt-2 w-48 rounded-md shadow-lg ring-1 ring-black ring-opacity-5">
-                    <div
-                      className="py-1"
-                      role="menu"
-                      aria-orientation="vertical"
-                    >
-                      {<Link
+              {!isAdmin && (
+                <div className="relative group">
+                  <button
+                    className="flex items-center text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular"
+                  >
+                    Activities <FaChevronCircleDown className="ml-1 w-5 h-5" />
+                  </button>
+                  <div
+                    className="absolute left-0 mt-2 w-48 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 backdrop-blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                  >
+                    <div className="py-1" role="menu" aria-orientation="vertical">
+                      <Link
                         href="/events"
-                        className="caesar-dressing-regular block px-4 py-2 text-md text-gray-300 hover:text-[#3494D1]"
-                        onClick={() => setEventsDropdownOpen(!eventsDropdownOpen)}
+                        className="bebas-neue-regular block px-4 py-2 text-md text-gray-300 hover:text-[#3494D1]"
                       >
                         Events
-                      </Link>}
-                      {<Link
+                      </Link>
+                      <Link
                         href="/workshops"
-                        className="caesar-dressing-regular block px-4 py-2 text-md text-gray-300 hover:text-[#3494D1]"
-                        onClick={() => setEventsDropdownOpen(!eventsDropdownOpen)}
+                        className="bebas-neue-regular block px-4 py-2 text-md text-gray-300 hover:text-[#3494D1]"
                       >
                         Workshops
-                      </Link>}
-                      {<Link
+                      </Link>
+                      <Link
                         href="/techevents"
-                        className="caesar-dressing-regular block px-4 py-2 text-md text-gray-300 hover:text-[#3494D1]"
-                        onClick={() => setEventsDropdownOpen(!eventsDropdownOpen)}
+                        className="bebas-neue-regular block px-4 py-2 text-md text-gray-300 hover:text-[#3494D1]"
                       >
                         Techspardha Events
-                      </Link>}
+                      </Link>
                     </div>
                   </div>
-                )}
-              </div>}
-              {!isAdmin&&<Link
+                </div>
+              )}
+              {!isAdmin && <Link
                 href="/meets"
-                className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium caesar-dressing-regular"
+                className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular"
               >
-                Meets
+              Meets
               </Link>}
-              {!isAdmin&&<Link
+              {!isAdmin && <Link
                 href="/inductions"
-                className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium caesar-dressing-regular"
+                className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular"
               >
                 Inductions
               </Link>}
-             { !isAdmin&&<Link
+              {!isAdmin && <Link
                 href="/gallery"
-                className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium caesar-dressing-regular"
+                className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular"
               >
                 Gallery
               </Link>}
-              {!isAdmin&&<Link
+              {!isAdmin && <Link
                 href="/members"
-                className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium caesar-dressing-regular"
+                className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular"
               >
                 Members
               </Link>}
@@ -412,7 +406,7 @@ const Navbar: React.FC = () => {
               {!id ? (
                 <Link
                   href="/signup"
-                  className="bg-[#3494D1] text-white hover:text-[#3494D1] hover:bg-white px-7 py-1 rounded-sm text-sm font-medium caesar-dressing-regular"
+                  className="bg-[#3494D1] text-white hover:text-[#3494D1] hover:bg-white px-7 py-1 rounded-sm text-sm font-medium bebas-neue-regular"
                 >
                   Signup
                 </Link>
@@ -421,11 +415,10 @@ const Navbar: React.FC = () => {
                   <div className="flex items-center cursor-pointer">
                     <div className="relative flex items-center">
                       <FaBell
-                        className={`w-8 h-8 cursor-pointer ${
-                          newNotificationCount > 0
-                            ? "text-yellow-400"
-                            : "text-white"
-                        }`}
+                        className={`w-8 h-8 cursor-pointer ${newNotificationCount > 0
+                          ? "text-yellow-400"
+                          : "text-white"
+                          }`}
                         onClick={handleBellClick}
                       />
 
@@ -529,9 +522,8 @@ const Navbar: React.FC = () => {
 
         {/* Sidebar for Mobile */}
         <div
-          className={`fixed inset-y-0 left-0 transform ${
-            sidebarOpen ? "translate-x-0" : "-translate-x-full"
-          } md:hidden transition-transform duration-300 ease-in-out bg-black bg-opacity-90 w-64 p-4 z-50`}
+          className={`fixed inset-y-0 left-0 transform ${sidebarOpen ? "translate-x-0" : "-translate-x-full"
+            } md:hidden transition-transform duration-300 ease-in-out bg-black bg-opacity-90 w-64 p-4 z-50`}
         >
           <button
             className="text-white focus:outline-none mb-4"
@@ -554,8 +546,9 @@ const Navbar: React.FC = () => {
           </button>
           {!id && (
             <Link
+            onClick={() => setSidebarOpen(!sidebarOpen)}
               href="/login"
-              className="bg-[#3494D1] text-white hover:text-[#3494D1] px-4 rounded-sm text-sm font-medium caesar-dressing-regular"
+              className="bg-[#3494D1] text-white hover:text-[#3494D1] px-4 rounded-sm text-sm font-medium bebas-neue-regular"
             >
               Login
             </Link>
@@ -634,59 +627,67 @@ const Navbar: React.FC = () => {
 
           <div className="flex flex-col space-y-4">
             <Link
+              onClick={() => setSidebarOpen(!sidebarOpen)}
               href="/rcplanes/blogs"
-              className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium caesar-dressing-regular"
+              className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular"
             >
               Blogs
             </Link>
             <Link
+              onClick={() => setSidebarOpen(!sidebarOpen)}
               href="/rcplanes/events"
-              className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium caesar-dressing-regular"
+              className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular"
             >
               Events
             </Link>
             <Link
+              onClick={() => setSidebarOpen(!sidebarOpen)}
               href="/drones"
-              className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium caesar-dressing-regular"
+              className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular"
             >
               Drones
             </Link>
             <Link
+              onClick={() => setSidebarOpen(!sidebarOpen)}
               href="/rcplanes"
-              className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium caesar-dressing-regular"
+              className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular"
             >
               Rc Planes
             </Link>
             <Link
+              onClick={() => setSidebarOpen(!sidebarOpen)}
               href="/meets"
-              className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium caesar-dressing-regular"
+              className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular"
             >
               Meets
             </Link>
             <Link
+              onClick={() => setSidebarOpen(!sidebarOpen)}
               href="/inductions"
-              className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium caesar-dressing-regular"
+              className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular"
             >
+
               Inductions
             </Link>
             <Link
+              onClick={() => setSidebarOpen(!sidebarOpen)}
               href="/gallery"
-              className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium caesar-dressing-regular"
+              className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular"
             >
               Gallery
             </Link>
-            <Link
+            {/* <Link
               href="/alluminai"
-              className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium caesar-dressing-regular"
+              className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular"
             >
               ALLuminai
             </Link>
             <Link
               href="/about"
-              className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium caesar-dressing-regular"
+              className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular"
             >
               About Us
-            </Link>
+            </Link> */}
           </div>
         </div>
       </nav>

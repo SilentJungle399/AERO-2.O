@@ -32,7 +32,7 @@ class ContactUsPage extends Component {
 
         {/* Get in Touch Form */}
         <div className="mb-6 ">
-          <form className="space-y-4 max-w-6xl mx-auto">
+          <form className="space-y-4 max-w-2xl mx-auto">
             <div>
               <label htmlFor="name" className="block text-sm font-medium text-gray-300">Name:</label>
               <input 

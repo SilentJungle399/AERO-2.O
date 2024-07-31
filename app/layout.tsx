@@ -26,10 +26,11 @@ export default function RootLayout({
           href="https://fonts.googleapis.com/css2?family=Codystar:wght@300;400&family=Monoton&family=Fuggles&display=swap"
           rel="stylesheet"
         />
-        <link
+        <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet"/>
+        {/* <link
           href="https://fonts.googleapis.com/css2?family=Caesar+Dressing&display=swap"
           rel="stylesheet"
-        />
+        /> */}
       </head>
       <body className={inter.className}>
         <ClientLayout>{children}</ClientLayout>

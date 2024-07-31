@@ -19,7 +19,7 @@ const EventsPage = () => {
 
   const ref = useRef();
 
-  
+
   const { scrollYProgress } = useScroll({ target: ref });
   const x = useTransform(scrollYProgress, [0, 1], ["0%", "-92%"]);
 
@@ -41,7 +41,13 @@ const EventsPage = () => {
     fetchEvents();
   }, []);
 
-  if (loading) return <p className="text-center text-2xl text-white">Loading...</p>;
+  if (loading) {
+    return (
+      <div className='flex items-center justify-center h-screen'>
+        <div className='w-32 h-32 border-b-4 border-t-2 border-blue-500 rounded-full animate-spin'></div>
+      </div>
+    )
+  };
   if (error) return <p className="text-center text-red-500">{error}</p>;
 
   return (
@@ -58,13 +64,13 @@ const EventsPage = () => {
           </div>
           <div className='absolute bottom-1/4 left-1/2 transform -translate-x-1/2 -translate-y-1/4  z-10'>
             {/* <FractalTree /> */}
-            <Brain scrollYProgress={scrollYProgress}/>
+            <Brain scrollYProgress={scrollYProgress} />
           </div>
         </div>
         <div className="sticky top-0 flex h-screen gap-4 items-center overflow-hidden">
           <motion.div style={{ x }} className="flex">
             <div className="h-screen w-screen flex items-center justify-center bg-gradient-to-r from-purple-300 to-red-300" />
-            {events.filter(event=>event.is_workshop).map((event, index) => (
+            {events.filter(event => event.is_workshop).map((event, index) => (
               <div
                 className={`h-screen w-screen flex-shrink-0 flex items-center justify-center bg-gradient-to-r ${gradients[index % gradients.length]}`}
                 key={event._id}
@@ -113,22 +119,22 @@ const EventsPage = () => {
                 </div>
               </div>
             ))}
-             <div
-                className={`h-screen w-screen flex-shrink-0 flex items-center justify-center bg-gradient-to-r ${gradients[5 % gradients.length]}`}
-               
-              >
-                <div className="flex flex-col lg:flex-row gap-8 text-white p-6 md:p-10 lg:p-16 max-w-6xl">
-                  <div className="lg:w-1/2 space-y-6">
-                    <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold">Easteeemed for seeing you in our upcoming events</h1>
-                
-                   
-                    
-                  </div>
-                  <div className="lg:w-1/2">
-                    
-                  </div>
+            <div
+              className={`h-screen w-screen flex-shrink-0 flex items-center justify-center bg-gradient-to-r ${gradients[5 % gradients.length]}`}
+
+            >
+              <div className="flex flex-col lg:flex-row gap-8 text-white p-6 md:p-10 lg:p-16 max-w-6xl">
+                <div className="lg:w-1/2 space-y-6">
+                  <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold">Easteeemed for seeing you in our upcoming events</h1>
+
+
+
+                </div>
+                <div className="lg:w-1/2">
+
                 </div>
               </div>
+            </div>
           </motion.div>
         </div>
       </div>
