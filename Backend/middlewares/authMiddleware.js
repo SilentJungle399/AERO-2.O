@@ -4,7 +4,7 @@ const { decode } = require('punycode');
 
 const authMiddleware = (allowedRoles = []) => async (req, res, next) => {
     const token = req.header('Authorization')?.replace('Bearer ', '');
-    // console.log(token)
+    console.log(token)
     if (!token) {
         return res.status(401).json({ error: 'Access denied. No token provided.' });
     }
@@ -16,6 +16,9 @@ const authMiddleware = (allowedRoles = []) => async (req, res, next) => {
         if (!user) {
             return res.status(401).json({ error: 'Access denied. User not found.' });
         }
+        console.log(allowedRoles)
+        console.log(user.role)
+        // console.log(allowedRoles.length)
 
         if (allowedRoles.length && !allowedRoles.includes(user.role)) {
             return res.status(403).json({ error: 'Access denied. Insufficient permissions.' });

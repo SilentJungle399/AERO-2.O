@@ -58,7 +58,7 @@ const googleSignup = async (req, res) => {
         profile_picture=` https://avatar.iran.liara.run/username?username=${firstletter[0]}+${lastletter[0]}`;
         console.log(profile_picture);
     }
-    
+
       // If the user does not exist, create a new user
       user = new User({
         googleId: uid,
@@ -270,9 +270,14 @@ const Signup = async (req, res) => {
       day: "numeric",
     });
 
-    const profile_pic = `https://avatar.iran.liara.run/public/boy?username=${
-      Math.random() * 9000
-    }`;
+    let profile_picture=` https://avatar.iran.liara.run/username?username=${full_name[0]}`;
+        console.log(profile_picture);
+    if(full_name.split(' ').length>1){
+      let firstletter=full_name.split(' ')[0];
+        let lastletter=full_name.split(' ')[1];
+        profile_picture=` https://avatar.iran.liara.run/username?username=${firstletter[0]}+${lastletter[0]}`;
+        console.log(profile_picture);
+    }
     const newUser = new User({
       full_name,
       email,
