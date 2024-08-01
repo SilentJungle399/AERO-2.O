@@ -45,10 +45,20 @@ const googleSignup = async (req, res) => {
     // Check if the user already exists in the database
     let user = await User.findOne({ email: email });
 
+    
+
+
+
     if (!user) {
-      let profile_pic = `https://avatar.iran.liara.run/public/boy?username=${
-        Math.random() * 9000
-      }`;
+      let profile_picture=` https://avatar.iran.liara.run/username?username=${name[0]}`;
+        console.log(profile_picture);
+    if(name.split(' ').length>1){
+      let firstletter=name.split(' ')[0];
+        let lastletter=name.split(' ')[1];
+        profile_picture=` https://avatar.iran.liara.run/username?username=${firstletter[0]}+${lastletter[0]}`;
+        console.log(profile_picture);
+    }
+    
       // If the user does not exist, create a new user
       user = new User({
         googleId: uid,
