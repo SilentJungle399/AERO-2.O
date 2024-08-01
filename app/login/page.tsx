@@ -26,7 +26,9 @@ export default function Login() {
         localStorage.setItem('name',data.full_name)
         localStorage.setItem('profile_pic',data.profile_pic)
         console.log(data);
-        router.replace('/');
+        setTimeout(function() {
+          window.location.href = "/";
+      }, 100);
         // window.location.reload()
 
       } else {

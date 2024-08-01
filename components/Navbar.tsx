@@ -159,7 +159,9 @@ const Navbar: React.FC = () => {
         localStorage.setItem("name", data.full_name);
         localStorage.setItem("profile_pic", data.profile_pic);
         localStorage.setItem("role", data.role);
-        window.location.reload();
+        setTimeout(function() {
+          window.location.href = "/";
+      }, 100);
 
       } else {
         setError("Failed to sign in with Google");
