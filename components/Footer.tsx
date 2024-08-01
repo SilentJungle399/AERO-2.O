@@ -9,41 +9,39 @@ const Footer = () => {
     <footer className="bg-gray-800 text-gray-300 p-4 md:p-8">
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
 
- {/* Logo and Description */}
- <div className="flex flex-col items-center md:items-start">
+        {/* Logo and Description */}
+        <div className="flex flex-col items-center justify-center md:items-start">
           <Link href="/">
             <Image
               src="/aeronewlogo-removebg.png"
               alt="Aero Club Logo"
-              width={150}
-              height={150}
-              className="w-20 h-20 md:w-32 md:h-32 mb-4"
+              width={200}
+              height={200}
+              className="w-60 h-60 md:w-32 md:h-32 mb-4"
             />
           </Link>
           <p className="text-center md:text-left text-sm">
             Welcome to the Aero Club NIT Kurukshetra. Join us to explore the exciting world of aeromodelling.
           </p>
           {/* Social Media Links */}
-        <div className="flex flex-col  items-center md:items-start">
-          <h2 className="text-lg font-bold mb-2">Follow Us</h2>
-          <div className="flex space-x-4 ">
-            <SocialLink href="https://facebook.com">
-              <FaFacebook size={24} />
-            </SocialLink>
-            <SocialLink href="https://twitter.com">
-              <FaTwitter size={24} />
-            </SocialLink>
-            <SocialLink href="https://instagram.com">
-              <FaInstagram size={24} />
-            </SocialLink>
-            <SocialLink href="https://linkedin.com">
-              <FaLinkedin size={24} />
-            </SocialLink>
+          <div className="flex flex-col  items-center md:items-start">
+            <h2 className="text-lg font-bold mb-2">Follow Us</h2>
+            <div className="flex space-x-4 ">
+              <SocialLink href="https://facebook.com">
+                <FaFacebook size={24} />
+              </SocialLink>
+              <SocialLink href="https://twitter.com">
+                <FaTwitter size={24} />
+              </SocialLink>
+              <SocialLink href="https://instagram.com">
+                <FaInstagram size={24} />
+              </SocialLink>
+              <SocialLink href="https://linkedin.com">
+                <FaLinkedin size={24} />
+              </SocialLink>
+            </div>
           </div>
         </div>
-        </div>
-
-        
         {/* Navigation Links */}
         <div className="flex flex-col">
           <h2 className="text-lg font-bold mb-2">Quick Links</h2>
@@ -55,7 +53,7 @@ const Footer = () => {
               <NavLink href="/drones/events" text="Drone-Events" />
               <NavLink href="/drones/workshops" text="Drone-Workshops" />
               <NavLink href="/drones/members" text="Drone-Members" />
-              
+
             </div>
             <div className="flex flex-col space-y-2">
               <NavLink href="/rcplanes" text="RC-Planes" />
@@ -72,11 +70,6 @@ const Footer = () => {
             </div>
           </nav>
         </div>
-
-        
-
-       
-
       </div>
 
       {/* Copyright */}

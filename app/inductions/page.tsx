@@ -1,7 +1,21 @@
 "use client"
 import Link from 'next/link';
 import React, { useState, useEffect } from 'react';
-import { FaPlane, FaCalendarAlt, FaMapMarkerAlt, FaClock, FaReadme, FaMouse } from 'react-icons/fa';
+import { FaPlane, FaMapMarkerAlt, FaClock, FaMouse } from 'react-icons/fa';
+import { RiTimerLine } from "react-icons/ri";
+
+// This function is for foramting time and date on deadline (line 101)
+
+function formatDateTime(dateString) {
+  const date = new Date(dateString);
+  const optionsDate = { year: 'numeric', month: 'long', day: 'numeric' };
+  const optionsTime = { hour: 'numeric', minute: 'numeric', hour12: true };
+
+  const datePart = date.toLocaleDateString(undefined, optionsDate);
+  const timePart = date.toLocaleTimeString(undefined, optionsTime);
+
+  return `${datePart}, ${timePart}`;
+}
 
 const InductionSessionsList = () => {
   const [inductionSessions, setInductionSessions] = useState([]);
@@ -65,7 +79,7 @@ const InductionSessionsList = () => {
                 <img src="/rocket-launching.jpg" alt="Induction Session" className="w-full lg:w-60 h-60 lg:h-auto object-cover" />
                 <div className="p-6 flex-grow">
                   <div className='flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4'>
-                    <h3 className="text-2xl font-semibold mb-2 sm:mb-0 text-white">{session.I_name}</h3>
+                    <h3 className="text-2xl font-semibold mb-2 sm:mb-0 text-white-500">{session.I_name}</h3>
                     <Link
                       className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors duration-300"
                       href={`inductions/register/${session._id}`}
@@ -77,11 +91,11 @@ const InductionSessionsList = () => {
                   <p className="text-md mb-6 text-gray-300">{session.I_description}</p>
                   <div className='flex flex-col sm:flex-row justify-between text-sm text-gray-300'>
                     <div>
-                      <p className="mb-1"><FaMapMarkerAlt className="inline mr-2 text-red-600" /><span className="font-semibold">Venue:</span> {session.I_venue}</p>
-                      <p><FaClock className="inline mr-2" /><span className="font-semibold">Timing:</span> {session.I_timing}</p>
+                      <p className="mb-1"><FaMapMarkerAlt className="inline mr-2 text-red-600" /> {session.I_venue}</p>
+                      <p><FaClock className="inline mr-2" />{session.I_timing}</p>
                     </div>
                     <div className="mt-2 sm:mt-0 text-right">
-                      <p className="text-left mb-1"><FaCalendarAlt className="inline mr-2" /><span className="font-semibold">Deadline:</span> {session.I_deadline}</p>
+                      <p className="text-left mb-1 text-red-500"><RiTimerLine className="inline mr-1 mb-1 text-red-500" />{formatDateTime(session.I_deadline)}</p>
                       <p className={session.I_active_status ? "text-green-400" : "text-red-400"}>
                         {session.I_active_status ? "Active now " : "Submission closed"}
                         <FaMouse className="inline mr-2" />

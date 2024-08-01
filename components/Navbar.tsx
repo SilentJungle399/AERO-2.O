@@ -6,7 +6,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useRouter } from "next/navigation";
-import { FaArrowCircleDown, FaBell, FaChevronCircleDown, FaDropbox } from "react-icons/fa";
+import { FaArrowCircleDown, FaBell, FaCaretDown, FaDropbox } from "react-icons/fa";
 
 import { initializeApp } from "firebase/app";
 import firebaseConfig from "@/Backend/Firebseconfig/FirebaseConfig";
@@ -352,7 +352,7 @@ const Navbar: React.FC = () => {
                   <button
                     className="flex items-center text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular"
                   >
-                    Activities <FaChevronCircleDown className="ml-1 w-5 h-5" />
+                    Activities <FaCaretDown className="ml-1 w-5 h-5" />
                   </button>
                   <div
                     className="absolute left-0 mt-2 w-48 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 backdrop-blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-300"

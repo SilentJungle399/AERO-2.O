@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import Message from "@/components/Message";
 import { useParams } from "next/navigation";
 import {
   FaPaperclip,
@@ -20,6 +21,15 @@ const InductionForm = () => {
   const params = useParams();
   const id = params.id;
 
+  const [submiting, setSubmiting] = useState(false);
+
+  const [_1stPass, _set1stPass] = useState(true);
+  const [_2ndPass, _set2ndPass] = useState(true);
+  const [_3rdPass, _set3rdPass] = useState(true);
+
+  const [Error, setError] = useState(false);
+  const [Sucess, setSucess] = useState(false);
+
   const [files, setFiles] = useState([]);
 
   const [formData, setFormData] = useState({
@@ -38,7 +48,7 @@ const InductionForm = () => {
     experience: "",
     expectations: "",
   });
-  const [induction,setInduction] = useState(null);
+  const [induction, setInduction] = useState(null);
   const [loading, setLoading] = useState(true);
   const [currentStage, setCurrentStage] = useState(0);
 
@@ -85,8 +95,16 @@ const InductionForm = () => {
     }
   };
 
+  const [message, setMessage] = useState("");
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (currentStage == 2 && !formData.queries && !formData.team_preference && !formData.hobbies && !formData.skills && !formData.experience && !formData.expectations) {
+      _set3rdPass(false);
+      return;
+    }
+    else
+      _set3rdPass(true)
+    setSubmiting(true)
     try {
       const accessToken = document.cookie
         .split("; ")
@@ -122,18 +140,36 @@ const InductionForm = () => {
           body: formDataObject,
         }
       );
-
+      const message = await response.text();
+      setMessage(message);
       if (!response.ok) throw new Error("Failed to submit form");
-
+      setSucess(true)
       // alert("Application submitted successfully!");
       // window.location.href = "/";
     } catch (error) {
-      console.error("Error submitting form:", error);
-      alert("Failed to submit application. Please try again.");
+      setError(true)
+      // console.error("Error submitting form:", error);
+      // alert("Failed to submit application. Please try again.");
+    } finally {
+      setSubmiting(false)
     }
   };
 
   const nextStage = () => {
+    // First Pass
+    if (currentStage == 0 && !formData.name && !formData.email && !formData.rollNumber && !formData.branch && !formData.year && !formData.phoneNumber) {
+      _set1stPass(false);
+      return;
+    }
+    else
+      _set1stPass(true);
+    // Second Pass
+    if (currentStage == 1 && formData.answers.some(item => item.answer === "")) {
+      _set2ndPass(false);
+      return;
+    }
+    else
+      _set2ndPass(true);
     setCurrentStage((prev) => Math.min(prev + 1, 2));
   };
 
@@ -169,6 +205,7 @@ const InductionForm = () => {
       case 0:
         return (
           <div className="bg-gray-900 p-6 rounded-lg">
+            {!_1stPass && <p className="text-sm text-red-500">**Please fill all feilds...</p>}
             <h2 className="text-2xl font-semibold text-blue-400 mb-4 flex items-center">
               <FaRocket className="mr-2 text-yellow-500" />
               Personal Information
@@ -234,6 +271,7 @@ const InductionForm = () => {
       case 1:
         return (
           <div className="bg-gray-900 p-6 rounded-lg">
+            {!_2ndPass && <p className="text-sm text-red-500">**Please fill all feilds...</p>}
             <h2 className="text-2xl font-semibold text-green-400 mb-4 flex items-center">
               <FaBrain className="mr-2 " />
               Aeromodelling Questionnaire
@@ -258,6 +296,7 @@ const InductionForm = () => {
       case 2:
         return (
           <div className="bg-gray-900 p-6 rounded-lg">
+            {!_3rdPass && <p className="text-sm text-red-500">**Please fill all feilds...</p>}
             <h2 className="text-2xl font-semibold text-purple-400 mb-4 flex items-center">
               <FaCogs className="mr-2 text-purple-500" />
               Additional Information
@@ -360,7 +399,7 @@ const InductionForm = () => {
 
             <form onSubmit={handleSubmit} className="space-y-8">
               {renderStage()}
-
+              {(Error || Sucess) && <Message error={Error} success={Sucess} message={message} />}
               <div className="flex justify-between">
                 {currentStage > 0 && (
                   <button
@@ -385,9 +424,17 @@ const InductionForm = () => {
                   <button
                     type="submit"
                     className="bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 transition duration-300 flex items-center ml-auto"
+                    disabled={submiting}
                   >
-                    <FaPlane className="mr-2" />
-                    Submit Application
+                    {submiting ? <div
+                      className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-e-transparent align-[-0.125em] text-surface motion-reduce:animate-[spin_1.5s_linear_infinite] dark:text-white"
+                      role="status">
+                      <span
+                        className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]"
+                      >Loading...</span
+                      >
+                    </div> : <FaPlane className="mr-2" />}
+                    &nbsp;Submit Application
                   </button>
                 )}
               </div>
@@ -400,9 +447,8 @@ const InductionForm = () => {
           {[0, 1, 2].map((stage) => (
             <div
               key={stage}
-              className={`w-4 h-4 rounded-full mx-2 ${
-                currentStage >= stage ? "bg-blue-500" : "bg-gray-600"
-              }`}
+              className={`w-4 h-4 rounded-full mx-2 ${currentStage >= stage ? "bg-blue-500" : "bg-gray-600"
+                }`}
             ></div>
           ))}
         </div>
