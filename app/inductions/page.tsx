@@ -34,7 +34,7 @@ const InductionSessionsList = () => {
   });
 
   if (loading) {
-    return(
+    return (
       <div className='flex items-center justify-center h-screen'>
         <div className='w-32 h-32 border-b-4 border-t-2 border-blue-500 rounded-full animate-spin'></div>
       </div>
@@ -50,7 +50,7 @@ const InductionSessionsList = () => {
         <div className="twinkling"></div>
         <div className="clouds"></div>
       </div>
-      
+
       <div className="container mx-auto px-4 mt-28 relative z-10">
         <div className="text-center mb-12">
           <FaPlane className="text-6xl text-blue-500 mx-auto mb-4" />
@@ -66,7 +66,7 @@ const InductionSessionsList = () => {
                 <div className="p-6 flex-grow">
                   <div className='flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4'>
                     <h3 className="text-2xl font-semibold mb-2 sm:mb-0 text-white">{session.I_name}</h3>
-                    <Link 
+                    <Link
                       className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors duration-300"
                       href={`inductions/register/${session._id}`}
                     >
@@ -84,7 +84,7 @@ const InductionSessionsList = () => {
                       <p className="text-left mb-1"><FaCalendarAlt className="inline mr-2" /><span className="font-semibold">Deadline:</span> {session.I_deadline}</p>
                       <p className={session.I_active_status ? "text-green-400" : "text-red-400"}>
                         {session.I_active_status ? "Active now " : "Submission closed"}
-                      <FaMouse className="inline mr-2" />
+                        <FaMouse className="inline mr-2" />
                       </p>
                     </div>
                   </div>

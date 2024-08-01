@@ -115,7 +115,12 @@ export default function Signup() {
         localStorage.setItem("name", data.full_name);
         localStorage.setItem("profile_pic", data.profile_pic);
         localStorage.setItem("role", data.role); // Save user role
-        router.push(data.role === "admin" ? "/" : "/"); // Redirect based on role
+        // router.push(data.role === "admin" ? "/" : "/"); // Redirect based on role
+        // window.location.reload();
+        setTimeout(function() {
+            window.location.href = "/";
+        }, 100); // Delay the redirect by 100 milliseconds
+        
       } else {
         setError("Failed to sign in with Google");
       }
