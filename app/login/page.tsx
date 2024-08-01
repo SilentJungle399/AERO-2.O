@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -17,18 +18,18 @@ export default function Login() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
-        credentials:'include'
+        credentials: 'include'
       });
       if (response.ok) {
         const data = await response.json();
-        localStorage.setItem('token',data.token);
-        localStorage.setItem('_id',data._id);
-        localStorage.setItem('name',data.full_name)
-        localStorage.setItem('profile_pic',data.profile_pic)
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('_id', data._id);
+        localStorage.setItem('name', data.full_name)
+        localStorage.setItem('profile_pic', data.profile_pic)
         console.log(data);
-        setTimeout(function() {
+        setTimeout(function () {
           window.location.href = "/";
-      }, 100);
+        }, 100);
         // window.location.reload()
 
       } else {
@@ -96,6 +97,11 @@ export default function Login() {
             </button>
           </div>
         </form>
+        <Link
+          href={"/signup"}
+          className='text-sm text-gray-300'>
+            Don't have account? Signup
+        </Link>
       </div>
     </div>
   );

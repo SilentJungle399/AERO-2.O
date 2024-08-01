@@ -407,10 +407,10 @@ const Navbar: React.FC = () => {
 
               {!id ? (
                 <Link
-                  href="/signup"
-                  className="bg-[#3494D1] text-white hover:text-[#3494D1] hover:bg-white px-7 py-1 rounded-sm text-sm font-medium bebas-neue-regular"
+                  href="/login"
+                  className="bg-[#3494D1] text-white hover:text-[#3494D1] hover:bg-white px-7 py-1 rounded-md text-md font-sm bebas-neue-regular"
                 >
-                  Signup
+                  Login
                 </Link>
               ) : (
                 <div className="relative flex items-center text-yellow-300 justify-center">
