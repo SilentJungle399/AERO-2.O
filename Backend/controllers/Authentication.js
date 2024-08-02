@@ -284,7 +284,7 @@ const Signup = async (req, res) => {
       gender,
       password,
       date_of_joining,
-      profile_pic,
+      profile_pic:profile_picture,
     });
 
     const savedUser = await newUser.save();

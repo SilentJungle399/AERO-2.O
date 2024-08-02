@@ -91,28 +91,28 @@ const MeetCard = ({ meet, index }) => {
             <div className="flex items-center justify-between mb-2">
               <h2 className="text-lg font-semibold text-blue-300">{meet.meet_team_type} Meet</h2>
               <Link href={`/meets/${meet._id}`}>
-                <button className="bg-gradient-to-r from-blue-900 to-orange-700 text-white px-3 py-1 text-sm rounded-full hover:from-white-500 hover:to-green-500 transition duration-300 transform hover:scale-105 shadow-md">
+                <button className="bg-gradient-to-r from-blue-900 to-green-700 text-white px-3 py-1 text-sm rounded-full hover:from-white-500 hover:to-green-500 transition duration-300 transform hover:scale-105 shadow-md">
                   View
                 </button>
               </Link>
             </div>
             <div className="flex items-center space-x-4 text-sm text-white mb-2">
               <div className="flex items-center">
-                <FaCalendarAlt className="mr-2 text-pink-400" />
+                <FaCalendarAlt className="mr-2 text-green-400" />
                 <p>{new Date(meet.meet_date).toLocaleDateString()}</p>
               </div>
               <div className="flex items-center">
-                <FaClock className="mr-2 text-pink-400" />
+                <FaClock className="mr-2 text-green-400" />
                 <p>{meet.meet_time}</p>
               </div>
             </div>
             <div className="flex items-center space-x-4 text-sm text-white mb-2">
               <div className="flex items-center">
-                <FaMapMarkerAlt className="mr-2 text-pink-400" />
+                <FaMapMarkerAlt className="mr-2 text-green-400" />
                 <p>{meet.meet_venue}</p>
               </div>
               <div className="flex items-center">
-                <FaLaptop className="mr-2 text-pink-400" />
+                <FaLaptop className="mr-2 text-green-400" />
                 <p>{meet.meet_mode}</p>
               </div>
             </div>
@@ -121,7 +121,7 @@ const MeetCard = ({ meet, index }) => {
         </div>
       </div>
       <div className="w-2/12 flex justify-center">
-        <div className={`w-6 h-6 bg-blue-500 rounded-full border-4 border-gray-900 z-10 transition-all duration-300 ${isHovered ? 'scale-150 bg-orange-100 shadow-lg shadow-pink-500/50' : ''}`} />
+        <div className={`w-6 h-6 bg-blue-500 rounded-full border-4 border-gray-900 z-10 transition-all duration-300 ${isHovered ? 'scale-150 bg-green-500 shadow-lg shadow-pink-500/50' : ''}`} />
       </div>
       <div className="w-5/12" />
     </motion.div>
