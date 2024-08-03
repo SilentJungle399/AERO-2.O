@@ -70,9 +70,9 @@ const AllAlbumsPage = () => {
         className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8"
       >
         {albums.map((album) => (
-          <Link href={`/gallery/${album._id}`}>
+          <Link  key={album._id} href={`/gallery/${album._id}`}>
           <motion.div
-            key={album._id}
+            
             whileHover={{ scale: 1.05 }}
             className="bg-gray-800 rounded-lg shadow-lg overflow-hidden cursor-pointer"
           >

@@ -174,7 +174,7 @@ export default function AdminInductions() {
           <div className="relative text-black top-20 mx-auto p-5 border w-11/12 md:w-3/4 lg:w-2/3 shadow-lg rounded-md bg-white">
             <div className="mt-3">
               <h3 className="text-2xl font-semibold text-center mb-4">
-                {selectedStudent.name}'s Details
+                {selectedStudent.name}&apos;s Details
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                 <div>

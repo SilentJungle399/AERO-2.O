@@ -311,7 +311,7 @@ export default function CreateTeamPage() {
               </motion.div>
             </div>
             <p className="text-gray-300 text-lg">
-              Keep this token safe. You'll need it to manage your team.
+              Keep this token safe. You&apos;ll need it to manage your team.
             </p>
             <button
               onClick={() => setStage(6)}

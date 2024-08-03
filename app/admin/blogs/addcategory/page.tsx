@@ -157,7 +157,7 @@ const CategoryManager = () => {
                 className="w-full px-4 py-3 text-lg bg-white bg-opacity-50 rounded-lg shadow-inner focus:ring-2 focus:ring-blue-400 focus:outline-none transition duration-200"
                 placeholder="Provide a brief description of the category..."
               ></textarea>
-              <p className="text-sm text-gray-500 italic">A good description helps users understand the category's purpose.</p>
+              <p className="text-sm text-gray-500 italic">A good description helps users understand the category&apos;s purpose.</p>
             </div>
 
             {/* Parent Category */}
@@ -175,7 +175,7 @@ const CategoryManager = () => {
                   <option key={category._id} value={category._id}>{category.name}</option>
                 ))}
               </select>
-              <p className="text-sm text-gray-500 italic">Select a parent category to create a hierarchy, or leave as 'None' for a top-level category.</p>
+              <p className="text-sm text-gray-500 italic">Select a parent category to create a hierarchy, or leave as None for a top-level category.</p>
             </div>
 
             {/* Submit button */}
