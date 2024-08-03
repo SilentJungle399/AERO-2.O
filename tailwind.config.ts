@@ -18,12 +18,13 @@ const config: Config = {
       },
       keyframes: {
         confetti: {
-          '0%': { transform: 'translateY(0) rotateX(0) rotateY(0)', opacity: 1 },
-          '100%': { transform: 'translateY(100vh) rotateX(360deg) rotateY(180deg)', opacity: 0 },
+          '0%': { transform: 'translateY(0) rotateX(0) rotateY(0)', opacity: '1' },
+          '100%': { transform: 'translateY(100vh) rotateX(360deg) rotateY(180deg)', opacity: '0' },
         },
       },
     },
   },
   plugins: [],
 };
+
 export default config;

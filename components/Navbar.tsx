@@ -17,24 +17,31 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const googleProvider = new GoogleAuthProvider();
 
-// NotificationModal component
-const NotificationModal = ({ notifications, closeModal }) => {
-  // Sort notifications: Unread first, then Read
+interface Notification {
+  _id: string;
+  notifications_title: string;
+  created_at: string;
+}
+
+interface NotificationWithRead {
+  notification: Notification;
+  read: boolean;
+}
+
+interface NotificationModalProps {
+  notifications: NotificationWithRead[];
+  closeModal: () => void;
+}
+
+const NotificationModal: React.FC<NotificationModalProps> = ({ notifications, closeModal }) => {
   const sortedNotifications = notifications.sort((a, b) => {
     return a.read === b.read
-      ? new Date(b.notification.created_at) -
-      new Date(a.notification.created_at)
-      : a.read
-        ? 1
-        : -1;
+      ? new Date(b.notification.created_at).getTime() - new Date(a.notification.created_at).getTime()
+      : a.read ? 1 : -1;
   });
 
-  const unreadNotifications = sortedNotifications.filter(
-    (notification) => !notification.read
-  );
-  const readNotifications = sortedNotifications.filter(
-    (notification) => notification.read
-  );
+  const unreadNotifications = sortedNotifications.filter(notification => !notification.read);
+  const readNotifications = sortedNotifications.filter(notification => notification.read);
 
   return (
     <div className="fixed inset-0 z-10 flex items-center justify-center bg-black bg-opacity-50">
@@ -43,34 +50,18 @@ const NotificationModal = ({ notifications, closeModal }) => {
           <h2 className="flex items-center space-x-2 text-xl font-semibold">
             <FaBell className="text-yellow-400 mr-3" /> Notifications
           </h2>
-          <button
-            onClick={closeModal}
-            className="text-gray-500 hover:text-gray-700"
-          >
-            &times;
-          </button>
+          <button onClick={closeModal} className="text-gray-500 hover:text-gray-700">&times;</button>
         </div>
         <div className="overflow-y-auto max-h-80">
-          {/* Unread Notifications */}
           {unreadNotifications.length > 0 && (
             <div className="mb-4">
-              <h3 className="text-lg font-semibold text-gray-800 mb-2">
-                Unread Notifications
-              </h3>
+              <h3 className="text-lg font-semibold text-gray-800 mb-2">Unread Notifications</h3>
               {unreadNotifications.map((notification, index) => (
-                <Link
-                  key={index}
-                  href={`/notifications/${notification.notification._id}`}
-                  onClick={closeModal}
-                >
+                <Link key={index} href={`/notifications/${notification.notification._id}`} onClick={closeModal}>
                   <div className="mb-4 p-3 bg-blue-50 border-l-4 border-blue-500 rounded-lg">
-                    <p className="text-sm text-gray-700 font-medium">
-                      {notification.notification.notifications_title}
-                    </p>
+                    <p className="text-sm text-gray-700 font-medium">{notification.notification.notifications_title}</p>
                     <span className="text-xs text-gray-500">
-                      {new Date(
-                        notification.notification.created_at
-                      ).toLocaleDateString()}
+                      {new Date(notification.notification.created_at).toLocaleDateString()}
                     </span>
                   </div>
                 </Link>
@@ -78,26 +69,15 @@ const NotificationModal = ({ notifications, closeModal }) => {
             </div>
           )}
 
-          {/* Read Notifications */}
           {readNotifications.length > 0 && (
             <div>
-              <h3 className="text-lg font-semibold text-gray-800 mb-2">
-                Read Notifications
-              </h3>
+              <h3 className="text-lg font-semibold text-gray-800 mb-2">Read Notifications</h3>
               {readNotifications.map((notification, index) => (
-                <Link
-                  key={index}
-                  href={`/notifications/${notification.notification._id}`}
-                  onClick={closeModal}
-                >
+                <Link key={index} href={`/notifications/${notification.notification._id}`} onClick={closeModal}>
                   <div className="mb-4 p-3 bg-gray-100 rounded-lg">
-                    <p className="text-sm text-gray-700">
-                      {notification.notification.notifications_title}
-                    </p>
+                    <p className="text-sm text-gray-700">{notification.notification.notifications_title}</p>
                     <span className="text-xs text-gray-500">
-                      {new Date(
-                        notification.notification.created_at
-                      ).toLocaleDateString()}
+                      {new Date(notification.notification.created_at).toLocaleDateString()}
                     </span>
                   </div>
                 </Link>
@@ -105,20 +85,15 @@ const NotificationModal = ({ notifications, closeModal }) => {
             </div>
           )}
 
-          {/* No notifications available */}
-          {unreadNotifications.length === 0 &&
-            readNotifications.length === 0 && (
-              <p className="text-sm text-gray-500">
-                No notifications available
-              </p>
-            )}
+          {unreadNotifications.length === 0 && readNotifications.length === 0 && (
+            <p className="text-sm text-gray-500">No notifications available</p>
+          )}
         </div>
       </div>
     </div>
   );
 };
 
-// Main Navbar component
 const Navbar: React.FC = () => {
   const [eventsDropdownOpen, setEventsDropdownOpen] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -129,13 +104,12 @@ const Navbar: React.FC = () => {
   const [newNotificationCount, setNewNotificationCount] = useState(0);
   const [isAdmin, setAdmin] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [notifications, setNotifications] = useState([]);
+  const [notifications, setNotifications] = useState<NotificationWithRead[]>([]);
   const [id, setId] = useState("");
 
   const router = useRouter();
   const pathname = usePathname();
 
-  // Google Sign In function
   const signInWithGoogle = async () => {
     try {
       const result = await signInWithPopup(auth, googleProvider);
@@ -159,10 +133,9 @@ const Navbar: React.FC = () => {
         localStorage.setItem("name", data.full_name);
         localStorage.setItem("profile_pic", data.profile_pic);
         localStorage.setItem("role", data.role);
-        setTimeout(function() {
+        setTimeout(() => {
           window.location.href = "/";
-      }, 100);
-
+        }, 100);
       } else {
         setError("Failed to sign in with Google");
       }
@@ -171,8 +144,6 @@ const Navbar: React.FC = () => {
     }
   };
 
-
-  // Fetch notifications function
   const fetchNotifications = async () => {
     const id = localStorage.getItem("_id");
     if (!id) {
@@ -181,9 +152,7 @@ const Navbar: React.FC = () => {
     }
 
     try {
-      const response = await fetch(
-        `http://localhost:5000/api/users/notifications/${id}`
-      );
+      const response = await fetch(`http://localhost:5000/api/users/notifications/${id}`);
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
@@ -192,9 +161,9 @@ const Navbar: React.FC = () => {
       const notifications = data.notifications;
       const unreadCount = data.unreadCount;
 
-      const sortedNotifications = notifications.sort((a, b) => {
+      const sortedNotifications = notifications.sort((a: NotificationWithRead, b: NotificationWithRead) => {
         if (a.read === b.read) {
-          return new Date(b.created_at) - new Date(a.created_at);
+          return new Date(b.notification.created_at).getTime() - new Date(a.notification.created_at).getTime();
         }
         return a.read ? 1 : -1;
       });
@@ -206,7 +175,6 @@ const Navbar: React.FC = () => {
     }
   };
 
-  // Logout function
   const logout = async () => {
     try {
       localStorage.clear();
@@ -229,7 +197,6 @@ const Navbar: React.FC = () => {
     }
   };
 
-  // useEffect for initial data fetching and setup
   useEffect(() => {
     fetchNotifications();
     const name = localStorage.getItem("name");
@@ -243,9 +210,8 @@ const Navbar: React.FC = () => {
     }
 
     setId(id || "");
-    if (userRole == "admin") {
+    if (userRole === "admin") {
       setAdmin(true);
-
     }
 
     if (!id) {
@@ -256,7 +222,6 @@ const Navbar: React.FC = () => {
     }
   }, []);
 
-  // Handle bell icon click
   const handleBellClick = () => {
     setIsModalOpen(true);
   };
@@ -266,7 +231,6 @@ const Navbar: React.FC = () => {
       <nav className="bg-black bg-opacity-0 w-full pointer-events-auto">
         <div className="w-full px-0">
           <div className="flex items-center justify-between h-24 px-2 md:px-4">
-            {/* Hamburger Menu Icon for Mobile */}
             <button
               className="xl:hidden text-white focus:outline-none"
               onClick={() => setSidebarOpen(!sidebarOpen)}
@@ -287,7 +251,6 @@ const Navbar: React.FC = () => {
               </svg>
             </button>
 
-            {/* Logo */}
             <div className="flex-shrink-0">
               <Link href="/">
                 <Image
@@ -300,110 +263,109 @@ const Navbar: React.FC = () => {
               </Link>
             </div>
 
-            {/* Links for Desktop */}
             <div className="hidden md:flex items-center space-x-2 md:space-x-4 w-full justify-end mr-20">
-              {/* admin routes */}
-              {isAdmin && <Link
-                href="/admin/blogs"
-                className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular"
-              >
-                Blogs-dashboard
-              </Link>}
-              {isAdmin && <Link
-                href="/admin/blogs"
-                className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular"
-              >
-                Events-dashboard
-              </Link>}
-              {isAdmin && <Link
-                href="/admin/blogs"
-                className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular"
-              >
-                Inductions-dashboard
-              </Link>}
-              {isAdmin && <Link
-                href="/admin/blogs"
-                className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular"
-              >
-                Meets-dashboard
-              </Link>}
+              {isAdmin && (
+                <>
+                  <Link
+                    href="/admin/blogs"
+                    className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular"
+                  >
+                    Blogs-dashboard
+                  </Link>
+                  <Link
+                    href="/admin/events"
+                    className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular"
+                  >
+                    Events-dashboard
+                  </Link>
+                  <Link
+                    href="/admin/inductions"
+                    className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular"
+                  >
+                    Inductions-dashboard
+                  </Link>
+                  <Link
+                    href="/admin/meets"
+                    className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular"
+                  >
+                    Meets-dashboard
+                  </Link>
+                </>
+              )}
 
-              {/* //usermode routes */}
-              {!isAdmin && <Link
-                href="/rcplanes/blogs"
-                className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular"
-              >
-                Blogs
-              </Link>}
-              {!isAdmin && <Link
-                href="/drones"
-                className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular"
-              >
-                Drones
-              </Link>}
-              {!isAdmin && <Link
-                href="/rcplanes"
-                className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular"
-              >
-                Rc Planes
-              </Link>}
               {!isAdmin && (
-                <div className="relative group">
-                  <button
-                    className="flex items-center text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular"
+                <>
+                  <Link
+                    href="/rcplanes/blogs"
+                    className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular"
                   >
-                    Activities <FaCaretDown className="ml-1 w-5 h-5" />
-                  </button>
-                  <div
-                    className="absolute left-0 mt-2 w-48 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 backdrop-blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                    Blogs
+                  </Link>
+                  <Link
+                    href="/drones"
+                    className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular"
                   >
-                    <div className="py-1" role="menu" aria-orientation="vertical">
-                      <Link
-                        href="/events"
-                        className="bebas-neue-regular block px-4 py-2 text-md text-gray-300 hover:text-[#3494D1]"
-                      >
-                        Events
-                      </Link>
-                      <Link
-                        href="/workshops"
-                        className="bebas-neue-regular block px-4 py-2 text-md text-gray-300 hover:text-[#3494D1]"
-                      >
-                        Workshops
-                      </Link>
-                      <Link
-                        href="/techevents"
-                        className="bebas-neue-regular block px-4 py-2 text-md text-gray-300 hover:text-[#3494D1]"
-                      >
-                        Techspardha Events
-                      </Link>
+                    Drones
+                  </Link>
+                  <Link
+                    href="/rcplanes"
+                    className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular"
+                  >
+                    Rc Planes
+                  </Link>
+                  <div className="relative group">
+                    <button className="flex items-center text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular">
+                      Activities <FaCaretDown className="ml-1 w-5 h-5" />
+                    </button>
+                    <div className="absolute left-0 mt-2 w-48 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 backdrop-blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                      <div className="py-1" role="menu" aria-orientation="vertical">
+                        <Link
+                          href="/events"
+                          className="bebas-neue-regular block px-4 py-2 text-md text-gray-300 hover:text-[#3494D1]"
+                        >
+                          Events
+                        </Link>
+                        <Link
+                          href="/workshops"
+                          className="bebas-neue-regular block px-4 py-2 text-md text-gray-300 hover:text-[#3494D1]"
+                        >
+                          Workshops
+                        </Link>
+                        <Link
+                          href="/techevents"
+                          className="bebas-neue-regular block px-4 py-2 text-md text-gray-300 hover:text-[#3494D1]"
+                        >
+                          Techspardha Events
+                        </Link>
+                      </div>
                     </div>
                   </div>
-                </div>
+                  <Link
+                    href="/meets"
+                    className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular"
+                  >
+                    Meets
+                  </Link>
+                  <Link
+                    href="/inductions"
+                    className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular"
+                  >
+                    Inductions
+                  </Link>
+                  <Link
+                    href="/gallery"
+                    className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular"
+                  >
+                    Gallery
+                  </Link>
+                  <Link
+                    href="/members"
+                    className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular"
+                  >
+                    Members
+                  </Link>
+                </>
               )}
-              {!isAdmin && <Link
-                href="/meets"
-                className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular"
-              >
-              Meets
-              </Link>}
-              {!isAdmin && <Link
-                href="/inductions"
-                className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular"
-              >
-                Inductions
-              </Link>}
-              {!isAdmin && <Link
-                href="/gallery"
-                className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular"
-              >
-                Gallery
-              </Link>}
-              {!isAdmin && <Link
-                href="/members"
-                className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular"
-              >
-                Members
-              </Link>}
 
               {!id ? (
                 <Link
@@ -417,13 +379,9 @@ const Navbar: React.FC = () => {
                   <div className="flex items-center cursor-pointer">
                     <div className="relative flex items-center">
                       <FaBell
-                        className={`w-8 h-8 cursor-pointer ${newNotificationCount > 0
-                          ? "text-yellow-400"
-                          : "text-white"
-                          }`}
+                        className={`w-8 h-8 cursor-pointer ${newNotificationCount > 0 ? "text-yellow-400" : "text-white"}`}
                         onClick={handleBellClick}
                       />
-
                       {newNotificationCount > 0 && (
                         <div
                           className="absolute top-0 right-0 flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-red-500 rounded-full -translate-x-1/2 translate-y-1/2"
@@ -473,7 +431,7 @@ const Navbar: React.FC = () => {
                             "My Profile"
                           )}
                         </Link>
-                        {isAdmin === "admin" && (
+                        {isAdmin && (
                           <Link
                             href="/admin-dashboard"
                             className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
@@ -509,7 +467,6 @@ const Navbar: React.FC = () => {
                       </div>
                     </div>
                   )}
-
                   {isModalOpen && (
                     <NotificationModal
                       notifications={notifications}
@@ -524,8 +481,9 @@ const Navbar: React.FC = () => {
 
         {/* Sidebar for Mobile */}
         <div
-          className={`fixed inset-y-0 left-0 transform ${sidebarOpen ? "translate-x-0" : "-translate-x-full"
-            } md:hidden transition-transform duration-300 ease-in-out bg-black bg-opacity-90 w-64 p-4 z-50`}
+          className={`fixed inset-y-0 left-0 transform ${
+            sidebarOpen ? "translate-x-0" : "-translate-x-full"
+          } md:hidden transition-transform duration-300 ease-in-out bg-black bg-opacity-90 w-64 p-4 z-50`}
         >
           <button
             className="text-white focus:outline-none mb-4"
@@ -548,14 +506,13 @@ const Navbar: React.FC = () => {
           </button>
           {!id && (
             <Link
-            onClick={() => setSidebarOpen(!sidebarOpen)}
+              onClick={() => setSidebarOpen(!sidebarOpen)}
               href="/login"
               className="bg-[#3494D1] text-white hover:text-[#3494D1] px-4 rounded-sm text-sm font-medium bebas-neue-regular"
             >
               Login
             </Link>
           )}
-          {/* Profile dropdown for mobile */}
           {id && (
             <button
               className="nav-link"
@@ -590,7 +547,7 @@ const Navbar: React.FC = () => {
                 >
                   My Profile
                 </Link>
-                {isAdmin === "admin" && (
+                {isAdmin && (
                   <Link
                     href="/admin-dashboard"
                     className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
@@ -668,7 +625,6 @@ const Navbar: React.FC = () => {
               href="/inductions"
               className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular"
             >
-
               Inductions
             </Link>
             <Link
@@ -678,18 +634,6 @@ const Navbar: React.FC = () => {
             >
               Gallery
             </Link>
-            {/* <Link
-              href="/alluminai"
-              className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular"
-            >
-              ALLuminai
-            </Link>
-            <Link
-              href="/about"
-              className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular"
-            >
-              About Us
-            </Link> */}
           </div>
         </div>
       </nav>

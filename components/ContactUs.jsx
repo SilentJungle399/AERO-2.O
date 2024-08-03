@@ -11,18 +11,18 @@ class ContactUsPage extends Component {
     document.body.appendChild(script);
 
     // Initialize the map
-    window.initMap = () => {
-      const location = { lat: 29.9667, lng: 76.8333 }; // Coordinates for NIT Kurukshetra
-      const map = new window.google.maps.Map(document.getElementById('map'), {
-        zoom: 15,
-        center: location,
-      });
-      new window.google.maps.Marker({
-        position: location,
-        map: map,
-        title: 'NIT Kurukshetra',
-      });
-    };
+    // window.initMap = () => {
+    //   const location = { lat: 29.9667, lng: 76.8333 }; // Coordinates for NIT Kurukshetra
+    //   const map = new window.google.maps.Map(document.getElementById('map'), {
+    //     zoom: 15,
+    //     center: location,
+    //   });
+    //   new window.google.maps.Marker({
+    //     position: location,
+    //     map: map,
+    //     title: 'NIT Kurukshetra',
+    //   });
+    // };
   }
 
   render() {
