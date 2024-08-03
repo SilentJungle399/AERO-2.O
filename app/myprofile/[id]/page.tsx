@@ -5,6 +5,7 @@ import { FaEdit } from 'react-icons/fa';
 
 const MyProfile = () => {
   const { id } = useParams();
+  const [loading, setLoading] = useState(false)
   const [user, setUser] = useState({
     full_name: '',
     email: '',
@@ -18,8 +19,10 @@ const MyProfile = () => {
     team_name: '',
     current_post: '',
   });
-
   useEffect(() => {
+    console.log(id)
+    if (!id)
+      window.location.href = "/";
     fetchUserData();
   }, [id]);
 
@@ -53,7 +56,7 @@ const MyProfile = () => {
     if (file) {
       const formData = new FormData();
       formData.append('profile_file', file);
-
+      setLoading(true)
       try {
         const token = localStorage.getItem('token');
         const response = await fetch(`http://localhost:5000/api/users/profile/${id}`, {
@@ -68,9 +71,14 @@ const MyProfile = () => {
 
         const { profilePicUrl } = await response.json();
         setUser({ ...user, profile_pic: profilePicUrl });
+        localStorage.setItem("profile_pic", profilePicUrl)
       } catch (error) {
         console.error('Error uploading profile picture:', error);
         alert('Failed to upload profile picture.');
+      }
+      finally {
+        setLoading(false)
+        window.location.reload()
       }
     }
   };
@@ -118,7 +126,14 @@ const MyProfile = () => {
                 className="absolute bottom-9 w-10 h-10 right-5 lg:right-8 p-2  text-white rounded-full"
                 onClick={() => document.getElementById('profile-pic-input').click()}
               >
-                <FaEdit className='w-10 h-10  text-yellow-300' />
+                {loading ? <div
+                  className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-e-transparent align-[-0.125em] text-surface motion-reduce:animate-[spin_1.5s_linear_infinite] dark:text-white"
+                  role="status">
+                  <span
+                    className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]"
+                  >Loading...</span
+                  >
+                </div> : <FaEdit className='w-10 h-10  text-yellow-300' />}
               </button>
             </div>
             <div className='text-center'>
@@ -126,11 +141,11 @@ const MyProfile = () => {
               <p className="text-gray-400">{user.current_post} - {user.team_name} Team</p>
             </div>
           </div>
-          
+
         </div>
-        
+
         <div className="p-8 bg-gray-900">
-          
+
 
           <form onSubmit={handleSubmit} className="space-y-6 text-gray-200">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">

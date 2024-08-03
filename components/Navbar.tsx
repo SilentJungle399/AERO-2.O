@@ -455,7 +455,7 @@ const Navbar: React.FC = () => {
                         aria-labelledby="options-menu"
                       >
                         <Link
-                          href="/profile"
+                          href={`/myprofile/${id}`}
                           className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-200"
                         >
                           {username ? (
@@ -491,7 +491,7 @@ const Navbar: React.FC = () => {
                           href={`/myprofile/${id}`}
                           className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                         >
-                          Complete Profile
+                          Profile
                         </Link>
                         <Link
                           href="/settings"

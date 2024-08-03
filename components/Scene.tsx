@@ -1,7 +1,7 @@
 'use client';
 import React, { useState, useEffect, Suspense } from 'react';
 import { Canvas } from '@react-three/fiber';
-import { Environment, Html, ScrollControls, useScroll,useProgress, PerspectiveCamera } from '@react-three/drei';
+import { Environment, Html, ScrollControls, useScroll, useProgress, PerspectiveCamera } from '@react-three/drei';
 import EyeModel from './EyeModel';
 import Model from './Model';
 import RcModel from './RcModel';
@@ -12,29 +12,31 @@ function Loader() {
   const { progress } = useProgress();
   return (
     <Html center>
-      <div style={{ textAlign: 'center' }}>
-        <div style={{ color: 'white', fontSize: '24px', fontWeight: 'bold' }}>
-          {progress.toFixed(1)}% loaded
-        </div>
-        <div className="spinner"></div>
-        <style jsx>{`
-          .spinner {
-            margin: 20px auto;
-            width: 40px;
-            height: 40px;
-            border: 4px solid rgba(255, 255, 255, 0.1);
-            border-left-color: #fff;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            z-index : 1000;
-          }
+      <div className="fixed inset-0 flex items-center justify-center z-60">
+        <div className="text-center">
+          <div className="text-white text-2xl font-bold">
+            {progress.toFixed(1)}% loaded
+          </div>
+          <div className="spinner"></div>
+          <style jsx>{`
+        .spinner {
+          margin: 20px auto;
+          width: 40px;
+          height: 40px;
+          border: 4px solid rgba(255, 255, 255, 0.1);
+          border-left-color: #fff;
+          border-radius: 50%;
+          animation: spin 1s linear infinite;
+          z-index: 1000;
+        }
 
-          @keyframes spin {
-            to {
-              transform: rotate(360deg);
-            }
+        @keyframes spin {
+          to {
+            transform: rotate(360deg);
           }
-        `}</style>
+        }
+      `}</style>
+        </div>
       </div>
     </Html>
   );
@@ -114,17 +116,17 @@ export default function Scene() {
           <AeroModellingClub isMobile={isMobile} />
           <Suspense fallback={<Loader />}>
             <ScrollControls damping={0.1} pages={isMobile ? 2 : 8}>
-                <Model isMobile={isMobile} />
-                <EyeModel isMobile={isMobile} />
-                <group>
-                  <Environment preset="sunset" />
-                  <DroneModel isMobile={isMobile} />
-                  <Dronesection />
-                </group>
-                <group>
-                  <RcModel isMobile={isMobile} />
-                  <Rcsection />
-                </group>
+              <Model isMobile={isMobile} />
+              <EyeModel isMobile={isMobile} />
+              <group>
+                <Environment preset="sunset" />
+                <DroneModel isMobile={isMobile} />
+                <Dronesection />
+              </group>
+              <group>
+                <RcModel isMobile={isMobile} />
+                <Rcsection />
+              </group>
             </ScrollControls>
           </Suspense>
         </Canvas>
