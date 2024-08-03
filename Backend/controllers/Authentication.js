@@ -48,9 +48,10 @@ const googleSignup = async (req, res) => {
     
 
 
+
     let profile_picture=` https://avatar.iran.liara.run/username?username=${name[0]}`;
-    console.log(profile_picture);
     if (!user) {
+        console.log(profile_picture);
     if(name.split(' ').length>1){
       let firstletter=name.split(' ')[0];
         let lastletter=name.split(' ')[1];
@@ -63,7 +64,7 @@ const googleSignup = async (req, res) => {
         googleId: uid,
         email,
         full_name:name,
-        profile_pic
+        profile_pic:profile_picture
       });
 
       await user.save(); // Save the user to the database
@@ -283,7 +284,7 @@ const Signup = async (req, res) => {
       gender,
       password,
       date_of_joining,
-      profile_pic,
+      profile_pic:profile_picture,
     });
 
     const savedUser = await newUser.save();

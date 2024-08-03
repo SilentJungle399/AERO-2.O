@@ -7,9 +7,39 @@ import Image from 'next/image';
 export default function MeetAnalyticsPage() {
   const [meet, setMeet] = useState(null);
   const [loading, setLoading] = useState(true);
-//   const searchParams = useSearchParams();
- const id =useParams().id
- console.log("id"+id)
+  //   const searchParams = useSearchParams();
+  const id = useParams().id
+  console.log("id" + id)
+
+  const handleEnd = async () => {
+    if (!id) return;
+    try {
+      const accessToken = document.cookie
+        .split("; ")
+        .find((row) => row.startsWith("token="))
+        .split("=")[1];
+        const response = await fetch(
+          `http://localhost:5000/api/users/endmeet/${id}`,
+          {
+            method: "POST",
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            }
+          }
+        );
+      const data = await response.json();
+      if (response.ok) {
+        setTimeout(function () {
+          window.location.reload()
+        }, 100);
+      }
+    } catch (error) {
+      console.error('Error ending meet :', error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
 
   useEffect(() => {
     const fetchMeetDetails = async () => {
@@ -79,6 +109,11 @@ export default function MeetAnalyticsPage() {
           <h2 className="text-2xl font-semibold mb-4">Analytics</h2>
           {/* Add your analytics components here */}
           <p>Implement your analytics visualizations and data here.</p>
+        </div>
+        <div className='flex justify-end'>
+          <button onClick={handleEnd} disabled={meet.meet_active_status ? false : true}  className='r-0 p-2 ml-auto  text-md justify-end bg-red-500 rounded-md'>
+            {meet.meet_active_status ? <div>End meet</div> : <div className='cursor-not-allowed' >Meet Already Ended</div>}
+          </button>
         </div>
       </div>
     </div>

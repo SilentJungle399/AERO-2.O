@@ -18,8 +18,8 @@ const otpVerification = new mongoose.Schema({
       },
       createdAt: {
         type: Date,
-        default: Date.now,
-        expires: '20m' // The OTP will expire after 5 minutes
+        default: Date.now
+        // expires: '20m' // The OTP will expire after 5 minutes
       }
 });
 

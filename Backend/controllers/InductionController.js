@@ -120,7 +120,7 @@ const saveParticipants = async (req, res) => {
     const inductionImagePath = inductioncheck.I_banner_img;
 
     if (inductioncheck.I_participants.includes(uid)) {
-      return res.status(201).json("user already participated");
+      return res.status(401).json("User already participated!!!");
     }
 
     // Create a new instance of InductiesModel
@@ -153,7 +153,7 @@ const saveParticipants = async (req, res) => {
     // Update InductionModel with participant's ID
     const induction = await Induction.findById(inId);
     if (!induction) {
-      return res.status(404).json({ error: "Induction not found" });
+      return res.status(404).json({ error: "Induction not found!!!" });
     }
 
     // Add the participant's ID to I_participants array in InductionModel
@@ -179,7 +179,7 @@ const saveParticipants = async (req, res) => {
       inductionImagePath
     );
 
-    // res.status(201).json(savedParticipant); // Respond with the saved participant document
+    res.status(201).json("Registration Succesfull. Please check you mail for more details.") // Respond with the saved participant document
   } catch (error) {
     res
       .status(500)

@@ -15,6 +15,7 @@ const {
   getAllMeets,
   getMeet,
   markAttendance,
+  endMeet,
 } = require("../controllers/MeetsController");
 const {
   createEvent,
@@ -75,7 +76,7 @@ userRoutes.post("/sendnotification/:id",authMiddleware(["admin"]),upload.array('
 //////////////////////////////////////////////////////////////////////////////////////////
 
 
-
+userRoutes.post("/endmeet/:id",authMiddleware(["admin"]),endMeet)
 userRoutes.post("/createmeet", authMiddleware(["admin"]), create_meet);
 userRoutes.get("/getallmeets", getAllMeets);
 userRoutes.get("/getmeets/:id", getMeet);

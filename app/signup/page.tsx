@@ -83,7 +83,10 @@ export default function Signup() {
         localStorage.setItem("name", data.user.full_name);
         localStorage.setItem("profile_pic", data.user.profile_pic);
         localStorage.setItem("role", data.user.role); // Save user role
-        router.replace(data.user.role === "admin" ? "/admin" : "/user"); // Redirect based on role
+        setTimeout(function() {
+          window.location.href = "/";
+      }, 100);
+        // router.replace(data.user.role === "admin" ? "/admin" : "/user"); // Redirect based on role
       } else {
         const data = await response.json();
         setError(data.error || "Signup failed");
