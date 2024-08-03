@@ -1,4 +1,3 @@
-import { error } from 'console'
 import React from 'react'
 
 export default function Message(props) {

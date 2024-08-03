@@ -2,6 +2,8 @@ import { useAnimations, useGLTF, useScroll } from "@react-three/drei";
 import { useEffect, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import { Group, Vector3 } from "three";
+import { GLTF } from "three-stdlib"; // Add this import
+
 
 // Define a custom GLTF type interface
 interface CustomGLTF extends GLTF {
