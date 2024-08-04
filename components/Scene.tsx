@@ -7,41 +7,6 @@ import Model from './Model';
 import RcModel from './RcModel';
 import DroneModel from './Drone';
 import Loader from './homePageLoader'
-import ContactUsPage from './ContactUs';
-
-// function Loader() {
-//   const { progress } = useProgress();
-//   return (
-//     <Html center>
-//       <div className="fixed inset-0 flex items-center justify-center z-60">
-//         <div className="text-center">
-//           <div className="text-white text-2xl font-bold">
-//             {progress.toFixed(1)}% loaded
-//           </div>
-//           <div className="spinner"></div>
-//           <style jsx>{`
-//             .spinner {
-//               margin: 20px auto;
-//               width: 40px;
-//               height: 40px;
-//               border: 4px solid rgba(255, 255, 255, 0.1);
-//               border-left-color: #fff;
-//               border-radius: 50%;
-//               animation: spin 1s linear infinite;
-//               z-index: 1000;
-//             }
-
-//             @keyframes spin {
-//               to {
-//                 transform: rotate(360deg);
-//               }
-//             }
-//           `}</style>
-//         </div>
-//       </div>
-//     </Html>
-//   );
-// }
 
 interface AeroModellingClubProps {
   isMobile: boolean;

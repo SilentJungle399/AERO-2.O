@@ -31,7 +31,7 @@ const MyProfile = () => {
       const token = localStorage.getItem('token');
       if (!token) throw new Error('No token found');
 
-      const response = await fetch(`process.env.BACKEND_ROUTE/api/users/${id}`, {
+      const response = await fetch(`http://localhost:5000/api/users/${id}`, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -59,7 +59,7 @@ const MyProfile = () => {
       setLoading(true)
       try {
         const token = localStorage.getItem('token');
-        const response = await fetch(`process.env.BACKEND_ROUTE/api/users/profile/${id}`, {
+        const response = await fetch(`http://localhost:5000/api/users/profile/${id}`, {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -87,7 +87,7 @@ const MyProfile = () => {
     e.preventDefault();
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`process.env.BACKEND_ROUTE/api/users/update/${id}`, {
+      const response = await fetch(`http://localhost:5000/api/users/update/${id}`, {
         method: 'PATCH',
         headers: {
           'Authorization': `Bearer ${token}`,

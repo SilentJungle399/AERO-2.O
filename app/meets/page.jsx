@@ -12,7 +12,11 @@ const MeetListPage = () => {
   useEffect(() => {
     const fetchMeets = async () => {
       try {
-        const response = await fetch('process.env.BACKEND_ROUTE/api/users/getallmeets');
+        console.log( process.env.NEXT_PUBLIC_BACKEND_URL )
+        const baseUrl = process.env.NODE_ENV === 'production' 
+          ? process.env.NEXT_PUBLIC_BACKEND_URL 
+          : 'http://localhost:5000';
+        const response = await fetch(`${baseUrl}/api/users/getallmeets`);
         if (!response.ok) {
           throw new Error('Failed to fetch induction sessions');
         }
@@ -24,14 +28,17 @@ const MeetListPage = () => {
         setLoading(false);
       }
     };
-
+  
     fetchMeets();
   }, []);
 
   if (loading) {
-    return(
-      <div className='flex items-center justify-center h-screen'>
-        <div className='w-32 h-32 border-b-4 border-t-2 border-blue-500 rounded-full animate-spin'></div>
+    return (
+      <div className="loader-container bg-black">
+        <video className="loader-video" autoPlay loop muted>
+          <source src="/loading.webm" type="video/webm" />
+          Your browser does not support the video tag.
+        </video>
       </div>
     );
   }
@@ -41,23 +48,22 @@ const MeetListPage = () => {
       <div className="absolute inset-0 overflow-hidden">
         {[...Array(1000)].map((_, i) => (
           <div key={i} className="absolute bg-white rounded-full"
-               style={{
-                 top: `${Math.random() * 90}%`,
-                 left: `${Math.random() * 100}%`,
-                 width: `${Math.random() * 5}px`,
-                 height: `${Math.random() * 5}px`,
-                 opacity: 0.1,
-                 animation: `twinkle ${Math.random()*2  + 1}s linear infinite`,
-               }}
+            style={{
+              top: `${Math.random() * 90}%`,
+              left: `${Math.random() * 100}%`,
+              width: `${Math.random() * 5}px`,
+              height: `${Math.random() * 5}px`,
+              opacity: 0.1,
+              animation: `twinkle ${Math.random() * 2 + 1}s linear infinite`,
+            }}
           />
         ))}
       </div>
       <div className="w-full mt-20 max-w-7xl relative">
-      <div className="text-center ">
+        <div className="text-center">
           <FaPlane className="text-6xl text-blue-500 mx-auto mb-4" />
-          <h1 className='text-4xl monoton md:text-6xl  text-white mb-2'>Aeromodeling&nbsp;&nbsp; Club</h1>
-          
-          <h2 className='text-2xl monoton md:text-3xl  text-blue-400 mb-8'>NIT&nbsp;&nbsp; Kurukshetra</h2>
+          <h1 className='text-4xl monoton md:text-6xl text-white mb-2'>Aeromodeling&nbsp;&nbsp; Club</h1>
+          <h2 className='text-2xl monoton md:text-3xl text-blue-400 mb-8'>NIT&nbsp;&nbsp; Kurukshetra</h2>
         </div>
         <h1 className="text-4xl monoton mb-6 text-center text-white">Upcoming &nbsp;&nbsp; Meets &nbsp;&nbsp; Timeline</h1>
         <div className="relative">
@@ -76,7 +82,7 @@ const MeetCard = ({ meet, index }) => {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
-    <motion.div 
+    <motion.div
       className={`mb-16 flex justify-center items-center w-full ${isLeft ? 'flex-row-reverse' : ''}`}
       initial={{ opacity: 0, y: 50 }}
       animate={{ opacity: 1, y: 0 }}

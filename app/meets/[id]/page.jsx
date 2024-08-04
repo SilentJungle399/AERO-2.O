@@ -22,7 +22,7 @@ const MeetDetailPage = () => {
   useEffect(() => {
     const fetchMeetDetails = async () => {
       try {
-        const response = await fetch(`process.env.BACKEND_ROUTE/api/users/getmeets/${id}`);
+        const response = await fetch(`http://localhost:5000/api/users/getmeets/${id}`);
         if (!response.ok) {
           throw new Error("Failed to fetch meet details");
         }

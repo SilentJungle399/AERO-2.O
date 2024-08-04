@@ -19,7 +19,7 @@ const BlogPost = () => {
 
   const fetchBlog = async () => {
     try {
-      const response = await fetch(`process.env.BACKEND_ROUTE/api/users/getoneblog/${id}`);
+      const response = await fetch(`http://localhost:5000/api/users/getoneblog/${id}`);
       if (!response.ok) throw new Error('Network response was not ok');
       const data = await response.json();
       setBlog(data);

@@ -19,7 +19,7 @@ const CategoryManager = () => {
 
   const fetchCategories = async () => {
     try {
-      const response = await fetch('process.env.BACKEND_ROUTE/api/users/getallcategories');
+      const response = await fetch('http://localhost:5000/api/users/getallcategories');
       if (response.ok) {
         const data = await response.json();
         setCategories(data);
@@ -39,8 +39,8 @@ const CategoryManager = () => {
   const handleAddCategory = async (e) => {
     e.preventDefault();
     try {
-        // process.env.BACKEND_ROUTE/api/users/getmeets/667b077f0533150ac1e19a78
-      const response = await fetch('process.env.BACKEND_ROUTE/api/users/addnewcategory', {
+        // http://localhost:5000/api/users/getmeets/667b077f0533150ac1e19a78
+      const response = await fetch('http://localhost:5000/api/users/addnewcategory', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

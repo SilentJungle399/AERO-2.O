@@ -20,7 +20,7 @@ const AlbumPage = () => {
   const fetchAlbum = async () => {
     try {
       const response = await fetch(
-        `process.env.BACKEND_ROUTE/api/users/albums/${id}`
+        `http://localhost:5000/api/users/albums/${id}`
       );
       const data = await response.json();
       setAlbum(data);
@@ -43,7 +43,7 @@ const AlbumPage = () => {
     });
 
     try {
-      await fetch(`process.env.BACKEND_ROUTE/api/users/album/${id}`, {
+      await fetch(`http://localhost:5000/api/users/album/${id}`, {
         method: "POST",
         body: formData,
       });
@@ -58,7 +58,7 @@ const AlbumPage = () => {
     setSelectedImage(image);
     // Increase view count
     try {
-      await fetch(`process.env.BACKEND_ROUTE/api/images/${image.id}/view`, {
+      await fetch(`http://localhost:5000/api/images/${image.id}/view`, {
         method: "POST",
       });
       // Update local state
@@ -75,7 +75,7 @@ const AlbumPage = () => {
 
   const handleLike = async (image) => {
     try {
-      await fetch(`process.env.BACKEND_ROUTE/api/images/${image.id}/like`, {
+      await fetch(`http://localhost:5000/api/images/${image.id}/like`, {
         method: "POST",
       });
       // Update local state

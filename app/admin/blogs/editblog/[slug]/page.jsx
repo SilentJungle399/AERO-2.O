@@ -24,7 +24,7 @@ const EditBlogPost = () => {
     try {
       setLoading(true);
       const response = await fetch(
-        `process.env.BACKEND_ROUTE/api/users/getoneblog/${slug}`
+        `http://localhost:5000/api/users/getoneblog/${slug}`
       );
       if (!response.ok) {
         throw new Error("Failed to fetch the blog");
@@ -74,7 +74,7 @@ const EditBlogPost = () => {
     try {
       setLoading(true);
       const response = await fetch(
-        `process.env.BACKEND_ROUTE/api/users/updateoneblog/${slug}`,
+        `http://localhost:5000/api/users/updateoneblog/${slug}`,
         {
           method: "PUT",
           headers: {

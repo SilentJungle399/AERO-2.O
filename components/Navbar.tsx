@@ -116,7 +116,7 @@ const Navbar: React.FC = () => {
       const user = result.user;
       const token = await user.getIdToken();
 
-      const res = await fetch("process.env.BACKEND_ROUTE/api/auth/google-signin", {
+      const res = await fetch("http://localhost:5000/api/auth/google-signin", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -152,7 +152,7 @@ const Navbar: React.FC = () => {
     }
 
     try {
-      const response = await fetch(`process.env.BACKEND_ROUTE/api/users/notifications/${id}`);
+      const response = await fetch(`http://localhost:5000/api/users/notifications/${id}`);
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
@@ -178,7 +178,7 @@ const Navbar: React.FC = () => {
   const logout = async () => {
     try {
       localStorage.clear();
-      const response = await fetch("process.env.BACKEND_ROUTE/api/auth/logout", {
+      const response = await fetch("http://localhost:5000/api/auth/logout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
