@@ -22,6 +22,12 @@ const config: Config = {
           '100%': { transform: 'translateY(100vh) rotateX(360deg) rotateY(180deg)', opacity: '0' },
         },
       },
+      screens: {
+        xs : '400px',
+        sm: '640px',
+        md: '768px',
+        lg: '1024px',
+      },
     },
   },
   plugins: [],

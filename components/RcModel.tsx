@@ -53,8 +53,8 @@ export default function RcModel({ isMobile, scale = [2.1, 2.1, 2.1] }: RcModelPr
       const scrollOffset = scroll.offset; // Get scroll offset
 
       // Update target position based on scroll
-      targetPosition.current.x = isMobile ? -13+ scrollOffset * 20 : -7.5 + scrollOffset * 41; // Adjust the horizontal movement range for mobile
-      targetPosition.current.y = isMobile ? -3.4 + scrollOffset * 4 : 0 + scrollOffset * 1.5; // Adjust the vertical movement range for mobile
+      targetPosition.current.x = isMobile ? -13+ scrollOffset * 20 : -23 + scrollOffset * 41; // Adjust the horizontal movement range for mobile
+      targetPosition.current.y = isMobile ? -4.5 + scrollOffset * 4 : -2 + scrollOffset * 1.5; // Adjust the vertical movement range for mobile
       if(isMobile){
         // console.log(targetPosition.current.x)
         // console.log(targetPosition.current.y)

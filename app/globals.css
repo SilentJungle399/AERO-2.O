@@ -169,9 +169,7 @@ body {
 }
 
 
-
-
-.aero-heading-text {
+/* .aero-heading-text {
   position: relative;
   color: #3494D1;
   top: -210px;
@@ -364,7 +362,7 @@ body {
 } 
 
 /* //samsung z flip */
-@media only screen and (max-width: 361px) {
+/*@media only screen and (max-width: 361px) {
   .aero-heading-text {
     top: -190px;
     left: 1190px;
@@ -394,7 +392,7 @@ body {
   }
 } 
 /* samsung-galaxy-s8+ */
- @media only screen and (max-width: 361px) {
+ /*@media only screen and (max-width: 361px) {
   .aero-heading-text {
     top: -190px;
     left: 940px;
@@ -451,13 +449,13 @@ body {
     font-size: 40px;
     line-height: 70px;
   }
-} 
+}  */
 
 
 /* Optional: Hide scrollbar for WebKit-based browsers (e.g., Chrome, Safari) */
-body::-webkit-scrollbar {
+/* body::-webkit-scrollbar {
   display: none;
-}
+} */
 
 /* For loading.tsx file */
 /* Loader styles */
