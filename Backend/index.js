@@ -2,15 +2,15 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
-
 require('dotenv').config();
 
-
 const app = express();
+
+// CORS configuration
 app.use(cors({
     origin: [
-        'https://51.79.161.11',
-        'http://localhost:3000'
+        'https://51.79.161.11',   // Production URL
+        'http://localhost:3000'   // Development URL
     ],
     credentials: true // Enable credentials (cookies)
 }));
@@ -19,37 +19,38 @@ app.use(express.json());
 app.use(cookieParser()); // Add cookie-parser middleware
 app.use(express.urlencoded({ extended: true }));
 
-
-// console.log(process.env.MONGO_URI)
-
+// Connect to MongoDB
 const connectToMongo = async () => {
     try {
-        // Replace 'mongodb://localhost:27017/your_database_name' with your MongoDB connection URI
-        
-        const uri =process.env.MONGO_URI;
-      await mongoose.connect(uri, {
+        const uri = process.env.MONGO_URI; // MongoDB connection URI
+        await mongoose.connect(uri, {
             useNewUrlParser: true,
             useUnifiedTopology: true,
         });
-
         console.log('MongoDB connected successfully');
     } catch (error) {
         console.error('MongoDB connection error:', error);
-        // Exit the process if MongoDB connection fails
         process.exit(1);
     }
 };
 connectToMongo();
 
-// Regular User Routes
+// Register routes
 const userRoutes = require('./routes/userRoutes');
 app.use('/api/users', userRoutes);
 
-// Authentication Routes
-const authRoutes = require('./routes/authroutes');
+const authRoutes = require('./routes/authRoutes');
 app.use('/api/auth', authRoutes);
 
+// Determine base URL based on environment
 const PORT = process.env.PORT || 5000;
+const baseURL = process.env.NODE_ENV === 'production'
+    ? `https://51.79.161.11:5000`
+    : `http://localhost:5000`;
+
+    
+// Server listening
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
+    console.log(`Base URL: ${baseURL}`);
 });
