@@ -10,16 +10,22 @@ const app = express();
 app.use(cors({
     origin: [
         'http://51.79.161.11:3000',   // Production URL
-        'http://localhost:3000'   // Development URL
+        'http://localhost:3000'       // Development URL
     ],
     credentials: true // Enable credentials (cookies)
+}));
+
+app.options('*', cors({ // Preflight OPTIONS request for credentials
+    origin: [
+        'http://51.79.161.11:3000',   // Production URL
+        'http://localhost:3000'       // Development URL
+    ],
+    credentials: true
 }));
 
 app.use(express.json());
 app.use(cookieParser()); // Add cookie-parser middleware
 app.use(express.urlencoded({ extended: true }));
-
-
 
 // Connect to MongoDB
 const connectToMongo = async () => {
@@ -37,11 +43,9 @@ const connectToMongo = async () => {
 };
 connectToMongo();
 
-
-app.get("/",(req,res)=>{
+app.get("/", (req, res) => {
     return res.json("hello world of aeromodelling");
 })
-
 
 // Register routes
 const userRoutes = require('./routes/userRoutes');
@@ -55,7 +59,6 @@ const PORT = process.env.PORT || 5000;
 const baseURL = process.env.NODE_ENV === 'production'
     ? `https://51.79.161.11:5000`
     : `http://localhost:5000`;
-
 
 // Server listening
 app.listen(PORT, () => {
