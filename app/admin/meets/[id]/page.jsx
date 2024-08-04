@@ -18,8 +18,11 @@ export default function MeetAnalyticsPage() {
         .split("; ")
         .find((row) => row.startsWith("token="))
         .split("=")[1];
+        const baseUrl = process.env.NODE_ENV === 'production' 
+          ? process.env.NEXT_PUBLIC_BACKEND_URL 
+          : 'http://localhost:5000';
         const response = await fetch(
-          `http://localhost:5000/api/users/endmeet/${id}`,
+          `${baseUrl}/api/users/endmeet/${id}`,
           {
             method: "POST",
             headers: {

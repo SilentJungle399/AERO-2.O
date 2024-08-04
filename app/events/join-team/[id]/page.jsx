@@ -36,8 +36,11 @@ const JoinTeam = () => {
     setError("");
     try {
       // Replace this with your actual API call
+      const baseUrl = process.env.NODE_ENV === 'production'
+        ? process.env.NEXT_PUBLIC_BACKEND_URL
+        : 'http://localhost:5000';
       const response = await fetch(
-        "http://localhost:5000/api/users/checktoken",
+        `${baseUrl}/api/users/checktoken`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -69,7 +72,10 @@ const JoinTeam = () => {
     setError("");
     try {
       // Replace this with your actual API call
-      const response = await fetch("http://localhost:5000/api/users/jointeam", {
+      const baseUrl = process.env.NODE_ENV === 'production' 
+          ? process.env.NEXT_PUBLIC_BACKEND_URL 
+          : 'http://localhost:5000';
+      const response = await fetch(`${baseUrl}/api/users/jointeam`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -130,11 +136,10 @@ const JoinTeam = () => {
           <button
             onClick={validateGroupToken}
             disabled={isLoading}
-            className={`w-full py-3 px-4 rounded-md text-white font-semibold transition-colors duration-300 ${
-              isLoading
+            className={`w-full py-3 px-4 rounded-md text-white font-semibold transition-colors duration-300 ${isLoading
                 ? "bg-gray-600 cursor-not-allowed"
                 : "bg-blue-600 hover:bg-blue-700"
-            }`}
+              }`}
           >
             {isLoading ? "Validating..." : "Validate Token"}
           </button>
@@ -178,8 +183,8 @@ const JoinTeam = () => {
                     field.name === "Member_email"
                       ? "email"
                       : field.name === "Member_mob_no"
-                      ? "tel"
-                      : "text"
+                        ? "tel"
+                        : "text"
                   }
                   name={field.name}
                   value={formData[field.name]}
@@ -208,11 +213,10 @@ const JoinTeam = () => {
             <button
               type="submit"
               disabled={isLoading}
-              className={`w-full py-3 px-4 rounded-md text-white font-semibold transition-colors duration-300 ${
-                isLoading
+              className={`w-full py-3 px-4 rounded-md text-white font-semibold transition-colors duration-300 ${isLoading
                   ? "bg-gray-600 cursor-not-allowed"
                   : "bg-blue-600 hover:bg-blue-700"
-              }`}
+                }`}
             >
               {isLoading ? "Joining..." : "Join Team"}
             </button>

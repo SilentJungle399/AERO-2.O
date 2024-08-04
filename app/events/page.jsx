@@ -21,23 +21,26 @@
 //   const { scrollYProgress } = useScroll({ target: ref });
 //   const x = useTransform(scrollYProgress, [0, 1], ["0%", "-92%"]);
 
-//   useEffect(() => {
-//     const fetchEvents = async () => {
-//       try {
-//         const response = await fetch('http://localhost:5000/api/users/getallevents');
-//         if (!response.ok) {
-//           throw new Error('Failed to fetch events');
-//         }
-//         const data = await response.json();
-//         setEvents(data.events);
-//         setLoading(false);
-//       } catch (error) {
-//         setError(error.message);
-//         setLoading(false);
-//       }
-//     };
-//     fetchEvents();
-//   }, []);
+  // useEffect(() => {
+  //   const fetchEvents = async () => {
+  //     try {
+  //       const baseUrl = process.env.NODE_ENV === 'production' 
+  //         ? process.env.NEXT_PUBLIC_BACKEND_URL 
+  //         : 'http://localhost:5000';
+  //       const response = await fetch(`${baseUrl}/api/users/getallevents`);
+  //       if (!response.ok) {
+  //         throw new Error('Failed to fetch events');
+  //       }
+  //       const data = await response.json();
+  //       setEvents(data.events);
+  //       setLoading(false);
+  //     } catch (error) {
+  //       setError(error.message);
+  //       setLoading(false);
+  //     }
+  //   };
+  //   fetchEvents();
+  // }, []);
 
 //   if (loading) {
 //     return (

@@ -19,7 +19,10 @@ const AllAlbumsPage = () => {
 
   const fetchAlbums = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/users/albums');
+      const baseUrl = process.env.NODE_ENV === 'production'
+        ? process.env.NEXT_PUBLIC_BACKEND_URL
+        : 'http://localhost:5000';
+      const response = await fetch(`${baseUrl}/api/users/albums`);
       console.log("fuhskd")
       const data = await response.json();
       setAlbums(data);
@@ -36,13 +39,16 @@ const AllAlbumsPage = () => {
     e.preventDefault();
     const userId = localStorage.getItem('_id');
     try {
-      const response = await fetch('http://localhost:5000/api/users/createalbum', {
+      const baseUrl = process.env.NODE_ENV === 'production'
+        ? process.env.NEXT_PUBLIC_BACKEND_URL
+        : 'http://localhost:5000';
+      const response = await fetch(`${baseUrl}/api/users/createalbum`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ ...newAlbum, album_author: userId }),
-        credentials:'include'
+        credentials: 'include'
       });
       if (response.ok) {
         setShowModal(false);
@@ -62,54 +68,54 @@ const AllAlbumsPage = () => {
   return (
     <div className="min-h-screen bg-gray-900 text-white p-8 ">
       <h1 className="text-6xl monoton mb-8  mt-24 bg-gradient-to-r from-blue-300 via-green-500 to-indigo-400 text-transparent bg-clip-text">Photos &nbsp;&nbsp;And &nbsp;&nbsp;videos &nbsp;&nbsp;Albums</h1>
-      
-      <motion.div 
+
+      <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
         className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8"
       >
         {albums.map((album) => (
-          <Link  key={album._id} href={`/gallery/${album._id}`}>
-          <motion.div
-            
-            whileHover={{ scale: 1.05 }}
-            className="bg-gray-800 rounded-lg shadow-lg overflow-hidden cursor-pointer"
-          >
-            <div className="relative h-48">
-              <div className="grid grid-cols-3 gap-1 h-full">
-                {album.album_images.slice(0, 10).map((image, index) => {
-                  const size = getRandomSize();
-                  return (
-                    <div key={index} className={`
-                      ${size === 'small' ? 'col-span-1 row-span-1' : 
-                        size === 'medium' ? 'col-span-1 row-span-2' : 
-                        'col-span-2 row-span-2'}
+          <Link key={album._id} href={`/gallery/${album._id}`}>
+            <motion.div
+
+              whileHover={{ scale: 1.05 }}
+              className="bg-gray-800 rounded-lg shadow-lg overflow-hidden cursor-pointer"
+            >
+              <div className="relative h-48">
+                <div className="grid grid-cols-3 gap-1 h-full">
+                  {album.album_images.slice(0, 10).map((image, index) => {
+                    const size = getRandomSize();
+                    return (
+                      <div key={index} className={`
+                      ${size === 'small' ? 'col-span-1 row-span-1' :
+                          size === 'medium' ? 'col-span-1 row-span-2' :
+                            'col-span-2 row-span-2'}
                       overflow-hidden
                     `}>
-                      {image.file_type.includes("image")&&<img 
-                        src={image.url || 'https://via.placeholder.com/300x200'} 
-                        alt={`${album.album_name} image ${index + 1}`} 
-                        className="w-full h-full object-cover"
-                      />}
-                    </div>
-                  );
-                })}
+                        {image.file_type.includes("image") && <img
+                          src={image.url || 'https://via.placeholder.com/300x200'}
+                          alt={`${album.album_name} image ${index + 1}`}
+                          className="w-full h-full object-cover"
+                        />}
+                      </div>
+                    );
+                  })}
+                </div>
+                <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
+                  <FaFolder className="text-6xl text-white opacity-75" />
+                </div>
               </div>
-              <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
-                <FaFolder className="text-6xl text-white opacity-75" />
+              <div className="p-4">
+                <h2 className="text-xl font-semibold mb-2">{album.album_title}</h2>
+                <p className="text-gray-400 mb-2 flex items-center">
+                  <FaUser className="mr-2" /> {album.album_author.username}
+                </p>
+                <p className="text-gray-400 flex items-center">
+                  <FaCalendar className="mr-2" /> {new Date(album.createdAt).toLocaleDateString()}
+                </p>
               </div>
-            </div>
-            <div className="p-4">
-              <h2 className="text-xl font-semibold mb-2">{album.album_title}</h2>
-              <p className="text-gray-400 mb-2 flex items-center">
-                <FaUser className="mr-2" /> {album.album_author.username}
-              </p>
-              <p className="text-gray-400 flex items-center">
-                <FaCalendar className="mr-2" /> {new Date(album.createdAt).toLocaleDateString()}
-              </p>
-            </div>
-          </motion.div>
+            </motion.div>
           </Link>
         ))}
       </motion.div>

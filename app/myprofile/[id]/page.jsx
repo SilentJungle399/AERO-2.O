@@ -30,8 +30,10 @@ const MyProfile = () => {
     try {
       const token = localStorage.getItem('token');
       if (!token) throw new Error('No token found');
-
-      const response = await fetch(`http://localhost:5000/api/users/${id}`, {
+      const baseUrl = process.env.NODE_ENV === 'production'
+        ? process.env.NEXT_PUBLIC_BACKEND_URL
+        : 'http://localhost:5000';
+      const response = await fetch(`${baseUrl}/api/users/${id}`, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -59,7 +61,10 @@ const MyProfile = () => {
       setLoading(true)
       try {
         const token = localStorage.getItem('token');
-        const response = await fetch(`http://localhost:5000/api/users/profile/${id}`, {
+        const baseUrl = process.env.NODE_ENV === 'production'
+          ? process.env.NEXT_PUBLIC_BACKEND_URL
+          : 'http://localhost:5000';
+        const response = await fetch(`${baseUrl}/api/users/profile/${id}`, {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -87,7 +92,10 @@ const MyProfile = () => {
     e.preventDefault();
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5000/api/users/update/${id}`, {
+      const baseUrl = process.env.NODE_ENV === 'production'
+        ? process.env.NEXT_PUBLIC_BACKEND_URL
+        : 'http://localhost:5000';
+      const response = await fetch(`${baseUrl}/api/users/update/${id}`, {
         method: 'PATCH',
         headers: {
           'Authorization': `Bearer ${token}`,

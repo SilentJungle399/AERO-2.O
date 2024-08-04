@@ -44,8 +44,11 @@ export default function CreateTeamPage() {
     const fetchEventData = async () => {
       setIsLoading(true);
       try {
+        const baseUrl = process.env.NODE_ENV === 'production' 
+          ? process.env.NEXT_PUBLIC_BACKEND_URL 
+          : 'http://localhost:5000';
         const response = await fetch(
-          `http://localhost:5000/api/users/event/${id}`
+          `${baseUrl}/api/users/event/${id}`
         );
         if (!response.ok) throw new Error("Failed to fetch event data");
         const data = await response.json();
@@ -70,8 +73,11 @@ export default function CreateTeamPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      const baseUrl = process.env.NODE_ENV === 'production' 
+          ? process.env.NEXT_PUBLIC_BACKEND_URL 
+          : 'http://localhost:5000';
       const response = await fetch(
-        `http://localhost:5000/api/users/createteam/${id}`,
+        `${baseUrl}/api/users/createteam/${id}`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

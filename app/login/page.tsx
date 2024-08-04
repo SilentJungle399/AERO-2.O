@@ -14,7 +14,10 @@ export default function Login() {
     e.preventDefault();
     setError('');
     try {
-      const response = await fetch('http://localhost:5000/api/auth/login', {
+      const baseUrl = process.env.NODE_ENV === 'production'
+        ? process.env.NEXT_PUBLIC_BACKEND_URL
+        : 'http://localhost:5000';
+      const response = await fetch(`${baseUrl}/api/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
@@ -100,7 +103,7 @@ export default function Login() {
         <Link
           href={"/signup"}
           className='text-sm text-gray-300'>
-            Don&apos;t have account? Signup
+          Don&apos;t have account? Signup
         </Link>
       </div>
     </div>

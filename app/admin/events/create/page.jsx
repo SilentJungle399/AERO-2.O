@@ -61,7 +61,10 @@ const CreateEvent = () => {
     });
 
     try {
-      const response = await fetch('http://localhost:5000/api/users/createevent', {
+      const baseUrl = process.env.NODE_ENV === 'production' 
+          ? process.env.NEXT_PUBLIC_BACKEND_URL 
+          : 'http://localhost:5000';
+      const response = await fetch(`${baseUrl}/api/users/createevent`, {
         method: 'POST',
         body: formDataToSubmit,
       });

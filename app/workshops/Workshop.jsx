@@ -25,7 +25,10 @@ const EventsPage = () => {
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/users/getallevents');
+        const baseUrl = process.env.NODE_ENV === 'production'
+          ? process.env.NEXT_PUBLIC_BACKEND_URL
+          : 'http://localhost:5000';
+        const response = await fetch(`${baseUrl}/api/users/getallevents`);
         if (!response.ok) {
           throw new Error('Failed to fetch events');
         }
@@ -111,22 +114,22 @@ const EventsPage = () => {
                 </div>
               </div>
             ))}
-             <div
-                className={`h-screen w-screen flex-shrink-0 flex items-center justify-center bg-gradient-to-r ${gradients[5 % gradients.length]}`}
-               
-              >
-                <div className="flex flex-col lg:flex-row gap-8 text-white p-6 md:p-10 lg:p-16 max-w-6xl">
-                  <div className="lg:w-1/2 space-y-6">
-                    <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold">Easteeemed for seeing you in our upcoming events</h1>
-                
-                   
-                    
-                  </div>
-                  <div className="lg:w-1/2">
-                    
-                  </div>
+            <div
+              className={`h-screen w-screen flex-shrink-0 flex items-center justify-center bg-gradient-to-r ${gradients[5 % gradients.length]}`}
+
+            >
+              <div className="flex flex-col lg:flex-row gap-8 text-white p-6 md:p-10 lg:p-16 max-w-6xl">
+                <div className="lg:w-1/2 space-y-6">
+                  <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold">Easteeemed for seeing you in our upcoming events</h1>
+
+
+
+                </div>
+                <div className="lg:w-1/2">
+
                 </div>
               </div>
+            </div>
           </motion.div>
         </div>
       </div>

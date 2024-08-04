@@ -9,7 +9,10 @@ const Blogs = () => {
   useEffect(() => {
     const fetchBlogs = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/users/getallblogs');
+        const baseUrl = process.env.NODE_ENV === 'production'
+          ? process.env.NEXT_PUBLIC_BACKEND_URL
+          : 'http://localhost:5000';
+        const response = await fetch(`${baseUrl}/api/users/getallblogs`);
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }

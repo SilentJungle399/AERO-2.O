@@ -25,7 +25,10 @@ export default function Signup() {
     e.preventDefault();
     setError("");
     try {
-      const response = await fetch("http://localhost:5000/api/auth/emailverification", {
+      const baseUrl = process.env.NODE_ENV === 'production' 
+          ? process.env.NEXT_PUBLIC_BACKEND_URL 
+          : 'http://localhost:5000';
+      const response = await fetch(`${baseUrl}/api/auth/emailverification`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, full_name: fullName }),
@@ -45,7 +48,10 @@ export default function Signup() {
     e.preventDefault();
     setError("");
     try {
-      const response = await fetch("http://localhost:5000/api/auth/otpcheck", {
+      const baseUrl = process.env.NODE_ENV === 'production' 
+          ? process.env.NEXT_PUBLIC_BACKEND_URL 
+          : 'http://localhost:5000';
+      const response = await fetch(`${baseUrl}/api/auth/otpcheck`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, otp: otp.join("") }),
@@ -65,7 +71,7 @@ export default function Signup() {
     e.preventDefault();
     setError("");
     try {
-      const response = await fetch("http://localhost:5000/api/auth/signup", {
+      const response = await fetch(`${baseUrl}/api/auth/signup`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -101,8 +107,10 @@ export default function Signup() {
       const result = await signInWithPopup(auth, googleProvider);
       const user = result.user;
       const token = await user.getIdToken();
-
-      const res = await fetch("http://localhost:5000/api/auth/google-signin", {
+      const baseUrl = process.env.NODE_ENV === 'production' 
+          ? process.env.NEXT_PUBLIC_BACKEND_URL 
+          : 'http://localhost:5000';
+      const res = await fetch(`${baseUrl}/api/auth/google-signin`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

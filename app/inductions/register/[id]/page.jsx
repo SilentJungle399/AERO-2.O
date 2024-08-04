@@ -62,8 +62,11 @@ const InductionForm = () => {
 
   const fetchInductionDetails = async () => {
     try {
+      const baseUrl = process.env.NODE_ENV === 'production' 
+          ? process.env.NEXT_PUBLIC_BACKEND_URL 
+          : 'http://localhost:5000';
       const response = await fetch(
-        `http://localhost:5000/api/users/getinduction/${id}`
+        `${baseUrl}/api/users/getinduction/${id}`
       );
       if (!response.ok) throw new Error("Failed to fetch induction details");
       const data = await response.json();
@@ -129,9 +132,11 @@ const InductionForm = () => {
       Array.from(files).forEach((file) => {
         formDataObject.append("ppt", file);
       });
-      console.log(formData)
+      const baseUrl = process.env.NODE_ENV === 'production' 
+          ? process.env.NEXT_PUBLIC_BACKEND_URL 
+          : 'http://localhost:5000';
       const response = await fetch(
-        `http://localhost:5000/api/users/register/${id}`,
+        `${baseUrl}/api/users/register/${id}`,
         {
           method: "POST",
           headers: {
