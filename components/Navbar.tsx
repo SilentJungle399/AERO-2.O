@@ -178,7 +178,10 @@ const Navbar: React.FC = () => {
   const logout = async () => {
     try {
       localStorage.clear();
-      const response = await fetch("http://localhost:5000/api/auth/logout", {
+      const baseUrl = process.env.NODE_ENV === 'production'
+        ? process.env.NEXT_PUBLIC_BACKEND_URL
+        : 'http://localhost:5000';
+      const response = await fetch(`${baseUrl}/api/auth/logout`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
@@ -481,9 +484,8 @@ const Navbar: React.FC = () => {
 
         {/* Sidebar for Mobile */}
         <div
-          className={`fixed inset-y-0 left-0 transform ${
-            sidebarOpen ? "translate-x-0" : "-translate-x-full"
-          } md:hidden transition-transform duration-300 ease-in-out bg-black bg-opacity-90 w-64 p-4 z-50`}
+          className={`fixed inset-y-0 left-0 transform ${sidebarOpen ? "translate-x-0" : "-translate-x-full"
+            } md:hidden transition-transform duration-300 ease-in-out bg-black bg-opacity-90 w-64 p-4 z-50`}
         >
           <button
             className="text-white focus:outline-none mb-4"

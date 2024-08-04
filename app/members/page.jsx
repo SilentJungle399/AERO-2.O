@@ -9,7 +9,10 @@ const UserDisplay = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/users/getourmembers');
+        const baseUrl = process.env.NODE_ENV === 'production' 
+          ? process.env.NEXT_PUBLIC_BACKEND_URL 
+          : 'http://localhost:5000';
+        const response = await fetch(`${baseUrl}/api/users/getourmembers`);
         if (!response.ok) throw new Error('Network response was not ok');
         const allUsers = await response.json();
 

@@ -22,7 +22,10 @@ const MeetDetailPage = () => {
   useEffect(() => {
     const fetchMeetDetails = async () => {
       try {
-        const response = await fetch(`http://localhost:5000/api/users/getmeets/${id}`);
+        const baseUrl = process.env.NODE_ENV === 'production'
+          ? process.env.NEXT_PUBLIC_BACKEND_URL
+          : 'http://localhost:5000';
+        const response = await fetch(`${baseUrl}/api/users/getmeets/${id}`);
         if (!response.ok) {
           throw new Error("Failed to fetch meet details");
         }

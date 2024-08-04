@@ -19,8 +19,11 @@ const AlbumPage = () => {
 
   const fetchAlbum = async () => {
     try {
+      const baseUrl = process.env.NODE_ENV === 'production'
+        ? process.env.NEXT_PUBLIC_BACKEND_URL
+        : 'http://localhost:5000';
       const response = await fetch(
-        `http://localhost:5000/api/users/albums/${id}`
+        `${baseUrl}/api/users/albums/${id}`
       );
       const data = await response.json();
       setAlbum(data);
@@ -43,7 +46,10 @@ const AlbumPage = () => {
     });
 
     try {
-      await fetch(`http://localhost:5000/api/users/album/${id}`, {
+      const baseUrl = process.env.NODE_ENV === 'production'
+        ? process.env.NEXT_PUBLIC_BACKEND_URL
+        : 'http://localhost:5000';
+      await fetch(`${baseUrl}/api/users/album/${id}`, {
         method: "POST",
         body: formData,
       });
@@ -58,7 +64,10 @@ const AlbumPage = () => {
     setSelectedImage(image);
     // Increase view count
     try {
-      await fetch(`http://localhost:5000/api/images/${image.id}/view`, {
+      const baseUrl = process.env.NODE_ENV === 'production'
+        ? process.env.NEXT_PUBLIC_BACKEND_URL
+        : 'http://localhost:5000';
+      await fetch(`${baseUrl}/api/images/${image.id}/view`, {
         method: "POST",
       });
       // Update local state
@@ -75,7 +84,10 @@ const AlbumPage = () => {
 
   const handleLike = async (image) => {
     try {
-      await fetch(`http://localhost:5000/api/images/${image.id}/like`, {
+      const baseUrl = process.env.NODE_ENV === 'production'
+        ? process.env.NEXT_PUBLIC_BACKEND_URL
+        : 'http://localhost:5000';
+      await fetch(`${baseUrl}/api/images/${image.id}/like`, {
         method: "POST",
       });
       // Update local state
@@ -205,34 +217,34 @@ const AlbumPage = () => {
             className="fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center p-4 z-50"
           >
             <div className="absolute top-3 left-4 flex items-center">
-                <button
-                  onClick={() => handleLike(selectedImage)}
-                  className="flex items-center text-red-500 px-4 py-2 rounded-full mr-4"
-                >
-                  <FaHeart className="mr-2" /> {selectedImage.likes}
-                </button>
-                <div className="flex items-center text-blue-500">
-                  <FaEye className="mr-2" /> {selectedImage.views}
-                </div>
+              <button
+                onClick={() => handleLike(selectedImage)}
+                className="flex items-center text-red-500 px-4 py-2 rounded-full mr-4"
+              >
+                <FaHeart className="mr-2" /> {selectedImage.likes}
+              </button>
+              <div className="flex items-center text-blue-500">
+                <FaEye className="mr-2" /> {selectedImage.views}
               </div>
+            </div>
             <motion.div
               initial={{ scale: 0.9 }}
               animate={{ scale: 1 }}
               className="relative justify-center max-w-4xl w-full"
             >
-              {selectedImage.file_type.includes("image")&&<img
+              {selectedImage.file_type.includes("image") && <img
                 src={selectedImage.url}
                 alt="Selected image"
                 className="w-full h-auto  rounded-lg"
               />}
               {selectedImage.file_type.includes("video") && (
-                  <video
-                    src={selectedImage.url}
-                    alt={`Album video`}
-                    className="w-full h-full object-cover"
-                    controls
-                  />
-                )}
+                <video
+                  src={selectedImage.url}
+                  alt={`Album video`}
+                  className="w-full h-full object-cover"
+                  controls
+                />
+              )}
               {/* <button
                 onClick={() => setSelectedImage(null)}
                 className="absolute top-3 right-2 text-red-500 text-2xl"
@@ -252,11 +264,11 @@ const AlbumPage = () => {
               </div> */}
             </motion.div>
             <button
-                onClick={() => setSelectedImage(null)}
-                className="absolute top-3 right-2 text-red-500 text-2xl"
-              >
-                <FaTimes />
-              </button>
+              onClick={() => setSelectedImage(null)}
+              className="absolute top-3 right-2 text-red-500 text-2xl"
+            >
+              <FaTimes />
+            </button>
           </motion.div>
         )}
       </AnimatePresence>

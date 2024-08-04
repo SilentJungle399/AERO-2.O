@@ -26,7 +26,10 @@ const EventsPage = () => {
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/users/getallevents');
+        const baseUrl = process.env.NODE_ENV === 'production' 
+          ? process.env.NEXT_PUBLIC_BACKEND_URL 
+          : 'http://localhost:5000';
+        const response = await fetch(`${baseUrl}/api/users/getallevents`);
         if (!response.ok) {
           throw new Error('Failed to fetch events');
         }

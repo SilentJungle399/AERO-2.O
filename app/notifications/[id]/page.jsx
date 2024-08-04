@@ -25,7 +25,10 @@ const Notification = () => {
     }
   
     try {
-      const response = await fetch(`http://localhost:5000/api/users/${notificationId}/notifications`, {
+      const baseUrl = process.env.NODE_ENV === 'production' 
+          ? process.env.NEXT_PUBLIC_BACKEND_URL 
+          : 'http://localhost:5000';
+      const response = await fetch(`${baseUrl}/api/users/${notificationId}/notifications`, {
         method: 'POST', // Use POST method to send the request body
         headers: {
           'Content-Type': 'application/json',
