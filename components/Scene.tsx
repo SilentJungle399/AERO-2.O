@@ -16,7 +16,7 @@ function AeroModellingClub({ isMobile }: AeroModellingClubProps) {
   return (
     <Html>
       <div className={`monoton absolute z-10 text-blue-500
-        xs:top-[-90px] xs:left-[1200px] xs:text-[60px] xs:leading-[60px]
+        xs:top-[-90px] xs:left-[1080px] xs:text-[55px] xs:leading-[60px]
         sm:top-[-104px] sm:left-[320px] sm:text-[37px] sm:leading-[45px]
         md:top-[-150px] md:left-[400px] md:text-[80px] md:leading-[90px]
         lg:top-[-210px] lg:left-[500px] lg:text-[140px] lg:leading-[150px]`}>
@@ -27,7 +27,7 @@ function AeroModellingClub({ isMobile }: AeroModellingClubProps) {
         <div className="flex items-center">
           <h1>Club</h1>
           <h1 className={`subtitle text-red-600 ml-2
-            xs:text-[20px] xs:pt-[7px]
+            xs:text-[17px] xs:pt-[7px]
             sm:text-[11px] sm:pt-[7px]
             md:text-[20px] md:pt-[15px]
             lg:text-[40px] lg:pt-[25px] lg:ml-[30px]`}>
@@ -43,10 +43,10 @@ function Dronesection() {
   return (
     <Html>
       <div className="monoton absolute z-10 text-orange-600
-        xs:top-[700px] xs:left-[1200px] xs:text-[50px] xs:leading-[60px]
-        sm:top-[450px] sm:left-[20px] sm:text-[70px] sm:leading-[80px]
-        md:top-[600px] md:left-[150px] md:text-[100px] md:leading-[110px]
-        lg:top-[900px] lg:left-[350px] lg:text-[140px] lg:leading-[150px]">
+        xs:top-[700px] xs:left-[1100px] xs:text-[50px] xs:leading-[60px]
+        sm:top-[650px] sm:left-[1000px] sm:text-[70px] sm:leading-[80px]
+        md:top-[600px] md:left-[900px] md:text-[100px] md:leading-[110px]
+        lg:top-[900px] lg:left-[400px] lg:text-[140px] lg:leading-[150px]">
         <h1>Drones</h1>
       </div>
     </Html>
@@ -57,10 +57,10 @@ function Rcsection() {
   return (
     <Html>
       <div className="monoton absolute z-10 text-orange-600
-        xs:top-[1500px] xs:left-[1200px] xs:text-[50px] xs:leading-[60px]
-        sm:top-[700px] sm:left-[20px] sm:text-[70px] sm:leading-[80px]
-        md:top-[1000px] md:left-[150px] md:text-[100px] md:leading-[110px]
-        lg:top-[1700px] lg:left-[350px] lg:text-[140px] lg:leading-[150px]">
+        xs:top-[1500px] xs:left-[1100px] xs:text-[50px] xs:leading-[60px]
+        sm:top-[1450px] sm:left-[1000px] sm:text-[70px] sm:leading-[80px]
+        md:top-[1400px] md:left-[900px] md:text-[100px] md:leading-[110px]
+        lg:top-[1700px] lg:left-[400px] lg:text-[140px] lg:leading-[150px]">
         <h1>Planes</h1>
       </div>
     </Html>
@@ -85,7 +85,7 @@ export default function Scene() {
   }, []);
 
   return (
-    <div className="h-screen overflow-hidden">
+    <div className="h-screen overflow-hidden hide-scrollbar">
       <Canvas className="h-full w-full overflow-hidden" gl={{ antialias: true }} dpr={[1, 2]}>
         <Suspense fallback={<Loader />}>
           <PerspectiveCamera makeDefault position={[7, 0, 5]} />

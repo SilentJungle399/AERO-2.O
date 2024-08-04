@@ -168,6 +168,11 @@ body {
   }
 }
 
+.hide-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
 
 /* .aero-heading-text {
   position: relative;
@@ -453,9 +458,9 @@ body {
 
 
 /* Optional: Hide scrollbar for WebKit-based browsers (e.g., Chrome, Safari) */
-/* body::-webkit-scrollbar {
+body::-webkit-scrollbar {
   display: none;
-} */
+} 
 
 /* For loading.tsx file */
 /* Loader styles */

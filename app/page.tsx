@@ -12,7 +12,9 @@ const Scene = React.lazy(() => import('@/components/Scene'));
 export default function Home() {
   return (
     <>
+    <span className='overflow-hidden backdr hide-scrollbar'>
       <Scene />
+    </span>
       {/* <AlumniCarousel/> */}
       <ContactUsPage />
     </>
