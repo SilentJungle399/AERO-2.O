@@ -19,6 +19,8 @@ app.use(express.json());
 app.use(cookieParser()); // Add cookie-parser middleware
 app.use(express.urlencoded({ extended: true }));
 
+
+
 // Connect to MongoDB
 const connectToMongo = async () => {
     try {
@@ -35,6 +37,12 @@ const connectToMongo = async () => {
 };
 connectToMongo();
 
+
+app.get("/",(req,res)=>{
+    return res.json("hello world of aeromodelling");
+})
+
+
 // Register routes
 const userRoutes = require('./routes/userRoutes');
 app.use('/api/users', userRoutes);
@@ -48,7 +56,7 @@ const baseURL = process.env.NODE_ENV === 'production'
     ? `https://51.79.161.11:5000`
     : `http://localhost:5000`;
 
-    
+
 // Server listening
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
