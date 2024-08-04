@@ -37,7 +37,7 @@ const JoinTeam = () => {
     try {
       // Replace this with your actual API call
       const response = await fetch(
-        "http://localhost:5000/api/users/checktoken",
+        "process.env.BACKEND_ROUTE/api/users/checktoken",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -69,7 +69,7 @@ const JoinTeam = () => {
     setError("");
     try {
       // Replace this with your actual API call
-      const response = await fetch("http://localhost:5000/api/users/jointeam", {
+      const response = await fetch("process.env.BACKEND_ROUTE/api/users/jointeam", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

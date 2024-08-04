@@ -63,7 +63,7 @@ const InductionForm = () => {
   const fetchInductionDetails = async () => {
     try {
       const response = await fetch(
-        `http://localhost:5000/api/users/getinduction/${id}`
+        `process.env.BACKEND_ROUTE/api/users/getinduction/${id}`
       );
       if (!response.ok) throw new Error("Failed to fetch induction details");
       const data = await response.json();
@@ -131,7 +131,7 @@ const InductionForm = () => {
       });
       console.log(formData)
       const response = await fetch(
-        `http://localhost:5000/api/users/register/${id}`,
+        `process.env.BACKEND_ROUTE/api/users/register/${id}`,
         {
           method: "POST",
           headers: {

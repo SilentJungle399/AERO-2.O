@@ -19,7 +19,7 @@ export default function MeetAnalyticsPage() {
         .find((row) => row.startsWith("token="))
         .split("=")[1];
         const response = await fetch(
-          `http://localhost:5000/api/users/endmeet/${id}`,
+          `process.env.BACKEND_ROUTE/api/users/endmeet/${id}`,
           {
             method: "POST",
             headers: {
@@ -45,7 +45,7 @@ export default function MeetAnalyticsPage() {
     const fetchMeetDetails = async () => {
       if (!id) return;
       try {
-        const response = await fetch(`http://localhost:5000/api/users/getmeets/${id}`);
+        const response = await fetch(`process.env.BACKEND_ROUTE/api/users/getmeets/${id}`);
         if (!response.ok) {
           throw new Error('Failed to fetch meet details');
         }

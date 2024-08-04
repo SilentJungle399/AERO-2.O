@@ -45,7 +45,7 @@ export default function CreateTeamPage() {
       setIsLoading(true);
       try {
         const response = await fetch(
-          `http://localhost:5000/api/users/event/${id}`
+          `process.env.BACKEND_ROUTE/api/users/event/${id}`
         );
         if (!response.ok) throw new Error("Failed to fetch event data");
         const data = await response.json();
@@ -71,7 +71,7 @@ export default function CreateTeamPage() {
     e.preventDefault();
     try {
       const response = await fetch(
-        `http://localhost:5000/api/users/createteam/${id}`,
+        `process.env.BACKEND_ROUTE/api/users/createteam/${id}`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

@@ -10,7 +10,7 @@ const InductionSessionsList = () => {
   useEffect(() => {
     const fetchInductionSessions = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/users/getallinduction');
+        const response = await fetch('process.env.BACKEND_ROUTE/api/users/getallinduction');
         if (!response.ok) {
           throw new Error('Failed to fetch induction sessions');
         }

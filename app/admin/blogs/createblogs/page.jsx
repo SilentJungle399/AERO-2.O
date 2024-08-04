@@ -32,7 +32,7 @@ const BlogForm = () => {
     const fetchCategories = async () => {
       try {
         const response = await fetch(
-          "http://localhost:5000/api/users/getallcategories"
+          "process.env.BACKEND_ROUTE/api/users/getallcategories"
         );
         const data = await response.json();
         setCategories(data);
@@ -72,7 +72,7 @@ const BlogForm = () => {
         }
       }
       const response = await fetch(
-        "http://localhost:5000/api/users/addnewblog",
+        "process.env.BACKEND_ROUTE/api/users/addnewblog",
         {
           method: "POST",
           body: form,

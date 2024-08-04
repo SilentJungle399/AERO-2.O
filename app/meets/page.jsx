@@ -12,7 +12,7 @@ const MeetListPage = () => {
   useEffect(() => {
     const fetchMeets = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/users/getallmeets');
+        const response = await fetch('process.env.BACKEND_ROUTE/api/users/getallmeets');
         if (!response.ok) {
           throw new Error('Failed to fetch induction sessions');
         }

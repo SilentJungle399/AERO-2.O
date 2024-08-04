@@ -19,7 +19,7 @@ const AllAlbumsPage = () => {
 
   const fetchAlbums = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/users/albums');
+      const response = await fetch('process.env.BACKEND_ROUTE/api/users/albums');
       console.log("fuhskd")
       const data = await response.json();
       setAlbums(data);
@@ -36,7 +36,7 @@ const AllAlbumsPage = () => {
     e.preventDefault();
     const userId = localStorage.getItem('_id');
     try {
-      const response = await fetch('http://localhost:5000/api/users/createalbum', {
+      const response = await fetch('process.env.BACKEND_ROUTE/api/users/createalbum', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -28,7 +28,7 @@ const generateQRCodeForMeet = async function (meet) {
 
     // Generate new token and QR code data
     const token = uuidv4();
-    const qrCodeData = `http://localhost:5000/api/users/scan-meet/${meet._id}?token=${token}`;
+    const qrCodeData = `process.env.BACKEND_ROUTE/api/users/scan-meet/${meet._id}?token=${token}`;
 
     // Generate QR code as a data URL
     await QRCode.toFile(
@@ -134,7 +134,7 @@ const markAttendance = async (req, res) => {
 
       // Generate a new QR code and token
       const newToken = uuidv4();
-      const newQrCode = await QRCode.toDataURL(`http://localhost:5000/api/users/scan-meet/${id}?token=${newToken}`);
+      const newQrCode = await QRCode.toDataURL(`process.env.BACKEND_ROUTE/api/users/scan-meet/${id}?token=${newToken}`);
 
       // Update the meet document with the new QR code and token
       meet.qr_code_token = newToken;

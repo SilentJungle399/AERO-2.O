@@ -18,7 +18,7 @@ export default function AdminInductions() {
   const fetchInduction = async () => {
     try {
       const response = await fetch(
-        `http://localhost:5000/api/users/getinductionforselectingstudent/${id}`
+        `process.env.BACKEND_ROUTE/api/users/getinductionforselectingstudent/${id}`
       );
       if (!response.ok) {
         throw new Error("Failed to fetch induction");
@@ -68,7 +68,7 @@ export default function AdminInductions() {
       });
 
       const response = await fetch(
-        `http://localhost:5000/api/users/sendnotification/${id}`,
+        `process.env.BACKEND_ROUTE/api/users/sendnotification/${id}`,
         {
           method: "POST",
           headers: {
