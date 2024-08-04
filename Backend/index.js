@@ -9,7 +9,7 @@ const app = express();
 // CORS configuration
 app.use(cors({
     origin: [
-        'https://51.79.161.11',   // Production URL
+        'http://51.79.161.11',   // Production URL
         'http://localhost:3000'   // Development URL
     ],
     credentials: true // Enable credentials (cookies)
