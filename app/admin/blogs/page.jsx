@@ -1,13 +1,12 @@
 "use client";
 
 import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
 import Link from 'next/link';
 import Cookies from 'js-cookie';
-import { FaPlane, FaUsers, FaCalendarAlt, FaTools, FaTrophy, FaCog, FaSignOutAlt } from 'react-icons/fa';
+import { FaPlane, FaUsers, FaCalendarAlt, FaTools, FaTrophy, FaCog } from 'react-icons/fa';
 
 const withAdminAuth = (WrappedComponent) => {
-  return (props) => {
+  const WithAdminAuth = (props) => {
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
@@ -35,7 +34,7 @@ const withAdminAuth = (WrappedComponent) => {
           if (data.isAdmin) {
             setIsLoading(false);
           } else {
-           window.location.href="/unauthorized"
+            window.location.href="/unauthorized"
           }
         } catch (error) {
           console.error('Error checking admin status:', error);
@@ -52,6 +51,11 @@ const withAdminAuth = (WrappedComponent) => {
 
     return <WrappedComponent {...props} />;
   };
+
+  // Set the display name for the HOC for better debugging and React DevTools
+  WithAdminAuth.displayName = `WithAdminAuth(${WrappedComponent.displayName || WrappedComponent.name || 'Component'})`;
+
+  return WithAdminAuth;
 };
 
 const AeroClubAdminDashboard = () => {
@@ -97,5 +101,8 @@ const AeroClubAdminDashboard = () => {
     </div>
   );
 };
+
+// Set the display name for the AeroClubAdminDashboard component
+AeroClubAdminDashboard.displayName = 'AeroClubAdminDashboard';
 
 export default withAdminAuth(AeroClubAdminDashboard);

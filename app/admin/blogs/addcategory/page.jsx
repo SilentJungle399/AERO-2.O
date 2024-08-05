@@ -1,12 +1,11 @@
-"use client"
-import Link from 'next/link';
+"use client";
 import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/router';
 import Cookies from 'js-cookie';
 import { FaCalendarAlt, FaCog, FaPlane, FaSignOutAlt, FaBars, FaTools, FaTrophy, FaUsers } from 'react-icons/fa';
+import Link from 'next/link';
 
 const withAdminAuth = (WrappedComponent) => {
-  return (props) => {
+  const WithAdminAuth = (props) => {
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
@@ -14,7 +13,7 @@ const withAdminAuth = (WrappedComponent) => {
         const token = Cookies.get('token');
 
         if (!token) {
-           window.location.href="/unauthorized"
+           window.location.href = "/unauthorized";
           return;
         }
 
@@ -34,11 +33,11 @@ const withAdminAuth = (WrappedComponent) => {
           if (data.isAdmin) {
             setIsLoading(false);
           } else {
-            window.location.href="/unauthorized"
+            window.location.href = "/unauthorized";
           }
         } catch (error) {
           console.error('Error checking admin status:', error);
-          window.location.href="/unauthorized"
+          window.location.href = "/unauthorized";
         }
       };
 
@@ -51,6 +50,10 @@ const withAdminAuth = (WrappedComponent) => {
 
     return <WrappedComponent {...props} />;
   };
+
+  WithAdminAuth.displayName = `withAdminAuth(${WrappedComponent.displayName || WrappedComponent.name || 'Component'})`;
+
+  return WithAdminAuth;
 };
 
 const CategoryManager = () => {
@@ -89,7 +92,6 @@ const CategoryManager = () => {
   const handleAddCategory = async (e) => {
     e.preventDefault();
     try {
-        // http://localhost:5000/api/users/getmeets/667b077f0533150ac1e19a78
       const response = await fetch('http://localhost:5000/api/users/addnewcategory', {
         method: 'POST',
         headers: {
@@ -113,7 +115,7 @@ const CategoryManager = () => {
   };
 
   return (
-    <div className="flex flex-col lg:flex-row min-h-screen bg-black ">
+    <div className="flex flex-col lg:flex-row min-h-screen bg-black">
       {/* Sidebar */}
       <aside className={`bg-blue-800 text-white w-full md:w-64 space-y-6 py-7 px-2 absolute inset-y-0 left-0 transform ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:relative md:translate-x-0 transition duration-200 ease-in-out z-20`}>
         <div className="flex items-center justify-between px-4">
@@ -123,7 +125,7 @@ const CategoryManager = () => {
           </button>
         </div>
         <nav className="mt-6">
-        <Link href="/admin/blogs/editblog" className="flex items-center py-3 px-6 bg-blue-900">
+          <Link href="/admin/blogs/editblog" className="flex items-center py-3 px-6 bg-blue-900">
             <FaPlane className="mr-3" />
             Edit blogs
           </Link>
@@ -152,17 +154,13 @@ const CategoryManager = () => {
             Settings
           </Link>
         </nav>
-        
       </aside>
 
       {/* Main content */}
-      <div className="flex-1 pt-24  flex flex-col overflow-hidden">
-        {/* Top bar */}
-      
-
+      <div className="flex-1 pt-24 flex flex-col overflow-hidden">
         {/* Category form */}
         <main className="flex-1 overflow-x-hidden overflow-y-auto p-4 md:p-8">
-          <form onSubmit={handleAddCategory} className=" mx-auto space-y-12">
+          <form onSubmit={handleAddCategory} className="mx-auto space-y-12">
             <h2 className="text-3xl font-bold text-blue-800 mb-8">Create New Category</h2>
 
             {/* Category Name */}
@@ -229,5 +227,7 @@ const CategoryManager = () => {
     </div>
   );
 };
+
+CategoryManager.displayName = 'CategoryManager';
 
 export default withAdminAuth(CategoryManager);

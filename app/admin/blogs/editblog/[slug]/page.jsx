@@ -15,7 +15,7 @@ const DynamicColorPicker = dynamic(
 );
 
 const withAdminAuth = (WrappedComponent) => {
-  return (props) => {
+  const WithAdminAuth = (props) => {
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
@@ -60,6 +60,11 @@ const withAdminAuth = (WrappedComponent) => {
 
     return <WrappedComponent {...props} />;
   };
+
+  // Set the display name for the HOC for better debugging and React DevTools
+  WithAdminAuth.displayName = `WithAdminAuth(${WrappedComponent.displayName || WrappedComponent.name || 'Component'})`;
+
+  return WithAdminAuth;
 };
 
 const EditBlogPost = () => {
@@ -201,5 +206,8 @@ const EditBlogPost = () => {
     </DndProvider>
   );
 };
+
+// Set the display name for the EditBlogPost component
+EditBlogPost.displayName = 'EditBlogPost';
 
 export default withAdminAuth(EditBlogPost);

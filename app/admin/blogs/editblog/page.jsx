@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
@@ -7,7 +7,7 @@ import { motion } from 'framer-motion';
 import Cookies from 'js-cookie';
 
 const withAdminAuth = (WrappedComponent) => {
-  return (props) => {
+  const WithAdminAuth = (props) => {
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
@@ -52,6 +52,11 @@ const withAdminAuth = (WrappedComponent) => {
 
     return <WrappedComponent {...props} />;
   };
+
+  // Set the display name for the HOC for better debugging and React DevTools
+  WithAdminAuth.displayName = `WithAdminAuth(${WrappedComponent.displayName || WrappedComponent.name || 'Component'})`;
+
+  return WithAdminAuth;
 };
 
 const Blogs = () => {
@@ -182,5 +187,8 @@ const Blogs = () => {
     </div>
   );
 };
+
+// Set the display name for the Blogs component
+Blogs.displayName = 'Blogs';
 
 export default withAdminAuth(Blogs);

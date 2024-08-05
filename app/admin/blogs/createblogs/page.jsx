@@ -1,11 +1,12 @@
 "use client";
+
 import React, { useState, useEffect } from "react";
 import Link from 'next/link';
 import Cookies from 'js-cookie';
 import { FaCalendarAlt, FaCog, FaPlane, FaSignOutAlt, FaTools, FaTrophy, FaUsers, FaBars, FaHeading, FaFileAlt, FaImage, FaTags, FaSearchPlus } from 'react-icons/fa';
 
 const withAdminAuth = (WrappedComponent) => {
-  return (props) => {
+  const WithAdminAuth = (props) => {
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
@@ -50,6 +51,11 @@ const withAdminAuth = (WrappedComponent) => {
 
     return <WrappedComponent {...props} />;
   };
+
+  // Set the display name for the HOC for better debugging and React DevTools
+  WithAdminAuth.displayName = `WithAdminAuth(${WrappedComponent.displayName || WrappedComponent.name || 'Component'})`;
+
+  return WithAdminAuth;
 };
 
 const BlogForm = () => {
@@ -64,7 +70,7 @@ const BlogForm = () => {
     seoDescription: "",
     seoKeywords: "",
     category: "",
-    slug:''
+    slug: ''
   });
   const [categories, setCategories] = useState([]);
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -144,7 +150,7 @@ const BlogForm = () => {
           seoDescription: "",
           seoKeywords: "",
           category: "",
-          slug:''
+          slug: ''
         });
       } else {
         throw new Error("Failed to create blog post");
@@ -166,7 +172,7 @@ const BlogForm = () => {
           </button>
         </div>
         <nav className="mt-6">
-        <Link href="/admin/blogs/editblog" className="flex items-center py-3 px-6 bg-blue-900">
+          <Link href="/admin/blogs/editblog" className="flex items-center py-3 px-6 bg-blue-900">
             <FaPlane className="mr-3" />
             Edit blogs
           </Link>
@@ -213,7 +219,7 @@ const BlogForm = () => {
           
           <form onSubmit={handleSubmit} className="mx-auto justify-center items-center space-y-8 max-w-3xl">
             {/* Title input */}
-          <h1 className="text-3xl">Create new blog</h1>
+            <h1 className="text-3xl">Create new blog</h1>
             <div className="space-y-2">
               <label htmlFor="title" className="flex items-center text-sm font-medium text-gray-700">
                 <FaHeading className="mr-2" />
@@ -287,7 +293,7 @@ const BlogForm = () => {
             <div className="space-y-2">
               <label htmlFor="slug" className="flex items-center text-sm font-medium text-gray-700">
                 <FaTags className="mr-2" />
-                slug
+                Slug
               </label>
               <input
                 type="text"
@@ -405,6 +411,5 @@ const BlogForm = () => {
     </div>
   );
 };
-
 
 export default withAdminAuth(BlogForm);
