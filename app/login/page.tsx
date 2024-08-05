@@ -8,7 +8,6 @@ export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -29,6 +28,7 @@ export default function Login() {
         localStorage.setItem('_id', data._id);
         localStorage.setItem('name', data.full_name)
         localStorage.setItem('profile_pic', data.profile_pic)
+        localStorage.setItem('role',data.role)
         console.log(data);
         setTimeout(function () {
           window.location.href = "/";

@@ -116,6 +116,7 @@ export default function Signup() {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
+        credentials:'include',
         body: JSON.stringify({ user }),
       });
       if (res.ok) {

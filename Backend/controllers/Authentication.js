@@ -15,6 +15,10 @@ admin.initializeApp({
   credential: admin.credential.cert(serviceAccount)
 });
 
+
+
+
+
 const getourmembers = async (req, res) => {
   try {
     // Fetch all users from the database
@@ -330,6 +334,7 @@ const Login = async (req, res) => {
     const _id = user._id;
     const full_name = user.full_name;
     const profile_pic = user.profile_pic;
+    const role=user.role;
 
     // Set the cookie
     res.cookie("token", token, {
@@ -344,7 +349,7 @@ const Login = async (req, res) => {
     res.setHeader("Set-Cookie", res.getHeader("Set-Cookie"));
 
     // Send the response after setting the cookie
-    res.status(200).json({ token, _id, full_name, profile_pic });
+    res.status(200).json({ token, _id, full_name, profile_pic,role });
   } catch (error) {
     console.error("Error during login:", error);
     res.status(500).json({ error: "Failed to login" });

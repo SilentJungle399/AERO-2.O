@@ -95,7 +95,6 @@ const NotificationModal: React.FC<NotificationModalProps> = ({ notifications, cl
 };
 
 const Navbar: React.FC = () => {
-  const [eventsDropdownOpen, setEventsDropdownOpen] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
   const [username, setUserName] = useState("");
@@ -122,6 +121,7 @@ const Navbar: React.FC = () => {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
+        credentials:'include',
         body: JSON.stringify({ user }),
       });
 
@@ -214,6 +214,7 @@ const Navbar: React.FC = () => {
 
     setId(id || "");
     if (userRole === "admin") {
+      console.log("dksfjs")
       setAdmin(true);
     }
 
@@ -276,7 +277,7 @@ const Navbar: React.FC = () => {
                     Blogs-dashboard
                   </Link>
                   <Link
-                    href="/admin/events"
+                    href="/admin/events/create"
                     className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular"
                   >
                     Events-dashboard

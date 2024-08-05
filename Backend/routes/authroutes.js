@@ -2,10 +2,14 @@ const express = require('express');
 const { emailVerification, otpcheck, Signup, Login, logout, googleSignup } = require('../controllers/Authentication');
 const { uploadMiddleware } = require('../controllers/uploadMiddleware');
 const multer = require("multer");
+const authMiddleware = require('../middlewares/authMiddleware');
 const upload = multer({ storage: multer.memoryStorage() });
 
 const authRoutes = express.Router();
 
+authRoutes.post("/check-admin", authMiddleware(['admin']), (req, res) => {
+    res.status(200).json({ isAdmin: true });
+});
 authRoutes.post("/profileupload", upload.single("profile"), uploadMiddleware)
 authRoutes.post("/emailverification", emailVerification);
 authRoutes.post("/otpcheck", otpcheck);

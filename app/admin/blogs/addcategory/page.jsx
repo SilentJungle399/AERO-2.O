@@ -1,7 +1,57 @@
 "use client"
 import Link from 'next/link';
 import React, { useState, useEffect } from 'react';
-import { FaCalendarAlt, FaCog, FaPlane, FaSignOutAlt,FaBars, FaTools, FaTrophy, FaUsers } from 'react-icons/fa';
+import { useRouter } from 'next/router';
+import Cookies from 'js-cookie';
+import { FaCalendarAlt, FaCog, FaPlane, FaSignOutAlt, FaBars, FaTools, FaTrophy, FaUsers } from 'react-icons/fa';
+
+const withAdminAuth = (WrappedComponent) => {
+  return (props) => {
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+      const checkAdmin = async () => {
+        const token = Cookies.get('token');
+
+        if (!token) {
+           window.location.href="/unauthorized"
+          return;
+        }
+
+        try {
+          const baseUrl = process.env.NODE_ENV === 'production'
+            ? process.env.NEXT_PUBLIC_BACKEND_URL
+            : 'http://localhost:5000';
+          const response = await fetch(`${baseUrl}/api/auth/check-admin`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${token}`
+            },
+          });
+
+          const data = await response.json();
+          if (data.isAdmin) {
+            setIsLoading(false);
+          } else {
+            window.location.href="/unauthorized"
+          }
+        } catch (error) {
+          console.error('Error checking admin status:', error);
+          window.location.href="/unauthorized"
+        }
+      };
+
+      checkAdmin();
+    }, []);
+
+    if (isLoading) {
+      return <div>Loading...</div>;
+    }
+
+    return <WrappedComponent {...props} />;
+  };
+};
 
 const CategoryManager = () => {
   const [categories, setCategories] = useState([]);
@@ -63,7 +113,7 @@ const CategoryManager = () => {
   };
 
   return (
-    <div className="flex flex-col lg:flex-row min-h-screen bg-gray-100 ">
+    <div className="flex flex-col lg:flex-row min-h-screen bg-black ">
       {/* Sidebar */}
       <aside className={`bg-blue-800 text-white w-full md:w-64 space-y-6 py-7 px-2 absolute inset-y-0 left-0 transform ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:relative md:translate-x-0 transition duration-200 ease-in-out z-20`}>
         <div className="flex items-center justify-between px-4">
@@ -73,9 +123,9 @@ const CategoryManager = () => {
           </button>
         </div>
         <nav className="mt-6">
-          <Link href="/admin/blogs/published" className="flex items-center py-3 px-6 bg-blue-900">
+        <Link href="/admin/blogs/editblog" className="flex items-center py-3 px-6 bg-blue-900">
             <FaPlane className="mr-3" />
-            Published blogs
+            Edit blogs
           </Link>
           <Link href="/admin/blogs/createblogs" className="flex items-center py-3 px-6 hover:bg-blue-700">
             <FaUsers className="mr-3" />
@@ -102,27 +152,13 @@ const CategoryManager = () => {
             Settings
           </Link>
         </nav>
-        <div className="absolute bottom-0 w-64 p-6">
-          <Link href="/logout" className="flex items-center text-white opacity-75 hover:opacity-100">
-            <FaSignOutAlt className="mr-3" />
-            Logout
-          </Link>
-        </div>
+        
       </aside>
 
       {/* Main content */}
-      <div className="flex-1 flex flex-col overflow-hidden">
+      <div className="flex-1 pt-24  flex flex-col overflow-hidden">
         {/* Top bar */}
-        <header className="bg-white shadow-sm p-4 flex justify-between items-center">
-          <button onClick={() => setSidebarOpen(!sidebarOpen)} className="lg:hidden">
-            <FaBars className="text-blue-800 text-xl" />
-          </button>
-          <h1 className="text-xl font-semibold text-blue-800">Category Manager</h1>
-          <div className="flex items-center space-x-2">
-            <span className="text-sm text-gray-600 hidden md:inline">Welcome, Admin</span>
-            <img src="/avatar.png" alt="Admin" className="h-8 w-8 rounded-full" />
-          </div>
-        </header>
+      
 
         {/* Category form */}
         <main className="flex-1 overflow-x-hidden overflow-y-auto p-4 md:p-8">
@@ -194,4 +230,4 @@ const CategoryManager = () => {
   );
 };
 
-export default CategoryManager;
+export default withAdminAuth(CategoryManager);

@@ -1,7 +1,56 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import Link from 'next/link';
+import Cookies from 'js-cookie';
 import { FaCalendarAlt, FaCog, FaPlane, FaSignOutAlt, FaTools, FaTrophy, FaUsers, FaBars, FaHeading, FaFileAlt, FaImage, FaTags, FaSearchPlus } from 'react-icons/fa';
+
+const withAdminAuth = (WrappedComponent) => {
+  return (props) => {
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+      const checkAdmin = async () => {
+        const token = Cookies.get('token');
+
+        if (!token) {
+          window.location.href = "/unauthorized";
+          return;
+        }
+
+        try {
+          const baseUrl = process.env.NODE_ENV === 'production'
+            ? process.env.NEXT_PUBLIC_BACKEND_URL
+            : 'http://localhost:5000';
+          const response = await fetch(`${baseUrl}/api/auth/check-admin`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${token}`
+            },
+          });
+
+          const data = await response.json();
+          if (data.isAdmin) {
+            setIsLoading(false);
+          } else {
+            window.location.href = "/unauthorized";
+          }
+        } catch (error) {
+          console.error('Error checking admin status:', error);
+          window.location.href = "/unauthorized";
+        }
+      };
+
+      checkAdmin();
+    }, []);
+
+    if (isLoading) {
+      return <div>Loading...</div>;
+    }
+
+    return <WrappedComponent {...props} />;
+  };
+};
 
 const BlogForm = () => {
   const [formData, setFormData] = useState({
@@ -107,9 +156,9 @@ const BlogForm = () => {
   };
 
   return (
-    <div className="flex flex-col md:flex-row min-h-screen bg-gray-100">
+    <div className="flex flex-col md:flex-row min-h-screen bg-black">
       {/* Sidebar */}
-      <aside className={`bg-blue-800 text-white w-full md:w-64 space-y-6 py-7 px-2 absolute inset-y-0 left-0 transform ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:relative md:translate-x-0 transition duration-200 ease-in-out z-20`}>
+      <aside className={`bg-blue-800 pt-24 text-white w-full md:w-64 space-y-6 py-7 px-2 absolute inset-y-0 left-0 transform ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:relative md:translate-x-0 transition duration-200 ease-in-out z-20`}>
         <div className="flex items-center justify-between px-4">
           <span className="text-2xl font-extrabold">AERO CLUB</span>
           <button onClick={() => setSidebarOpen(false)} className="md:hidden">
@@ -117,9 +166,9 @@ const BlogForm = () => {
           </button>
         </div>
         <nav className="mt-6">
-          <Link href="/admin/blogs/published" className="flex items-center py-3 px-6 bg-blue-900">
+        <Link href="/admin/blogs/editblog" className="flex items-center py-3 px-6 bg-blue-900">
             <FaPlane className="mr-3" />
-            Published blogs
+            Edit blogs
           </Link>
           <Link href="/admin/blogs/createblogs" className="flex items-center py-3 px-6 hover:bg-blue-700">
             <FaUsers className="mr-3" />
@@ -155,23 +204,16 @@ const BlogForm = () => {
       </aside>
 
       {/* Main content */}
-      <div className="flex-1 flex flex-col overflow-hidden">
+      <div className="flex-1 pt-24 flex flex-col overflow-hidden">
         {/* Top bar */}
-        <header className="bg-white shadow-sm p-4 flex justify-between items-center">
-          <button onClick={() => setSidebarOpen(!sidebarOpen)} className="md:hidden">
-            <FaBars className="text-blue-800 text-xl" />
-          </button>
-          <h1 className="text-xl font-semibold text-blue-800">Create New Blog Post</h1>
-          <div className="flex items-center space-x-2">
-            <span className="text-sm text-gray-600 hidden md:inline">Welcome, Admin</span>
-            <img src="/avatar.png" alt="Admin" className="h-8 w-8 rounded-full" />
-          </div>
-        </header>
+        
 
         {/* Blog form */}
-        <main className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-6">
-          <form onSubmit={handleSubmit} className="mx-auto space-y-8 max-w-3xl">
+        <main className="flex-1  bg-black p-6">
+          
+          <form onSubmit={handleSubmit} className="mx-auto justify-center items-center space-y-8 max-w-3xl">
             {/* Title input */}
+          <h1 className="text-3xl">Create new blog</h1>
             <div className="space-y-2">
               <label htmlFor="title" className="flex items-center text-sm font-medium text-gray-700">
                 <FaHeading className="mr-2" />
@@ -364,4 +406,5 @@ const BlogForm = () => {
   );
 };
 
-export default BlogForm;
+
+export default withAdminAuth(BlogForm);

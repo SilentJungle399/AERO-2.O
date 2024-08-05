@@ -4,6 +4,55 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
+import Cookies from 'js-cookie';
+
+const withAdminAuth = (WrappedComponent) => {
+  return (props) => {
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+      const checkAdmin = async () => {
+        const token = Cookies.get('token');
+
+        if (!token) {
+          window.location.href = "/unauthorized";
+          return;
+        }
+
+        try {
+          const baseUrl = process.env.NODE_ENV === 'production'
+            ? process.env.NEXT_PUBLIC_BACKEND_URL
+            : 'http://localhost:5000';
+          const response = await fetch(`${baseUrl}/api/auth/check-admin`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${token}`
+            },
+          });
+
+          const data = await response.json();
+          if (data.isAdmin) {
+            setIsLoading(false);
+          } else {
+            window.location.href = "/unauthorized";
+          }
+        } catch (error) {
+          console.error('Error checking admin status:', error);
+          window.location.href = "/unauthorized";
+        }
+      };
+
+      checkAdmin();
+    }, []);
+
+    if (isLoading) {
+      return <div>Loading...</div>;
+    }
+
+    return <WrappedComponent {...props} />;
+  };
+};
 
 const Blogs = () => {
   const [blogs, setBlogs] = useState([]);
@@ -39,7 +88,7 @@ const Blogs = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-900 py-12 px-4 sm:px-6 lg:px-8 overflow-hidden">
+    <div className="min-h-screen pt-24 bg-gray-900 py-12 px-4 sm:px-6 lg:px-8 overflow-hidden">
       <div className="max-w-7xl mx-auto relative">
         <motion.h1 
           className="text-5xl font-extrabold text-center mb-12 text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600"
@@ -134,4 +183,4 @@ const Blogs = () => {
   );
 };
 
-export default Blogs;
+export default withAdminAuth(Blogs);

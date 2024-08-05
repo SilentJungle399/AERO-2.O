@@ -1,20 +1,72 @@
-import React from 'react';
+"use client";
+
+import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
 import Link from 'next/link';
+import Cookies from 'js-cookie';
 import { FaPlane, FaUsers, FaCalendarAlt, FaTools, FaTrophy, FaCog, FaSignOutAlt } from 'react-icons/fa';
 
-export default function AeroClubAdminDashboard() {
+const withAdminAuth = (WrappedComponent) => {
+  return (props) => {
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+      const checkAdmin = async () => {
+        const token = Cookies.get('token');
+
+        if (!token) {
+          window.location.href="/login"
+          return;
+        }
+
+        try {
+          const baseUrl = process.env.NODE_ENV === 'production'
+            ? process.env.NEXT_PUBLIC_BACKEND_URL
+            : 'http://localhost:5000';
+          const response = await fetch(`${baseUrl}/api/auth/check-admin`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${token}`
+            },
+          });
+
+          const data = await response.json();
+          if (data.isAdmin) {
+            setIsLoading(false);
+          } else {
+           window.location.href="/unauthorized"
+          }
+        } catch (error) {
+          console.error('Error checking admin status:', error);
+          window.location.href="/unauthorized"
+        }
+      };
+
+      checkAdmin();
+    }, []);
+
+    if (isLoading) {
+      return <div>Loading...</div>;
+    }
+
+    return <WrappedComponent {...props} />;
+  };
+};
+
+const AeroClubAdminDashboard = () => {
   return (
-    <div className="flex h-screen bg-gray-100">
+    <div className="flex h-screen bg-black">
       {/* Sidebar */}
-      <div className="w-68  bg-blue-800 text-white h-screen fixed">
+      <div className="w-68 pt-24 bg-blue-800 text-white h-screen fixed">
         <div className="p-6">
           <h1 className="text-2xl font-bold">NIT KKR AERO CLUB</h1>
-          <p className="text- mt-1 font-medium">BLog Dashboard</p>
+          <p className="text-sm mt-1 font-medium">Blog Dashboard</p>
         </div>
         <nav className="mt-6">
-          <Link href="/admin/blogs/published" className="flex items-center py-3 px-6 bg-blue-900">
+          <Link href="/admin/blogs/editblog" className="flex items-center py-3 px-6 bg-blue-900">
             <FaPlane className="mr-3" />
-            Published blogs
+            Edit blogs
           </Link>
           <Link href="/admin/blogs/createblogs" className="flex items-center py-3 px-6 hover:bg-blue-700">
             <FaUsers className="mr-3" />
@@ -41,15 +93,9 @@ export default function AeroClubAdminDashboard() {
             Settings
           </Link>
         </nav>
-        <div className="absolute bottom-0 w-64 p-6">
-          <Link href="/logout" className="flex items-center text-white opacity-75 hover:opacity-100">
-            <FaSignOutAlt className="mr-3" />
-            Logout
-          </Link>
-        </div>
       </div>
-
-     
     </div>
   );
-}
+};
+
+export default withAdminAuth(AeroClubAdminDashboard);

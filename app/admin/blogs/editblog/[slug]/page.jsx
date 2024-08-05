@@ -1,4 +1,5 @@
 "use client";
+
 import { useState, useEffect, useCallback } from "react";
 import dynamic from "next/dynamic";
 import BlogSection from "../../components/BlogSection";
@@ -6,11 +7,60 @@ import AddSectionModal from "../../components/AddSectionModal";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { useParams } from "next/navigation";
+import Cookies from 'js-cookie';
 
 const DynamicColorPicker = dynamic(
   () => import("../../components/ColorPicker"),
   { ssr: false }
 );
+
+const withAdminAuth = (WrappedComponent) => {
+  return (props) => {
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+      const checkAdmin = async () => {
+        const token = Cookies.get('token');
+
+        if (!token) {
+          window.location.href = "/unauthorized";
+          return;
+        }
+
+        try {
+          const baseUrl = process.env.NODE_ENV === 'production'
+            ? process.env.NEXT_PUBLIC_BACKEND_URL
+            : 'http://localhost:5000';
+          const response = await fetch(`${baseUrl}/api/auth/check-admin`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${token}`
+            },
+          });
+
+          const data = await response.json();
+          if (data.isAdmin) {
+            setIsLoading(false);
+          } else {
+            window.location.href = "/unauthorized";
+          }
+        } catch (error) {
+          console.error('Error checking admin status:', error);
+          window.location.href = "/unauthorized";
+        }
+      };
+
+      checkAdmin();
+    }, []);
+
+    if (isLoading) {
+      return <div>Loading...</div>;
+    }
+
+    return <WrappedComponent {...props} />;
+  };
+};
 
 const EditBlogPost = () => {
   const { slug } = useParams();
@@ -96,7 +146,6 @@ const EditBlogPost = () => {
   };
 
   if (loading) return <p>Loading...</p>;
-  // if (error) return <p>Error: {error}</p>;
 
   return (
     <DndProvider backend={HTML5Backend}>
@@ -105,7 +154,6 @@ const EditBlogPost = () => {
           Edit Blog Post
         </h1>
         <div className="mx-auto text-gray-900 bg-white shadow-lg rounded-lg overflow-hidden">
-          {/* Display existing blog content */}
           {blog && (
             <div className="p-6">
               <h2 className="text-3xl font-bold mb-4">{blog.title}</h2>
@@ -117,7 +165,6 @@ const EditBlogPost = () => {
               )}
             </div>
           )}
-          {/* Display sections */}
           {blogSections.map((section, index) => (
             <BlogSection
               key={section.id || index}
@@ -128,7 +175,6 @@ const EditBlogPost = () => {
               deleteSection={deleteSection}
             />
           ))}
-          {/* Add new section button */}
           <div className="p-6">
             <button
               onClick={() => setIsAddModalOpen(true)}
@@ -156,4 +202,4 @@ const EditBlogPost = () => {
   );
 };
 
-export default EditBlogPost;
+export default withAdminAuth(EditBlogPost);
