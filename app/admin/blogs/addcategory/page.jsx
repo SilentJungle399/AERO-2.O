@@ -1,9 +1,11 @@
 "use client";
+
 import React, { useState, useEffect } from 'react';
 import Cookies from 'js-cookie';
 import { FaCalendarAlt, FaCog, FaPlane, FaSignOutAlt, FaBars, FaTools, FaTrophy, FaUsers } from 'react-icons/fa';
 import Link from 'next/link';
-import Loader from '@/components/Loader'
+import Loader from '@/components/Loader';
+
 const withAdminAuth = (WrappedComponent) => {
   const WithAdminAuth = (props) => {
     const [isLoading, setIsLoading] = useState(true);
@@ -13,7 +15,7 @@ const withAdminAuth = (WrappedComponent) => {
         const token = Cookies.get('token');
 
         if (!token) {
-           window.location.href = "/unauthorized";
+          window.location.href = "/unauthorized";
           return;
         }
 
@@ -45,7 +47,8 @@ const withAdminAuth = (WrappedComponent) => {
     }, []);
 
     if (isLoading) {
-      return <Loader/>
+      return <Loader />;
+    }
 
     return <WrappedComponent {...props} />;
   };
@@ -62,7 +65,6 @@ const CategoryManager = () => {
     description: '',
     parent: '',
   });
-  const [selectedCategory, setSelectedCategory] = useState('');
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   useEffect(() => {
