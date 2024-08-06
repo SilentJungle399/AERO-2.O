@@ -2,7 +2,7 @@
 import Link from 'next/link';
 import React, { useState, useEffect } from 'react';
 import { FaPlane, FaCalendarAlt, FaMapMarkerAlt, FaClock, FaReadme, FaMouse } from 'react-icons/fa';
-
+import Loader from '@/components/Loader'
 const InductionSessionsList = () => {
   const [inductionSessions, setInductionSessions] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -37,7 +37,7 @@ const InductionSessionsList = () => {
   });
 
   if (loading) {
-    return <p className=" animate-spin rounded-full h-32 w-32 border-t-2 border-b-4 border-blue-500"></p>;
+    return <Loader/>
   }
 
   return (

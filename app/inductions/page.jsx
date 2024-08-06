@@ -3,7 +3,7 @@ import Link from 'next/link';
 import React, { useState, useEffect } from 'react';
 import { FaPlane, FaMapMarkerAlt, FaClock, FaMouse } from 'react-icons/fa';
 import { RiTimerLine } from "react-icons/ri";
-
+import Loader from '@/components/Loader'
 // This function is for foramting time and date on deadline (line 101)
 
 function formatDateTime(dateString) {
@@ -52,9 +52,7 @@ const InductionSessionsList = () => {
 
   if (loading) {
     return (
-      <div className='flex items-center justify-center h-screen'>
-        <div className='w-32 h-32 border-b-4 border-t-2 border-blue-500 rounded-full animate-spin'></div>
-      </div>
+      <Loader/>
     )
     // return <p className=" animate-spin rounded-full h-32 w-32 border-t-2 border-b-4 border-blue-500"></p>;
   }

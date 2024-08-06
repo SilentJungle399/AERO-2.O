@@ -1,7 +1,7 @@
 "use client";
 import { useParams } from "next/navigation";
 import { useState, useEffect } from "react";
-
+import Loader from '@/components/Loader'
 export default function AdminInductions() {
   const { id } = useParams();
   const [induction, setInduction] = useState(null);
@@ -102,7 +102,7 @@ export default function AdminInductions() {
   };
 
   if (!induction) {
-    return <div>Loading...</div>;
+    return <Loader/>
   }
 
   return (

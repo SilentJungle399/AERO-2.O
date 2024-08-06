@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import Cookies from 'js-cookie';
 import { FaCalendarAlt, FaCog, FaPlane, FaSignOutAlt, FaBars, FaTools, FaTrophy, FaUsers } from 'react-icons/fa';
 import Link from 'next/link';
-
+import Loader from '@/components/Loader'
 const withAdminAuth = (WrappedComponent) => {
   const WithAdminAuth = (props) => {
     const [isLoading, setIsLoading] = useState(true);
@@ -45,8 +45,7 @@ const withAdminAuth = (WrappedComponent) => {
     }, []);
 
     if (isLoading) {
-      return <div>Loading...</div>;
-    }
+      return <Loader/>
 
     return <WrappedComponent {...props} />;
   };

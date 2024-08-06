@@ -21,8 +21,8 @@ interface EyeModelProps {
 
 export default function EyeModel({ isMobile, scale = [0.5, 0.5, 0.5] }: EyeModelProps) {
   const group = useRef<Group>(null);
-  const initialPosition = useRef(new Vector3(6.6, 0.9, 0)); // Initial position
-  const targetPosition = useRef(new Vector3(5.6, 0.9, 0)); // Target position based on scroll
+  const initialPosition = useRef(new Vector3(6.6, 0.9, -5)); // Initial position
+  const targetPosition = useRef(new Vector3(5.6, 0.9, -5)); // Target position based on scroll
   const { nodes, materials, animations, scene } = useGLTF("/Eyemodel.glb") as CustomGLTF;
   const { actions } = useAnimations(animations, scene);
   const Idle_Scan = actions ? actions["Idle_Scan"] : null;
@@ -51,10 +51,8 @@ export default function EyeModel({ isMobile, scale = [0.5, 0.5, 0.5] }: EyeModel
       const scrollOffset = scroll.offset; // Get scroll offset
 
       // Update target position based on scroll
-      targetPosition.current.x = isMobile ? 6.3 + - scrollOffset * 10 : 5.6 - scrollOffset * 15; // Adjust horizontal movement range for mobile
-      targetPosition.current.y = isMobile ?  1.4+ scrollOffset * 10 : 0.9 + scrollOffset * 15; // Adjust vertical movement range for mobile
-      console.log(targetPosition.current.x)
-      console.log(targetPosition.current.y)
+      targetPosition.current.x = isMobile ? -0.5 + - scrollOffset * 10 : -2 - scrollOffset * 15; // Adjust horizontal movement range for mobile
+      targetPosition.current.y = isMobile ? 1 + scrollOffset * 10 : 1 + scrollOffset * 15; // Adjust vertical movement range for mobile
       // Lerp towards the target position
       group.current.position.lerp(targetPosition.current, 0.1);
     }

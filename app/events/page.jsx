@@ -3,7 +3,7 @@
 // // import { motion, useScroll, useTransform } from "framer-motion";
 // // import Link from "next/link";
 // // import FractalTree from '../../components/Fractletree'; // Ensure the import path is correct
-
+// // import Loader from '@/components/Loader'
 // const gradients = [
 //   "from-red-300 to-blue-300",
 //   "from-blue-300 to-violet-300",
@@ -44,9 +44,7 @@
 
 //   if (loading) {
 //     return (
-//       <div className='flex items-center justify-center h-screen'>
-//         <div className='w-32 h-32 border-b-4 border-t-2 border-blue-500 rounded-full animate-spin'></div>
-//       </div>
+//       <Loader/>
 //     );
 //   }
 //   if (error) return <p className="text-center text-red-500">{error}</p>;
