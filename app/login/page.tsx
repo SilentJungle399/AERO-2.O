@@ -13,6 +13,7 @@ export default function Login() {
     e.preventDefault();
     setError('');
     try {
+
       const baseUrl = process.env.NODE_ENV === 'production'
         ? process.env.NEXT_PUBLIC_BACKEND_URL
         : 'http://localhost:5000';
@@ -30,9 +31,9 @@ export default function Login() {
         localStorage.setItem('profile_pic', data.profile_pic)
         localStorage.setItem('role',data.role)
         console.log(data);
-        setTimeout(function () {
-          window.location.href = "/";
-        }, 100);
+        // setTimeout(function () {
+        //   window.location.href = "/";
+        // }, 100);
         // window.location.reload()
 
       } else {

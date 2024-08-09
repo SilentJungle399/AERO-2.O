@@ -349,7 +349,7 @@ const Login = async (req, res) => {
     res.setHeader("Set-Cookie", res.getHeader("Set-Cookie"));
 
     // Send the response after setting the cookie
-    res.status(200).json({ token, _id, full_name, profile_pic,role });
+    res.status(200).json({ token, _id, full_name, profile_pic,role});
   } catch (error) {
     console.error("Error during login:", error);
     res.status(500).json({ error: "Failed to login" });
