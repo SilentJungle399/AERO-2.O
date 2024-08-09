@@ -21,8 +21,8 @@ interface RcModelProps {
 
 export default function RcModel({ isMobile, scale = [2.1, 2.1, 2.1] }: RcModelProps) {
   const group = useRef<Group>(null);
-  const initialPosition = useRef(new Vector3(-7.5, 0.2, -100)); // Initial position
-  const targetPosition = useRef(new Vector3(-7.5, 0.2, 1)); // Target position based on scroll
+  const initialPosition = useRef(new Vector3(-7.5, 0.2, -5)); // Initial position
+  const targetPosition = useRef(new Vector3(-7.5, 0.2, -5)); // Target position based on scroll
   const { nodes, materials, animations, scene } = useGLTF("/rc_plane.glb") as CustomGLTF;
   const { actions } = useAnimations(animations, scene);
   const scroll = useScroll();
@@ -53,8 +53,8 @@ export default function RcModel({ isMobile, scale = [2.1, 2.1, 2.1] }: RcModelPr
       const scrollOffset = scroll.offset; // Get scroll offset
 
       // Update target position based on scroll
-      targetPosition.current.x = isMobile ? -13+ scrollOffset * 20 : -23 + scrollOffset * 41; // Adjust the horizontal movement range for mobile
-      targetPosition.current.y = isMobile ? -4.5 + scrollOffset * 4 : -2 + scrollOffset * 1.5; // Adjust the vertical movement range for mobile
+      targetPosition.current.x = isMobile ? -5 + scrollOffset * 5 : -30 + scrollOffset * 41; // Adjust the horizontal movement range for mobile
+      targetPosition.current.y = isMobile ? -4 + scrollOffset * 4 : -2 + scrollOffset * 1.5; // Adjust the vertical movement range for mobile
       if(isMobile){
         // console.log(targetPosition.current.x)
         // console.log(targetPosition.current.y)

@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
-
+import Loader from '@/components/Loader'
 export default function MeetAnalyticsPage() {
   const [meet, setMeet] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -66,7 +66,7 @@ export default function MeetAnalyticsPage() {
   }, [id]);
 
   if (loading) {
-    return <div className="text-center text-2xl mt-10 text-white">Loading...</div>;
+    return <Loader/>
   }
 
   if (!meet) {

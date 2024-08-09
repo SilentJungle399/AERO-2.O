@@ -5,7 +5,7 @@ import { useParams } from "next/navigation";
 import { motion } from "framer-motion";
 import { FaCalendar, FaClock, FaMapMarkerAlt, FaLaptop, FaUsers, FaQrcode } from "react-icons/fa";
 import QrReader from "react-qr-scanner";
-
+import Loader from '@/components/Loader'
 import Message from "@/components/Message";
 
 const MeetDetailPage = () => {
@@ -108,9 +108,7 @@ const MeetDetailPage = () => {
 
   if (loading) {
     return (
-      <div className='flex items-center justify-center h-screen'>
-        <div className='w-32 h-32 border-b-4 border-t-2 border-blue-500 rounded-full animate-spin'></div>
-      </div>
+      <Loader/>
     )
   }
 

@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { FaCalendarAlt, FaClock, FaMapMarkerAlt, FaLaptop, FaPlane } from 'react-icons/fa';
+import Loader from '@/components/Loader'
 
 const MeetListPage = () => {
   const [meets, setMeets] = useState([]);
@@ -33,12 +34,7 @@ const MeetListPage = () => {
 
   if (loading) {
     return (
-      <div className="loader-container bg-black">
-        <video className="loader-video" autoPlay loop muted>
-          <source src="/loading.webm" type="video/webm" />
-          Your browser does not support the video tag.
-        </video>
-      </div>
+      <Loader/>
     );
   }
 

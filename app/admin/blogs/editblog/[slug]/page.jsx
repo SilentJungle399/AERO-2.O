@@ -8,7 +8,7 @@ import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { useParams } from "next/navigation";
 import Cookies from 'js-cookie';
-
+import Loader from '@/components/Loader'
 const DynamicColorPicker = dynamic(
   () => import("../../components/ColorPicker"),
   { ssr: false }
@@ -55,7 +55,7 @@ const withAdminAuth = (WrappedComponent) => {
     }, []);
 
     if (isLoading) {
-      return <div>Loading...</div>;
+      return <Loader/>
     }
 
     return <WrappedComponent {...props} />;

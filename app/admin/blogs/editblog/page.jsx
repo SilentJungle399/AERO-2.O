@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import Cookies from 'js-cookie';
-
+import Loader from '@/components/Loader'
 const withAdminAuth = (WrappedComponent) => {
   const WithAdminAuth = (props) => {
     const [isLoading, setIsLoading] = useState(true);
@@ -47,7 +47,7 @@ const withAdminAuth = (WrappedComponent) => {
     }, []);
 
     if (isLoading) {
-      return <div>Loading...</div>;
+      return <Loader/>
     }
 
     return <WrappedComponent {...props} />;

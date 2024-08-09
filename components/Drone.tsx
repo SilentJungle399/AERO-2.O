@@ -18,7 +18,7 @@ interface DroneModelProps {
 
 export default function DroneModel({ isMobile }: DroneModelProps) {
   const group = useRef<Group>(null);
-  const initialPosition = new Vector3(5, -6, 0); // Center position
+  const initialPosition = new Vector3(5, -6, -5); // Center position
   const { nodes, materials, animations, scene } = useGLTF("/drone.glb") as CustomGLTF;
   const { actions } = useAnimations(animations, scene);
   const scroll = useScroll();
@@ -57,15 +57,15 @@ export default function DroneModel({ isMobile }: DroneModelProps) {
       // Update position based on scroll
       const newPosition = initialPosition.clone();
       // console.log(newPosition)
-      newPosition.x = isMobile ? 6.5 + scrollOffset * 1 : -15 + scrollOffset * 50; // Adjust the horizontal movement range for mobile
-      newPosition.y = isMobile ? -7 + scrollOffset * 10 : -3; // Adjust the vertical movement range for mobile
+      newPosition.x = isMobile ? -2.75 + scrollOffset * 5 : -20 + scrollOffset * 50; // Adjust the horizontal movement range for mobile
+      newPosition.y = isMobile ? -6 + scrollOffset * 10 : -2.5; // Adjust the vertical movement range for mobile
       group.current.position.copy(newPosition);
     }
   });
 
   return (
     <group ref={group} dispose={null} rotation={[0, Math.PI * 40 / 180, 0]}>
-      <primitive object={scene} />
+      <primitive className="drone" object={scene} />
     </group>
   );
 }

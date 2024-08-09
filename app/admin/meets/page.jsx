@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import TimelineCard from '../../../components/TimelineCards';
-
+import Loader from '@/components/Loader'
 export default function AdminMeetListPage  () {
   const [meets, setMeets] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -30,7 +30,7 @@ export default function AdminMeetListPage  () {
   }, []);
 
   if (loading) {
-    return <div className="text-center text-2xl mt-10 text-white">Loading...</div>;
+    return <Loader/>
   }
 
   return (

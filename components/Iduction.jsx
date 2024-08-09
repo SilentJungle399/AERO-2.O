@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-
+import Loader from '@/components/Loader'
 const InductionSessionsList = () => {
   const [inductionSessions, setInductionSessions] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -35,7 +35,7 @@ const InductionSessionsList = () => {
   });
 
   if (loading) {
-    return <p>Loading...</p>; // Display a loading indicator while data is being fetched
+    return <Loader/> // Display a loading indicator while data is being fetched
   }
 
   return (

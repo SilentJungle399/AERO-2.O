@@ -104,7 +104,7 @@ export default function Login() {
         <Link
           href={"/signup"}
           className='text-sm text-gray-300'>
-          Don&apos;t have account? Signup
+          Don&apos;t have account? <span className='text-blue-400'>Signup</span>
         </Link>
       </div>
     </div>
