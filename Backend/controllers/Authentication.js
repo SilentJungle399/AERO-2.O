@@ -5,7 +5,7 @@ const {
 } = require("../middlewares/nodemailerMiddleware");
 const OtpVerification = require("../models/OtpVerification");
 const User = require("../models/usermodel");
-const bcrypt = require("bcrypt");
+// const bcrypt = require("bcrypt");
 
 var admin = require("firebase-admin");
 
@@ -312,7 +312,7 @@ const Login = async (req, res) => {
     if (!user) {
       return res.status(400).json({ error: "Invalid email" });
     }
-
+    console.log(user)
     const isMatch = await user.comparePassword(password);
     if (!isMatch) {
       return res.status(400).json({ error: "Invalid email or password" });

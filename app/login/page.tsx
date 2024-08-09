@@ -13,7 +13,6 @@ export default function Login() {
     e.preventDefault();
     setError('');
     try {
-
       const baseUrl = process.env.NODE_ENV === 'production'
         ? process.env.NEXT_PUBLIC_BACKEND_URL
         : 'http://localhost:5000';
@@ -27,20 +26,20 @@ export default function Login() {
         const data = await response.json();
         localStorage.setItem('token', data.token);
         localStorage.setItem('_id', data._id);
-        localStorage.setItem('name', data.full_name)
-        localStorage.setItem('profile_pic', data.profile_pic)
-        localStorage.setItem('role',data.role)
+        localStorage.setItem('name', data.full_name);
+        localStorage.setItem('profile_pic', data.profile_pic);
+        localStorage.setItem('role', data.role);
         console.log(data);
-        // setTimeout(function () {
-        //   window.location.href = "/";
-        // }, 100);
-        // window.location.reload()
-
+        setTimeout(() => {
+          window.location.href = "/";
+        }, 100);
       } else {
         const data = await response.json();
+        alert(data.message)
         setError(data.message || 'Login failed');
       }
     } catch (err) {
+      alert(err)
       setError('An error occurred. Please try again.');
     }
   };
@@ -104,7 +103,7 @@ export default function Login() {
         <Link
           href={"/signup"}
           className='text-sm text-gray-300'>
-          Don&apos;t have account? <span className='text-blue-400'>Signup</span>
+          Don&apos;t have an account? <span className='text-blue-400'>Signup</span>
         </Link>
       </div>
     </div>
