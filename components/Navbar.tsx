@@ -300,7 +300,7 @@ const Navbar: React.FC = () => {
               {!isAdmin && (
                 <>
                   <Link
-                    href="/rcplanes/blogs"
+                    href="/blogs"
                     className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular"
                   >
                     Blogs
