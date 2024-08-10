@@ -69,7 +69,7 @@ userRoutes.get("/getinduction/:id", getInduction);
 userRoutes.get("/getinductionforselectingstudent/:id", getInductionforSelections);
 userRoutes.post(
   "/register/:id",
-  authMiddleware(["admin", "user", "blogger"]),upload.array('ppt', 100),galleryUploadMiddleware,
+  authMiddleware(["admin", "user","member","blogger"]),upload.array('ppt', 100),galleryUploadMiddleware,
   saveParticipants
 );
 userRoutes.post("/sendnotification/:id",authMiddleware(["admin"]),upload.array('notification_file',100),galleryUploadMiddleware,sendNotification);
