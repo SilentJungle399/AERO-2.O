@@ -71,6 +71,10 @@ export default function Signup() {
     e.preventDefault();
     setError("");
     try {
+      console.log(email+fullName+password+gender)
+      const baseUrl = process.env.NODE_ENV === 'production' 
+          ? process.env.NEXT_PUBLIC_BACKEND_URL 
+          : 'http://localhost:5000';
       const response = await fetch(`${baseUrl}/api/auth/signup`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
