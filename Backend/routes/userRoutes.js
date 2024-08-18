@@ -162,7 +162,7 @@ userRoutes.get(
   authMiddleware(["user", "member", "admin"]),
   async (req, res) => {
     try {
-      const fields = 'full_name email roll_no year branch session college_name mobile_no profile_pic team_name current_post';
+      const fields = 'full_name email roll_no year branch session college_name mobile_no profile_pic current_post team_name aadhar_no job_location company_name ifsc_code college_name';
       const user = await User.findById(req.params.id).select(fields);
 
       if (!user) {
@@ -211,7 +211,7 @@ userRoutes.patch('/update/:id', authMiddleware(["user", "member", "admin"]), asy
   const updates = req.body;
 
   try {
-    const fields = 'full_name email roll_no year branch session college_name mobile_no profile_pic team_name current_post';
+    const fields = 'full_name email roll_no year branch session college_name mobile_no profile_pic team_name';
     const user = await User.findByIdAndUpdate(id, updates, { new: true, runValidators: true }).select(fields);
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
