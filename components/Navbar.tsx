@@ -270,6 +270,12 @@ const Navbar: React.FC = () => {
             <div className="hidden md:flex items-center space-x-2 md:space-x-4 w-full justify-end mr-20">
               {isAdmin && (
                 <>
+                <Link
+                    href="/gallery"
+                    className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular"
+                  >
+                    Gallery-Dashboard
+                  </Link>
                   <Link
                     href="/admin/blogs"
                     className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular"

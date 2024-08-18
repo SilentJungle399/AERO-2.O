@@ -45,7 +45,7 @@ const multer = require("multer");
 const { processUploads } = require("../middlewares/BlogMiddleware");
 const { uploadMiddleware } = require("../controllers/uploadMiddleware");
 const { getBlogPostBySlug } = require("../controllers/BlogController");
-const { getAlbum, getAllAlbums, createAlbum, addImageToAlbum } = require("../controllers/GalleryControllers");
+const { getAlbum, getAllAlbums, createAlbum, addImageToAlbum, handleLike, handleView } = require("../controllers/GalleryControllers");
 const { galleryUploadMiddleware } = require("../middlewares/GalleryUploadMiddleware");
 const { showAllNotification, showOneNotification } = require("../controllers/NotificationsController");
 const { getourmembers } = require("../controllers/Authentication");
@@ -116,6 +116,8 @@ userRoutes.post('/album/:id', upload.array('album_images', 100),galleryUploadMid
 userRoutes.get('/albums', getAllAlbums);
 // Get a specific album
 userRoutes.get('/albums/:id', getAlbum);
+userRoutes.post('/:uid/album/:album_id/images/:id/like', handleLike);
+userRoutes.post('/album/:album_id/images/:id/view', handleView);
 // .............
 
 
