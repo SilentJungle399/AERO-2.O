@@ -230,9 +230,29 @@ const Navbar: React.FC = () => {
     setIsModalOpen(true);
   };
 
+
+  //for NavBar effect
+    const [navBackground, setNavBackground] = useState('bg-transparent');
+  
+    const handleScroll = () => {
+      if (window.scrollY > 50) {
+        setNavBackground('bg-opacity-90 bg-black');
+      } else {
+        setNavBackground('bg-transparent');
+      }
+    };
+  
+    useEffect(() => {
+      window.addEventListener('scroll', handleScroll);
+      return () => {
+        window.removeEventListener('scroll', handleScroll);
+      };
+    }, []);
+
+    
   return (
-    <div className="fixed top-0 left-0 right-0 z-50 w-full pointer-events-none">
-      <nav className="bg-black bg-opacity-0 w-full pointer-events-auto">
+    <div className={`fixed top-0 left-0 right-0 z-50 w-full pointer-events-none transition-colors duration-300 ${navBackground}`}>
+      <nav className="w-full pointer-events-auto">
         <div className="w-full px-0">
           <div className="flex items-center justify-between h-24 px-2 md:px-4">
             <button
@@ -511,7 +531,7 @@ const Navbar: React.FC = () => {
             <Link
               onClick={() => setSidebarOpen(!sidebarOpen)}
               href="/login"
-              className="bg-[#3494D1] text-white hover:text-[#3494D1] px-4 rounded-sm text-sm font-medium bebas-neue-regular"
+              className="bg-[#3494D1] ml-10  text-white hover:text-[#3494D1] px-4 rounded-sm text-sm font-medium bebas-neue-regular"
             >
               Login
             </Link>
@@ -590,14 +610,14 @@ const Navbar: React.FC = () => {
           <div className="flex flex-col space-y-4">
             <Link
               onClick={() => setSidebarOpen(!sidebarOpen)}
-              href="/rcplanes/blogs"
+              href="/blogs"
               className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular"
             >
               Blogs
             </Link>
             <Link
               onClick={() => setSidebarOpen(!sidebarOpen)}
-              href="/rcplanes/events"
+              href="/events"
               className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular"
             >
               Events

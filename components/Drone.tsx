@@ -36,7 +36,7 @@ export default function DroneModel({ isMobile }: DroneModelProps) {
     // Set the initial position and scale of the model based on device type
     if (group.current) {
       group.current.position.copy(initialPosition);
-      group.current.scale.set(isMobile ? 0.7: 1.1, isMobile ? 0.7 : 1.1, isMobile ?0.7: 1.1);
+      group.current.scale.set(isMobile ? 0.6: 1.1, isMobile ? 0.6 : 1.1, isMobile ?0.6: 1.1);
     }
 
     // Configure materials to respond to the environment map
@@ -57,8 +57,8 @@ export default function DroneModel({ isMobile }: DroneModelProps) {
       // Update position based on scroll
       const newPosition = initialPosition.clone();
       // console.log(newPosition)
-      newPosition.x = isMobile ? -2.75 + scrollOffset * 5 : -20 + scrollOffset * 50; // Adjust the horizontal movement range for mobile
-      newPosition.y = isMobile ? -6 + scrollOffset * 10 : -2.5; // Adjust the vertical movement range for mobile
+      newPosition.x = isMobile ? -2.2 + scrollOffset * 5 : -20 + scrollOffset * 50; // Adjust the horizontal movement range for mobile
+      newPosition.y = isMobile ? -5.5 + scrollOffset * 10 : -2.5; // Adjust the vertical movement range for mobile
       group.current.position.copy(newPosition);
     }
   });
