@@ -51,8 +51,7 @@ const MeetDetailPage = () => {
 
       // Extract URL from the data object
       const url = new URL(data.text);
-      console.log("url");
-      console.log(url);
+      console.log("URL:", url);
 
       // Extract ID and token from the URL
       const id = url.pathname.split('/').pop();
@@ -62,7 +61,6 @@ const MeetDetailPage = () => {
       const uid = localStorage.getItem('_id');
 
       if (!uid) {
-        // alert('User ID not found in local storage');
         setMessage('Please Login to mark your attendance!!!');
         setError(true);
         return;
@@ -87,7 +85,7 @@ const MeetDetailPage = () => {
           setError(true);
           setMessage(result.message);
         }
-        setTimeout(function () {
+        setTimeout(() => {
           window.location.href = "/";
         }, 100);
       } catch (error) {
@@ -202,12 +200,13 @@ const MeetDetailPage = () => {
 
           <div className="mt-8">
             <button
-              disabled={meet.meet_active_status ? false : true}
+              disabled={!meet.meet_active_status}
               onClick={handleMarkAttendance}
-              className={`flex items-center justify-center w-full text-white py-3 px-6 rounded-lg font-semibold text-lg hover:from-purple-600 hover:to-pink-600 transition duration-300 transform hover:scale-105 ${meet.meet_active_status ? " bg-green-500" : "cursor-not-allowed  bg-green-300"}`}>
+              className={`flex items-center justify-center w-full text-white py-3 px-6 rounded-lg font-semibold text-lg hover:from-purple-600 hover:to-pink-600 transition duration-300 transform hover:scale-105 ${meet.meet_active_status ? " bg-green-500" : "cursor-not-allowed bg-green-300"}`}
+            >
               <FaQrcode className="mr-3" />
               Mark Attendance
-            </button >
+            </button>
             {(Error || Success) && <Message error={Error} success={Success} message={message} />}
           </div>
         </div>
