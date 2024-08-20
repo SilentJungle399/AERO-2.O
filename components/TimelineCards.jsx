@@ -13,7 +13,7 @@ const TimelineCard = ({ meet, index }) => {
         <div className="w-4 h-4 bg-indigo-600 rounded-full"></div>
         <div className="h-full w-0.5 bg-indigo-600"></div>
       </div>
-      <div className="bg-gray-800 p-6 rounded-lg shadow-lg flex-grow">
+      <div className="bg-gray-800 p-6 text-white rounded-lg shadow-lg flex-grow">
         <h2 className="text-2xl font-semibold mb-4">{meet.meet_team_type} Meet</h2>
         <p><strong>Date:</strong> {new Date(meet.meet_date).toLocaleDateString()}</p>
         <p><strong>Time:</strong> {meet.meet_time}</p>

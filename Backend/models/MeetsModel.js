@@ -7,7 +7,7 @@ const meetSchema = new mongoose.Schema({
         ref: 'User'
     }],
     meet_date: {
-        type: Date,
+        type: String,
         required: true
     },
     meet_time: {
@@ -16,7 +16,6 @@ const meetSchema = new mongoose.Schema({
     },
     meet_team_type: {
         type: String,
-        enum: ['Drone', 'Rc-Planes', 'Drone and Rc-planes both'],
         required: true
     },
     meet_venue: {
