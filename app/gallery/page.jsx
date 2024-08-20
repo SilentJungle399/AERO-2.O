@@ -1,33 +1,40 @@
-"use client"
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { FaFolder, FaPlus, FaCalendar, FaUser, FaTimes } from 'react-icons/fa';
-import Link from 'next/link';
+"use client";
+import React, { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { FaFolder, FaPlus, FaCalendar, FaUser, FaTimes } from "react-icons/fa";
+import Link from "next/link";
 
 const AllAlbumsPage = () => {
+  const [isAdmin,setAdmin]=useState(false);
   const [albums, setAlbums] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [newAlbum, setNewAlbum] = useState({
-    album_title: '',
-    album_name: '',
-    album_story: '',
+    album_title: "",
+    album_name: "",
+    album_story: "",
   });
 
   useEffect(() => {
+    const role=localStorage.getItem('role')
+    if(role==='admin'){
+      setAdmin(true);
+    }
+    console.log(role);
     fetchAlbums();
   }, []);
 
   const fetchAlbums = async () => {
     try {
-      const baseUrl = process.env.NODE_ENV === 'production'
-        ? process.env.NEXT_PUBLIC_BACKEND_URL
-        : 'http://localhost:5000';
+      const baseUrl =
+        process.env.NODE_ENV === "production"
+          ? process.env.NEXT_PUBLIC_BACKEND_URL
+          : "http://localhost:5000";
       const response = await fetch(`${baseUrl}/api/users/albums`);
-      console.log("fuhskd")
+      console.log("fuhskd");
       const data = await response.json();
       setAlbums(data);
     } catch (error) {
-      console.error('Error fetching albums:', error);
+      console.error("Error fetching albums:", error);
     }
   };
 
@@ -37,37 +44,40 @@ const AllAlbumsPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const userId = localStorage.getItem('_id');
+    const userId = localStorage.getItem("_id");
     try {
-      const baseUrl = process.env.NODE_ENV === 'production'
-        ? process.env.NEXT_PUBLIC_BACKEND_URL
-        : 'http://localhost:5000';
+      const baseUrl =
+        process.env.NODE_ENV === "production"
+          ? process.env.NEXT_PUBLIC_BACKEND_URL
+          : "http://localhost:5000";
       const response = await fetch(`${baseUrl}/api/users/createalbum`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({ ...newAlbum, album_author: userId }),
-        credentials: 'include'
+        credentials: "include",
       });
       if (response.ok) {
         setShowModal(false);
-        setNewAlbum({ album_title: '', album_name: '', album_story: '' });
+        setNewAlbum({ album_title: "", album_name: "", album_story: "" });
         fetchAlbums();
       }
     } catch (error) {
-      console.error('Error creating album:', error);
+      console.error("Error creating album:", error);
     }
   };
 
   const getRandomSize = () => {
-    const sizes = ['small', 'medium', 'large'];
+    const sizes = ["small", "medium", "large"];
     return sizes[Math.floor(Math.random() * sizes.length)];
   };
 
   return (
     <div className="min-h-screen bg-gray-900 text-white p-8 ">
-      <h1 className="text-6xl monoton mb-8  mt-24 bg-gradient-to-r from-blue-300 via-green-500 to-indigo-400 text-transparent bg-clip-text">Photos &nbsp;&nbsp;And &nbsp;&nbsp;videos &nbsp;&nbsp;Albums</h1>
+      <h1 className="text-6xl monoton mb-8  mt-24 bg-gradient-to-r from-blue-300 via-green-500 to-indigo-400 text-transparent bg-clip-text">
+        Photos &nbsp;&nbsp;And &nbsp;&nbsp;videos &nbsp;&nbsp;Albums
+      </h1>
 
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -78,26 +88,44 @@ const AllAlbumsPage = () => {
         {albums.map((album) => (
           <Link key={album._id} href={`/gallery/${album._id}`}>
             <motion.div
-
               whileHover={{ scale: 1.05 }}
-              className="bg-gray-800 rounded-lg shadow-lg overflow-hidden cursor-pointer"
+              className="bg-gray-700 rounded-lg shadow-lg overflow-hidden cursor-pointer"
             >
               <div className="relative h-48">
                 <div className="grid grid-cols-3 gap-1 h-full">
                   {album.album_images.slice(0, 10).map((image, index) => {
                     const size = getRandomSize();
                     return (
-                      <div key={index} className={`
-                      ${size === 'small' ? 'col-span-1 row-span-1' :
-                          size === 'medium' ? 'col-span-1 row-span-2' :
-                            'col-span-2 row-span-2'}
+                      <div
+                        key={index}
+                        className={`
+                      ${
+                        size === "small"
+                          ? "col-span-1 row-span-1"
+                          : size === "medium"
+                          ? "col-span-1 row-span-2"
+                          : "col-span-2 row-span-2"
+                      }
                       overflow-hidden
-                    `}>
-                        {image.file_type.includes("image") && <img
-                          src={image.url || 'https://via.placeholder.com/300x200'}
-                          alt={`${album.album_name} image ${index + 1}`}
-                          className="w-full h-full object-cover"
-                        />}
+                    `}
+                      >
+                        {image.file_type.includes("image") && (
+                          <img
+                            src={
+                              image.url || "https://via.placeholder.com/300x200"
+                            }
+                            alt={`${album.album_name} image ${index + 1}`}
+                            className="w-full h-full object-cover"
+                          />
+                        )}
+                        {image.file_type.includes("video") && (
+                          <video
+                            src={image.url}
+                            alt={`Album video`}
+                            className="w-full h-full object-cover"
+                            controls
+                          />
+                        )}
                       </div>
                     );
                   })}
@@ -107,27 +135,33 @@ const AllAlbumsPage = () => {
                 </div>
               </div>
               <div className="p-4">
-                <h2 className="text-xl font-semibold mb-2">{album.album_title}</h2>
-                <p className="text-gray-400 mb-2 flex items-center">
-                  <FaUser className="mr-2" /> {album.album_author.username}
-                </p>
+                <h2 className="text-xl font-semibold mb-2">
+                  {album.album_title}
+                </h2>
+                <div className="flex justify-between">
                 <p className="text-gray-400 flex items-center">
-                  <FaCalendar className="mr-2" /> {new Date(album.createdAt).toLocaleDateString()}
+                  <FaCalendar className="mr-2" />{" "}
+                  {new Date(album.created_at).toLocaleDateString()}
                 </p>
+                <p className="text-gray-400 mb-2 flex items-center">
+                  ~ by {album.album_author[0].full_name}
+                </p>
+                
+                </div>
               </div>
             </motion.div>
           </Link>
         ))}
       </motion.div>
 
-      <motion.button
+      {isAdmin&&<motion.button
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
         className="fixed bottom-8 right-8 bg-purple-600 text-white w-16 h-16 rounded-full text-3xl shadow-lg flex items-center justify-center"
         onClick={() => setShowModal(true)}
       >
         <FaPlus />
-      </motion.button>
+      </motion.button>}
 
       <AnimatePresence>
         {showModal && (

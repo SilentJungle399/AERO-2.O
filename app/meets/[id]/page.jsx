@@ -3,9 +3,9 @@
 import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import { motion } from "framer-motion";
-import { FaCalendar, FaClock, FaMapMarkerAlt, FaLaptop, FaUsers, FaQrcode } from "react-icons/fa";
+import { FaCalendar, FaClock, FaMapMarkerAlt, FaLaptop, FaUsers, FaQrcode, FaCamera } from "react-icons/fa";
 import QrReader from "react-qr-scanner";
-import Loader from '@/components/Loader'
+import Loader from '@/components/Loader';
 import Message from "@/components/Message";
 
 const MeetDetailPage = () => {
@@ -14,10 +14,11 @@ const MeetDetailPage = () => {
   const [loading, setLoading] = useState(true);
   const [showQrScanner, setShowQrScanner] = useState(false);
   const [qrResult, setQrResult] = useState(null);
+  const [cameraFacingMode, setCameraFacingMode] = useState('environment'); // Default to back camera
 
-  const [Error, setError] = useState(false)
-  const [Success, setSuccess] = useState(false)
-  const [message, setMessage] = useState("")
+  const [Error, setError] = useState(false);
+  const [Success, setSuccess] = useState(false);
+  const [message, setMessage] = useState("");
 
   useEffect(() => {
     const fetchMeetDetails = async () => {
@@ -50,8 +51,8 @@ const MeetDetailPage = () => {
 
       // Extract URL from the data object
       const url = new URL(data.text);
-      console.log("url")
-      console.log(url)
+      console.log("url");
+      console.log(url);
 
       // Extract ID and token from the URL
       const id = url.pathname.split('/').pop();
@@ -62,8 +63,8 @@ const MeetDetailPage = () => {
 
       if (!uid) {
         // alert('User ID not found in local storage');
-        setMessage('Please Login to mark your attendance!!!')
-        setError(true)
+        setMessage('Please Login to mark your attendance!!!');
+        setError(true);
         return;
       }
 
@@ -78,25 +79,23 @@ const MeetDetailPage = () => {
             token: token,
           }),
         });
-        const result = await response.json()
+        const result = await response.json();
         if (response.ok) {
-          setSuccess(true)
-          setMessage(result.message)
-        }
-        else {
-          setError(true)
-          setMessage(result.message)
+          setSuccess(true);
+          setMessage(result.message);
+        } else {
+          setError(true);
+          setMessage(result.message);
         }
         setTimeout(function () {
           window.location.href = "/";
         }, 100);
       } catch (error) {
-        setMessage('Error marking attendance')
-        setError(true)
+        setMessage('Error marking attendance');
+        setError(true);
       }
     }
   };
-
 
   const handleError = (err) => {
     console.error("QR Code Scan Error:", err);
@@ -106,10 +105,12 @@ const MeetDetailPage = () => {
     setShowQrScanner(true);
   };
 
+  const toggleCamera = () => {
+    setCameraFacingMode(prevMode => prevMode === 'environment' ? 'user' : 'environment');
+  };
+
   if (loading) {
-    return (
-      <Loader/>
-    )
+    return <Loader />;
   }
 
   if (!meet) {
@@ -171,7 +172,6 @@ const MeetDetailPage = () => {
               <FaUsers className="text-green-500 mr-3" />
               <p><span className="font-semibold">Total Participants:</span> {meet.participants_ids.length}</p>
             </div>
-            {/* <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"> */}
             <div className="overflow-x-auto">
               <table className="min-w-full w-full border-blue-900 border-2 border-collapse">
                 <thead>
@@ -193,7 +193,6 @@ const MeetDetailPage = () => {
               </table>
             </div>
 
-
             {meet.participants_ids.length > 6 && (
               <p className="mt-4 text-blue-400 cursor-pointer hover:underline">
                 View all participants
@@ -205,7 +204,7 @@ const MeetDetailPage = () => {
             <button
               disabled={meet.meet_active_status ? false : true}
               onClick={handleMarkAttendance}
-              className={`flex items-center justify-center w-full  text-white py-3 px-6 rounded-lg font-semibold text-lg hover:from-purple-600 hover:to-pink-600 transition duration-300 transform hover:scale-105 ${meet.meet_active_status ? " bg-green-500" : "cursor-not-allowed  bg-green-300"}`}>
+              className={`flex items-center justify-center w-full text-white py-3 px-6 rounded-lg font-semibold text-lg hover:from-purple-600 hover:to-pink-600 transition duration-300 transform hover:scale-105 ${meet.meet_active_status ? " bg-green-500" : "cursor-not-allowed  bg-green-300"}`}>
               <FaQrcode className="mr-3" />
               Mark Attendance
             </button >
@@ -216,14 +215,22 @@ const MeetDetailPage = () => {
 
       {showQrScanner && (
         <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50">
-          <div className="bg-gray-800 p-4 rounded-lg">
+          <div className="bg-gray-800 p-4 rounded-lg relative">
             <h2 className="text-xl font-semibold mb-4 text-white">Scan QR Code</h2>
             <QrReader
               delay={300}
               onError={handleError}
               onScan={handleScan}
+              facingMode={cameraFacingMode}
               style={{ width: "100%" }}
             />
+            <button
+              onClick={toggleCamera}
+              className="absolute top-4 right-4 bg-blue-500 text-white py-2 px-4 rounded-lg font-semibold flex items-center"
+            >
+              <FaCamera className="mr-2" />
+              Switch Camera
+            </button>
             <button
               onClick={() => setShowQrScanner(false)}
               className="mt-4 w-full bg-red-500 text-white py-2 px-4 rounded-lg font-semibold"

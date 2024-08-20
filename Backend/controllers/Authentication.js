@@ -248,6 +248,7 @@ const otpcheck = async (req, res) => {
 
 const Signup = async (req, res) => {
   const { email, password ,gender} = req.body;
+  console.log("email");
 
   try {
     const existingUser = await User.findOne({ email });
