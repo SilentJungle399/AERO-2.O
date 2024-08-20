@@ -9,7 +9,7 @@ const app = express();
 // CORS configuration
 app.use(cors({
     origin: [
-        'http://51.79.161.11:3000',   // Production URL
+        'http://51.79.146.251:3000',   // Production URL
         'http://localhost:3000'       // Development URL
     ],
     credentials: true // Enable credentials (cookies)
@@ -17,7 +17,7 @@ app.use(cors({
 
 app.options('*', cors({ // Preflight OPTIONS request for credentials
     origin: [
-        'http://51.79.161.11:3000',   // Production URL
+        'http://51.79.146.251:3000',   // Production URL
         'http://localhost:3000'       // Development URL
     ],
     credentials: true
@@ -57,7 +57,7 @@ app.use('/api/auth', authRoutes);
 // Determine base URL based on environment
 const PORT = process.env.PORT || 5000;
 const baseURL = process.env.NODE_ENV === 'production'
-    ? `https://51.79.161.11:5000`
+    ? `https://51.79.146.251:5000`
     : `http://localhost:5000`;
 
 // Server listening
