@@ -232,7 +232,7 @@ const Navbar: React.FC = () => {
 
   return (
     <div className="fixed top-0 left-0 right-0 z-50 w-full pointer-events-none">
-      <nav className="bg-black bg-opacity-0 w-full pointer-events-auto">
+      <nav className="bg-[#110e12] bg-opacity-0 w-full pointer-events-auto">
         <div className="w-full px-0">
           <div className="flex items-center justify-between h-24 px-2 md:px-4">
             <button
