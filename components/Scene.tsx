@@ -117,7 +117,7 @@ function RcSection({ isMobile }: { isMobile: boolean }) {
           fontSize: '30px', // Reduced font size to fit text better
           lineHeight: '1.5',
         }}>
-        <p className='mt-2 text-2xl font-mono text-gray-400'>Welcome to Aero Modelling Club! ✈️🚀 Whether you're an experienced RC pilot or just discovering the thrill of flying, our club is the perfect place to soar to new heights. We're a vibrant community of enthusiasts passionate about building, flying, and showcasing the incredible world of aero modelling. Dive into our hands-on workshops, participate in thrilling competitions, and connect with fellow hobbyists who share your passion. Ready to take off?</p>
+        <p className='mt-2 text-2xl font-mono text-gray-400'>Welcome to Aero Modelling Club! ✈️🚀 Whether you&apos;re an experienced RC pilot or just discovering the thrill of flying, our club is the perfect place to soar to new heights. We&apos;re a vibrant community of enthusiasts passionate about building, flying, and showcasing the incredible world of aero modelling. Dive into our hands-on workshops, participate in thrilling competitions, and connect with fellow hobbyists who share your passion. Ready to take off?</p>
         <div>
           <Image
             src='/Infinity-Loop.gif'
