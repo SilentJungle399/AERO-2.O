@@ -67,7 +67,7 @@ export default function Model({ isMobile }: ModelProps) {
         const clampedY = Math.max(-viewport.height / 2, Math.min(viewport.height / 2, targetY));
 
         // Smoothly interpolate position
-        modelPosition.current.lerp(new Vector3(0.5 + clampedX + scroll.offset * 10, -0.5 + clampedY + scroll.offset * 10, -5), 0.03);
+        modelPosition.current.lerp(new Vector3(0.5 + clampedX + scroll.offset * 10, -0.8 + clampedY + scroll.offset * 10, -5), 0.03);
         group.current.position.copy(modelPosition.current);
         // console.log(modelPosition)
         // Smoothly interpolate scale
@@ -79,7 +79,7 @@ export default function Model({ isMobile }: ModelProps) {
         group.current.rotation.y += (targetRotationY - group.current.rotation.y) * 0.1;
       } else {
         // Web: Update model position based on original logic
-        const x = 1 + scroll.offset * 20;
+        const x = 2.5 + scroll.offset * 20;
         const y = -0.5;
         modelPosition.current.set(x, y, -5);
         group.current.position.copy(modelPosition.current);
