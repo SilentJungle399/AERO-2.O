@@ -57,8 +57,8 @@ export default function DroneModel({ isMobile }: DroneModelProps) {
       // Update position based on scroll
       const newPosition = initialPosition.clone();
       // console.log(newPosition)
-      newPosition.x = isMobile ? -2.2 + scrollOffset * 5 : -20 + scrollOffset * 50; // Adjust the horizontal movement range for mobile
-      newPosition.y = isMobile ? -5.5 + scrollOffset * 10 : -2.5; // Adjust the vertical movement range for mobile
+      newPosition.x = isMobile ? -2.2 + scrollOffset * 5 : -25 + scrollOffset * 50; // Adjust the horizontal movement range for mobile
+      newPosition.y = isMobile ? -5.5 + scrollOffset * 10 : -1.9; // Adjust the vertical movement range for mobile
       group.current.position.copy(newPosition);
     }
   });

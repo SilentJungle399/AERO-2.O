@@ -66,24 +66,24 @@ function DroneSection({ isMobile }: { isMobile: boolean }) {
           lineHeight: '1.5',
           animation: 'slideDown 2s ease-out infinite', // Adjust timing and iteration as needed
         }}>
-        <p className='mt-4'>Welcome to the Drone Enthusiasts Club! 🚁 Whether you’re a seasoned drone pilot or new to the world of aerial technology. Ready to take your flying skills to new heights?</p>
+        <p className='mt-4 text-2xl text-gray-400 font-mono'>Welcome to the AeroClub!!! Whether you’re a seasoned drone pilot or new to the world of aerovics. Ready to dive deeper to the dreams of roarring into the skies...</p>
         <div className=' m-6'>
-          <h1 className='text-4xl text-blue-500'>Our Ongoing projects</h1>
+          <h1 className='text-4xl text-blue-500 font-serif font-bold'>--Our Ongoing Projects--</h1>
           <div className='flex flex-row justify-evenly flex-wrap p-12 '>
-            <div className='bg-white rounded-md shadow-lg p-4 max-w-xs w-full mx-2 mb-4'>
+            <div className='bg-white rounded-md shadow-lg p-4 max-w-xs w-full mx-2 mb-4 out'>
               <div className='text-4xl mb-2'>📡</div>
-              <h3 className='text-xl font-semibold text-orange-500 mb-2'>InterDrone Communication</h3>
-              <p className='text-black text-lg'>Seamless communication between drones ensures effective coordination and data exchange during operations.</p>
+              <h3 className='text-xl font-semibold text-orange-500 mb-2 font-serif'>Interdrone Communication</h3>
+              <p className='text-black text-lg font-mono leading-5 text-left pl-2'>Seamless communication between drones ensures effective coordination and data exchange during operations data exchange during operations.</p>
             </div>
             <div className='bg-white rounded-md shadow-lg p-2 max-w-xs w-full'>
               <div className='text-4xl mb-1'>🔍</div>
-              <h3 className='text-xl font-semibold text-orange-500 mb-2'>Tracing Drone</h3>
-              <p className='text-black text-lg'>Advanced tracing technology to track and monitor drone movements for security and analytics.</p>
+              <h3 className='text-xl font-semibold text-orange-500 mb-2 font-serif'>Tracing Drone</h3>
+              <p className='text-black text-lg font-mono leading-5 text-left pl-5'>Advanced tracing technology to track and monitor drone movements for security and analytics.track and monitor drone movements for security and analytics.</p>
             </div>
             <div className='bg-white rounded-md shadow-lg p-4 max-w-xs w-full mx-2 mb-4'>
               <div className='text-4xl mb-2'>🤖</div>
-              <h3 className='text-xl font-semibold text-orange-500 mb-2'>AI Drone</h3>
-              <p className='text-black text-lg'>Artificial Intelligence integrated into drones for autonomous navigation and decision-making.</p>
+              <h3 className='text-xl font-semibold text-orange-500 mb-2 font-serif'>AI Drone</h3>
+              <p className='text-black text-lg font-mono leading-5 text-left pl-3'>Artificial Intelligence integrated into drones for autonomous navigation and decision-makingnavigation and decision-making.</p>
             </div>
           </div>
 
@@ -113,11 +113,11 @@ function RcSection({ isMobile }: { isMobile: boolean }) {
           top: isMobile ? '220vh' : '250vh',
           left: '5vw',
           width: '90vw',
-          height: '120vh',
+          height: '110vh',
           fontSize: '30px', // Reduced font size to fit text better
           lineHeight: '1.5',
         }}>
-        <p className='mt-2'>Welcome to Aero Modelling Club! ✈️🚀 Whether you're an experienced RC pilot or just discovering the thrill of flying, our club is the perfect place to soar to new heights. We're a vibrant community of enthusiasts passionate about building, flying, and showcasing the incredible world of aero modelling. Dive into our hands-on workshops, participate in thrilling competitions, and connect with fellow hobbyists who share your passion. Ready to take off?</p>
+        <p className='mt-2 text-2xl font-mono text-gray-400'>Welcome to Aero Modelling Club! ✈️🚀 Whether you're an experienced RC pilot or just discovering the thrill of flying, our club is the perfect place to soar to new heights. We're a vibrant community of enthusiasts passionate about building, flying, and showcasing the incredible world of aero modelling. Dive into our hands-on workshops, participate in thrilling competitions, and connect with fellow hobbyists who share your passion. Ready to take off?</p>
         <div>
           <Image
             src='/Infinity-Loop.gif'

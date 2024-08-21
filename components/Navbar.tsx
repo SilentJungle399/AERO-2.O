@@ -11,6 +11,9 @@ import {
   FaBell,
   FaCaretDown,
   FaDropbox,
+  FaEnvelope,
+  FaInstagram,
+  FaTwitter,
 } from "react-icons/fa";
 
 import { initializeApp } from "firebase/app";
@@ -146,6 +149,29 @@ const Navbar: React.FC = () => {
   const [newNotificationCount, setNewNotificationCount] = useState(0);
   const [isAdmin, setAdmin] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+const [activitiesDropdownOpen, setActivitiesDropdownOpen] = useState(false);
+
+// Function to handle click outside of the dropdown
+const handleClickOutside = (event: MouseEvent) => {
+  if (
+    activitiesDropdownOpen &&
+    event.target instanceof HTMLElement &&
+    !event.target.closest('.relative.group')
+  ) {
+    setActivitiesDropdownOpen(false);
+  }
+};
+
+
+// Add event listener to the document when the component mounts
+useEffect(() => {
+  document.addEventListener('click', handleClickOutside);
+
+  // Clean up the event listener when the component unmounts
+  return () => {
+    document.removeEventListener('click', handleClickOutside);
+  };
+}, [activitiesDropdownOpen]);
   const [notifications, setNotifications] = useState<NotificationWithRead[]>(
     []
   );
@@ -597,7 +623,7 @@ const Navbar: React.FC = () => {
               />
             </svg>
           </button>
-          
+
           {!id && (
             <Link
               onClick={() => setSidebarOpen(!sidebarOpen)}
@@ -678,7 +704,7 @@ const Navbar: React.FC = () => {
             </div>
           )}
 
-{/* mobile verision navigation */}
+          {/* mobile verision navigation */}
 
           <div className="flex flex-col space-y-4">
             {/* admin routes in mobile */}
@@ -724,92 +750,162 @@ const Navbar: React.FC = () => {
 
             {/* user routes in mobile */}
             {!isAdmin && (
-              <>
-                <Link
-                  onClick={() => setSidebarOpen(!sidebarOpen)}
-                  href="/blogs"
-                  className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular"
-                >
-                  Blogs
-                </Link>
-                <Link
-                  onClick={() => setSidebarOpen(!sidebarOpen)}
-                  href="/drones"
-                  className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular"
-                >
-                  Drones
-                </Link>
-                <Link
-                  onClick={() => setSidebarOpen(!sidebarOpen)}
-                  href="/rcplanes"
-                  className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular"
-                >
-                  Rc Planes
-                </Link>
-                <div className="relative group">
-                  <button className="flex items-center text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular">
-                    Activities <FaCaretDown className="ml-1 w-5 h-5" />
-                  </button>
-                  <div className="absolute left-0 mt-2 w-48 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 backdrop-blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    <div
-                      className="py-1"
-                      role="menu"
-                      aria-orientation="vertical"
-                    >
-                      <Link
-                        onClick={() => setSidebarOpen(!sidebarOpen)}
-                        href="/events"
-                        className="bebas-neue-regular block px-4 py-2 text-md text-gray-300 hover:text-[#3494D1]"
-                      >
-                        Events
-                      </Link>
-                      <Link
-                        onClick={() => setSidebarOpen(!sidebarOpen)}
-                        href="/workshops"
-                        className="bebas-neue-regular block px-4 py-2 text-md text-gray-300 hover:text-[#3494D1]"
-                      >
-                        Workshops
-                      </Link>
-                      <Link
-                        onClick={() => setSidebarOpen(!sidebarOpen)}
-                        href="/techevents"
-                        className="bebas-neue-regular block px-4 py-2 text-md text-gray-300 hover:text-[#3494D1]"
-                      >
-                        Techspardha Events
-                      </Link>
-                    </div>
-                  </div>
-                </div>
-                <Link
-                  onClick={() => setSidebarOpen(!sidebarOpen)}
-                  href="/meets"
-                  className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular"
-                >
-                  Meets
-                </Link>
-                <Link
-                  onClick={() => setSidebarOpen(!sidebarOpen)}
-                  href="/inductions"
-                  className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular"
-                >
-                  Inductions
-                </Link>
-                <Link
-                  onClick={() => setSidebarOpen(!sidebarOpen)}
-                  href="/gallery"
-                  className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular"
-                >
-                  Gallery
-                </Link>
-                <Link
-                  onClick={() => setSidebarOpen(!sidebarOpen)}
-                  href="/members"
-                  className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular"
-                >
-                  Members
-                </Link>
-              </>
-            )}
+  <>
+    <Link
+      onClick={() => {
+        setSidebarOpen(!sidebarOpen);
+        setActivitiesDropdownOpen(false);
+      }}
+      href="/blogs"
+      className="text-white hover:text-[#3494D1] px-1 pt-8 md:px-3 rounded-md text-xl md:text-xl lg:text-2xl bebas-neue-regular"
+    >
+      Blogs
+    </Link>
+    <Link
+      onClick={() => {
+        setSidebarOpen(!sidebarOpen);
+        setActivitiesDropdownOpen(false);
+      }}
+      href="/drones"
+      className="text-white hover:text-[#3494D1] px-1 py-2 md:px-3 rounded-md text-xl md:text-xl lg:text-2xl font-medium bebas-neue-regular"
+    >
+      Drones
+    </Link>
+    <Link
+      onClick={() => {
+        setSidebarOpen(!sidebarOpen);
+        setActivitiesDropdownOpen(false);
+      }}
+      href="/rcplanes"
+      className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-xl md:text-xl lg:text-2xl font-medium bebas-neue-regular"
+    >
+      Rc Planes
+    </Link>
+    <div className="relative group z-10">
+      <button
+        className="flex items-center text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-xl md:text-xl lg:text-2xl font-medium bebas-neue-regular"
+        onClick={() => setActivitiesDropdownOpen(!activitiesDropdownOpen)}
+      >
+        Activities <FaCaretDown className="ml-1 w-5 h-5" />
+      </button>
+      {activitiesDropdownOpen && (
+        <div className="absolute left-0 mt-2 w-48 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 backdrop-blur-md">
+          <div className="py-1" role="menu" aria-orientation="vertical">
+            <Link
+              onClick={() => {
+                setSidebarOpen(!sidebarOpen);
+                setActivitiesDropdownOpen(false);
+              }}
+              href="/events"
+              className="bebas-neue-regular block px-4 py-2 text-md text-gray-300 hover:text-[#3494D1] text-xl"
+            >
+              Events
+            </Link>
+            <Link
+              onClick={() => {
+                setSidebarOpen(!sidebarOpen);
+                setActivitiesDropdownOpen(false);
+              }}
+              href="/workshops"
+              className="bebas-neue-regular block px-4 py-2 text-md text-gray-300 hover:text-[#3494D1] text-xl"
+            >
+              Workshops
+            </Link>
+            <Link
+              onClick={() => {
+                setSidebarOpen(!sidebarOpen);
+                setActivitiesDropdownOpen(false);
+              }}
+              href="/techevents"
+              className="bebas-neue-regular block px-4 py-2 text-md text-gray-300 hover:text-[#3494D1] text-xl"
+            >
+              Techspardha Events
+            </Link>
+          </div>
+        </div>
+      )}
+    </div>
+    <Link
+      onClick={() => {
+        setSidebarOpen(!sidebarOpen);
+        setActivitiesDropdownOpen(false);
+      }}
+      href="/meets"
+      className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-xl md:text-xl lg:text-2xl font-medium bebas-neue-regular"
+    >
+      Meets
+    </Link>
+    <Link
+      onClick={() => {
+        setSidebarOpen(!sidebarOpen);
+        setActivitiesDropdownOpen(false);
+      }}
+      href="/inductions"
+      className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-xl md:text-xl lg:text-2xl font-medium bebas-neue-regular"
+    >
+      Inductions
+    </Link>
+    <Link
+      onClick={() => {
+        setSidebarOpen(!sidebarOpen);
+        setActivitiesDropdownOpen(false);
+      }}
+      href="/gallery"
+      className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-xl md:text-xl lg:text-2xl font-medium bebas-neue-regular"
+    >
+      Gallery
+    </Link>
+    <Link
+      onClick={() => {
+        setSidebarOpen(!sidebarOpen);
+        setActivitiesDropdownOpen(false);
+      }}
+      href="/members"
+      className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-xl md:text-xl lg:text-2xl font-medium bebas-neue-regular"
+    >
+      Members
+    </Link>
+    <hr className="text-blue-500 bg-blue-900" />
+    <div className="items-center justify-between text-white">
+      <div>
+        <div className="flex items-center text-center justify-between">
+          <Image
+            className="justify-end"
+            src={'/favicon.ico'}
+            alt="not found"
+            width={50}
+            height={50}
+          />
+          <h1 className="font-sans font-bold mr-2">AeroModelling Club</h1>
+        </div>
+        <div className="flex ml-28 text-center space-x-2">
+          <a
+            href="https://www.instagram.com/aeroclub.nitkkr/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-pink-500 hover:text-gray-50"
+          >
+            <FaInstagram size={16} />
+          </a>
+          <a
+            href="https://www.linkedin.com/company/aero-club-nit-kurukshetra/?originalSubdomain=in"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-400 hover:text-gray-50"
+          >
+            <FaTwitter size={16} />
+          </a>
+          <a
+            href="mailto:aeronitkkr.club@gmail.com"
+            className="text-yellow-50 hover:text-gray-50"
+          >
+            <FaEnvelope size={16} />
+          </a>
+        </div>
+      </div>
+    </div>
+  </>
+)}
           </div>
         </div>
       </nav>
