@@ -54,7 +54,7 @@ export default function RcModel({ isMobile, scale = [2.1, 2.1, 2.1] }: RcModelPr
 
       // Update target position based on scroll
       targetPosition.current.x = isMobile ? -5 + scrollOffset * 5 : -30 + scrollOffset * 41; // Adjust the horizontal movement range for mobile
-      targetPosition.current.y = isMobile ? -4 + scrollOffset * 4 : -2 + scrollOffset * 1.5; // Adjust the vertical movement range for mobile
+      targetPosition.current.y = isMobile ? -4 + scrollOffset * 4 : -1 + scrollOffset * 1.5; // Adjust the vertical movement range for mobile
       if(isMobile){
         // console.log(targetPosition.current.x)
         // console.log(targetPosition.current.y)
@@ -65,7 +65,7 @@ export default function RcModel({ isMobile, scale = [2.1, 2.1, 2.1] }: RcModelPr
   });
 
   return (
-    <group ref={group} dispose={null} rotation={[Math.PI *10 / 180, Math.PI * 60 / 180, Math.PI * 20 / 180]}>
+    <group ref={group} dispose={null} rotation={[Math.PI *10 / 180, Math.PI/3, Math.PI * 20 / 180]}>
       <primitive object={scene} dispose={null} />
     </group>
   );
