@@ -62,36 +62,56 @@ function DroneSection({ isMobile }: { isMobile: boolean }) {
           left: '5vw',
           width: '90vw',
           height: '100vh',
-          fontSize: '1.875rem', // 30px in rem
+          fontSize: isMobile ? '1.6rem' : '1.875rem', // 30px in rem
           lineHeight: '1.5',
           animation: 'slideDown 2s ease-out infinite', // Adjust timing and iteration as needed
         }}>
-        <p className='mt-4 text-2xl text-gray-400 font-mono'>Welcome to the AeroClub!!! Whether you’re a seasoned drone pilot or new to the world of aerovics. Ready to dive deeper to the dreams of roarring into the skies...</p>
-        <div className=' m-6'>
-          <h1 className='text-4xl text-blue-500 font-serif font-bold'>--Our Ongoing Projects--</h1>
-          <div className='flex flex-row justify-evenly flex-wrap p-12 '>
-            <div className='bg-white rounded-md shadow-lg p-4 max-w-xs w-full mx-2 mb-4 out'>
-              <div className='text-4xl mb-2'>📡</div>
-              <h3 className='text-xl font-semibold text-orange-500 mb-2 font-serif'>Interdrone Communication</h3>
-              <p className='text-black text-lg font-mono leading-5 text-left pl-2'>Seamless communication between drones ensures effective coordination and data exchange during operations data exchange during operations.</p>
-            </div>
-            <div className='bg-white rounded-md shadow-lg p-2 max-w-xs w-full'>
-              <div className='text-4xl mb-1'>🔍</div>
-              <h3 className='text-xl font-semibold text-orange-500 mb-2 font-serif'>Tracing Drone</h3>
-              <p className='text-black text-lg font-mono leading-5 text-left pl-5'>Advanced tracing technology to track and monitor drone movements for security and analytics.track and monitor drone movements for security and analytics.</p>
-            </div>
-            <div className='bg-white rounded-md shadow-lg p-4 max-w-xs w-full mx-2 mb-4'>
-              <div className='text-4xl mb-2'>🤖</div>
-              <h3 className='text-xl font-semibold text-orange-500 mb-2 font-serif'>AI Drone</h3>
-              <p className='text-black text-lg font-mono leading-5 text-left pl-3'>Artificial Intelligence integrated into drones for autonomous navigation and decision-makingnavigation and decision-making.</p>
+        <p className='mt-4 font-mono text-gray-400'>Welcome to the Drone Enthusiasts Club! 🚁 Whether you’re a seasoned drone pilot or new to the world of aerial technology. Ready to take your flying skills to new heights?</p>
+        <style jsx>{`
+  @keyframes slideCards {
+    0% { transform: translateX(0); }
+    33.33% { transform: translateX(-100%); }
+    66.66% { transform: translateX(-200%); }
+    100% { transform: translateX(0); }
+  }
+
+  .mobile-slider {
+    display: flex;
+    animation: slideCards 15s infinite linear;
+  }
+
+  .mobile-slider:hover {
+    animation-play-state: paused;
+  }
+
+  .card {
+    flex: 0 0 100%;
+  }
+`}</style>
+        <div className='m-6'>
+          <h1 className='text-4xl text-blue-500 font-bold'>--Our Ongoing Projects--</h1>
+          <div className={`${isMobile ? "overflow-hidden mt-4" : "flex flex-row justify-evenly p-12 flex-wrap"}`}>
+            <div className={`${isMobile ? "mobile-slider" : "flex flex-row justify-between w-full"}`}>
+              <div className={`bg-white rounded-md p-4 max-w-xs w-full card ${isMobile ? "mx-2" : ""}`}>
+                <div className='text-4xl mb-2'>📡</div>
+                <h3 className='text-xl font-semibold text-orange-500 mb-2'>InterDrone Communication</h3>
+                <p className='text-black text-lg leading-5 font-mono text-center'>Seamless communication between drones ensures effective coordination and data exchange during operations.</p>
+              </div>
+              <div className={`bg-white rounded-md p-2 max-w-xs w-full card ${isMobile ? "mx-2" : ""}`}>
+                <div className='text-4xl mb-1'>🔍</div>
+                <h3 className='text-xl font-semibold text-orange-500 mb-2'>Tracing Drone</h3>
+                <p className='text-black text-lg leading-5 font-mono text-center'>Advanced tracing technology to track and monitor drone movements for security and analytics.</p>
+              </div>
+              <div className={`bg-white rounded-md p-4 max-w-xs w-full card ${isMobile ? "mx-2" : ""}`}>
+                <div className='text-4xl mb-2'>🤖</div>
+                <h3 className='text-xl font-semibold text-orange-500 mb-2'>AI Drone</h3>
+                <p className='text-black text-lg leading-5 font-mono text-center'>Artificial Intelligence integrated into drones for autonomous navigation and decision-making.</p>
+              </div>
             </div>
           </div>
-
         </div>
       </div>
     </Html>
-
-
   );
 }
 
@@ -100,7 +120,7 @@ function RcSection({ isMobile }: { isMobile: boolean }) {
     <Html>
       <div className="monoton absolute -z-10 text-orange-600"
         style={{
-          top: isMobile ? '210vh' : '250vh',
+          top: isMobile ? '215vh' : '250vh',
           left: '5vw',
           fontSize: isMobile ? 'clamp(4rem, 8vw, 8rem)' : 'clamp(2rem, 8vw, 6rem)',
           lineHeight: '1.1'
@@ -110,11 +130,11 @@ function RcSection({ isMobile }: { isMobile: boolean }) {
       <div
         className="absolute -z-10 text-center text-white p-4 flex flex-col items-center justify-center"
         style={{
-          top: isMobile ? '220vh' : '250vh',
+          top: isMobile ? '205vh' : '250vh',
           left: '5vw',
           width: '90vw',
-          height: '110vh',
-          fontSize: '30px', // Reduced font size to fit text better
+          height: '120vh',
+          fontSize: isMobile ? '20px' : '30px',
           lineHeight: '1.5',
         }}>
         <p className='mt-2 text-2xl font-mono text-gray-400'>Welcome to Aero Modelling Club! ✈️🚀 Whether you&apos;re an experienced RC pilot or just discovering the thrill of flying, our club is the perfect place to soar to new heights. We&apos;re a vibrant community of enthusiasts passionate about building, flying, and showcasing the incredible world of aero modelling. Dive into our hands-on workshops, participate in thrilling competitions, and connect with fellow hobbyists who share your passion. Ready to take off?</p>

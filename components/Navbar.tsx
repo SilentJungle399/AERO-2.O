@@ -647,7 +647,7 @@ const Navbar: React.FC = () => {
             <Link
               onClick={() => setSidebarOpen(!sidebarOpen)}
               href="/login"
-              className="bg-[#3494D1] ml-10  text-white hover:text-[#3494D1] px-4 rounded-sm text-sm font-medium bebas-neue-regular"
+              className="bg-[#3494D1] ml-24  text-white hover:text-[#3494D1] px-4 rounded-sm text-sm font-medium bebas-neue-regular"
             >
               Login
             </Link>
