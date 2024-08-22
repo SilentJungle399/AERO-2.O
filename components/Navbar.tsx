@@ -327,15 +327,8 @@ const Navbar: React.FC = () => {
   }, []);
 
   return (
-<<<<<<< HEAD
     <div className="fixed top-0 left-0 right-0 z-50 w-full pointer-events-none">
       <nav className="bg-[#110e12] bg-opacity-0 w-full pointer-events-auto">
-=======
-    <div
-      className={`fixed top-0 left-0 right-0 z-50 w-full pointer-events-none transition-colors duration-300 ${navBackground}`}
-    >
-      <nav className="w-full pointer-events-auto">
->>>>>>> 38b4928f4d24f7502e47e07550c2315f94b7b0d0
         <div className="w-full px-0">
           <div className="flex items-center justify-between h-24 px-2 md:px-4">
             <button
