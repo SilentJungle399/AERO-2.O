@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useParams } from "next/navigation";
 import { motion } from "framer-motion";
 import { FaCalendar, FaClock, FaMapMarkerAlt, FaLaptop, FaUsers, FaQrcode, FaCamera } from "react-icons/fa";
@@ -14,11 +14,12 @@ const MeetDetailPage = () => {
   const [loading, setLoading] = useState(true);
   const [showQrScanner, setShowQrScanner] = useState(false);
   const [qrResult, setQrResult] = useState(null);
-  const [cameraFacingMode, setCameraFacingMode] = useState('environment'); // Default to back camera
-
+  const [cameraFacingMode, setCameraFacingMode] = useState('environment');
+  const [hasPermission, setHasPermission] = useState(null);
   const [Error, setError] = useState(false);
   const [Success, setSuccess] = useState(false);
   const [message, setMessage] = useState("");
+  const qrReaderRef = useRef(null);
 
   useEffect(() => {
     const fetchMeetDetails = async () => {
@@ -44,20 +45,35 @@ const MeetDetailPage = () => {
     }
   }, [id]);
 
+  const requestCameraPermission = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: cameraFacingMode } });
+      setHasPermission(true);
+      console.log(stream.getTracks())
+      if (qrReaderRef.current) {
+        qrReaderRef.current.openImageDialog();
+      }
+      stream.getTracks().forEach(track => track.stop());
+    } catch (err) {
+      console.error('Error requesting camera permission:', err);
+      setHasPermission(false);
+      setError(true);
+      console.log(err)
+      setMessage('Camera permission denied. Please allow camera access to use the QR scanner.');
+    }
+  };
+
   const handleScan = async (data) => {
     if (data) {
       setQrResult(data);
       setShowQrScanner(false);
 
-      // Extract URL from the data object
       const url = new URL(data.text);
       console.log("URL:", url);
 
-      // Extract ID and token from the URL
       const id = url.pathname.split('/').pop();
       const token = url.searchParams.get('token');
 
-      // Retrieve UID from local storage
       const uid = localStorage.getItem('_id');
 
       if (!uid) {
@@ -101,10 +117,14 @@ const MeetDetailPage = () => {
 
   const handleMarkAttendance = () => {
     setShowQrScanner(true);
+    requestCameraPermission();
   };
 
   const toggleCamera = () => {
     setCameraFacingMode(prevMode => prevMode === 'environment' ? 'user' : 'environment');
+    if (hasPermission) {
+      requestCameraPermission();
+    }
   };
 
   if (loading) {
@@ -216,13 +236,19 @@ const MeetDetailPage = () => {
         <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50">
           <div className="bg-gray-800 p-4 rounded-lg relative">
             <h2 className="text-xl font-semibold mb-4 text-white">Scan QR Code</h2>
-            <QrReader
-              delay={300}
-              onError={handleError}
-              onScan={handleScan}
-              facingMode={cameraFacingMode}
-              style={{ width: "100%" }}
-            />
+            {hasPermission === false && (
+              <p className="text-red-500 mb-4">Camera permission denied. Please allow camera access and try again.</p>
+            )}
+            {hasPermission && (
+              <QrReader
+                ref={qrReaderRef}
+                delay={300}
+                onError={handleError}
+                onScan={handleScan}
+                facingMode={cameraFacingMode}
+                style={{ width: "100%" }}
+              />
+            )}
             <button
               onClick={toggleCamera}
               className="absolute top-4 right-4 bg-blue-500 text-white py-2 px-4 rounded-lg font-semibold flex items-center"
@@ -231,7 +257,10 @@ const MeetDetailPage = () => {
               Switch Camera
             </button>
             <button
-              onClick={() => setShowQrScanner(false)}
+              onClick={() => {
+                setShowQrScanner(false);
+                setHasPermission(null);
+              }}
               className="mt-4 w-full bg-red-500 text-white py-2 px-4 rounded-lg font-semibold"
             >
               Cancel
