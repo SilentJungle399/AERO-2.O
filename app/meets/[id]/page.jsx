@@ -50,42 +50,64 @@ const MeetDetailPage = () => {
 
       const requestCameraPermission = async () => {
         try {
+          // Request camera access
           const stream = await navigator.mediaDevices.getUserMedia({
             video: { facingMode: 'environment' }
           });
-
+      
+          // Set permission and start the QR code scanner
           setHasPermission(true);
-
+      
+          // Assuming qrCodeScanner is properly initialized before this
           qrCodeScanner.start(
-            { facingMode: 'environment' },
+            { facingMode: 'environment' }, // Ensures back camera is used
             {
               fps: 1,
               qrbox: { width: 500, height: 500 }
             },
             (decodedText) => {
+              console.log(decodedText);
               setQrResult(decodedText);
               setShowQrScanner(false);
-              qrCodeScanner.stop().catch(err => console.error("Error stopping QR scanner:", err));
+              handleScan(decodedText); 
+              // Stop the QR code scanner after successful scan
+              if (qrCodeScanner.isRunning) { // Ensure scanner is running before stopping
+                qrCodeScanner.stop()
+                  .then(() => {
+                    
+                    console.log("QR Code scanning stopped successfully.");
+                  })
+                  .catch(err => {
+                    console.error("Error stopping QR scanner:", err);
+                  });
+              }
             },
             (error) => {
-              console.error("QR Code Scan Error:", error);
+              if (error.name === 'NotFoundException') {
+                console.log("No QR code found in the scanned frame.");
+              } else {
+                console.error("QR Code Scan Error: ", error);
+              }
             }
-          ).catch(err => {
+          )
+          .catch(err => {
             console.error("Error starting QR scanner:", err);
             setHasPermission(false);
             setError(true);
             setMessage('Failed to start QR scanner.');
           });
-
+      
+          // Check which camera is being used
           const track = stream.getVideoTracks()[0];
           console.log("Selected Camera Device:", track.label);
-
+      
           if (track.label.toLowerCase().includes('back')) {
             console.log("Using back camera.");
           } else {
             console.log("Using front camera or another available camera.");
           }
-
+      
+          // Stop the stream tracks
           stream.getTracks().forEach(track => track.stop());
         } catch (err) {
           console.error('Error requesting camera permission:', err);
@@ -93,8 +115,7 @@ const MeetDetailPage = () => {
           setError(true);
           setMessage('Camera permission denied or no camera available. Please allow camera access or connect a camera.');
         }
-      };
-
+      };      
       requestCameraPermission();
 
       return () => {
@@ -103,12 +124,10 @@ const MeetDetailPage = () => {
     }
   }, [showQrScanner]);
 
-  const handleScan = async (data) => {
-    if (data) {
-      setQrResult(data);
-      setShowQrScanner(false);
-
-      const url = new URL(data);
+  const handleScan = async (decodedText) => {
+   
+      const url = new URL(decodedText);
+      console.log(url);
 
       const id = url.pathname.split('/').pop();
       const token = url.searchParams.get('token');
@@ -141,13 +160,13 @@ const MeetDetailPage = () => {
           setMessage(result.message);
         }
         setTimeout(() => {
-          window.location.href = "/";
+          window.location.href = `/meets/${id}`;
         }, 100);
       } catch (error) {
         setMessage('Error marking attendance');
         setError(true);
       }
-    }
+    
   };
 
   const handleError = (err) => {
