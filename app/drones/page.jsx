@@ -14,8 +14,14 @@ const DronePage = () => {
       className="max-w-4xl mx-auto px-0 py-8 mt-10
     "
     >
+<<<<<<< HEAD
       <header className="w-full h-[80vh] overflow-hidden">
         <div className="w-[100vw] h-full">
+=======
+      <header>
+        <h1 className="text-center">Drones</h1>
+        <div className="relative h-64 sm:h-80 md:h-96 lg:h-128 bg-cover bg-center flex justify-center items-center">
+>>>>>>> 38b4928f4d24f7502e47e07550c2315f94b7b0d0
           <Image
             className="object-cover"
             src="/sample-drone.jpg"

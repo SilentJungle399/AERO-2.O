@@ -45,7 +45,7 @@ const multer = require("multer");
 const { processUploads } = require("../middlewares/BlogMiddleware");
 const { uploadMiddleware } = require("../controllers/uploadMiddleware");
 const { getBlogPostBySlug } = require("../controllers/BlogController");
-const { getAlbum, getAllAlbums, createAlbum, addImageToAlbum } = require("../controllers/GalleryControllers");
+const { getAlbum, getAllAlbums, createAlbum, addImageToAlbum, handleLike, handleView } = require("../controllers/GalleryControllers");
 const { galleryUploadMiddleware } = require("../middlewares/GalleryUploadMiddleware");
 const { showAllNotification, showOneNotification } = require("../controllers/NotificationsController");
 const { getourmembers } = require("../controllers/Authentication");
@@ -69,7 +69,7 @@ userRoutes.get("/getinduction/:id", getInduction);
 userRoutes.get("/getinductionforselectingstudent/:id", getInductionforSelections);
 userRoutes.post(
   "/register/:id",
-  authMiddleware(["admin", "user", "blogger"]),upload.array('ppt', 100),galleryUploadMiddleware,
+  authMiddleware(["admin", "user","member","blogger"]),upload.array('ppt', 100),galleryUploadMiddleware,
   saveParticipants
 );
 userRoutes.post("/sendnotification/:id",authMiddleware(["admin"]),upload.array('notification_file',100),galleryUploadMiddleware,sendNotification);
@@ -116,6 +116,8 @@ userRoutes.post('/album/:id', upload.array('album_images', 100),galleryUploadMid
 userRoutes.get('/albums', getAllAlbums);
 // Get a specific album
 userRoutes.get('/albums/:id', getAlbum);
+userRoutes.post('/:uid/album/:album_id/images/:id/like', handleLike);
+userRoutes.post('/album/:album_id/images/:id/view', handleView);
 // .............
 
 
@@ -160,7 +162,7 @@ userRoutes.get(
   authMiddleware(["user", "member", "admin"]),
   async (req, res) => {
     try {
-      const fields = 'full_name email roll_no year branch session college_name mobile_no profile_pic team_name current_post';
+      const fields = 'full_name email roll_no year branch session college_name mobile_no profile_pic current_post team_name aadhar_no job_location company_name ifsc_code college_name';
       const user = await User.findById(req.params.id).select(fields);
 
       if (!user) {
@@ -209,7 +211,7 @@ userRoutes.patch('/update/:id', authMiddleware(["user", "member", "admin"]), asy
   const updates = req.body;
 
   try {
-    const fields = 'full_name email roll_no year branch session college_name mobile_no profile_pic team_name current_post';
+    const fields = 'full_name email roll_no year branch session college_name mobile_no profile_pic team_name';
     const user = await User.findByIdAndUpdate(id, updates, { new: true, runValidators: true }).select(fields);
     if (!user) {
       return res.status(404).json({ error: 'User not found' });

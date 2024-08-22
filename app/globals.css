@@ -173,6 +173,12 @@ body {
   scrollbar-width: none;  /* Firefox */
 }
 
+@keyframes slideLeftToRight {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+
 
 /* .aero-heading-text {
   position: relative;
@@ -506,4 +512,5 @@ body::-webkit-scrollbar {
     height: 10px;
   }
 }
+
 

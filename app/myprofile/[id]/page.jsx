@@ -117,17 +117,17 @@ const MyProfile = () => {
 
 
   return (
-    <div className="bg-black min-h-screen py-12 px-4 sm:px-6 lg:px-8 lg:py-24">
+    <div className="bg-black min-h-screen py-24 px-4 sm:px-6 lg:px-8 lg:py-24">
       <div className="max-w-4xl mx-auto bg-gray-800 shadow-xl rounded-lg overflow-hidden">
-        <div className="bg-blue-900 h-[300px] flex items-center justify-center">
+        <div className="bg-blue-900 h-[400px] flex items-center justify-center">
           <div className="  mb-8 relative">
-            <div className="relative pt-5 ml-auto max-md:pt-12 mb-3">
+            <div className="relative pt-12  ml-auto max-md:pt-12 mb-3">
               <img
                 src={user.profile_pic || "/default-avatar.png"}
                 alt="Profile Picture"
                 width={200}
                 height={200}
-                className="rounded-full border-4 border-blue-600 mb-4 sm:mb-0 sm:mr-8"
+                className="rounded-full border-4  border-blue-600 mb-4 sm:mb-0 sm:mr-8"
               />
               <button
                 type="button"
@@ -155,39 +155,69 @@ const MyProfile = () => {
         <div className="p-8 bg-gray-900">
 
 
-          <form onSubmit={handleSubmit} className="space-y-6 text-gray-200">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              {Object.keys(user).map(key => key !== 'profile_pic' && (
-                <div key={key}>
-                  <label className="block text-sm font-medium text-gray-300 capitalize">{key.replace('_', ' ')}</label>
-                  <input
-                    type={key === 'email' ? 'email' : 'text'}
-                    name={key}
-                    value={user[key]}
-                    onChange={handleInputChange}
-                    className="mt-1 block w-full border-b border-gray-600 focus:border-blue-500 focus:ring-0 sm:text-sm bg-gray-900 text-gray-300"
-                  />
-                </div>
-              ))}
-            </div>
+<form onSubmit={handleSubmit} className="space-y-6 text-gray-200">
+  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+    {Object.keys(user)
+      .filter(key => key !== 'profile_pic' && key !== '_id' && key !== 'current_post' && key !== 'team_name') // Exclude fields
+      .map(key => (
+        <div key={key}>
+          <label className="block text-sm font-medium text-gray-300 capitalize">
+            {key.replace('_', ' ')}
+          </label>
+          <input
+            type={key === 'email' ? 'email' : 'text'}
+            name={key}
+            value={user[key]}
+            onChange={handleInputChange}
+            className="mt-1 block w-full border-b border-gray-600 focus:border-blue-500 focus:ring-0 sm:text-sm bg-gray-900 text-gray-300"
+          />
+        </div>
+      ))}
+  </div>
 
-            <input
-              type="file"
-              id="profile-pic-input"
-              accept="image/*"
-              onChange={handleFileChange}
-              className="hidden"
-            />
+  <input
+    type="file"
+    id="profile-pic-input"
+    accept="image/*"
+    onChange={handleFileChange}
+    className="hidden"
+  />
 
-            <div className="flex justify-end">
-              <button
-                type="submit"
-                className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-              >
-                Update Profile
-              </button>
-            </div>
-          </form>
+  {/* Display current_post and team_name fields as disabled */}
+  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+    <div>
+      <label className="block text-sm font-medium text-gray-300 capitalize">Current Post</label>
+      <input
+        type="text"
+        name="current_post"
+        value={user.current_post || ''}
+        disabled
+        className="mt-1 block w-full border-b border-gray-600 bg-gray-800 text-gray-500 sm:text-sm"
+      />
+    </div>
+    <div>
+      <label className="block text-sm font-medium text-gray-300 capitalize">Team Name</label>
+      <input
+        type="text"
+        name="team_name"
+        value={user.team_name || ''}
+        disabled
+        className="mt-1 block w-full border-b border-gray-600 bg-gray-800 text-gray-500 sm:text-sm"
+      />
+    </div>
+  </div>
+
+  <div className="flex justify-end">
+    <button
+      type="submit"
+      className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+    >
+      Update Profile
+    </button>
+  </div>
+</form>
+
+
         </div>
       </div>
     </div>

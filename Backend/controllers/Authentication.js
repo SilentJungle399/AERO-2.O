@@ -5,7 +5,7 @@ const {
 } = require("../middlewares/nodemailerMiddleware");
 const OtpVerification = require("../models/OtpVerification");
 const User = require("../models/usermodel");
-const bcrypt = require("bcrypt");
+// const bcrypt = require("bcrypt");
 
 var admin = require("firebase-admin");
 
@@ -248,6 +248,7 @@ const otpcheck = async (req, res) => {
 
 const Signup = async (req, res) => {
   const { email, password ,gender} = req.body;
+  console.log("email");
 
   try {
     const existingUser = await User.findOne({ email });
@@ -312,7 +313,7 @@ const Login = async (req, res) => {
     if (!user) {
       return res.status(400).json({ error: "Invalid email" });
     }
-
+    console.log(user)
     const isMatch = await user.comparePassword(password);
     if (!isMatch) {
       return res.status(400).json({ error: "Invalid email or password" });
@@ -349,7 +350,7 @@ const Login = async (req, res) => {
     res.setHeader("Set-Cookie", res.getHeader("Set-Cookie"));
 
     // Send the response after setting the cookie
-    res.status(200).json({ token, _id, full_name, profile_pic,role });
+    res.status(200).json({ token, _id, full_name, profile_pic,role});
   } catch (error) {
     console.error("Error during login:", error);
     res.status(500).json({ error: "Failed to login" });

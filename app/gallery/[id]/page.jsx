@@ -1,17 +1,27 @@
 "use client";
+
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useParams } from "next/navigation";
 import { FaPlus, FaHeart, FaEye, FaTimes } from "react-icons/fa";
 
 const AlbumPage = () => {
+  const [isAdmin, setAdmin] = useState(false);
   const [album, setAlbum] = useState(null);
   const [showImageForm, setShowImageForm] = useState(false);
   const [newImages, setNewImages] = useState([]);
   const [selectedImage, setSelectedImage] = useState(null);
   const id = useParams().id;
+  const album_id = id;
+  const [uid, setUid] = useState('');
 
   useEffect(() => {
+    const role = localStorage.getItem('role');
+    if (role === 'admin') {
+      setAdmin(true);
+    }
+    const user = localStorage.getItem('_id');
+    setUid(user);
     if (id) {
       fetchAlbum();
     }
@@ -22,9 +32,7 @@ const AlbumPage = () => {
       const baseUrl = process.env.NODE_ENV === 'production'
         ? process.env.NEXT_PUBLIC_BACKEND_URL
         : 'http://localhost:5000';
-      const response = await fetch(
-        `${baseUrl}/api/users/albums/${id}`
-      );
+      const response = await fetch(`${baseUrl}/api/users/albums/${id}`);
       const data = await response.json();
       setAlbum(data);
     } catch (error) {
@@ -62,41 +70,72 @@ const AlbumPage = () => {
 
   const handleImageClick = async (image) => {
     setSelectedImage(image);
-    // Increase view count
     try {
       const baseUrl = process.env.NODE_ENV === 'production'
         ? process.env.NEXT_PUBLIC_BACKEND_URL
         : 'http://localhost:5000';
-      await fetch(`${baseUrl}/api/images/${image.id}/view`, {
-        method: "POST",
+        
+      // Make a POST request to increment the view count
+      await fetch(`${baseUrl}/api/users/album/${album_id}/images/${image._id}/view`, {
+        method: 'POST',
       });
-      // Update local state
-      setAlbum((prevAlbum) => ({
-        ...prevAlbum,
-        album_images: prevAlbum.album_images.map((img) =>
-          img.id === image.id ? { ...img, views: img.views + 1 } : img
-        ),
-      }));
+  
+      // Optimistic update for local state
+      setAlbum((prevAlbum) => {
+        console.log("Previous Album:", prevAlbum);
+        console.log("Updating Image:", image);
+  
+        return {
+          ...prevAlbum,
+          album_images: prevAlbum.album_images.map((img) => {
+            console.log("Current Image:", img);
+            return img._id === image._id
+              ? { ...img, image_views: (parseInt(img.image_views) || 0) + 1 } // Ensure image_views is a number
+              : img;
+          }),
+        };
+      });
     } catch (error) {
       console.error("Error incrementing view count:", error);
     }
   };
+  
 
   const handleLike = async (image) => {
     try {
+      console.log(image);
       const baseUrl = process.env.NODE_ENV === 'production'
         ? process.env.NEXT_PUBLIC_BACKEND_URL
         : 'http://localhost:5000';
-      await fetch(`${baseUrl}/api/images/${image.id}/like`, {
-        method: "POST",
+
+      await fetch(`${baseUrl}/api/users/${uid}/album/${album_id}/images/${image._id}/like`, {
+        method: 'POST',
       });
-      // Update local state
+
       setAlbum((prevAlbum) => ({
         ...prevAlbum,
-        album_images: prevAlbum.album_images.map((img) =>
-          img.id === image.id ? { ...img, likes: img.likes + 1 } : img
-        ),
+        album_images: prevAlbum.album_images.map((img) => {
+          if (img._id === image._id) {
+            return {
+              ...img,
+              image_likes: img.image_likes.includes(uid) 
+                ? img.image_likes.filter(id => id !== uid)
+                : [...img.image_likes, uid]
+            };
+          }
+          return img;
+        }),
       }));
+
+      if (selectedImage && selectedImage._id === image._id) {
+        setSelectedImage((prevImage) => ({
+          ...prevImage,
+          image_likes: prevImage.image_likes.includes(uid)
+            ? prevImage.image_likes.filter(id => id !== uid)
+            : [...prevImage.image_likes, uid]
+        }));
+      }
+
     } catch (error) {
       console.error("Error liking image:", error);
     }
@@ -147,10 +186,16 @@ const AlbumPage = () => {
                   />
                 )}
                 <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  <FaHeart className="text-3xl text-red-500 mr-2" />
-                  <span>{image.likes}</span>
+                  <FaHeart 
+                    className={`text-3xl mr-2 ${image.image_likes.includes(uid) ? 'text-red-500' : 'text-gray-500'}`} 
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleLike(image);
+                    }}
+                  />
+                  <span>{image.image_likes.length}</span>
                   <FaEye className="text-3xl text-blue-500 ml-4 mr-2" />
-                  <span>{image.views}</span>
+                  <span>{image.image_views}</span>
                 </div>
               </motion.div>
             ))}
@@ -158,14 +203,16 @@ const AlbumPage = () => {
         </motion.div>
       )}
 
-      <motion.button
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.9 }}
-        className="mt-8 bg-purple-600 text-white px-6 py-3 rounded-full text-lg shadow-lg flex items-center justify-center mx-auto"
-        onClick={() => setShowImageForm(true)}
-      >
-        <FaPlus className="mr-2" /> Add New Image
-      </motion.button>
+      {isAdmin && (
+        <motion.button
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
+          className="mt-8 bg-purple-600 text-white px-6 py-3 rounded-full text-lg shadow-lg flex items-center justify-center mx-auto"
+          onClick={() => setShowImageForm(true)}
+        >
+          <FaPlus className="mr-2" /> Add New Image
+        </motion.button>
+      )}
 
       <AnimatePresence>
         {showImageForm && (
@@ -221,10 +268,11 @@ const AlbumPage = () => {
                 onClick={() => handleLike(selectedImage)}
                 className="flex items-center text-red-500 px-4 py-2 rounded-full mr-4"
               >
-                <FaHeart className="mr-2" /> {selectedImage.likes}
+                <FaHeart className={`mr-2 ${selectedImage.image_likes.includes(uid) ? 'text-red-500' : 'text-gray-500'}`} />
+                {selectedImage.image_likes.length}
               </button>
               <div className="flex items-center text-blue-500">
-                <FaEye className="mr-2" /> {selectedImage.views}
+                <FaEye className="mr-2" /> {selectedImage.image_views}
               </div>
             </div>
             <motion.div
@@ -232,11 +280,13 @@ const AlbumPage = () => {
               animate={{ scale: 1 }}
               className="relative justify-center max-w-4xl w-full"
             >
-              {selectedImage.file_type.includes("image") && <img
-                src={selectedImage.url}
-                alt="Selected image"
-                className="w-full h-auto  rounded-lg"
-              />}
+              {selectedImage.file_type.includes("image") && (
+                <img
+                  src={selectedImage.url}
+                  alt="Selected image"
+                  className="w-full h-auto rounded-lg"
+                />
+              )}
               {selectedImage.file_type.includes("video") && (
                 <video
                   src={selectedImage.url}
@@ -245,23 +295,6 @@ const AlbumPage = () => {
                   controls
                 />
               )}
-              {/* <button
-                onClick={() => setSelectedImage(null)}
-                className="absolute top-3 right-2 text-red-500 text-2xl"
-              >
-                <FaTimes />
-              </button> */}
-              {/* <div className="absolute top-3 left-4 flex items-center">
-                <button
-                  onClick={() => handleLike(selectedImage)}
-                  className="flex items-center text-red-500 px-4 py-2 rounded-full mr-4"
-                >
-                  <FaHeart className="mr-2" /> {selectedImage.likes}
-                </button>
-                <div className="flex items-center text-blue-500">
-                  <FaEye className="mr-2" /> {selectedImage.views}
-                </div>
-              </div> */}
             </motion.div>
             <button
               onClick={() => setSelectedImage(null)}

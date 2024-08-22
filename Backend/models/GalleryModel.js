@@ -35,10 +35,16 @@ const gallerySchema = new mongoose.Schema({
         type: String,
         default: "",
       },
-      album_likes: [
+      image_likes: [
         {
           type: Schema.Types.ObjectId,
           ref: "User",
+        },
+      ],
+      image_views: [
+        {
+          type: Number,
+          default:0
         },
       ],
     },
@@ -49,6 +55,11 @@ const gallerySchema = new mongoose.Schema({
       ref: "User",
     },
   ],
+  created_at: {
+    type: Date,
+    default: Date.now
+}
+
   
 });
 
