@@ -66,7 +66,7 @@ function DroneSection({ isMobile }: { isMobile: boolean }) {
           lineHeight: '1.5',
           animation: 'slideDown 2s ease-out infinite', // Adjust timing and iteration as needed
         }}>
-        <p className='mt-4'>Welcome to the Drone Enthusiasts Club! 🚁 Whether you’re a seasoned drone pilot or new to the world of aerial technology. Ready to take your flying skills to new heights?</p>
+        <p className='mt-4 font-mono text-gray-400'>Welcome to the Drone Enthusiasts Club! 🚁 Whether you’re a seasoned drone pilot or new to the world of aerial technology. Ready to take your flying skills to new heights?</p>
         <style jsx>{`
   @keyframes slideCards {
     0% { transform: translateX(0); }
@@ -89,23 +89,23 @@ function DroneSection({ isMobile }: { isMobile: boolean }) {
   }
 `}</style>
         <div className='m-6'>
-          <h1 className='text-4xl text-blue-500'>Our Ongoing projects</h1>
+          <h1 className='text-4xl text-blue-500 font-bold'>--Our Ongoing Projects--</h1>
           <div className={`${isMobile ? "overflow-hidden mt-4" : "flex flex-row justify-evenly p-12 flex-wrap"}`}>
             <div className={`${isMobile ? "mobile-slider" : "flex flex-row justify-between w-full"}`}>
               <div className={`bg-white rounded-md p-4 max-w-xs w-full card ${isMobile ? "mx-2" : ""}`}>
                 <div className='text-4xl mb-2'>📡</div>
                 <h3 className='text-xl font-semibold text-orange-500 mb-2'>InterDrone Communication</h3>
-                <p className='text-black text-lg'>Seamless communication between drones ensures effective coordination and data exchange during operations.</p>
+                <p className='text-black text-lg leading-5 font-mono text-center'>Seamless communication between drones ensures effective coordination and data exchange during operations.</p>
               </div>
               <div className={`bg-white rounded-md p-2 max-w-xs w-full card ${isMobile ? "mx-2" : ""}`}>
                 <div className='text-4xl mb-1'>🔍</div>
                 <h3 className='text-xl font-semibold text-orange-500 mb-2'>Tracing Drone</h3>
-                <p className='text-black text-lg'>Advanced tracing technology to track and monitor drone movements for security and analytics.</p>
+                <p className='text-black text-lg leading-5 font-mono text-center'>Advanced tracing technology to track and monitor drone movements for security and analytics.</p>
               </div>
               <div className={`bg-white rounded-md p-4 max-w-xs w-full card ${isMobile ? "mx-2" : ""}`}>
                 <div className='text-4xl mb-2'>🤖</div>
                 <h3 className='text-xl font-semibold text-orange-500 mb-2'>AI Drone</h3>
-                <p className='text-black text-lg'>Artificial Intelligence integrated into drones for autonomous navigation and decision-making.</p>
+                <p className='text-black text-lg leading-5 font-mono text-center'>Artificial Intelligence integrated into drones for autonomous navigation and decision-making.</p>
               </div>
             </div>
           </div>
