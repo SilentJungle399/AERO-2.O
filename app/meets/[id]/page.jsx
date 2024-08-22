@@ -1,6 +1,5 @@
 "use client";
-
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import { motion } from "framer-motion";
 import { FaCalendar, FaClock, FaMapMarkerAlt, FaLaptop, FaUsers, FaQrcode } from "react-icons/fa";
@@ -15,11 +14,10 @@ const MeetDetailPage = () => {
   const [showQrScanner, setShowQrScanner] = useState(false);
   const [qrResult, setQrResult] = useState(null);
   const [hasPermission, setHasPermission] = useState(null);
-  const [Error, setError] = useState(false);
-  const [Success, setSuccess] = useState(false);
+  const [error, setError] = useState(false);
+  const [success, setSuccess] = useState(false);
   const [message, setMessage] = useState("");
-  const qrReaderRef = useRef(null);
-  const html5Qr = useRef(null);
+  const [html5QrCode, setHtml5QrCode] = useState(null); // Declare html5QrCode as state
 
   useEffect(() => {
     const fetchMeetDetails = async () => {
@@ -45,65 +43,72 @@ const MeetDetailPage = () => {
     }
   }, [id]);
 
-  const requestCameraPermission = async () => {
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: 'environment' }  // Explicitly requests the back camera
-      });
+  useEffect(() => {
+    if (showQrScanner) {
+      const qrCodeScanner = new Html5Qrcode("reader",true);
+      setHtml5QrCode(qrCodeScanner);
 
-      setHasPermission(true);
+      const requestCameraPermission = async () => {
+        try {
+          const stream = await navigator.mediaDevices.getUserMedia({
+            video: { facingMode: 'environment' }
+          });
 
-      if (qrReaderRef.current) {
-        html5Qr.current = new Html5Qrcode("reader");
-        html5Qr.current.start(
-          { facingMode: 'environment' },
-          {
-            fps: 10,
-            qrbox: 250
-          },
-          (decodedText) => {
-            setQrResult(decodedText);
-            setShowQrScanner(false);
-            html5Qr.current.stop().catch(err => console.error("Error stopping QR scanner:", err));
-          },
-          (error) => {
-            console.error("QR Code Scan Error:", error);
+          setHasPermission(true);
+
+          qrCodeScanner.start(
+            { facingMode: 'environment' },
+            {
+              fps: 1,
+              qrbox: { width: 500, height: 500 }
+            },
+            (decodedText) => {
+              setQrResult(decodedText);
+              setShowQrScanner(false);
+              qrCodeScanner.stop().catch(err => console.error("Error stopping QR scanner:", err));
+            },
+            (error) => {
+              console.error("QR Code Scan Error:", error);
+            }
+          ).catch(err => {
+            console.error("Error starting QR scanner:", err);
+            setHasPermission(false);
+            setError(true);
+            setMessage('Failed to start QR scanner.');
+          });
+
+          const track = stream.getVideoTracks()[0];
+          console.log("Selected Camera Device:", track.label);
+
+          if (track.label.toLowerCase().includes('back')) {
+            console.log("Using back camera.");
+          } else {
+            console.log("Using front camera or another available camera.");
           }
-        ).catch(err => {
-          console.error("Error starting QR scanner:", err);
+
+          stream.getTracks().forEach(track => track.stop());
+        } catch (err) {
+          console.error('Error requesting camera permission:', err);
           setHasPermission(false);
           setError(true);
-          setMessage('Failed to start QR scanner.');
-        });
-
-        // Log which camera is being used based on the label
-        const track = stream.getVideoTracks()[0];
-        console.log("Selected Camera Device:", track.label);  // Debugging: Log the selected camera's label
-
-        if (track.label.toLowerCase().includes('back')) {
-          console.log("Using back camera.");
-        } else {
-          console.log("Using front camera or another available camera.");
+          setMessage('Camera permission denied or no camera available. Please allow camera access or connect a camera.');
         }
+      };
 
-        // Stop the stream after use
-        stream.getTracks().forEach(track => track.stop());
-      }
+      requestCameraPermission();
 
-    } catch (err) {
-      console.error('Error requesting camera permission:', err);
-      setHasPermission(false);
-      setError(true);
-      setMessage('Camera permission denied or no camera available. Please allow camera access or connect a camera.');
+      return () => {
+        qrCodeScanner.stop().catch(err => console.error("Error stopping QR scanner:", err));
+      };
     }
-  };
+  }, [showQrScanner]);
 
   const handleScan = async (data) => {
     if (data) {
       setQrResult(data);
       setShowQrScanner(false);
 
-      const url = new URL(data.text);
+      const url = new URL(data);
 
       const id = url.pathname.split('/').pop();
       const token = url.searchParams.get('token');
@@ -151,7 +156,6 @@ const MeetDetailPage = () => {
 
   const handleMarkAttendance = () => {
     setShowQrScanner(true);
-    requestCameraPermission();
   };
 
   if (loading) {
@@ -224,66 +228,39 @@ const MeetDetailPage = () => {
                     <th className="border border-blue-900 p-2 sm:p-4">#</th>
                     <th className="border border-blue-900 p-2 sm:p-4">Roll No</th>
                     <th className="border border-blue-900 p-2 sm:p-4">Name</th>
+                    <th className="border border-blue-900 p-2 sm:p-4">Email</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {meet.participants_ids.slice(0, 6).map((participant, idx) => (
-                    <tr key={participant._id} className="bg-slate-600">
-                      <td className="border border-blue-900 p-2 sm:p-4">{idx + 1}</td>
+                  {meet.participants_ids.map((participant, index) => (
+                    <tr key={participant._id}>
+                      <td className="border border-blue-900 p-2 sm:p-4">{index + 1}</td>
                       <td className="border border-blue-900 p-2 sm:p-4">{participant.roll_no}</td>
-                      <td className="border border-blue-900 p-2 sm:p-4">{participant.full_name}</td>
+                      <td className="border border-blue-900 p-2 sm:p-4">{participant.name}</td>
+                      <td className="border border-blue-900 p-2 sm:p-4">{participant.email}</td>
                     </tr>
                   ))}
                 </tbody>
               </table>
             </div>
-
-            {meet.participants_ids.length > 6 && (
-              <p className="mt-4 text-blue-400 cursor-pointer hover:underline">
-                View all participants
-              </p>
-            )}
           </div>
 
-          <div className="mt-8">
-            <button
-              disabled={!meet.meet_active_status}
-              onClick={handleMarkAttendance}
-              className={`flex items-center justify-center w-full text-white py-3 px-6 rounded-lg font-semibold text-lg hover:from-purple-600 hover:to-pink-600 transition duration-300 transform hover:scale-105 ${meet.meet_active_status ? " bg-green-500" : "cursor-not-allowed bg-green-300"}`}
-            >
-              <FaQrcode className="mr-3" />
-              Mark Attendance
-            </button>
-            {(Error || Success) && <Message error={Error} success={Success} message={message} />}
-          </div>
+          <button
+            onClick={handleMarkAttendance}
+            className="mt-8 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
+          >
+            <FaQrcode className="inline mr-2" />
+            Mark Attendance
+          </button>
+
+          {showQrScanner && (
+            <div id="reader" className="mt-8 w-full h-96 bg-gray-700"></div>
+          )}
+
+          {error && <Message type="error" message={message} />}
+          {success && <Message type="success" message={message} />}
         </div>
       </motion.div>
-
-      {showQrScanner && (
-        <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50">
-          <div className="bg-gray-800 p-4 rounded-lg relative">
-            <h2 className="text-xl font-semibold mb-4 text-white">Scan QR Code</h2>
-            {hasPermission === false && (
-              <p className="text-red-500 mb-4">Back camera not available. Please switch to a device with a back camera.</p>
-            )}
-            {hasPermission && (
-              <div id="reader" style={{ width: "100%", height: "auto" }}></div>
-            )}
-            <button
-              onClick={() => {
-                setShowQrScanner(false);
-                setHasPermission(null);
-                if (html5Qr.current) {
-                  html5Qr.current.stop().catch(err => console.error("Error stopping QR scanner:", err));
-                }
-              }}
-              className="mt-4 w-full bg-red-500 text-white py-2 px-4 rounded-lg font-semibold"
-            >
-              Cancel
-            </button>
-          </div>
-        </div>
-      )}
     </div>
   );
 };
