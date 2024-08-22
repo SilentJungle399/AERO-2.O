@@ -138,7 +138,7 @@ const Accordion: React.FC = () => {
           aria-controls="accordion-flush-body-3"
         >
           <span>
-            What are the differences between a drone and an RC Plane flyers?
+            What are the differences between a drone and an RC Plane flyer?
           </span>
           <svg
             data-accordion-icon
