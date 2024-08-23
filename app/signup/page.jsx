@@ -159,14 +159,47 @@ export default function Signup() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-black py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8 bg-white p-10 rounded-xl shadow-2xl">
-        <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+      <div className="max-w-xl w-full space-y-8 bg-black p-10 rounded-xl shadow-2xl">
+        
+      <p className="flex text-2xl text-mono monoton text-blue-300 typing-effect">
+          Welcome&nbsp;to&nbsp;Aero&nbsp;Club...
+        </p>
+
+        <style jsx>{`
+          .typing-effect {
+            overflow: hidden;
+            border-right: 0.15em solid #1e40af;
+            white-space: nowrap;
+            letter-spacing: 0.25em;
+            animation: typing 3.5s steps(40, end),
+              blink-caret 0.75s step-end infinite;
+          }
+
+          @keyframes typing {
+            from {
+              width: 0;
+            }
+            to {
+              width: 100%;
+            }
+          }
+
+          @keyframes blink-caret {
+            from,
+            to {
+              border-color: transparent;
+            }
+            50% {
+              border-color: #1e40af;
+            }
+          }
+        `}</style>        <div>
+          <h2 className="font-mono text-green-700 mt-6 text-center text-3xl font-extrabold text-gray-00">
             Create a new account
           </h2>
         </div>
         {step === 1 && (
-          <form className="mt-8 space-y-6" onSubmit={handleEmailVerification}>
+          <form className="font-mono mt-8 space-y-6" onSubmit={handleEmailVerification}>
             <input type="hidden" name="remember" value="true" />
             <div className="rounded-md shadow-sm -space-y-px">
               <div>
@@ -207,7 +240,7 @@ export default function Signup() {
         )}
 
         {step === 2 && (
-          <form className="mt-8 space-y-6" onSubmit={handleOtpCheck}>
+          <form className="font-mono mt-8 space-y-6" onSubmit={handleOtpCheck}>
             <div className="flex justify-between space-x-2">
               {otp.map((digit, index) => (
                 <input
@@ -233,7 +266,7 @@ export default function Signup() {
         )}
 
         {step === 3 && (
-          <form className="mt-8 space-y-6" onSubmit={handleSignup}>
+          <form className="font-mono mt-8 space-y-6" onSubmit={handleSignup}>
             <div className="rounded-md shadow-sm -space-y-px">
               <div>
                 <select
@@ -276,13 +309,13 @@ export default function Signup() {
 
         {error && <div className="text-red-500 text-sm mt-2">{error}</div>}
 
-        <div className="mt-6">
+        <div className="mt-6 font-mono">
           <div className="relative">
             <div className="absolute inset-0 flex items-center">
               <div className="w-full border-t border-gray-300"></div>
             </div>
             <div className="relative flex justify-center text-sm">
-              <span className="px-2 bg-white text-gray-500">Or continue with</span>
+              <span className="px-2 bg-black text-gray-500">Or continue with</span>
             </div>
           </div>
 

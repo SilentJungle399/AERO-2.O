@@ -179,40 +179,7 @@ const Navbar: React.FC = () => {
   const router = useRouter();
   const pathname = usePathname();
 
-  const signInWithGoogle = async () => {
-    try {
-      const result = await signInWithPopup(auth, googleProvider);
-      const user = result.user;
-      const token = await user.getIdToken();
-
-      const res = await fetch("http://localhost:5000/api/auth/google-signin", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        credentials: "include",
-        body: JSON.stringify({ user }),
-      });
-
-      if (res.ok) {
-        const data = await res.json();
-        console.log(data);
-        localStorage.setItem("token", data.token);
-        localStorage.setItem("_id", data._id);
-        localStorage.setItem("name", data.full_name);
-        localStorage.setItem("profile_pic", data.profile_pic);
-        localStorage.setItem("role", data.role);
-        setTimeout(() => {
-          window.location.href = "/";
-        }, 100);
-      } else {
-        setError("Failed to sign in with Google");
-      }
-    } catch (error) {
-      setError("Error signing in with Google");
-    }
-  };
+ 
 
   const fetchNotifications = async () => {
     const id = localStorage.getItem("_id");
@@ -296,12 +263,7 @@ const Navbar: React.FC = () => {
       setAdmin(true);
     }
 
-    if (!id) {
-      const timeoutId = setTimeout(() => {
-        signInWithGoogle();
-      }, 1000);
-      return () => clearTimeout(timeoutId);
-    }
+    
   }, []);
 
   const handleBellClick = () => {
