@@ -1,7 +1,6 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import BlogCanvas from '../../components/BlogCanvas'
 
 const UserDisplay = () => {
   const [users, setUsers] = useState({ byYear: {}, alumni: [] });
@@ -121,7 +120,7 @@ const UserDisplay = () => {
 
       <div className="container mx-auto px-4 py-32 relative z-10">
         <motion.h1 
-          className="text-6xl  monoton mb-16 text-white"
+          className="text-3xl text-center monoton mb-16 text-white lg:text-6xl"
           initial={{ opacity: 0, y: -50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}

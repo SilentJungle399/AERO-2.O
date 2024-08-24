@@ -270,23 +270,23 @@ const Navbar: React.FC = () => {
     setIsModalOpen(true);
   };
 
-  //for NavBar effect
-  const [navBackground, setNavBackground] = useState("bg-transparent");
+  // //for NavBar effect
+  // const [navBackground, setNavBackground] = useState("bg-transparent");
 
-  const handleScroll = () => {
-    if (window.scrollY > 50) {
-      setNavBackground("bg-opacity-90 bg-black");
-    } else {
-      setNavBackground("bg-transparent");
-    }
-  };
+  // const handleScroll = () => {
+  //   if (window.scrollY > 50) {
+  //     setNavBackground("bg-opacity-90 bg-black");
+  //   } else {
+  //     setNavBackground("bg-transparent");
+  //   }
+  // };
 
-  useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
+  // useEffect(() => {
+  //   window.addEventListener("scroll", handleScroll);
+  //   return () => {
+  //     window.removeEventListener("scroll", handleScroll);
+  //   };
+  // }, []);
 
   return (
     <div className="fixed top-0 left-0 right-0 z-50 w-full pointer-events-none">
