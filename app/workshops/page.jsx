@@ -26,8 +26,8 @@ const EventsPage = () => {
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const baseUrl = process.env.NODE_ENV === 'production' 
-          ? process.env.NEXT_PUBLIC_BACKEND_URL 
+        const baseUrl = process.env.NODE_ENV === 'production'
+          ? process.env.NEXT_PUBLIC_BACKEND_URL
           : 'http://localhost:5000';
         const response = await fetch(`${baseUrl}/api/users/getallevents`);
         if (!response.ok) {
@@ -46,7 +46,7 @@ const EventsPage = () => {
 
   if (loading) {
     return (
-      <Loader/>
+      <Loader />
     )
   };
   if (error) return <p className="text-center text-red-500">{error}</p>;
@@ -60,11 +60,10 @@ const EventsPage = () => {
     >
       <div className="h-[900vh] relative" ref={ref}>
         <div className="relative w-screen h-screen flex items-center justify-center text-3xl md:text-6xl lg:text-8xl text-center">
-          <div className="z-0 mr-8 text-white monoton">
+          <div className="z-0 mt-20 text-white monoton text-wrap text-center">
             Aeromodelling Club workshops
           </div>
-          <div className='absolute bottom-1/4 left-1/2 transform -translate-x-1/2 -translate-y-1/4  z-10'>
-            {/* <FractalTree /> */}
+          <div className='absolute top-1/4 left-1/2 transform -translate-x-1/2 -translate-y-1/4  z-10'>
             <Brain scrollYProgress={scrollYProgress} />
           </div>
         </div>
@@ -143,12 +142,12 @@ const EventsPage = () => {
         <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold">
           Ready to <span className="bg-gradient-to-r from-blue-600 via-green-500 to-indigo-400 text-transparent bg-clip-text">take flight</span>?
         </h1>
-        <div className="relative">
+        <div className="relative w-full h-full flex items-center justify-center">
           <motion.svg
             animate={{ rotate: 360 }}
             transition={{ duration: 8, ease: "linear", repeat: Infinity }}
             viewBox="0 0 300 300"
-            className="w-64 h-64 md:w-80 md:h-80 lg:w-96 lg:h-96"
+            className="w-96 h-96 md:w-80 md:h-80 lg:w-96 lg:h-96"
           >
             <defs>
               <path
@@ -163,13 +162,11 @@ const EventsPage = () => {
             </text>
           </motion.svg>
           <Link href="/contact">
-            <motion.a
-              className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-32 h-32 bg-black text-white rounded-full flex items-center justify-center text-xl font-bold"
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
+            <div
+              className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-32 h-32 bg-black text-white rounded-full flex items-center justify-center text-xl font-bold transition-transform duration-300 ease-in-out hover:scale-110"
             >
               Join Us
-            </motion.a>
+            </div>
           </Link>
         </div>
       </div>
