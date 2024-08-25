@@ -44,13 +44,9 @@ export default function RootLayout({
           rel="stylesheet"
         />
         <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet"/>
-        {/* <link
-          href="https://fonts.googleapis.com/css2?family=Caesar+Dressing&display=swap"
-        <link
-          href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap"
-          rel="stylesheet"
-        />
-        {/* Include favicon */}
+        <link href="https://fonts.googleapis.com/css2?family=Headland+One&display=swap" rel="stylesheet"></link>
+
+
         <link rel="icon" href="/favicon.ico" sizes="any" />
 
         {/* Open Graph meta tags */}

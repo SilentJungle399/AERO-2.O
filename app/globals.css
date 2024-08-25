@@ -172,6 +172,11 @@ body {
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;  /* Firefox */
 }
+.headland-one-regular {
+  font-family: "Headland One", serif;
+  font-weight: 400;
+  font-style: normal;
+}
 
 @keyframes slideLeftToRight {
   0% { transform: translateX(-100%); }

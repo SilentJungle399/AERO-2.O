@@ -3,6 +3,29 @@ import Image from "next/image";
 import Accordion from "./Accordion";
 
 const DronePage = () => {
+
+  const droneProjects = [
+    {
+      id: 1,
+      title: "Object Tracing Drone",
+      description: "An innovative drone project focusing on object detection and tracking using AI algorithms.",
+      image: "/drone_project1.webp",
+    },
+    {
+      id: 2,
+      title: "Arduino-Based Mini Drone",
+      description: "A compact and efficient drone powered by Arduino, perfect for DIY enthusiasts and educational purposes.",
+      image: "/drone_project2.jpg",
+    },
+    {
+      id: 3,
+      title: "FPV Racing Drone",
+      description: "A fast and agile FPV racing drone designed for high-speed maneuvering and competitive racing.",
+      image: "/drone_project3.jpg",
+    },
+  ];
+  
+
   return (
     <div className="bg-gray-900 text-white min-h-screen">
       <header className="relative h-screen">
@@ -14,7 +37,7 @@ const DronePage = () => {
           priority
         />
         <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-          <h1 className="text-5xl md:text-7xl font-bold text-center text-white shadow-lg">
+          <h1 className="text-5xl md:text-7xl headland-one-regular font-bold text-center text-white shadow-lg">
             Drones: The Future of Flight
           </h1>
         </div>
@@ -41,7 +64,7 @@ const DronePage = () => {
                   <li>✓ ESCs, Battery</li>
                   <li>✓ Screw Driver, L-keys</li>
                   <li>✓ Motor, Motor Screw Box, Motor Shat</li>
-                  <li>✓ Propellers</li>
+                  <li>✓ Rubber Band, Propellers</li>
                   <li>✓ Transmitter, Receiver</li>
                   <li>✓ Pliers</li>
                   <li>✓ Jumper Wires</li>
@@ -54,19 +77,19 @@ const DronePage = () => {
         <section className="mb-16">
           <h2 className="text-3xl font-bold mb-8">Latest Drone Projects</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[1, 2, 3].map((item) => (
-              <div key={item} className="bg-gray-800 rounded-lg overflow-hidden shadow-lg transition-transform hover:scale-105">
+            {droneProjects.map((item) => (
+              <div key={item.id} className="bg-gray-800 rounded-lg overflow-hidden shadow-lg transition-transform hover:scale-105">
                 <Image
-                  src={`/drone-project-${item}.jpg`}
-                  alt={`Drone Project ${item}`}
+                  src={item.image}
+                  alt={`Drone Project ${item.id}`}
                   width={400}
                   height={300}
                   className="w-full h-48 object-cover"
                 />
                 <div className="p-6">
-                  <h3 className="text-xl font-semibold mb-2">Drone Project {item}</h3>
+                  <h3 className="text-xl font-semibold mb-2">{item.title}</h3>
                   <p className="text-gray-400">
-                    An innovative drone project showcasing advanced UAV technology and applications.
+                    {item.description}
                   </p>
                 </div>
               </div>
