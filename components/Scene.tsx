@@ -120,7 +120,7 @@ function RcSection({ isMobile }: { isMobile: boolean }) {
     <Html>
       <div className="monoton absolute -z-10 text-orange-600"
         style={{
-          top: isMobile ? '215vh' : '250vh',
+          top: isMobile ? '210vh' : '250vh',
           left: '5vw',
           fontSize: isMobile ? 'clamp(4rem, 8vw, 8rem)' : 'clamp(2rem, 8vw, 6rem)',
           lineHeight: '1.1'
@@ -130,7 +130,7 @@ function RcSection({ isMobile }: { isMobile: boolean }) {
       <div
         className="absolute -z-10 text-center text-white p-4 flex flex-col items-center justify-center"
         style={{
-          top: isMobile ? '205vh' : '250vh',
+          top: isMobile ? '215vh' : '250vh',
           left: '5vw',
           width: '90vw',
           height: '120vh',

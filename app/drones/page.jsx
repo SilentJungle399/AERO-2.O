@@ -15,7 +15,7 @@ const DronePage = () => {
     "
     >
       <header>
-        <h1 className="text-center">Drones</h1>
+        <h1 className="text-center text-9xl font-bold">Drones</h1>
         <div className="relative h-64 sm:h-80 md:h-96 lg:h-128 bg-cover bg-center flex justify-center items-center">
           <Image
             className="object-cover"

@@ -67,7 +67,7 @@ const EventsPage = () => {
           <div className='absolute top-1/4 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10'>
             <FractalTree />
           </div>
-          <div className="z-0 mr-8 text-white monoton">
+          <div className="z-0 text-white text-center monoton">
             Aeromodelling Club Events
           </div>
         </div>
@@ -91,7 +91,7 @@ const EventsPage = () => {
                     </div>
                     <p className="text-lg md:text-xl">{event.E_mini_description}</p>
                     <div className="flex flex-col sm:flex-row gap-4 mt-6">
-                      <Link href={`/events/create-team/${event._id}`} passHref>
+                      <Link className='m-1' href={`/events/create-team/${event._id}`} passHref>
                         <motion.a
                           className="flex-1 bg-blue-600 text-white font-semibold py-3 px-6 rounded-lg hover:bg-blue-500 transition-colors text-center text-lg"
                           whileHover={{ scale: 1.05 }}
@@ -100,7 +100,7 @@ const EventsPage = () => {
                           Create Team
                         </motion.a>
                       </Link>
-                      <Link href={`/events/join-team/${event._id}`} passHref>
+                      <Link className='m-1' href={`/events/join-team/${event._id}`} passHref>
                         <motion.a
                           className="flex-1 bg-green-600 text-white font-semibold py-3 px-6 rounded-lg hover:bg-green-500 transition-colors text-center text-lg"
                           whileHover={{ scale: 1.05 }}
@@ -146,12 +146,12 @@ const EventsPage = () => {
         <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold">
           Ready to <span className="bg-gradient-to-r from-blue-600 via-green-500 to-indigo-400 text-transparent bg-clip-text">take flight</span>?
         </h1>
-        <div className="relative">
+        <div className="relative w-full h-full flex items-center justify-center">
           <motion.svg
             animate={{ rotate: 360 }}
             transition={{ duration: 8, ease: "linear", repeat: Infinity }}
             viewBox="0 0 300 300"
-            className="w-64 h-64 md:w-80 md:h-80 lg:w-96 lg:h-96"
+            className="w-96 h-96 md:w-80 md:h-80 lg:w-96 lg:h-96"
           >
             <defs>
               <path
@@ -166,13 +166,11 @@ const EventsPage = () => {
             </text>
           </motion.svg>
           <Link href="/contact">
-            <motion.a
-              className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-32 h-32 bg-black text-white rounded-full flex items-center justify-center text-xl font-bold"
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
+            <div
+              className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-32 h-32 bg-black text-white rounded-full flex items-center justify-center text-xl font-bold transition-transform duration-300 ease-in-out hover:scale-110"
             >
               Join Us
-            </motion.a>
+            </div>
           </Link>
         </div>
       </div>
