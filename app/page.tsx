@@ -3,6 +3,7 @@
 // import Cookies from 'js-cookie';
 import ContactUsPage from '@/components/ContactUs';
 import React, { Suspense } from 'react';
+import SponsorsPage from "../components/sponsers"
 // import Navbar from '@/components/Navbar';
 // import dynamic from 'next/dynamic';
 // import AdminNavBar from '@/components/AdminNavBar';
@@ -15,7 +16,6 @@ export default function Home() {
     <span className='overflow-hidden backdr hide-scrollbar'>
       <Scene />
     </span>
-      {/* <AlumniCarousel/> */}
       <ContactUsPage />
     </>
   );
