@@ -79,7 +79,7 @@ const CreateEvent = () => {
 
   return (
     <div className="min-h-screen bg-black text-white p-4">
-      <div className="max-w-full mx-auto bg-gray-800 shadow-lg rounded-lg">
+      <div className="mt-24 max-w-full mx-auto bg-gray-800 shadow-lg rounded-lg">
         <h1 className="text-3xl font-bold mb-6 text-center pt-6">Create Event</h1>
         <form onSubmit={handleSubmit} className="space-y-6 p-6">
           <div className="space-y-2">

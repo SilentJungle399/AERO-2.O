@@ -43,7 +43,7 @@ const withAdminAuth = (WrappedComponent) => {
           if (data.isAdmin) {
             setIsLoading(false);
           } else {
-            window.location.href = "/unauthorized";
+            // window.location.href = "/unauthorized";
           }
         } catch (error) {
           console.error('Error checking admin status:', error);
@@ -78,8 +78,11 @@ const EditBlogPost = () => {
   const fetchBlog = useCallback(async () => {
     try {
       setLoading(true);
+      const baseUrl = process.env.NODE_ENV === 'production'
+            ? process.env.NEXT_PUBLIC_BACKEND_URL
+            : 'http://localhost:5000';
       const response = await fetch(
-        `http://localhost:5000/api/users/getoneblog/${slug}`
+        `${baseUrl}/api/users/getoneblog/${slug}`
       );
       if (!response.ok) {
         throw new Error("Failed to fetch the blog");
@@ -128,8 +131,11 @@ const EditBlogPost = () => {
   const publishBlog = async () => {
     try {
       setLoading(true);
+      const baseUrl = process.env.NODE_ENV === 'production'
+            ? process.env.NEXT_PUBLIC_BACKEND_URL
+            : 'http://localhost:5000';
       const response = await fetch(
-        `http://localhost:5000/api/users/updateoneblog/${slug}`,
+        `${baseUrl}/api/users/updateoneblog/${slug}`,
         {
           method: "PUT",
           headers: {
@@ -154,8 +160,8 @@ const EditBlogPost = () => {
 
   return (
     <DndProvider backend={HTML5Backend}>
-      <div className="min-h-screen bg-gray-100 p-8">
-        <h1 className="text-4xl font-bold mb-8 text-center text-gray-800">
+      <div className="min-h-screen bg-gray-900 p-24">
+        <h1 className="text-4xl font-bold mb-8 text-center text-gray-100">
           Edit Blog Post
         </h1>
         <div className="mx-auto text-gray-900 bg-white shadow-lg rounded-lg overflow-hidden">
