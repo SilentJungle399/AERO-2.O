@@ -130,14 +130,14 @@ function RcSection({ isMobile }: { isMobile: boolean }) {
       <div
         className="absolute -z-10 text-center text-white p-4 flex flex-col items-center justify-center"
         style={{
-          top: isMobile ? '205vh' : '250vh',
+          top: isMobile ? '203vh' : '250vh',
           left: '5vw',
           width: '90vw',
           height: '120vh',
-          fontSize: isMobile ? '20px' : '30px',
+          fontSize: isMobile ? '1.6rem' : '1.875rem',
           lineHeight: '1.1',
         }}>
-        <p className='text-2xl font-mono text-gray-400'>Welcome to Aero Modelling Club! Whether yoplace to soar to nenthusiasts passionate about building, flying, and showcasing the incredible world of aero modelling. Dive into our hands-on workshops, participate in thrilling competitions, and connect with fellow hobbyists who share your passion. Ready to take off?</p>
+        <p className='font-mono text-gray-400'>Welcome to the Aero Modelling Club! Join a passionate community where you can build, fly, and showcase incredible models. Dive into workshops, compete in events, and connect with fellow enthusiasts. Ready to take off?</p>
         <div>
           <Image
             src='/Infinity-Loop.gif'

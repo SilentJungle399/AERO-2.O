@@ -49,23 +49,17 @@ const Footer = () => {
             <div className="flex flex-col space-y-2">
               <NavLink href="/" text="Home" />
               <NavLink href="/drones" text="Drones" />
-              <NavLink href="/drones/blogs" text="Drone-Blogs" />
-              <NavLink href="/drones/events" text="Drone-Events" />
-              <NavLink href="/drones/workshops" text="Drone-Workshops" />
-              <NavLink href="/drones/members" text="Drone-Members" />
-
+              <NavLink href="/workshops" text="Workshops" />
+             
             </div>
             <div className="flex flex-col space-y-2">
               <NavLink href="/rcplanes" text="RC-Planes" />
-              <NavLink href="/rcplanes/blogs" text="RC-Plane-Blogs" />
-              <NavLink href="/rcplanes/events" text="RC-Plane-Events" />
-              <NavLink href="/rcplanes/workshops" text="RC-Plane-Workshops" />
-              <NavLink href="/rcplanes/members" text="RC-Plane-Members" />
+              <NavLink href="/blogs" text="Blogs" />
+              <NavLink href="/events" text="Events" />
             </div>
             <div className="flex flex-col space-y-2">
               <NavLink href="/meets" text="Meets" />
               <NavLink href="/gallery" text="Gallery" />
-              <NavLink href="/alluminai" text="ALLuminai" />
               <NavLink href="/about" text="About Us" />
             </div>
           </nav>
