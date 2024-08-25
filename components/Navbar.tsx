@@ -236,7 +236,7 @@ const Navbar: React.FC = () => {
         console.log("Logout successful");
         router.push("/login");
         router.refresh();
-        window.location.reload();
+        window.location.href="/"
       } else {
         console.error("Logout failed");
       }
@@ -270,27 +270,27 @@ const Navbar: React.FC = () => {
     setIsModalOpen(true);
   };
 
-  // //for NavBar effect
-  // const [navBackground, setNavBackground] = useState("bg-transparent");
+  //for NavBar effect
+  const [navBackground, setNavBackground] = useState("bg-transparent");
 
-  // const handleScroll = () => {
-  //   if (window.scrollY > 50) {
-  //     setNavBackground("bg-opacity-90 bg-black");
-  //   } else {
-  //     setNavBackground("bg-transparent");
-  //   }
-  // };
+  const handleScroll = () => {
+    if (window.scrollY > 50) {
+      setNavBackground("bg-opacity-90 bg-black");
+    } else {
+      setNavBackground("bg-transparent");
+    }
+  };
 
-  // useEffect(() => {
-  //   window.addEventListener("scroll", handleScroll);
-  //   return () => {
-  //     window.removeEventListener("scroll", handleScroll);
-  //   };
-  // }, []);
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
 
   return (
     <div className="fixed top-0 left-0 right-0 z-50 w-full pointer-events-none">
-      <nav className="bg-[#110e12] bg-opacity-0 w-full pointer-events-auto">
+      <nav className={`bg-[#110e12] ${navBackground} w-full pointer-events-auto`}>
         <div className="w-full px-0">
           <div className="flex items-center justify-between h-24 px-2 md:px-4">
             <button

@@ -189,7 +189,7 @@ export default function AdminMeetListPage() {
             </div>
 
             <div className="mb-4">
-              <label htmlFor="meet_team_type" className="block text-gray-700">Team Type</label>
+              <label htmlFor="meet_team_type" className="block text-gray-700">Meet Name</label>
               <input
                 type="text"
                 id="meet_team_type"
@@ -228,38 +228,47 @@ export default function AdminMeetListPage() {
             </div>
 
             <div className="mb-4">
-              <span className="block text-gray-700">Essentials</span>
-              <label className="inline-flex items-center mt-2">
-                <input
-                  type="checkbox"
-                  value="Laptop"
-                  checked={formData.meet_essentials.includes('Laptop')}
-                  onChange={handleChange}
-                  className="form-checkbox"
-                />
-                <span className="ml-2">Laptop</span>
-              </label>
-              <label className="inline-flex items-center mt-2">
-                <input
-                  type="checkbox"
-                  value="Notebook"
-                  checked={formData.meet_essentials.includes('Notebook')}
-                  onChange={handleChange}
-                  className="form-checkbox"
-                />
-                <span className="ml-2">Notebook</span>
-              </label>
-              <label className="inline-flex items-center mt-2">
-                <input
-                  type="checkbox"
-                  value="Pen"
-                  checked={formData.meet_essentials.includes('Pen')}
-                  onChange={handleChange}
-                  className="form-checkbox"
-                />
-                <span className="ml-2">Pen</span>
-              </label>
-            </div>
+  <span className="block text-gray-700">Essentials</span>
+  {[
+    'Laptop',
+    'Laptop Charger',
+    'USB Type-B Cable',
+    'Arduino Board',
+    'NodeMCU (ESP8266)',
+    'Transmitter Remote Control',
+    'Receiver Module',
+    'Battery Charger',
+    'Lipo Batteries',
+    'Battery Storage Case',
+    'Propeller Tools',
+    'Propellers',
+    'Soldering Iron',
+    'Soldering Wire',
+    'Heat Shrink Tubing',
+    'Multimeter',
+    'GPS Module',
+    'Goggles (FPV)',
+    'FPV Camera',
+    'Wiring and Connectors',
+    'Mini Screwdriver Set',
+    'Spare Screws and Nuts',
+    'Balsa Wood and Glue',
+    'Antennas',
+    'Field Tools (e.g., Allen Wrenches)',
+  ].map(item => (
+    <label key={item} className="inline-flex items-center mt-2">
+      <input
+        type="checkbox"
+        value={item}
+        checked={formData.meet_essentials.includes(item)}
+        onChange={handleChange}
+        className="form-checkbox"
+      />
+      <span className="ml-2">{item}</span>
+    </label>
+  ))}
+</div>
+
 
             <div className="mb-4">
               <label htmlFor="meet_mode" className="block text-gray-700">Mode</label>
@@ -274,14 +283,16 @@ export default function AdminMeetListPage() {
                 <option value="">Select Mode</option>
                 <option value="offline">Offline</option>
                 <option value="online">Online</option>
+                <option value="hybrid">Hybrid</option>
               </select>
             </div>
 
             <button
               type="submit"
+              disabled={loading}
               className="w-full py-2 px-4 bg-blue-500 text-white font-bold rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
-              Create Meeting
+              Create Team
             </button>
           </form>
         </div>
