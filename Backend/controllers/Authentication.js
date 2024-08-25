@@ -2,6 +2,7 @@ const { authDomain } = require("../Firebseconfig/FirebaseConfig");
 const {
   sendVerificationEmail,
   sendSignupEmailNotification,
+  sendPasswordResetEmail,
 } = require("../middlewares/nodemailerMiddleware");
 const OtpVerification = require("../models/OtpVerification");
 const User = require("../models/usermodel");
@@ -10,12 +11,80 @@ const User = require("../models/usermodel");
 var admin = require("firebase-admin");
 
 var serviceAccount = require("../Firebseconfig/Servicekeys.json")
+const PasswordResetToken = require('../models/PassworResetTokenSchema');
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount)
 });
 
 
+
+const crypto = require('crypto');
+const requestPasswordReset = async (req, res) => {
+  const { email } = req.body;
+  console.log(email)
+
+  // Find the user by email
+  const user = await User.findOne({ email } );
+
+  if (!user) {
+      return res.status(404).send('User not found');
+  }
+
+  // Generate a unique reset token
+  const resetToken = crypto.randomBytes(32).toString('hex');
+
+  // Create a new PasswordResetToken document
+  const passwordResetToken = new PasswordResetToken({
+      userId: user.id,
+      token: resetToken,
+      expiresAt: new Date(Date.now() + 3600000) // Token expires in 1 hour
+  });
+
+  // Save the token to the database
+  await passwordResetToken.save();
+
+  // Send the password reset email
+  sendPasswordResetEmail(email, resetToken);
+
+   res.status(200).send('Reset Link sent succesfully');
+};
+
+const updatePassword= async (req, res) => {
+  const { token, password } = req.body;
+
+  if (!token || !password) {
+    return res.status(400).json({ message: 'Token and password are required' });
+  }
+
+  try {
+    // Find the reset token in the database
+    const resetToken = await PasswordResetToken.findOne({ token });
+
+    if (!resetToken || resetToken.expiresAt < Date.now()) {
+      return res.status(400).json({ message: 'Invalid or expired token' });
+    }
+
+    // Find the user associated with the reset token
+    const user = await User.findById(resetToken.userId);
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Hash the new password and update the user's password
+    user.password = await bcrypt.hash(password, 10);
+    await user.save();
+
+    // Delete the reset token after successful password reset
+    await resetToken.delete();
+
+    res.status(200).json({ message: 'Password reset successfully' });
+  } catch (error) {
+    console.error('Error resetting password:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
 
 
 
@@ -373,4 +442,6 @@ const logout = async (req, res) => {
   }
 };
 
-module.exports = { getourmembers,Signup, Login, logout, emailVerification, otpcheck,uploadProfile,googleSignup};
+
+
+module.exports = {updatePassword,requestPasswordReset, getourmembers,Signup, Login, logout, emailVerification, otpcheck,uploadProfile,googleSignup,requestPasswordReset};
