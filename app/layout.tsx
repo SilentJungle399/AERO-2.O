@@ -57,7 +57,7 @@ export default function RootLayout({
         <meta property="og:title" content="AeroModelling Club || NIT KURUKSHETRA" />
         <meta property="og:description" content="Join NIT Kurukshetra’s Aeromodeling Club to explore aviation dreams. Think, build, and innovate with our vibrant community." />
         <meta property="og:url" content="https://aeronitkkr.in" />
-        <meta property="og:image" content="/og-image.jpg" />
+        <meta property="og:image" content="/favicon.ico" />
         <meta property="og:site_name" content="AeroModelling Club" />
       </head>
       <body className={inter.className}>
