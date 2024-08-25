@@ -6,8 +6,8 @@ import EyeModel from './EyeModel';
 import Model from './Model';
 import RcModel from './RcModel';
 import DroneModel from './Drone';
-import Loader from './homePageLoader';
 import Image from 'next/image';
+import LoadingBar from './slimloader'
 
 interface AeroModellingClubProps {
   isMobile: boolean;
@@ -89,7 +89,7 @@ function DroneSection({ isMobile }: { isMobile: boolean }) {
   }
 `}</style>
         <div className='m-6'>
-          <h1 className='text-4xl text-blue-500 font-bold'>--Our Ongoing Projects--</h1>
+          <h1 className='text-2xl text-blue-500 font-bold lg:text-4xl'>--Our Ongoing Projects--</h1>
           <div className={`${isMobile ? "overflow-hidden mt-4" : "flex flex-row justify-evenly p-12 flex-wrap"}`}>
             <div className={`${isMobile ? "mobile-slider" : "flex flex-row justify-between w-full"}`}>
               <div className={`bg-white rounded-md p-4 max-w-xs w-full card ${isMobile ? "mx-2" : ""}`}>
@@ -130,14 +130,14 @@ function RcSection({ isMobile }: { isMobile: boolean }) {
       <div
         className="absolute -z-10 text-center text-white p-4 flex flex-col items-center justify-center"
         style={{
-          top: isMobile ? '215vh' : '250vh',
+          top: isMobile ? '205vh' : '250vh',
           left: '5vw',
           width: '90vw',
           height: '120vh',
           fontSize: isMobile ? '20px' : '30px',
-          lineHeight: '1.5',
+          lineHeight: '1.1',
         }}>
-        <p className='mt-2 text-2xl font-mono text-gray-400'>Welcome to Aero Modelling Club! ✈️🚀 Whether you&apos;re an experienced RC pilot or just discovering the thrill of flying, our club is the perfect place to soar to new heights. We&apos;re a vibrant community of enthusiasts passionate about building, flying, and showcasing the incredible world of aero modelling. Dive into our hands-on workshops, participate in thrilling competitions, and connect with fellow hobbyists who share your passion. Ready to take off?</p>
+        <p className='text-2xl font-mono text-gray-400'>Welcome to Aero Modelling Club! Whether yoplace to soar to nenthusiasts passionate about building, flying, and showcasing the incredible world of aero modelling. Dive into our hands-on workshops, participate in thrilling competitions, and connect with fellow hobbyists who share your passion. Ready to take off?</p>
         <div>
           <Image
             src='/Infinity-Loop.gif'
@@ -172,32 +172,30 @@ export default function Scene() {
   return (
     <div className="h-screen overflow-hidden hide-scrollbar">
       <Canvas className="h-full w-full overflow-hidden" gl={{ antialias: true }} dpr={[1, 2]}>
-        {/* <Suspense fallback={<Loader />}> */}
         <PerspectiveCamera makeDefault position={[0, 0, 0]} />
         <directionalLight position={[10, 10, 10]} intensity={4} />
         <AeroModellingClub isMobile={isMobile} />
         <ScrollControls damping={0.1} pages={isMobile ? 2 : 3}>
-          <Suspense fallback={<Loader />}>
+          <Suspense fallback={<LoadingBar />}>
             <Model isMobile={isMobile} />
           </Suspense>
-          <Suspense fallback={<Loader />}>
+          <Suspense fallback={<LoadingBar />}>
             <EyeModel isMobile={isMobile} />
           </Suspense>
           <group>
             <Environment preset="sunset" />
-            <Suspense fallback={<Loader />}>
+            <Suspense fallback={<LoadingBar />}>
               <DroneModel isMobile={isMobile} />
             </Suspense>
             <DroneSection isMobile={isMobile} />
           </group>
           <group>
-            <Suspense fallback={<Loader />}>
+            <Suspense fallback={<LoadingBar />}>
               <RcModel isMobile={isMobile} />
             </Suspense>
             <RcSection isMobile={isMobile} />
           </group>
         </ScrollControls>
-        {/* </Suspense> */}
       </Canvas>
     </div>
   );
