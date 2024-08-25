@@ -255,7 +255,7 @@ const MeetDetailPage = () => {
                     <tr key={participant._id}>
                       <td className="border border-blue-900 p-2 sm:p-4">{index + 1}</td>
                       <td className="border border-blue-900 p-2 sm:p-4">{participant.roll_no}</td>
-                      <td className="border border-blue-900 p-2 sm:p-4">{participant.name}</td>
+                      <td className="border border-blue-900 p-2 sm:p-4">{participant.full_name}</td>
                       <td className="border border-blue-900 p-2 sm:p-4">{participant.email}</td>
                     </tr>
                   ))}
@@ -265,12 +265,15 @@ const MeetDetailPage = () => {
           </div>
 
           <button
-            onClick={handleMarkAttendance}
-            className="mt-8 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
-          >
-            <FaQrcode className="inline mr-2" />
-            Mark Attendance
-          </button>
+  onClick={handleMarkAttendance}
+  disabled={!meet.meet_active_status} // Disable button if the meet is inactive
+  className={`mt-8 px-4 py-2 rounded-md transition 
+    ${meet.meet_active_status ? 'bg-blue-600 text-white hover:bg-blue-700' : 'bg-gray-400 text-gray-700 cursor-not-allowed'}`}
+>
+  <FaQrcode className="inline mr-2" />
+  Mark Attendance
+</button>
+
 
           {showQrScanner && (
             <div id="reader" className="mt-8 w-full h-96 bg-gray-700"></div>
