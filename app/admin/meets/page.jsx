@@ -126,7 +126,7 @@ export default function AdminMeetListPage() {
           meet_essentials: [],
           meet_mode: '',
         });
-        setShowForm(false);
+        // setShowForm(false);
       } else {
         const error = await response.text();
         setStatusMessage(`Error creating meet: ${error}`);
@@ -147,7 +147,7 @@ export default function AdminMeetListPage() {
 
   return (
     <div className="min-h-screen bg-gray-900 text-gray-800 p-8">
-      <h1 className="text-4xl font-bold mb-8 text-center text-white">Admin Meet Timeline</h1>
+      <h1 className="mt-16 text-4xl monoton mb-8 text-center text-white">Admin &nbsp;&nbsp;&nbsp; Meet&nbsp;&nbsp;&nbsp; Timeline</h1>
       
       <div className="max-w-4xl mx-auto mb-8">
         <button
