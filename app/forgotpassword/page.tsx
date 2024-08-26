@@ -8,6 +8,7 @@ export default function ForgotPassword() {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -27,9 +28,16 @@ export default function ForgotPassword() {
       });
 
       const data = await response.json();
+      console.log(data)
 
       if (response.ok) {
         setMessage(data.message);
+        setIsButtonDisabled(true);
+
+        // Disable the button for 25 seconds
+        setTimeout(() => {
+          setIsButtonDisabled(false);
+        }, 25000);
       } else {
         setError(data.error);
       }
@@ -72,8 +80,9 @@ export default function ForgotPassword() {
             <button
               type="submit"
               className="font-mono group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              disabled={isButtonDisabled}
             >
-              Send Password Reset Email
+              {isButtonDisabled ? "Check your mail..." : "Send Password Reset Email"}
             </button>
           </div>
         </form>

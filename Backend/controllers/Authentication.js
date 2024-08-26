@@ -6,7 +6,7 @@ const {
 } = require("../middlewares/nodemailerMiddleware");
 const OtpVerification = require("../models/OtpVerification");
 const User = require("../models/usermodel");
-// const bcrypt = require("bcrypt");
+const bcrypt = require("bcrypt");
 
 var admin = require("firebase-admin");
 
@@ -45,9 +45,9 @@ const requestPasswordReset = async (req, res) => {
   await passwordResetToken.save();
 
   // Send the password reset email
-  sendPasswordResetEmail(email, resetToken);
+  await sendPasswordResetEmail(email, resetToken);
 
-   res.status(200).send('Reset Link sent succesfully');
+  res.status(200).json({ message: 'Email Sent successfully' });
 };
 
 const updatePassword= async (req, res) => {
