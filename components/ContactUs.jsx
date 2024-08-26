@@ -61,17 +61,17 @@ class ContactUsPage extends Component {
               </div>
             ))}
           </div>
-
-          {/* Flex container for Map and Contact Form */}
-          <div className="flex flex-col md:flex-row gap-4">
-            {/* Google Map */}
-            <div className="flex-1">
-            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2713.621113508049!2d76.81762199640569!3d29.946413601785384!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390e3f422f5244e7%3A0x9c630c311d6349b8!2sNIT%20KURUKSHETRA!5e0!3m2!1sen!2sin!4v1724629070863!5m2!1sen!2sin" width="600" height="450" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-            </div>
+          <h2 className="text-3xl font-bold text-blue-500 text-center mb-6">
+            Connect With Us
+          </h2>
+          <div className="flex flex-col md:flex-row">
+            {<div className="flex-1">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2713.621113508049!2d76.81762199640569!3d29.946413601785384!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390e3f422f5244e7%3A0x9c630c311d6349b8!2sNIT%20KURUKSHETRA!5e0!3m2!1sen!2sin!4v1724629070863!5m2!1sen!2sin" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" className="w-full h-full justify-center"></iframe>
+            </div>}
 
             {/* Get in Touch Form */}
-            <div className="flex-1">
-              <h1 className="text-2xl md:text-3xl text-center mb-4">Contact Us</h1>
+            <div className="flex-1 border-red-500">
+              <h1 className="text-3xl font-bold text-blue-500 text-center mt-6 mb-8">Message Us</h1>
               <form className="space-y-4 max-w-2xl mx-auto">
                 <div>
                   <label

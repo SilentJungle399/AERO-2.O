@@ -31,7 +31,7 @@ const DronePage = () => {
       <header className="relative h-screen">
         <Image
           className="object-cover"
-          src="/sample-drone.jpg"
+          src="/banner-drone.jpg"
           alt="Drone in flight"
           layout="fill"
           priority
