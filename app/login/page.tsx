@@ -83,11 +83,9 @@ export default function Login() {
         }, 100);
       } else {
         const data = await response.json();
-        alert(data.message);
-        setError(data.message || "Login failed");
+        setError(data.error || "Login failed");
       }
     } catch (err) {
-      alert(err);
       setError("An error occurred. Please try again.");
     }
   };
