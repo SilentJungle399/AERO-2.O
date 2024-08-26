@@ -77,7 +77,7 @@ const updatePassword= async (req, res) => {
     await user.save();
 
     // Delete the reset token after successful password reset
-    await resetToken.delete();
+    await resetToken.remove();
 
     res.status(200).json({ message: 'Password reset successfully' });
   } catch (error) {
