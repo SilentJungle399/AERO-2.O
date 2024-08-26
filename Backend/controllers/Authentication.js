@@ -50,7 +50,7 @@ const requestPasswordReset = async (req, res) => {
   res.status(200).json({ message: 'Email Sent successfully' });
 };
 
-const updatePassword= async (req, res) => {
+const updatePassword = async (req, res) => {
   const { token, password } = req.body;
 
   if (!token || !password) {
@@ -77,7 +77,7 @@ const updatePassword= async (req, res) => {
     await user.save();
 
     // Delete the reset token after successful password reset
-    await resetToken.remove();
+    await PasswordResetToken.deleteOne({ _id: resetToken._id });
 
     res.status(200).json({ message: 'Password reset successfully' });
   } catch (error) {
@@ -85,7 +85,6 @@ const updatePassword= async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 };
-
 
 
 const getourmembers = async (req, res) => {
