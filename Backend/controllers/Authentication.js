@@ -56,7 +56,7 @@ const updatePassword = async (req, res) => {
   if (!token || !password) {
     return res.status(400).json({ message: 'Token and password are required' });
   }
-
+  console.log(password)
   try {
     // Find the reset token in the database
     const resetToken = await PasswordResetToken.findOne({ token });
@@ -67,7 +67,7 @@ const updatePassword = async (req, res) => {
 
     // Find the user associated with the reset token
     const user = await User.findById(resetToken.userId);
-
+    console.log(user)
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
@@ -382,7 +382,9 @@ const Login = async (req, res) => {
       return res.status(400).json({ error: "Invalid email" });
     }
     console.log(user)
+    console.log(password)
     const isMatch = await user.comparePassword(password);
+    console.log(isMatch)
     if (!isMatch) {
       return res.status(400).json({ error: "Invalid email or password" });
     }
