@@ -161,7 +161,7 @@ const EventsPage = () => {
               </textPath>
             </text>
           </motion.svg>
-          <Link href="/contact">
+          <Link href="https://www.instagram.com/aeroclub.nitkkr/">
             <div
               className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-32 h-32 bg-black text-white rounded-full flex items-center justify-center text-xl font-bold transition-transform duration-300 ease-in-out hover:scale-110"
             >
