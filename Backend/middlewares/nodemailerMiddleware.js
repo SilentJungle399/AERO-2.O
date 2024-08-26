@@ -12,6 +12,101 @@ const transporter = nodemailer.createTransport({
     }
 });
 
+const sendPasswordResetEmail = async (email, resetToken) => {
+    // Create the reset URL
+    const resetUrl = `https://aeronitkkr.in/forgotpassword/${resetToken}`;
+
+    // Email content
+    const message = `<!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Password Reset</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                background-color: #f4f4f4;
+                margin: 0;
+                padding: 0;
+            }
+    
+            .container {
+                max-width: 600px;
+                margin: 20px auto;
+                background-color: #ffffff;
+                padding: 40px;
+                border-radius: 10px;
+                box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            }
+    
+            h1 {
+                color: #333333;
+            }
+    
+            p {
+                color: #666666;
+                line-height: 1.5;
+            }
+    
+            .reset-link {
+                margin-top: 20px;
+                padding: 10px;
+                background-color: #f0f0f0;
+                border-radius: 5px;
+                font-size: 18px;
+                text-align: center;
+            }
+    
+            .footer {
+                margin-top: 20px;
+                color: #999999;
+                font-size: 12px;
+            }
+    
+            .footer a {
+                color: #999999;
+                text-decoration: none;
+            }
+    
+            .footer a:hover {
+                color: #555555;
+            }
+        </style>
+    </head>
+    <body>
+    
+        <div class="container">
+            <h1>Password Reset</h1>
+            <p>Dear User,</p>
+            <p>We received a request to reset your password. You can reset it by clicking the link below:</p>
+            <div class="reset-link">
+                <a href="${resetUrl}" target="_blank">Reset Your Password</a>
+            </div>
+            <p>If you didn't request a password reset, please ignore this email.</p>
+            <p class="footer">Best regards,<br>The Hms Team<br><a href="#">Visit our website</a></p>
+        </div>
+    
+    </body>
+    </html>
+    `;
+
+    const mailOptions = {
+        from: 'hms.nitkkr@gmail.com',
+        to: email,
+        subject: 'Aeronitkkr.in Password Reset Mail',
+        html: message
+    };
+
+    // Send mail
+    transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+            console.log('Error sending email:', error);
+        } else {
+            console.log('Email sent:', info.response);
+        }
+    });
+};
 
 const sendSelectionConfirmationEmail = (uid,name,email, inductionName, selectionDate, rollNumber, branch, year, phoneNumber, teamPreference, fileDownloadURLs) => {
     
@@ -546,4 +641,6 @@ const sendVerificationEmail = (email, otp) => {
     });
 };
 
-module.exports = {sendVerificationEmail,sendSignupEmailNotification,sendParticipationConfirmationEmail,sendSelectionConfirmationEmail};
+
+
+module.exports = {sendVerificationEmail,sendSignupEmailNotification,sendParticipationConfirmationEmail,sendSelectionConfirmationEmail,sendPasswordResetEmail};
