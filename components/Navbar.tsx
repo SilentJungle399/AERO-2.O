@@ -179,8 +179,6 @@ const Navbar: React.FC = () => {
   const router = useRouter();
   const pathname = usePathname();
 
- 
-
   const fetchNotifications = async () => {
     const id = localStorage.getItem("_id");
     if (!id) {
@@ -236,7 +234,7 @@ const Navbar: React.FC = () => {
         console.log("Logout successful");
         router.push("/login");
         router.refresh();
-        window.location.href="/"
+        window.location.href = "/";
       } else {
         console.error("Logout failed");
       }
@@ -262,8 +260,6 @@ const Navbar: React.FC = () => {
       console.log("dksfjs");
       setAdmin(true);
     }
-
-    
   }, []);
 
   const handleBellClick = () => {
@@ -290,7 +286,9 @@ const Navbar: React.FC = () => {
 
   return (
     <div className="fixed top-0 left-0 right-0 z-50 w-full pointer-events-none">
-      <nav className={`bg-[#110e12] transition-colors duration-300 ${navBackground} w-full pointer-events-auto`}>
+      <nav
+        className={`bg-[#110e12] transition-colors duration-300 ${navBackground} w-full pointer-events-auto`}
+      >
         <div className="w-full px-0">
           <div className="flex items-center justify-between h-24 px-2 md:px-4">
             <button
@@ -400,6 +398,12 @@ const Navbar: React.FC = () => {
                           Events
                         </Link>
                         <Link
+                          href="/meets"
+                          className="bebas-neue-regular block px-4 py-2 text-md text-gray-300 hover:text-[#3494D1]"
+                        >
+                          Meets
+                        </Link>
+                        <Link
                           href="/workshops"
                           className="bebas-neue-regular block px-4 py-2 text-md text-gray-300 hover:text-[#3494D1]"
                         >
@@ -414,12 +418,7 @@ const Navbar: React.FC = () => {
                       </div>
                     </div>
                   </div>
-                  <Link
-                    href="/meets"
-                    className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular"
-                  >
-                    Meets
-                  </Link>
+
                   <Link
                     href="/inductions"
                     className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular"
@@ -432,12 +431,32 @@ const Navbar: React.FC = () => {
                   >
                     Gallery
                   </Link>
-                  <Link
-                    href="/members"
-                    className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular"
-                  >
-                    Members
-                  </Link>
+
+                  <div className="relative group">
+                    <button className="flex items-center text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular">
+                      community <FaCaretDown className="ml-1 w-5 h-5" />
+                    </button>
+                    <div className="absolute left-0 mt-2 w-48 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 backdrop-blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                      <div
+                        className="py-1"
+                        role="menu"
+                        aria-orientation="vertical"
+                      >
+                        <Link
+                          href="/devteam"
+                          className="bebas-neue-regular block px-4 py-2 text-md text-gray-300 hover:text-[#3494D1]"
+                        >
+                          DEVTEAM
+                        </Link>
+                        <Link
+                          href="/members"
+                          className="bebas-neue-regular block px-4 py-2 text-md text-gray-300 hover:text-[#3494D1]"
+                        >
+                          Member
+                        </Link>
+                      </div>
+                    </div>
+                  </div>
                 </>
               )}
 
@@ -483,88 +502,86 @@ const Navbar: React.FC = () => {
                     </button>
                   </div>
                   {profileOpen && (
-            <div className="origin-top-right top-16 text-white absolute right-0 w-48 rounded-md shadow-lg bg-black ring-1 ring-white ring-opacity-50">
-              <div
-                className="py-1"
-                role="menu"
-                aria-orientation="vertical"
-                aria-labelledby="options-menu"
-              >
-                <Link
-                  href={`/myprofile/${id}`}
-                  className="block px-4 py-2 text-sm text-gray-400 hover:bg-gray-900"
-                >
-                  {username ? (
-                    <div className="flex items-center" onClick={() => setSidebarOpen(!sidebarOpen)}>
-                      <img
-                        src={profile}
-                        alt="Profile Picture"
-                        width={24}
-                        height={24}
-                        className="rounded-full mr-2"
-                      />
-                      {username}
+                    <div className="origin-top-right top-16 text-white absolute right-0 w-48 rounded-md shadow-lg bg-black ring-1 ring-white ring-opacity-50">
+                      <div
+                        className="py-1"
+                        role="menu"
+                        aria-orientation="vertical"
+                        aria-labelledby="options-menu"
+                      >
+                        <Link
+                          href={`/myprofile/${id}`}
+                          className="block px-4 py-2 text-sm text-gray-400 hover:bg-gray-900"
+                        >
+                          {username ? (
+                            <div
+                              className="flex items-center"
+                              onClick={() => setSidebarOpen(!sidebarOpen)}
+                            >
+                              <img
+                                src={profile}
+                                alt="Profile Picture"
+                                width={24}
+                                height={24}
+                                className="rounded-full mr-2"
+                              />
+                              {username}
+                            </div>
+                          ) : (
+                            "My Profile"
+                          )}
+                        </Link>
+                        <Link
+                          href={`/myprofile/${id}`}
+                          onClick={() => setSidebarOpen(!sidebarOpen)}
+                          className="block px-4 py-2 text-sm text-gray-400 hover:bg-gray-900"
+                        >
+                          Profile
+                        </Link>
+                        <div
+                          className="relative flex items-center"
+                          onClick={handleBellClick}
+                        >
+                          <FaBell
+                            onClick={() => setSidebarOpen(!sidebarOpen)}
+                            className={` absolute left-1 w-4 h-4 cursor-pointer ${
+                              newNotificationCount > 0
+                                ? "text-yellow-400"
+                                : "text-white"
+                            }`}
+                          />
+                          {newNotificationCount > 0 && (
+                            <div
+                              className="absolute left-2 flex items-center justify-center w-3 h-3 text-sm font-bold text-white bg-red-500 rounded-full -translate-x-1/2 translate-y-1/2"
+                              onClick={handleBellClick}
+                            >
+                              {newNotificationCount}
+                            </div>
+                          )}
+                          <Link
+                            href="/#"
+                            className="block px-5 py-2 text-sm text-gray-400 hover:bg-gray-900"
+                          >
+                            Notifications
+                          </Link>
+                        </div>
+                        <Link
+                          onClick={() => setSidebarOpen(!sidebarOpen)}
+                          href="#"
+                          className="block px-4 py-2 text-sm text-gray-400 hover:bg-gray-900"
+                        >
+                          Settings
+                        </Link>
+                        <hr />
+                        <button
+                          onClick={logout}
+                          className="block px-4 py-2 text-sm text-red-700 hover:bg-gray-900 w-full text-left"
+                        >
+                          Logout
+                        </button>
+                      </div>
                     </div>
-                  ) : (
-                    "My Profile"
                   )}
-                </Link>
-                <Link
-                  href={`/myprofile/${id}`} 
-                  onClick={() => setSidebarOpen(!sidebarOpen)}
-                  className="block px-4 py-2 text-sm text-gray-400 hover:bg-gray-900"
-                >
-                  Profile
-                </Link>
-                <div
-                  className="relative flex items-center"
-                  onClick={handleBellClick}
-                  
-                >
-                  <FaBell
-                  onClick={() => setSidebarOpen(!sidebarOpen)}
-                    className={` absolute left-1 w-4 h-4 cursor-pointer ${
-                      newNotificationCount > 0
-                        ? "text-yellow-400"
-                        : "text-white"
-                    }`}
-                  />
-                  {newNotificationCount > 0 && (
-                    <div
-                      className="absolute left-2 flex items-center justify-center w-3 h-3 text-sm font-bold text-white bg-red-500 rounded-full -translate-x-1/2 translate-y-1/2"
-                      onClick={handleBellClick}
-                    >
-                      {newNotificationCount}
-                    </div>
-                  )}
-                  <Link
-               
-                    href="/#"
-                    className="block px-5 py-2 text-sm text-gray-400 hover:bg-gray-900"
-                  >
-                    Notifications
-                  </Link>
-                  
-                </div>
-                <Link
-                onClick={() => setSidebarOpen(!sidebarOpen)}
-                  href="#"
-                  className="block px-4 py-2 text-sm text-gray-400 hover:bg-gray-900"
-                >
-                  Settings
-                </Link>
-                <hr />
-                <button
-                  onClick={logout}
-                  className="block px-4 py-2 text-sm text-red-700 hover:bg-gray-900 w-full text-left"
-                >
-                  Logout
-                </button>
-              </div>
-              
-            </div>
-            
-          )}
                   {isModalOpen && (
                     <NotificationModal
                       notifications={notifications}
@@ -645,7 +662,10 @@ const Navbar: React.FC = () => {
                   className="block px-4 py-2 text-sm text-gray-400 hover:bg-gray-900"
                 >
                   {username ? (
-                    <div className="flex items-center" onClick={() => setSidebarOpen(!sidebarOpen)}>
+                    <div
+                      className="flex items-center"
+                      onClick={() => setSidebarOpen(!sidebarOpen)}
+                    >
                       <img
                         src={profile}
                         alt="Profile Picture"
@@ -660,7 +680,7 @@ const Navbar: React.FC = () => {
                   )}
                 </Link>
                 <Link
-                  href={`/myprofile/${id}`} 
+                  href={`/myprofile/${id}`}
                   onClick={() => setSidebarOpen(!sidebarOpen)}
                   className="block px-4 py-2 text-sm text-gray-400 hover:bg-gray-900"
                 >
@@ -669,10 +689,9 @@ const Navbar: React.FC = () => {
                 <div
                   className="relative flex items-center"
                   onClick={handleBellClick}
-                  
                 >
                   <FaBell
-                  onClick={() => setSidebarOpen(!sidebarOpen)}
+                    onClick={() => setSidebarOpen(!sidebarOpen)}
                     className={` absolute left-1 w-4 h-4 cursor-pointer ${
                       newNotificationCount > 0
                         ? "text-yellow-400"
@@ -688,16 +707,14 @@ const Navbar: React.FC = () => {
                     </div>
                   )}
                   <Link
-               
                     href="/#"
                     className="block px-5 py-2 text-sm text-gray-400 hover:bg-gray-900"
                   >
                     Notifications
                   </Link>
-                  
                 </div>
                 <Link
-                onClick={() => setSidebarOpen(!sidebarOpen)}
+                  onClick={() => setSidebarOpen(!sidebarOpen)}
                   href="#"
                   className="block px-4 py-2 text-sm text-gray-400 hover:bg-gray-900"
                 >
@@ -711,16 +728,14 @@ const Navbar: React.FC = () => {
                   Logout
                 </button>
               </div>
-              
             </div>
-            
           )}
           {isModalOpen && (
-                    <NotificationModal
-                      notifications={notifications}
-                      closeModal={() => setIsModalOpen(false)}
-                    />
-                  )}
+            <NotificationModal
+              notifications={notifications}
+              closeModal={() => setIsModalOpen(false)}
+            />
+          )}
 
           {/* mobile verision navigation */}
 
