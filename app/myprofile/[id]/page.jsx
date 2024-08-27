@@ -127,7 +127,7 @@ const MyProfile = () => {
                 alt="Profile Picture"
                 width={200}
                 height={200}
-                className="rounded-full border-4  border-blue-600 mb-4 sm:mb-0 sm:mr-8"
+                className="rounded-full object-cover w-56 h-56 border-4  border-blue-600 mb-4 sm:mb-0 sm:mr-8"
               />
               <button
                 type="button"
@@ -158,7 +158,7 @@ const MyProfile = () => {
 <form onSubmit={handleSubmit} className="space-y-6 text-gray-200">
   <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
     {Object.keys(user)
-      .filter(key => key !== 'profile_pic' && key !== '_id' && key !== 'current_post' && key !== 'team_name') // Exclude fields
+      .filter(key => key !== 'profile_pic' && key !== '_id' && key !== 'email' && key !== 'roll_no' && key !== 'college_name' && key !== 'session' && key !== 'branch' && key !== 'current_post' && key !== 'team_name') // Exclude fields
       .map(key => (
         <div key={key}>
           <label className="block text-sm font-medium text-gray-300 capitalize">
@@ -200,6 +200,79 @@ const MyProfile = () => {
       <input
         type="text"
         name="team_name"
+        value={user.team_name || ''}
+        disabled
+        className="mt-1 block w-full border-b border-gray-600 bg-gray-800 text-gray-500 sm:text-sm"
+      />
+    </div>
+    <div>
+      <label className="block text-sm font-medium text-gray-300 capitalize">Current Post</label>
+      <input
+        type="text"
+        name="current_post"
+        value={user.current_post || ''}
+        disabled
+        className="mt-1 block w-full border-b border-gray-600 bg-gray-800 text-gray-500 sm:text-sm"
+      />
+    </div><div>
+      <label className="block text-sm font-medium text-gray-300 capitalize">Email</label>
+      <input
+        type="text"
+        name="current_post"
+        value={user.email || ''}
+        disabled
+        className="mt-1 block w-full border-b border-gray-600 bg-gray-800 text-gray-500 sm:text-sm"
+      />
+    </div><div>
+      <label className="block text-sm font-medium text-gray-300 capitalize"> Branch</label>
+      <input
+        type="text"
+        name="current_post"
+        value={user.branch || ''}
+        disabled
+        className="mt-1 block w-full border-b border-gray-600 bg-gray-800 text-gray-500 sm:text-sm"
+      />
+    </div><div>
+      <label className="block text-sm font-medium text-gray-300 capitalize">College name</label>
+      <input
+        type="text"
+        name="current_post"
+        value={user.college_name || ''}
+        disabled
+        className="mt-1 block w-full border-b border-gray-600 bg-gray-800 text-gray-500 sm:text-sm"
+      />
+    </div><div>
+      <label className="block text-sm font-medium text-gray-300 capitalize">Roll no</label>
+      <input
+        type="text"
+        name="current_post"
+        value={user.roll_no || ''}
+        disabled
+        className="mt-1 block w-full border-b border-gray-600 bg-gray-800 text-gray-500 sm:text-sm"
+      />
+    </div><div>
+      <label className="block text-sm font-medium text-gray-300 capitalize">Current Post</label>
+      <input
+        type="text"
+        name="current_post"
+        value={user.current_post || ''}
+        disabled
+        className="mt-1 block w-full border-b border-gray-600 bg-gray-800 text-gray-500 sm:text-sm"
+      />
+    </div><div>
+      <label className="block text-sm font-medium text-gray-300 capitalize">session</label>
+      <input
+        type="text"
+        name="current_post"
+        value={user.session || ''}
+        disabled
+        className="mt-1 block w-full border-b border-gray-600 bg-gray-800 text-gray-500 sm:text-sm"
+      />
+    </div><div>
+      <label className="block text-sm font-medium text-gray-300 capitalize">Team name</label>
+      <input
+        type="text"
+        name="current_post"
         value={user.team_name || ''}
         disabled
         className="mt-1 block w-full border-b border-gray-600 bg-gray-800 text-gray-500 sm:text-sm"

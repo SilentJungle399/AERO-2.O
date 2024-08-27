@@ -323,7 +323,7 @@ const Navbar: React.FC = () => {
               </Link>
             </div>
 
-            <div className="hidden md:flex items-center space-x-1 md:space-x-2 w-full justify-end">
+            <div className="hidden md:flex items-center space-x-1 md:space-x-2 w-full justify-end mr-4">
               {/* admin routes in desktop */}
               {isAdmin && (
                 <>
@@ -495,9 +495,9 @@ const Navbar: React.FC = () => {
                       <img
                         src={profile}
                         alt="Profile Picture"
-                        width={44}
-                        height={44}
-                        className="rounded-full"
+                        width={100}
+                        height={100}
+                        className="rounded-full rounded-full object-cover w-11 h-11"
                       />
                     </button>
                   </div>
@@ -523,7 +523,7 @@ const Navbar: React.FC = () => {
                                 alt="Profile Picture"
                                 width={24}
                                 height={24}
-                                className="rounded-full mr-2"
+                                className="mr-2 rounded-full object-cover w-11 h-11"
                               />
                               {username}
                             </div>
