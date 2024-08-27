@@ -66,7 +66,7 @@ const InductionSessionsList = () => {
     <div className="clouds"></div>
   </div>
 
-  <div className="container mx-auto mt-28 relative z-10">
+  <div className="ml-2 mr-2 mx-auto mt-28 relative z-10">
     <div className="text-center mb-12">
       <FaPlane className="text-6xl text-blue-500 mx-auto mb-4" />
       <h1 className='text-4xl monoton md:text-6xl text-white mb-2'>Aeromodeling&nbsp;&nbsp; Club</h1>

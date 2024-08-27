@@ -323,7 +323,7 @@ const Navbar: React.FC = () => {
               </Link>
             </div>
 
-            <div className="hidden md:flex items-center space-x-2 md:space-x-4 w-full justify-end mr-20">
+            <div className="hidden md:flex items-center space-x-1 md:space-x-2 w-full justify-end">
               {/* admin routes in desktop */}
               {isAdmin && (
                 <>
@@ -894,16 +894,39 @@ const Navbar: React.FC = () => {
                 >
                   Gallery
                 </Link>
-                <Link
-                  onClick={() => {
-                    setSidebarOpen(!sidebarOpen);
-                    setActivitiesDropdownOpen(false);
-                  }}
-                  href="/members"
-                  className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-xl md:text-xl lg:text-2xl font-medium bebas-neue-regular"
-                >
-                  Members
-                </Link>
+                <div className="relative group" >
+                    <button className="flex items-center text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular">
+                      community <FaCaretDown className="ml-1 w-5 h-5" />
+                    </button>
+                    <div className="absolute left-0 mt-2 w-48 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 backdrop-blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                      <div
+                        className="py-1"
+                        role="menu"
+                        aria-orientation="vertical"
+                      >
+                        <Link
+                          href="/devteam"
+                          className="bebas-neue-regular block px-4 py-2 text-md text-gray-300 hover:text-[#3494D1]"
+                          onClick={() => {
+                            setSidebarOpen(!sidebarOpen);
+                            setActivitiesDropdownOpen(false);
+                          }}
+                        >
+                          DEVTEAM
+                        </Link>
+                        <Link
+                          href="/members"
+                          className="bebas-neue-regular block px-4 py-2 text-md text-gray-300 hover:text-[#3494D1]"
+                          onClick={() => {
+                            setSidebarOpen(!sidebarOpen);
+                            setActivitiesDropdownOpen(false);
+                          }}
+                        >
+                          Member
+                        </Link>
+                      </div>
+                    </div>
+                  </div>
                 <hr className="text-blue-500 bg-blue-900" />
                 <div className="items-center justify-between text-white">
                   <div>

@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { FaEye, FaThumbsUp, FaUser, FaCalendarAlt } from "react-icons/fa";
+import { FaEye, FaThumbsUp, FaUser, FaCalendarAlt, FaStar } from "react-icons/fa";
 
 const Blogs = () => {
   const [blogs, setBlogs] = useState([]);
@@ -42,33 +42,36 @@ const Blogs = () => {
       <div className="mb-8">
         {/* Featured Blog */}
         <Link href={`/blogs/${featured.slug}`} passHref>
-          <div
-            className="relative bg-cover bg-center h-96 shadow-lg overflow-hidden flex items-end mb-6 transform hover:scale-105 transition-transform duration-300"
-            style={{ backgroundImage: `url(${featured.main_image})` }}
-          >
-            <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black opacity-60"></div>
-            <div className="absolute bottom-0 left-0 p-6">
-              <h2 className="text-3xl font-bold text-white mb-4">
-                {featured.title}
-              </h2>
-              <div className="flex items-center text-sm space-x-4 text-white">
-                <span className="flex items-center">
-                  <FaUser className="mr-2" /> {featured.author.name}
-                </span>
-                <span className="flex items-center">
-                  <FaCalendarAlt className="mr-2" />{" "}
-                  {new Date(featured.createdAt).toLocaleDateString()}
-                </span>
-                <span className="flex items-center">
-                  <FaEye className="mr-2" /> {featured.views}
-                </span>
-                <span className="flex items-center">
-                  <FaThumbsUp className="mr-2" /> {featured.upvotes}
-                </span>
-              </div>
-            </div>
-          </div>
-        </Link>
+  <div
+    className="relative bg-cover bg-center h-96 shadow-lg overflow-hidden flex items-end mb-6 transform hover:scale-105 transition-transform duration-300"
+    style={{ backgroundImage: `url(${featured.main_image})` }}
+  >
+    <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black opacity-60"></div>
+    <div className="flex absolute top-0 left-0 m-4">
+    <FaStar className="text-yellow-300"/>
+    </div>
+    <div className="absolute bottom-0 left-0 p-6">
+      <h2 className="text-3xl font-bold text-white mb-4">
+        {featured.title}
+      </h2>
+      <div className="flex items-center text-sm space-x-4 text-white">
+        <span className="flex items-center">
+          <FaUser className="mr-2" /> {featured.author.name}
+        </span>
+        <span className="flex items-center">
+          <FaCalendarAlt className="mr-2" />{" "}
+          {new Date(featured.createdAt).toLocaleDateString()}
+        </span>
+        <span className="flex items-center">
+          <FaEye className="mr-2" /> {featured.views}
+        </span>
+        <span className="flex items-center">
+          <FaThumbsUp className="mr-2" /> {featured.upvotes}
+        </span>
+      </div>
+    </div>
+  </div>
+</Link>
 
         {/* Other Blogs */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -112,9 +115,9 @@ const Blogs = () => {
   };
 
   return (
-    <div className="container mx-auto p-4 pt-32">
-      <h1 className="text-6xl monoton mb-8">
-        Our Curated Blog Section
+    <div className="ml-6 mr-4 text-left mx-auto  pt-32">
+      <h1 className="text-5xl  monoton mb-8">
+      &nbsp;&nbsp;&nbsp;OUR  &nbsp;&nbsp;&nbsp;CURATED &nbsp;&nbsp;&nbsp;BLOG&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;SECTION
       </h1>
       {blogs.reduce((acc, _, index) => {
         if (index % 4 === 0) {

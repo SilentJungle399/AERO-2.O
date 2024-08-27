@@ -142,13 +142,13 @@ const AlbumPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white p-8">
+    <div className="min-h-screen bg-gray-900 text-white pt-8 ">
       {album && (
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="max-w-7xl mx-auto mt-24"
+          className="max-w-7xl mx-auto mt-24 ml-2 mr-1"
         >
           <h1 className="text-4xl font-bold mb-4">{album.album_title}</h1>
           <p className="text-xl text-gray-400 mb-8">{album.album_name}</p>
