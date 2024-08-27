@@ -10,35 +10,33 @@ const bcrypt = require("bcrypt");
 
 var admin = require("firebase-admin");
 
-var serviceAccount = require("../Firebseconfig/Servicekeys.json")
-const PasswordResetToken = require('../models/PassworResetTokenSchema');
+var serviceAccount = require("../Firebseconfig/Servicekeys.json");
+const PasswordResetToken = require("../models/PassworResetTokenSchema");
 
 admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount)
+  credential: admin.credential.cert(serviceAccount),
 });
 
-
-
-const crypto = require('crypto');
+const crypto = require("crypto");
 const requestPasswordReset = async (req, res) => {
   const { email } = req.body;
-  console.log(email)
+  console.log(email);
 
   // Find the user by email
-  const user = await User.findOne({ email } );
+  const user = await User.findOne({ email });
 
   if (!user) {
-      return res.status(404).send('User not found');
+    return res.status(404).send("User not found");
   }
 
   // Generate a unique reset token
-  const resetToken = crypto.randomBytes(32).toString('hex');
+  const resetToken = crypto.randomBytes(32).toString("hex");
 
   // Create a new PasswordResetToken document
   const passwordResetToken = new PasswordResetToken({
-      userId: user.id,
-      token: resetToken,
-      expiresAt: new Date(Date.now() + 3600000) // Token expires in 1 hour
+    userId: user.id,
+    token: resetToken,
+    expiresAt: new Date(Date.now() + 3600000), // Token expires in 1 hour
   });
 
   // Save the token to the database
@@ -47,45 +45,44 @@ const requestPasswordReset = async (req, res) => {
   // Send the password reset email
   await sendPasswordResetEmail(email, resetToken);
 
-  res.status(200).json({ message: 'Email Sent successfully' });
+  res.status(200).json({ message: "Email Sent successfully" });
 };
 
 const updatePassword = async (req, res) => {
   const { token, password } = req.body;
 
   if (!token || !password) {
-    return res.status(400).json({ message: 'Token and password are required' });
+    return res.status(400).json({ message: "Token and password are required" });
   }
-  console.log(password)
+  console.log(password);
   try {
     // Find the reset token in the database
     const resetToken = await PasswordResetToken.findOne({ token });
 
     if (!resetToken || resetToken.expiresAt < Date.now()) {
-      return res.status(400).json({ message: 'Invalid or expired token' });
+      return res.status(400).json({ message: "Invalid or expired token" });
     }
 
     // Find the user associated with the reset token
     const user = await User.findById(resetToken.userId);
-    console.log(user)
+    console.log(user);
     if (!user) {
-      return res.status(404).json({ message: 'User not found' });
+      return res.status(404).json({ message: "User not found" });
     }
 
-    // Hash the new password and update the user's password
-    user.password = await bcrypt.hash(password, 10);
+    // update the password directly pre hash function will updagte it automatically
+    user.password = password;
     await user.save();
 
     // Delete the reset token after successful password reset
     await PasswordResetToken.deleteOne({ _id: resetToken._id });
 
-    res.status(200).json({ message: 'Password reset successfully' });
+    res.status(200).json({ message: "Password reset successfully" });
   } catch (error) {
-    console.error('Error resetting password:', error);
-    res.status(500).json({ message: 'Server error' });
+    console.error("Error resetting password:", error);
+    res.status(500).json({ message: "Server error" });
   }
 };
-
 
 const getourmembers = async (req, res) => {
   try {
@@ -96,17 +93,16 @@ const getourmembers = async (req, res) => {
     res.status(200).json(users);
   } catch (error) {
     // Handle any errors that might occur
-    console.error('Error fetching users:', error);
-    res.status(500).json({ message: 'Failed to fetch users' });
+    console.error("Error fetching users:", error);
+    res.status(500).json({ message: "Failed to fetch users" });
   }
 };
 
-
 const googleSignup = async (req, res) => {
-  const firebase_token = req.headers.authorization?.split(' ')[1]; // Extract token from Authorization header
+  const firebase_token = req.headers.authorization?.split(" ")[1]; // Extract token from Authorization header
 
   if (!firebase_token) {
-    return res.status(401).json({ message: 'No token provided' });
+    return res.status(401).json({ message: "No token provided" });
   }
 
   try {
@@ -117,31 +113,26 @@ const googleSignup = async (req, res) => {
     // Check if the user already exists in the database
     let user = await User.findOne({ email: email });
 
-    
-
-
-
-    let profile_picture=` https://avatar.iran.liara.run/username?username=${name[0]}`;
+    let profile_picture = ` https://avatar.iran.liara.run/username?username=${name[0]}`;
     if (!user) {
+      console.log(profile_picture);
+      if (name.split(" ").length > 1) {
+        let firstletter = name.split(" ")[0];
+        let lastletter = name.split(" ")[1];
+        profile_picture = ` https://avatar.iran.liara.run/username?username=${firstletter[0]}+${lastletter[0]}`;
         console.log(profile_picture);
-    if(name.split(' ').length>1){
-      let firstletter=name.split(' ')[0];
-        let lastletter=name.split(' ')[1];
-        profile_picture=` https://avatar.iran.liara.run/username?username=${firstletter[0]}+${lastletter[0]}`;
-        console.log(profile_picture);
-    }
+      }
 
       // If the user does not exist, create a new user
       user = new User({
         googleId: uid,
         email,
-        full_name:name,
-        profile_pic:profile_picture
+        full_name: name,
+        profile_pic: profile_picture,
       });
 
       await user.save(); // Save the user to the database
     }
-
 
     let expiresIn;
     switch (user.role) {
@@ -159,8 +150,7 @@ const googleSignup = async (req, res) => {
     const _id = user._id;
     const full_name = user.full_name;
     let profile_pic = user.profile_pic;
-    const role=user.role;
-
+    const role = user.role;
 
     // Set the cookie
     res.cookie("token", token, {
@@ -175,18 +165,17 @@ const googleSignup = async (req, res) => {
     res.setHeader("Set-Cookie", res.getHeader("Set-Cookie"));
 
     // Send the response after setting the cookie
-    res.status(200).json({ token, _id, full_name, profile_pic,role});
+    res.status(200).json({ token, _id, full_name, profile_pic, role });
     // Respond with the user data
     // res.status(200).json({
     //   message: 'User signed in successfully',
     //   user,
     // });
   } catch (error) {
-    console.error('Error during Google sign-in:', error);
-    res.status(500).json({ message: 'Server error' });
+    console.error("Error during Google sign-in:", error);
+    res.status(500).json({ message: "Server error" });
   }
 };
-
 
 const uploadProfile = async (req, res) => {
   try {
@@ -196,7 +185,13 @@ const uploadProfile = async (req, res) => {
     if (user) {
       user.profile_pic = profile_pic;
       await user.save(); // Save the updated user object
-      res.status(200).json({ success: true, message: "Profile picture updated successfully",profile_pic:profile_pic});
+      res
+        .status(200)
+        .json({
+          success: true,
+          message: "Profile picture updated successfully",
+          profile_pic: profile_pic,
+        });
     } else {
       res.status(404).json({ success: false, message: "User not found" });
     }
@@ -205,7 +200,6 @@ const uploadProfile = async (req, res) => {
     res.status(500).json({ success: false, message: "Internal server error" });
   }
 };
-
 
 function generateOTP() {
   return Math.floor(100000 + Math.random() * 900000); // Generate 6-digit OTP
@@ -283,13 +277,15 @@ const otpcheck = async (req, res) => {
 
     if (!verificationDoc) {
       console.log("No OTP verification document found for email:", email);
-      return res.status(404).json({ err: "OTP verification document not found" });
+      return res
+        .status(404)
+        .json({ err: "OTP verification document not found" });
     }
 
     // Check if the OTP matches
     if (verificationDoc.otp !== otp) {
-      console.log(verificationDoc.otp)
-      console.log(otp)
+      console.log(verificationDoc.otp);
+      console.log(otp);
       console.log("OTP mismatch for email:", email);
       return res.status(400).json({ err: "Invalid OTP" });
     }
@@ -307,7 +303,6 @@ const otpcheck = async (req, res) => {
     console.log("Updated verification document:", verificationDoc);
 
     return res.status(200).json({ message: "OTP verified successfully" });
-
   } catch (error) {
     console.error("Error:", error);
     return res.status(500).json({ err: "Internal server error" });
@@ -315,7 +310,7 @@ const otpcheck = async (req, res) => {
 };
 
 const Signup = async (req, res) => {
-  const { email, password ,gender} = req.body;
+  const { email, password, gender } = req.body;
   console.log("email");
 
   try {
@@ -336,20 +331,20 @@ const Signup = async (req, res) => {
     if (!verification || !verification.status) {
       return res.status(404).json({ err: "Email not verified" });
     }
-     await verification.deleteOne({email});
+    await verification.deleteOne({ email });
     const date_of_joining = new Date().toLocaleDateString("en-US", {
       year: "numeric",
       month: "long",
       day: "numeric",
     });
 
-    let profile_picture=` https://avatar.iran.liara.run/username?username=${full_name[0]}`;
-        console.log(profile_picture);
-    if(full_name.split(' ').length>1){
-      let firstletter=full_name.split(' ')[0];
-        let lastletter=full_name.split(' ')[1];
-        profile_picture=` https://avatar.iran.liara.run/username?username=${firstletter[0]}+${lastletter[0]}`;
-        console.log(profile_picture);
+    let profile_picture = ` https://avatar.iran.liara.run/username?username=${full_name[0]}`;
+    console.log(profile_picture);
+    if (full_name.split(" ").length > 1) {
+      let firstletter = full_name.split(" ")[0];
+      let lastletter = full_name.split(" ")[1];
+      profile_picture = ` https://avatar.iran.liara.run/username?username=${firstletter[0]}+${lastletter[0]}`;
+      console.log(profile_picture);
     }
     const newUser = new User({
       full_name,
@@ -357,7 +352,7 @@ const Signup = async (req, res) => {
       gender,
       password,
       date_of_joining,
-      profile_pic:profile_picture,
+      profile_pic: profile_picture,
     });
 
     const savedUser = await newUser.save();
@@ -381,10 +376,10 @@ const Login = async (req, res) => {
     if (!user) {
       return res.status(400).json({ error: "Invalid email" });
     }
-    console.log(user)
-    console.log(password)
+    console.log(user);
+    console.log(password);
     const isMatch = await user.comparePassword(password);
-    console.log(isMatch)
+    console.log(isMatch);
     if (!isMatch) {
       return res.status(400).json({ error: "Invalid email or password" });
     }
@@ -405,7 +400,7 @@ const Login = async (req, res) => {
     const _id = user._id;
     const full_name = user.full_name;
     const profile_pic = user.profile_pic;
-    const role=user.role;
+    const role = user.role;
 
     // Set the cookie
     res.cookie("token", token, {
@@ -420,7 +415,7 @@ const Login = async (req, res) => {
     res.setHeader("Set-Cookie", res.getHeader("Set-Cookie"));
 
     // Send the response after setting the cookie
-    res.status(200).json({ token, _id, full_name, profile_pic,role});
+    res.status(200).json({ token, _id, full_name, profile_pic, role });
   } catch (error) {
     console.error("Error during login:", error);
     res.status(500).json({ error: "Failed to login" });
@@ -443,6 +438,16 @@ const logout = async (req, res) => {
   }
 };
 
-
-
-module.exports = {updatePassword,requestPasswordReset, getourmembers,Signup, Login, logout, emailVerification, otpcheck,uploadProfile,googleSignup,requestPasswordReset};
+module.exports = {
+  updatePassword,
+  requestPasswordReset,
+  getourmembers,
+  Signup,
+  Login,
+  logout,
+  emailVerification,
+  otpcheck,
+  uploadProfile,
+  googleSignup,
+  requestPasswordReset,
+};

@@ -92,7 +92,7 @@ const sendPasswordResetEmail = async (email, resetToken) => {
     `;
 
     const mailOptions = {
-        from: 'hms.nitkkr@gmail.com',
+        from: `${process.env.USER_EMAIL}`,
         to: email,
         subject: 'Aeronitkkr.in Password Reset Mail',
         html: message
@@ -292,7 +292,7 @@ const sendSelectionConfirmationEmail = (uid,name,email, inductionName, selection
     `;
 
     const mailOptions = {
-        from: 'hms.nitkkr@gmail.com', // Sender address
+        from:  `${process.env.USER_EMAIL}`, // Sender address
         to: email, // Recipient address
         subject: '🎉 Congratulations on Your Selection! 🎉', // Subject line
         html: message, // HTML body
@@ -430,7 +430,7 @@ const sendParticipationConfirmationEmail = (name, email, inductionName, inductio
     `;
 
     const mailOptions = {
-        from: 'hms.nitkkr@gmail.com', // Sender address
+        from:  `${process.env.USER_EMAIL}`, // Sender address
         to: email, // Recipient address
         subject: '🛩️ Welcome to Aeromodelling! Induction Participation Confirmed', // Subject line
         html: message // HTML body
@@ -531,7 +531,7 @@ const sendSignupEmailNotification = (full_name,email,) => {
     `
     console.log(full_name,email)
     const mailOptions = {
-        from: 'hms.nitkkr@gmail.com', // Sender address
+        from:  `${process.env.USER_EMAIL}`, // Sender address
         to: email, // Recipient address
         subject: 'Thankyou for signing up', // Subject line
         html: message // Plain text body
@@ -623,7 +623,7 @@ const sendVerificationEmail = (email, otp) => {
     `;
 
     const mailOptions = {
-        from: 'hms.nitkkr@gmail.com', // Sender address
+        from:  `${process.env.USER_EMAIL}`, // Sender address
         to: email, // Recipient address
         subject: 'Email Verification OTP', // Subject line
         html: message // HTML content

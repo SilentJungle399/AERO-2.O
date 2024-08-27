@@ -74,16 +74,17 @@ const AllAlbumsPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white p-8 ">
-      <h1 className="text-6xl monoton mb-8  mt-24 bg-gradient-to-r from-blue-300 via-green-500 to-indigo-400 text-transparent bg-clip-text">
-        Photos &nbsp;&nbsp;And &nbsp;&nbsp;videos &nbsp;&nbsp;Albums
+    <div className="min-h-screen bg-gray-900 text-white  ">
+
+      <h1 className="text-3xl lg:text-5xl monoton mb-8 pt-3  mt-24 bg-gradient-to-r from-blue-300 via-green-500 to-indigo-400 text-transparent bg-clip-text">
+      &nbsp;&nbsp;&nbsp;Photos &nbsp;&nbsp;And &nbsp;&nbsp;videos &nbsp;&nbsp;Albums
       </h1>
 
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8"
+        className="ml-3 mr-2 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8"
       >
         {albums.map((album) => (
           <Link key={album._id} href={`/gallery/${album._id}`}>
@@ -93,7 +94,7 @@ const AllAlbumsPage = () => {
             >
               <div className="relative h-48">
                 <div className="grid grid-cols-3 gap-1 h-full">
-                  {album.album_images.slice(0, 10).map((image, index) => {
+                  {album.album_images.slice(0, 6).map((image, index) => {
                     const size = getRandomSize();
                     return (
                       <div
@@ -116,14 +117,6 @@ const AllAlbumsPage = () => {
                             }
                             alt={`${album.album_name} image ${index + 1}`}
                             className="w-full h-full object-cover"
-                          />
-                        )}
-                        {image.file_type.includes("video") && (
-                          <video
-                            src={image.url}
-                            alt={`Album video`}
-                            className="w-full h-full object-cover"
-                            controls
                           />
                         )}
                       </div>
