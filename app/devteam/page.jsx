@@ -17,7 +17,7 @@ const teamMembers = [
     name: "Jay Kumar Gupta",
     role: "Backend Developer",
     imageUrl: "/dev1.png",
-    bio: "Prefinal year student at NIT Kurukshetra, fueled by a passion for development and curious about the latest in emerging technologies. Always eager to learn and innovate",
+    bio: "Prefinal year Computer Engineering student at NIT Kurukshetra, fueled by a passion for development and curious about the latest in emerging technologies.",
   },
   {
     name: "Divyanshu Tungriya",
@@ -58,7 +58,6 @@ const contentMembers = [
     name: "Kaushiki Vashisth",
     role: "Content Writer",
     imageUrl: "/kaus.jpg",
-    bio: "B.Tech Computer Engineering student at NIT Kurukshetra, deeply passionate about web development and exploring the latest advancements in technology.",
   },
   {
     name: "Kushagra",
@@ -69,7 +68,6 @@ const contentMembers = [
     name: "Janhvi Singh",
     role: "Video Editor",
     imageUrl: "/cont6.jpg",
-    bio: "B.Tech Computer Engineering student at NIT Kurukshetra, deeply passionate about web development and exploring the latest advancements in technology.",
   },
 ];
 
