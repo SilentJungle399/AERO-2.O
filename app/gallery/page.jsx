@@ -76,7 +76,7 @@ const AllAlbumsPage = () => {
   return (
     <div className="min-h-screen bg-gray-900 text-white  ">
 
-      <h1 className="text-3xl lg:text-5xl monoton mb-8 pt-3  mt-24 bg-gradient-to-r from-blue-300 via-green-500 to-indigo-400 text-transparent bg-clip-text">
+      <h1 className="text-3xl lg:text-5xl monoton mb-8 pt-28   bg-gradient-to-r from-blue-300 via-green-500 to-indigo-400 text-transparent bg-clip-text">
       &nbsp;&nbsp;&nbsp;Photos &nbsp;&nbsp;And &nbsp;&nbsp;videos &nbsp;&nbsp;Albums
       </h1>
 
@@ -84,7 +84,7 @@ const AllAlbumsPage = () => {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="ml-3 mr-2 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8"
+        className="ml-3 mr-2  grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8"
       >
         {albums.map((album) => (
           <Link key={album._id} href={`/gallery/${album._id}`}>
