@@ -62,12 +62,11 @@ const InductionForm = () => {
 
   const fetchInductionDetails = async () => {
     try {
-      const baseUrl = process.env.NODE_ENV === 'production' 
-          ? process.env.NEXT_PUBLIC_BACKEND_URL 
-          : 'http://localhost:5000';
-      const response = await fetch(
-        `${baseUrl}/api/users/getinduction/${id}`
-      );
+      const baseUrl =
+        process.env.NODE_ENV === "production"
+          ? process.env.NEXT_PUBLIC_BACKEND_URL
+          : "http://localhost:5000";
+      const response = await fetch(`${baseUrl}/api/users/getinduction/${id}`);
       if (!response.ok) throw new Error("Failed to fetch induction details");
       const data = await response.json();
       setInduction(data);
@@ -101,13 +100,19 @@ const InductionForm = () => {
   const [message, setMessage] = useState("");
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (currentStage == 2 && !formData.queries && !formData.team_preference && !formData.hobbies && !formData.skills && !formData.experience && !formData.expectations) {
+    if (
+      currentStage == 2 &&
+      !formData.queries &&
+      !formData.team_preference &&
+      !formData.hobbies &&
+      !formData.skills &&
+      !formData.experience &&
+      !formData.expectations
+    ) {
       _set3rdPass(false);
       return;
-    }
-    else
-      _set3rdPass(true)
-    setSubmiting(true)
+    } else _set3rdPass(true);
+    setSubmiting(true);
     try {
       const accessToken = document.cookie
         .split("; ")
@@ -132,49 +137,54 @@ const InductionForm = () => {
       Array.from(files).forEach((file) => {
         formDataObject.append("ppt", file);
       });
-      const baseUrl = process.env.NODE_ENV === 'production' 
-          ? process.env.NEXT_PUBLIC_BACKEND_URL 
-          : 'http://localhost:5000';
-      const response = await fetch(
-        `${baseUrl}/api/users/register/${id}`,
-        {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-          body: formDataObject,
-        }
-      );
+      const baseUrl =
+        process.env.NODE_ENV === "production"
+          ? process.env.NEXT_PUBLIC_BACKEND_URL
+          : "http://localhost:5000";
+      const response = await fetch(`${baseUrl}/api/users/register/${id}`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        body: formDataObject,
+      });
       const message = await response.text();
       setMessage(message);
       if (!response.ok) throw new Error("Failed to submit form");
-      setSucess(true)
+      setSucess(true);
       // alert("Application submitted successfully!");
       // window.location.href = "/";
     } catch (error) {
-      setError(true)
+      setError(true);
       // console.error("Error submitting form:", error);
       // alert("Failed to submit application. Please try again.");
     } finally {
-      setSubmiting(false)
+      setSubmiting(false);
     }
   };
 
   const nextStage = () => {
     // First Pass
-    if (currentStage == 0 && !formData.name && !formData.email && !formData.rollNumber && !formData.branch && !formData.year && !formData.phoneNumber) {
+    if (
+      currentStage == 0 &&
+      !formData.name &&
+      !formData.email &&
+      !formData.rollNumber &&
+      !formData.branch &&
+      !formData.year &&
+      !formData.phoneNumber
+    ) {
       _set1stPass(false);
       return;
-    }
-    else
-      _set1stPass(true);
+    } else _set1stPass(true);
     // Second Pass
-    if (currentStage == 1 && formData.answers.some(item => item.answer === "")) {
+    if (
+      currentStage == 1 &&
+      formData.answers.some((item) => item.answer === "")
+    ) {
       _set2ndPass(false);
       return;
-    }
-    else
-      _set2ndPass(true);
+    } else _set2ndPass(true);
     setCurrentStage((prev) => Math.min(prev + 1, 2));
   };
 
@@ -210,7 +220,11 @@ const InductionForm = () => {
       case 0:
         return (
           <div className="bg-gray-900 p-6 rounded-lg">
-            {!_1stPass && <p className="text-sm text-red-500">**Please fill all feilds...</p>}
+            {!_1stPass && (
+              <p className="text-sm text-red-500">
+                **Please fill all feilds...
+              </p>
+            )}
             <h2 className="text-2xl font-semibold text-blue-400 mb-4 flex items-center">
               <FaRocket className="mr-2 text-yellow-500" />
               Personal Information
@@ -276,7 +290,11 @@ const InductionForm = () => {
       case 1:
         return (
           <div className="bg-gray-900 p-6 rounded-lg">
-            {!_2ndPass && <p className="text-sm text-red-500">**Please fill all feilds...</p>}
+            {!_2ndPass && (
+              <p className="text-sm text-red-500">
+                **Please fill all feilds...
+              </p>
+            )}
             <h2 className="text-2xl font-semibold text-green-400 mb-4 flex items-center">
               <FaBrain className="mr-2 " />
               Aeromodelling Questionnaire
@@ -301,7 +319,11 @@ const InductionForm = () => {
       case 2:
         return (
           <div className="bg-gray-900 p-6 rounded-lg">
-            {!_3rdPass && <p className="text-sm text-red-500">**Please fill all feilds...</p>}
+            {!_3rdPass && (
+              <p className="text-sm text-red-500">
+                **Please fill all feilds...
+              </p>
+            )}
             <h2 className="text-2xl font-semibold text-purple-400 mb-4 flex items-center">
               <FaCogs className="mr-2 text-purple-500" />
               Additional Information
@@ -315,21 +337,33 @@ const InductionForm = () => {
                 className="w-full p-3 rounded bg-gray-800 text-gray-200 focus:outline-none focus:ring-2 focus:ring-purple-500"
                 rows="3"
               ></textarea>
-              <input
-                type="file"
-                name="ppt"
-                onChange={handleInputChange}
-                className="w-full p-3 rounded bg-gray-800 text-gray-200 focus:outline-none focus:ring-2 focus:ring-purple-500"
-                multiple
-              />
-              <input
-                type="text"
+              <div className="w-full">
+                <label className="block text-gray-200 mb-2">
+                  Please upload any image, PDF, or video showcasing your skill:
+                </label>
+                <input
+                  type="file"
+                  name="ppt"
+                  onChange={handleInputChange}
+                  className="w-full p-3 rounded bg-gray-800 text-gray-200 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                  multiple
+                  accept="image/*,application/pdf,video/*"
+                />
+              </div>
+
+              <select
                 name="team_preference"
-                placeholder="Team Preference"
                 value={formData.team_preference}
                 onChange={handleInputChange}
                 className="w-full p-3 rounded bg-gray-800 text-gray-200 focus:outline-none focus:ring-2 focus:ring-purple-500"
-              />
+              >
+                <option value="" disabled>
+                  Select Team Preference
+                </option>
+                <option value="Drones">Drones</option>
+                <option value="Rc Planes">RC Planes</option>
+              </select>
+
               <textarea
                 name="hobbies"
                 placeholder="Hobbies"
@@ -404,7 +438,9 @@ const InductionForm = () => {
 
             <form onSubmit={handleSubmit} className="space-y-8">
               {renderStage()}
-              {(Error || Sucess) && <Message error={Error} success={Sucess} message={message} />}
+              {(Error || Sucess) && (
+                <Message error={Error} success={Sucess} message={message} />
+              )}
               <div className="flex justify-between">
                 {currentStage > 0 && (
                   <button
@@ -431,14 +467,18 @@ const InductionForm = () => {
                     className="bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 transition duration-300 flex items-center ml-auto"
                     disabled={submiting}
                   >
-                    {submiting ? <div
-                      className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-e-transparent align-[-0.125em] text-surface motion-reduce:animate-[spin_1.5s_linear_infinite] dark:text-white"
-                      role="status">
-                      <span
-                        className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]"
-                      >Loading...</span
+                    {submiting ? (
+                      <div
+                        className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-e-transparent align-[-0.125em] text-surface motion-reduce:animate-[spin_1.5s_linear_infinite] dark:text-white"
+                        role="status"
                       >
-                    </div> : <FaPlane className="mr-2" />}
+                        <span className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">
+                          Loading...
+                        </span>
+                      </div>
+                    ) : (
+                      <FaPlane className="mr-2" />
+                    )}
                     &nbsp;Submit Application
                   </button>
                 )}
@@ -452,8 +492,9 @@ const InductionForm = () => {
           {[0, 1, 2].map((stage) => (
             <div
               key={stage}
-              className={`w-4 h-4 rounded-full mx-2 ${currentStage >= stage ? "bg-blue-500" : "bg-gray-600"
-                }`}
+              className={`w-4 h-4 rounded-full mx-2 ${
+                currentStage >= stage ? "bg-blue-500" : "bg-gray-600"
+              }`}
             ></div>
           ))}
         </div>

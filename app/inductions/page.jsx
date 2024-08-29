@@ -4,6 +4,8 @@ import React, { useState, useEffect } from 'react';
 import { FaPlane, FaMapMarkerAlt, FaClock, FaMouse } from 'react-icons/fa';
 import { RiTimerLine } from "react-icons/ri";
 import Loader from '@/components/Loader'
+import { jwtDecode } from "jwt-decode"; // You can use this package to decode the token
+
 // This function is for foramting time and date on deadline (line 101)
 
 function formatDateTime(dateString) {
@@ -20,6 +22,35 @@ function formatDateTime(dateString) {
 const InductionSessionsList = () => {
   const [inductionSessions, setInductionSessions] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  function isTokenExpired(token) {
+    try {
+      console.log(token);
+      const decodedToken = jwtDecode(token);
+      console.log(decodedToken);
+      const currentTime = Math.floor(Date.now() / 1000);  // Get the current time in seconds
+      console.log("Current time:", currentTime);
+      console.log("Token expiration:", decodedToken.exp);
+      return parseInt(decodedToken.exp) < currentTime; // Compare the expiration time with the current time
+    } catch (error) {
+      console.error('Invalid token', error);
+      return true; // If the token is invalid, treat it as expired
+    }
+  }
+  
+  function LoginCheck() {
+    const token = localStorage.getItem('token'); // Assume the token is stored in localStorage
+    const isExpired = isTokenExpired(token);
+    console.log("Is token expired:", isExpired);
+    if (!token || isExpired) {
+      alert('Session expired. Please log in again.');
+      // Redirect to login page or handle accordingly
+      window.location.href = '/login';
+    } else {
+      console.log('Token is valid');
+    }
+  }
+
 
   useEffect(() => {
     const fetchInductionSessions = async () => {
@@ -84,6 +115,7 @@ const InductionSessionsList = () => {
                 <Link
                   className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors duration-300"
                   href={`inductions/register/${session._id}`}
+                  onClick={LoginCheck}
                 >
                   Register Now
                 </Link>
