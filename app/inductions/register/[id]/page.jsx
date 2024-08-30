@@ -152,8 +152,8 @@ const InductionForm = () => {
       setMessage(message);
       if (!response.ok) throw new Error("Failed to submit form");
       setSucess(true);
-      // alert("Application submitted successfully!");
-      // window.location.href = "/";
+      alert("Application submitted successfully!");
+      window.location.href = "/";
     } catch (error) {
       setError(true);
       // console.error("Error submitting form:", error);
@@ -446,7 +446,7 @@ const InductionForm = () => {
                   <button
                     type="button"
                     onClick={handlePrevious}
-                    className="bg-gray-700 text-gray-200 py-2 px-4 rounded-lg hover:bg-gray-600 transition duration-300 flex items-center"
+                    className="bg-gray-700 m-2 text-gray-200 py-2 px-4 rounded-lg hover:bg-gray-600 transition duration-300 flex items-center"
                   >
                     <FaArrowLeft className="mr-2" />
                     Previous
@@ -464,7 +464,7 @@ const InductionForm = () => {
                 ) : (
                   <button
                     type="submit"
-                    className="bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 transition duration-300 flex items-center ml-auto"
+                    className="bg-green-600 m-2 text-white py-2 px-4 rounded-lg hover:bg-green-700 transition duration-300 flex items-center ml-auto"
                     disabled={submiting}
                   >
                     {submiting ? (
@@ -477,7 +477,7 @@ const InductionForm = () => {
                         </span>
                       </div>
                     ) : (
-                      <FaPlane className="mr-2" />
+                      <FaPlane className="m-2" />
                     )}
                     &nbsp;Submit Application
                   </button>

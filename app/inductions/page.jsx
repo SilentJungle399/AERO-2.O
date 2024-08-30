@@ -106,7 +106,7 @@ const InductionSessionsList = () => {
     </div>
     <div className="grid grid-cols-1 gap-8">
       {sortedSessions.map(session => (
-        <div key={session._id} className="bg-gray-800 border border-gray-700 rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105 hover:border-blue-500">
+        <div key={session._id} className="bg-gray-800 border mx-8 mb-4 border-gray-700 rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105 hover:border-blue-500">
           <div className="flex flex-col lg:flex-row">
             <img src={session.I_banner_img} alt="Induction Session" className="w-full lg:w-60 h-60 lg:h-auto object-cover" />
             <div className="p-6 flex-grow">
