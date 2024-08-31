@@ -1,0 +1,522 @@
+[33mcommit e8bc7bc028b13b74d900dbcc1946e1bc14010065[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m
+Merge: b2d5598 38b4928
+Author: root <root@vps-a4a27082.vps.ovh.ca>
+Date:   Thu Aug 22 16:43:22 2024 +0000
+
+    meets configured
+    Merge branch 'main' of https://github.com/JAYKUMARGUPTA73/AERO-2.O
+
+[33mcommit 38b4928f4d24f7502e47e07550c2315f94b7b0d0[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Merge: a2f8961 5081db6
+Author: jay kumar gupta <jaynrk2002@gmail.com>
+Date:   Thu Aug 22 22:10:33 2024 +0530
+
+    Merge branch 'main' of https://github.com/JAYKUMARGUPTA73/AERO-2.O
+
+[33mcommit a2f8961731935b5f0e09d5e6e5ce91ad5d27a907[m
+Author: jay kumar gupta <jaynrk2002@gmail.com>
+Date:   Thu Aug 22 22:10:19 2024 +0530
+
+    meets working fixxed
+
+[33mcommit 5081db6434abb2e4969c40f79efd92729bb78652[m
+Author: Divyanshu4fx <divyanshustacks123@gmail.com>
+Date:   Thu Aug 22 20:01:12 2024 +0530
+
+    LB
+
+[33mcommit efec2741dd04876c17bc2dcbf92afbddd14c8a04[m
+Author: Divyanshu4fx <divyanshustacks123@gmail.com>
+Date:   Thu Aug 22 19:57:48 2024 +0530
+
+    home page changes
+
+[33mcommit 03d2bd529f8a4a1b5bd338ee340cdee9fffad725[m
+Merge: 38d7273 6190087
+Author: Divyanshu4fx <divyanshustacks123@gmail.com>
+Date:   Thu Aug 22 19:44:10 2024 +0530
+
+    Home page responsive for mobile
+
+[33mcommit 38d7273074dea2d1327cfb4826051400fafadb84[m
+Author: Divyanshu4fx <divyanshustacks123@gmail.com>
+Date:   Thu Aug 22 19:40:53 2024 +0530
+
+    mobile view of home page corrected
+
+[33mcommit b2d5598d88191ab4c7ac6e1a01ea85a2f08142f2[m
+Merge: 70c2723 6190087
+Author: root <root@vps-a4a27082.vps.ovh.ca>
+Date:   Thu Aug 22 12:19:59 2024 +0000
+
+    yg
+    Merge branch 'main' of https://github.com/JAYKUMARGUPTA73/AERO-2.O
+
+[33mcommit 61900870193f4725a09ebbb2afd899e0f2b5f60f[m
+Author: jay kumar gupta <jaynrk2002@gmail.com>
+Date:   Thu Aug 22 17:49:30 2024 +0530
+
+    g
+
+[33mcommit 70c2723c7191a22295a5af05fac2f560a57edb3d[m
+Merge: baf0f33 2b804f7
+Author: root <root@vps-a4a27082.vps.ovh.ca>
+Date:   Thu Aug 22 11:36:03 2024 +0000
+
+    html5
+    Merge branch 'main' of https://github.com/JAYKUMARGUPTA73/AERO-2.O
+
+[33mcommit 2b804f7846db042ca23b01ca4862783911a8a878[m
+Author: jay kumar gupta <jaynrk2002@gmail.com>
+Date:   Thu Aug 22 17:05:33 2024 +0530
+
+    camete html5
+
+[33mcommit baf0f33612401a3d97fad9befc2a6fd16c2ccfd6[m
+Merge: df09acb e3b55b8
+Author: root <root@vps-a4a27082.vps.ovh.ca>
+Date:   Thu Aug 22 11:03:15 2024 +0000
+
+    c2
+    Merge branch 'main' of https://github.com/JAYKUMARGUPTA73/AERO-2.O
+
+[33mcommit e3b55b8aa142939294cdd4138015b18839c37629[m
+Author: jay kumar gupta <jaynrk2002@gmail.com>
+Date:   Thu Aug 22 16:32:22 2024 +0530
+
+    camera
+
+[33mcommit df09acb8caa564dea362cfc53295cc9b12af7f65[m
+Merge: 44278a0 1641c90
+Author: root <root@vps-a4a27082.vps.ovh.ca>
+Date:   Thu Aug 22 10:43:47 2024 +0000
+
+    camera mode test
+    Merge branch 'main' of https://github.com/JAYKUMARGUPTA73/AERO-2.O
+
+[33mcommit 1641c90a7bd630bcc45a9e4f3d8f4fa7f62d84b2[m
+Author: jay kumar gupta <jaynrk2002@gmail.com>
+Date:   Thu Aug 22 16:11:01 2024 +0530
+
+    back camera
+
+[33mcommit 44278a0c9af99d36151ac1ab5945ad6fa37e22ed[m
+Merge: eaac722 599c5e5
+Author: root <root@vps-a4a27082.vps.ovh.ca>
+Date:   Wed Aug 21 18:16:59 2024 +0000
+
+    3rd merge Merge branch 'main' of https://github.com/JAYKUMARGUPTA73/AERO-2.O
+
+[33mcommit 599c5e539ee3a4a61420d77914023cd3df615af3[m
+Author: jay kumar gupta <jaynrk2002@gmail.com>
+Date:   Wed Aug 21 23:46:37 2024 +0530
+
+    eslint error
+
+[33mcommit eaac7224f6d896a32a6baccc54ebb953d182f456[m
+Merge: 991e68f 7369124
+Author: root <root@vps-a4a27082.vps.ovh.ca>
+Date:   Wed Aug 21 18:11:57 2024 +0000
+
+    commiting for 2nd time from terminal Merge branch 'main' of https://github.com/JAYKUMARGUPTA73/AERO-2.O
+
+[33mcommit 991e68fca24acf9bed088ae59405ac0060cbc033[m
+Author: root <root@vps-a4a27082.vps.ovh.ca>
+Date:   Wed Aug 21 18:10:14 2024 +0000
+
+    commit form server
+
+[33mcommit 7369124e70e227935be018bb48d9fecb797b9040[m
+Author: jay kumar gupta <jaynrk2002@gmail.com>
+Date:   Wed Aug 21 23:35:02 2024 +0530
+
+    notificaation added in mobile version
+
+[33mcommit c39eed4479e9fda629dc6b3083fc65c04f934024[m
+Author: jay kumar gupta <jaynrk2002@gmail.com>
+Date:   Wed Aug 21 18:05:51 2024 +0530
+
+    navbar mobile done
+
+[33mcommit 8fabc160091baae8b4ea77ed16169278e34a81af[m
+Merge: 3f21c63 98f51df
+Author: jay kumar gupta <jaynrk2002@gmail.com>
+Date:   Wed Aug 21 12:44:39 2024 +0530
+
+    Merge branch 'main' of https://github.com/JAYKUMARGUPTA73/AERO-2.O
+
+[33mcommit 3f21c635ed0b3d10c05091be05ba419488909414[m
+Author: jay kumar gupta <jaynrk2002@gmail.com>
+Date:   Wed Aug 21 12:44:26 2024 +0530
+
+    navigation done
+
+[33mcommit 98f51df2c90c0a0ac3a59aa12bf7fa6bcaff8b78[m
+Author: Divyanshu4fx <divyanshustacks123@gmail.com>
+Date:   Wed Aug 21 11:58:06 2024 +0530
+
+    home page
+
+[33mcommit 1fa496e8f251ece5febad7c9b1aeeaaecfb777b9[m
+Merge: 34dee1e 41e8811
+Author: Divyanshu4fx <divyanshustacks123@gmail.com>
+Date:   Tue Aug 20 23:59:01 2024 +0530
+
+    Merge branch 'main' of https://github.com/JAYKUMARGUPTA73/AERO-2.O
+
+[33mcommit 34dee1e7ea1514f65d435a72963adb62c3d20e62[m
+Author: Divyanshu4fx <divyanshustacks123@gmail.com>
+Date:   Tue Aug 20 23:58:43 2024 +0530
+
+    Scene
+
+[33mcommit 41e8811a0e4b0a82ecbd893b7dcc15f6089f424e[m
+Author: jay kumar gupta <jaynrk2002@gmail.com>
+Date:   Tue Aug 20 23:52:43 2024 +0530
+
+    meta data configured
+
+[33mcommit 15b73f255a4800e522e00e192f2056cbcef26a86[m
+Merge: bbe2bc2 774a2b7
+Author: Divyanshu4fx <divyanshustacks123@gmail.com>
+Date:   Tue Aug 20 23:15:57 2024 +0530
+
+    Merge branch 'main' of https://github.com/JAYKUMARGUPTA73/AERO-2.O
+
+[33mcommit bbe2bc2ecf49bee8867483e3b64d66f46331e58f[m
+Author: Divyanshu4fx <divyanshustacks123@gmail.com>
+Date:   Tue Aug 20 23:15:51 2024 +0530
+
+    mobile navbar
+
+[33mcommit 774a2b7d04369d4bf342b13a225eede6cdae034c[m
+Author: jay kumar gupta <jaynrk2002@gmail.com>
+Date:   Tue Aug 20 16:44:25 2024 +0530
+
+    meets back camera enabales and create meet functionality added
+
+[33mcommit de7a34ce1665c8d4ec0f0f095679cccf3ecf85b0[m
+Author: jay kumar gupta <jaynrk2002@gmail.com>
+Date:   Tue Aug 20 14:34:31 2024 +0530
+
+    domain configured
+
+[33mcommit b462413ef92fa6b4c0891e61bdc2d103ef5adaff[m
+Author: jay kumar gupta <jaynrk2002@gmail.com>
+Date:   Tue Aug 20 09:14:48 2024 +0530
+
+    new ip congigured
+
+[33mcommit 605330fce7edccbaa9469da3d27866d58095b3d4[m
+Author: jay kumar gupta <jaynrk2002@gmail.com>
+Date:   Sun Aug 18 19:30:46 2024 +0530
+
+    profile and member fixxed
+
+[33mcommit fcfd61c27df4ffc6834dd790b8a6915325eb9185[m
+Author: jay kumar gupta <jaynrk2002@gmail.com>
+Date:   Sun Aug 18 16:02:48 2024 +0530
+
+    gallery admin mode fixed with likes and view count,inductions error fixed,signup error fixed
+
+[33mcommit 9538a8c72e7f2170e98bd0aac5b582e41fb8a66f[m
+Author: jay kumar gupta <jaynrk2002@gmail.com>
+Date:   Sat Aug 17 22:20:07 2024 +0530
+
+    signup issue fixed
+
+[33mcommit 9e87177bc66ad13f8570f19a813a011fc1155334[m
+Author: jay kumar gupta <jaynrk2002@gmail.com>
+Date:   Sat Aug 17 18:11:39 2024 +0530
+
+    bolg page half done
+
+[33mcommit f246ff8a196094114c52ef3e8b8bc0c46f6bb3ad[m
+Author: jay kumar gupta <jaynrk2002@gmail.com>
+Date:   Sun Aug 11 02:01:23 2024 +0530
+
+    induction can be filled by member noe
+
+[33mcommit fb9691d4aea3de0ef964fd08207c07a60ddb3f26[m
+Author: Divyanshu4fx <divyanshustacks123@gmail.com>
+Date:   Sat Aug 10 01:23:20 2024 +0530
+
+    role undefined issue resolved
+
+[33mcommit d0c5aa1ef8460313bc9d1f16a794ae400cab49b4[m
+Author: Divyanshu4fx <divyanshustacks123@gmail.com>
+Date:   Sat Aug 10 00:25:53 2024 +0530
+
+    fractal tree issue resolved
+
+[33mcommit d213ed77184ef15744981e8bef43ea6299d84f78[m
+Merge: f15cf85 7c7fe43
+Author: jay kumar gupta <jaynrk2002@gmail.com>
+Date:   Sat Aug 10 00:00:45 2024 +0530
+
+    Merge branch 'main' of https://github.com/JAYKUMARGUPTA73/AERO-2.O
+
+[33mcommit f15cf853709f5e10138891fdab6d7a9af8d03e73[m
+Author: jay kumar gupta <jaynrk2002@gmail.com>
+Date:   Fri Aug 9 23:58:54 2024 +0530
+
+    fas
+
+[33mcommit 7c7fe4366902f3f96c3d0b52b1eeb8098d4cece7[m
+Author: pkkishan14 <urmaliyapk14@gmail.com>
+Date:   Fri Aug 9 09:16:52 2024 +0530
+
+    rc and drone pk
+
+[33mcommit d256c664495228bfb313cd4c3a27ae459190cfe8[m
+Author: pkkishan14 <urmaliyapk14@gmail.com>
+Date:   Thu Aug 8 22:47:29 2024 +0530
+
+    lksdnfk@pk
+
+[33mcommit feaac5553dcdf6b4ec7256b6ef8cd7c0944029e1[m
+Author: Divyanshu4fx <divyanshustacks123@gmail.com>
+Date:   Wed Aug 7 01:14:23 2024 +0530
+
+    blogs addcategory error resolved
+
+[33mcommit 12767d80d070a1527b1ee3251e56521d0b3fa124[m
+Author: Divyanshu4fx <divyanshustacks123@gmail.com>
+Date:   Tue Aug 6 23:03:34 2024 +0530
+
+    All same Loader and HomePage Responsive
+
+[33mcommit dd4d7153a5b4dfcd360dc11c1fda3a9f513f2982[m
+Author: jay kumar gupta <jaynrk2002@gmail.com>
+Date:   Mon Aug 5 15:50:50 2024 +0530
+
+    admin route protected
+
+[33mcommit 348003e8d9ac466599fb9d4ed32a88f810b206c0[m
+Author: jay kumar gupta <jaynrk2002@gmail.com>
+Date:   Mon Aug 5 13:35:19 2024 +0530
+
+    protected route for admin blogs achieved
+
+[33mcommit 58cae1e85912af60fd4ed69317ad391ef7181155[m
+Author: Divyanshu4fx <divyanshustacks123@gmail.com>
+Date:   Mon Aug 5 03:31:20 2024 +0530
+
+    Responsive
+
+[33mcommit 8b0681ff0a655bb962c7f3507a5e572f613772ae[m
+Author: Divyanshu4fx <divyanshustacks123@gmail.com>
+Date:   Mon Aug 5 03:00:31 2024 +0530
+
+    Home Page Responsive
+
+[33mcommit 40a1d93708f747eb6b9a2e42924cf30c5dc17ef7[m
+Author: jay kumar gupta <jaynrk2002@gmail.com>
+Date:   Mon Aug 5 01:03:00 2024 +0530
+
+    dsfsdf
+
+[33mcommit 4e5535570b1c3c05fca00c36b4865e5a57edecac[m
+Author: jay kumar gupta <jaynrk2002@gmail.com>
+Date:   Mon Aug 5 00:49:25 2024 +0530
+
+    dvfdsf
+
+[33mcommit a4039e5c816220b11deabeb3f81d24ed7ceec300[m
+Author: jay kumar gupta <jaynrk2002@gmail.com>
+Date:   Mon Aug 5 00:42:37 2024 +0530
+
+    adbusk
+
+[33mcommit f05d046e9806f310e721f8b6c93d1a039222dbd0[m
+Author: jay kumar gupta <jaynrk2002@gmail.com>
+Date:   Mon Aug 5 00:36:29 2024 +0530
+
+    dfkjbvsdjfv
+
+[33mcommit 57f475d76e227665b3246a3f732498fe9b09b1f5[m
+Author: jay kumar gupta <jaynrk2002@gmail.com>
+Date:   Mon Aug 5 00:24:52 2024 +0530
+
+    adskfjndf
+
+[33mcommit 57c5725cbee25b4b6d5a7f22cd62593d503fa6db[m
+Author: jay kumar gupta <jaynrk2002@gmail.com>
+Date:   Mon Aug 5 00:19:54 2024 +0530
+
+    hey
+
+[33mcommit 510f4a25fc1699b361a2d3749cd504fc1044d2f0[m
+Merge: 31e2f11 da67cfa
+Author: jay kumar gupta <jaynrk2002@gmail.com>
+Date:   Sun Aug 4 23:28:46 2024 +0530
+
+    Merge branch 'main' of https://github.com/JAYKUMARGUPTA73/AERO-2.O
+
+[33mcommit 31e2f11c575e9c3968e9841dd68310490f3a69aa[m
+Author: jay kumar gupta <jaynrk2002@gmail.com>
+Date:   Sun Aug 4 23:28:36 2024 +0530
+
+    index
+
+[33mcommit da67cfab86f5688b607186745a73325b48e0e43a[m
+Author: Divyanshu4fx <divyanshustacks123@gmail.com>
+Date:   Sun Aug 4 23:20:34 2024 +0530
+
+    dev and prod routes
+
+[33mcommit 946e1ed1430013f46edd1cde305023116a97bb7d[m
+Author: Divyanshu4fx <divyanshustacks123@gmail.com>
+Date:   Sun Aug 4 18:16:40 2024 +0530
+
+    dot env meets
+
+[33mcommit 30b16cffaa17ab5e449030188dde71ace036efdd[m
+Author: Divyanshu4fx <divyanshustacks123@gmail.com>
+Date:   Sun Aug 4 16:18:24 2024 +0530
+
+    env wala kam
+
+[33mcommit a1c5ba689819af7d9be5e1939ab54622f42b8cc7[m
+Author: Divyanshu4fx <divyanshustacks123@gmail.com>
+Date:   Sun Aug 4 15:51:07 2024 +0530
+
+    loader
+
+[33mcommit 838ba72dad247c544e1da1f7d9da4a6514f94472[m
+Merge: 56906e2 c1f7336
+Author: Divyanshu4fx <divyanshustacks123@gmail.com>
+Date:   Sun Aug 4 03:19:20 2024 +0530
+
+    Merge branch 'main' of https://github.com/JAYKUMARGUPTA73/AERO-2.O
+
+[33mcommit 56906e2f5169346ffeaa2ab646689eab4dc76524[m
+Author: Divyanshu4fx <divyanshustacks123@gmail.com>
+Date:   Sun Aug 4 03:18:03 2024 +0530
+
+    Some Work
+
+[33mcommit c1f733688482c0c20959a1daf6e5d29158d6f4fd[m
+Author: jay kumar gupta <jaynrk2002@gmail.com>
+Date:   Sun Aug 4 01:52:08 2024 +0530
+
+    hey
+
+[33mcommit 3ba7864d1aa2f15f2d5350d3cc7eb5e45848b2d1[m
+Author: jay kumar gupta <jaynrk2002@gmail.com>
+Date:   Sun Aug 4 01:10:55 2024 +0530
+
+    Changing ts to js
+
+[33mcommit afc28f209be337ec90457be1d0355e445308487f[m
+Author: jay kumar gupta <jaynrk2002@gmail.com>
+Date:   Sun Aug 4 00:16:43 2024 +0530
+
+    hy
+
+[33mcommit 04e6f6889feca880c697e07d9a7654f2b485a0c8[m
+Author: jay kumar gupta <jaynrk2002@gmail.com>
+Date:   Sun Aug 4 00:13:49 2024 +0530
+
+    hey jay
+
+[33mcommit f6200123c1cb0dc6d8010c0c0351b0f9149fc2a3[m
+Merge: 8865daf 648e363
+Author: jay kumar gupta <jaynrk2002@gmail.com>
+Date:   Sun Aug 4 00:07:38 2024 +0530
+
+    Merge branch 'main' of https://github.com/JAYKUMARGUPTA73/AERO-2.O
+
+[33mcommit 8865daf0a51aec12d2e3d44329b03f0df22a6a6a[m
+Author: jay kumar gupta <jaynrk2002@gmail.com>
+Date:   Sun Aug 4 00:07:27 2024 +0530
+
+    build tested
+
+[33mcommit 648e36340979f5b0c5812dd42b70e7c535cdd208[m
+Author: Divyanshu4fx <divyanshustacks123@gmail.com>
+Date:   Fri Aug 2 23:53:12 2024 +0530
+
+    Meets@divyanshu
+
+[33mcommit 48fd40724d5fa7861e9bc29fbc35242625c2aa2b[m
+Merge: 29c650d 6f56540
+Author: Divyanshu4fx <divyanshustacks123@gmail.com>
+Date:   Fri Aug 2 01:05:09 2024 +0530
+
+    merge
+
+[33mcommit 29c650da0ea7e4d98aadd8fb9a2007933be3933c[m
+Author: Divyanshu4fx <divyanshustacks123@gmail.com>
+Date:   Fri Aug 2 01:01:48 2024 +0530
+
+    induction@divyanshu
+
+[33mcommit 6f5654081472b988470e5796a0b91b892404a6c1[m
+Merge: e4d52e4 d53a330
+Author: jay kumar gupta <jaynrk2002@gmail.com>
+Date:   Fri Aug 2 00:54:34 2024 +0530
+
+    Merge branch 'main' of https://github.com/JAYKUMARGUPTA73/AERO-2.O
+
+[33mcommit e4d52e43dbe2b9866334d61c5f787f4661369297[m
+Author: jay kumar gupta <jaynrk2002@gmail.com>
+Date:   Fri Aug 2 00:54:22 2024 +0530
+
+    hey boyy
+
+[33mcommit d53a330df5441a97c191a2a712a079e23d6fc086[m
+Merge: 0cbc409 d2b8387
+Author: Divyanshu4fx <divyanshustacks123@gmail.com>
+Date:   Thu Aug 1 21:54:54 2024 +0530
+
+    Merge branch 'main' of https://github.com/JAYKUMARGUPTA73/AERO-2.O
+
+[33mcommit 0cbc409b8eb0f86523536929ce4f55c105582a7e[m
+Author: Divyanshu4fx <divyanshustacks123@gmail.com>
+Date:   Thu Aug 1 21:54:41 2024 +0530
+
+    login button
+
+[33mcommit d2b838784d0a70e9a4ffc65cae9bd9c3772facd5[m
+Merge: d4982c4 cda8432
+Author: jay kumar gupta <jaynrk2002@gmail.com>
+Date:   Thu Aug 1 21:51:27 2024 +0530
+
+    Merge branch 'main' of https://github.com/JAYKUMARGUPTA73/AERO-2.O
+
+[33mcommit d4982c454145c2412d2ff59bc5ba9c6952638ec6[m
+Author: jay kumar gupta <jaynrk2002@gmail.com>
+Date:   Thu Aug 1 21:50:34 2024 +0530
+
+    sdknmadf
+
+[33mcommit cda843268186b8d2bf8c37969c066c9f1d97a865[m
+Author: Divyanshu4fx <divyanshustacks123@gmail.com>
+Date:   Thu Aug 1 21:31:52 2024 +0530
+
+    minor changes Page Reloading and Redirecting
+
+[33mcommit 5016146ad5dfef798bb8085de19a3ac7cac3a367[m
+Author: Divyanshu4fx <divyanshustacks123@gmail.com>
+Date:   Wed Jul 31 23:52:45 2024 +0530
+
+    Android NavBar Polish,Font change and Loading Spinner Added
+
+[33mcommit 63dfe46617c2dea9287516920a75204815e72a2e[m
+Author: jay kumar gupta <jaynrk2002@gmail.com>
+Date:   Sat Jul 27 11:02:40 2024 +0530
+
+    completed till members
+
+[33mcommit 0ddbefc79e414877178c723228afd01e5fb83856[m
+Author: jay kumar gupta <jaynrk2002@gmail.com>
+Date:   Wed Jul 17 22:03:40 2024 +0530
+
+    second commit
+
+[33mcommit 657d9a6986083dea77306d0293adcf65fd6b7eb3[m
+Author: jay kumar gupta <jaynrk2002@gmail.com>
+Date:   Mon Jun 17 16:17:20 2024 +0530
+
+    first commit
