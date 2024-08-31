@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import Message from "@/components/Message";
 import { useParams } from "next/navigation";
 import {
@@ -51,6 +51,7 @@ const InductionForm = () => {
   const [induction, setInduction] = useState(null);
   const [loading, setLoading] = useState(true);
   const [currentStage, setCurrentStage] = useState(0);
+  const [previews, setPreviews] = useState([]);
 
   useEffect(() => {
     const storedId = localStorage.getItem("_id");
@@ -91,10 +92,40 @@ const InductionForm = () => {
       newAnswers[index] = { ...newAnswers[index], answer: value };
       setFormData((prev) => ({ ...prev, answers: newAnswers }));
     } else if (name === "ppt") {
+      handlePreviewFileInputChange(e);
       setFiles(files);
     } else {
       setFormData((prev) => ({ ...prev, [name]: value }));
     }
+  };
+
+  const handlePreviewFileInputChange = (event) => {
+    const files = Array.from(event.target.files);
+    const newPreviews = [];
+
+    files.forEach((file) => {
+      const reader = new FileReader();
+
+      reader.onload = (e) => {
+        if (file.type.startsWith('image/')) {
+          newPreviews.push({ type: 'image', src: e.target.result });
+        } else if (file.type === 'application/pdf') {
+          newPreviews.push({ type: 'pdf', name: file.name });
+        } else if (file.type.startsWith('video/')) {
+          newPreviews.push({ type: 'video', src: URL.createObjectURL(file) });
+        }
+        
+        if (newPreviews.length === files.length) {
+          setPreviews(newPreviews);
+        }
+      };
+
+      if (file.type.startsWith('image/') || file.type === 'application/pdf') {
+        reader.readAsDataURL(file);
+      } else if (file.type.startsWith('video/')) {
+        reader.readAsArrayBuffer(file);
+      }
+    });
   };
 
   const [message, setMessage] = useState("");
@@ -156,28 +187,24 @@ const InductionForm = () => {
       window.location.href = "/";
     } catch (error) {
       setError(true);
-      // console.error("Error submitting form:", error);
-      // alert("Failed to submit application. Please try again.");
     } finally {
       setSubmiting(false);
     }
   };
 
   const nextStage = () => {
-    // First Pass
     if (
-      currentStage == 0 &&
-      !formData.name &&
-      !formData.email &&
-      !formData.rollNumber &&
-      !formData.branch &&
-      !formData.year &&
-      !formData.phoneNumber
+      currentStage === 0 &&
+  (!formData.name || formData.name.trim() === '') ||
+  (!formData.email || formData.email.trim() === '') ||
+  (!formData.rollNumber || formData.rollNumber.trim() === '') ||
+  (!formData.branch || formData.branch.trim() === '') ||
+  (!formData.year || formData.year.trim() === '') ||
+  (!formData.phoneNumber || formData.phoneNumber.trim() === '')
     ) {
       _set1stPass(false);
       return;
     } else _set1stPass(true);
-    // Second Pass
     if (
       currentStage == 1 &&
       formData.answers.some((item) => item.answer === "")
@@ -222,7 +249,7 @@ const InductionForm = () => {
           <div className="bg-gray-900 p-6 rounded-lg">
             {!_1stPass && (
               <p className="text-sm text-red-500">
-                **Please fill all feilds...
+                **Please fill all fields...
               </p>
             )}
             <h2 className="text-2xl font-semibold text-blue-400 mb-4 flex items-center">
@@ -266,15 +293,22 @@ const InductionForm = () => {
                 className="w-full p-3 rounded bg-gray-800 text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 required
               />
-              <input
-                type="text"
-                name="year"
-                placeholder="Year of Study"
-                value={formData.year}
-                onChange={handleInputChange}
-                className="w-full p-3 rounded bg-gray-800 text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                required
-              />
+              <select
+  name="year"
+  value={formData.year}
+  onChange={handleInputChange}
+  className="w-full p-3 rounded bg-gray-800 text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+  required
+>
+  <option value="" disabled>
+    Year of Study
+  </option>
+  <option value="1st">1st Year</option>
+  <option value="2nd">2nd Year</option>
+  <option value="3rd">3rd Year</option>
+  <option value="4th">4th Year</option>
+</select>
+
               <input
                 type="tel"
                 name="phoneNumber"
@@ -292,7 +326,7 @@ const InductionForm = () => {
           <div className="bg-gray-900 p-6 rounded-lg">
             {!_2ndPass && (
               <p className="text-sm text-red-500">
-                **Please fill all feilds...
+                **Please fill all fields...
               </p>
             )}
             <h2 className="text-2xl font-semibold text-green-400 mb-4 flex items-center">
@@ -321,37 +355,48 @@ const InductionForm = () => {
           <div className="bg-gray-900 p-6 rounded-lg">
             {!_3rdPass && (
               <p className="text-sm text-red-500">
-                **Please fill all feilds...
+                **Please fill all fields...
               </p>
             )}
             <h2 className="text-2xl font-semibold text-purple-400 mb-4 flex items-center">
               <FaCogs className="mr-2 text-purple-500" />
               Additional Information
             </h2>
-            <div className="space-y-6">
-              <textarea
-                name="queries"
-                placeholder="Any queries?"
-                value={formData.queries}
-                onChange={handleInputChange}
-                className="w-full p-3 rounded bg-gray-800 text-gray-200 focus:outline-none focus:ring-2 focus:ring-purple-500"
-                rows="3"
-              ></textarea>
-              <div className="w-full">
-                <label className="block text-gray-200 mb-2">
-                  Please upload any image, PDF, or video showcasing your skill:
-                </label>
-                <input
-                  type="file"
-                  name="ppt"
-                  onChange={handleInputChange}
-                  className="w-full p-3 rounded bg-gray-800 text-gray-200 focus:outline-none focus:ring-2 focus:ring-purple-500"
-                  multiple
-                  accept="image/*,application/pdf,video/*"
-                />
-              </div>
-
-              <select
+            <div className="w-full space-y-4">
+      <label className="block text-gray-200 mb-2">
+        Please upload any image, PDF, or video showcasing your skill: (optional)
+      </label>
+      <input
+        type="file"
+        name="ppt"
+        onChange={handleInputChange}
+        className="w-full p-3 rounded bg-gray-800 text-gray-200 focus:outline-none focus:ring-2 focus:ring-purple-500"
+        multiple
+        accept="image/*,application/pdf,video/*"
+      />
+      {previews.length > 0 && (
+  <div className="mt-4 space-y-2">
+    <h3 className="text-lg font-semibold text-gray-200">File Previews:</h3>
+    <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+      {previews.map((preview, index) => (
+        <div key={index} className="border border-gray-600 rounded p-2">
+          {preview.type === 'image' && (
+            <img src={preview.src} alt="Preview" className="w-full h-40 object-cover" />
+          )}
+          {preview.type === 'pdf' && (
+            <div className="flex items-center justify-center h-40 bg-gray-700">
+              <p className="text-gray-200">{preview.name}</p>
+            </div>
+          )}
+          {preview.type === 'video' && (
+            <video src={preview.src} controls className="w-full h-40 object-cover" />
+          )}
+        </div>
+      ))}
+    </div>
+  </div>
+)}
+<select
                 name="team_preference"
                 value={formData.team_preference}
                 onChange={handleInputChange}
@@ -364,39 +409,7 @@ const InductionForm = () => {
                 <option value="Rc Planes">RC Planes</option>
               </select>
 
-              <textarea
-                name="hobbies"
-                placeholder="Hobbies"
-                value={formData.hobbies}
-                onChange={handleInputChange}
-                className="w-full p-3 rounded bg-gray-800 text-gray-200 focus:outline-none focus:ring-2 focus:ring-purple-500"
-                rows="3"
-              ></textarea>
-              <textarea
-                name="skills"
-                placeholder="Skills"
-                value={formData.skills}
-                onChange={handleInputChange}
-                className="w-full p-3 rounded bg-gray-800 text-gray-200 focus:outline-none focus:ring-2 focus:ring-purple-500"
-                rows="3"
-              ></textarea>
-              <textarea
-                name="experience"
-                placeholder="Relevant Experience"
-                value={formData.experience}
-                onChange={handleInputChange}
-                className="w-full p-3 rounded bg-gray-800 text-gray-200 focus:outline-none focus:ring-2 focus:ring-purple-500"
-                rows="3"
-              ></textarea>
-              <textarea
-                name="expectations"
-                placeholder="Expectations from the club"
-                value={formData.expectations}
-                onChange={handleInputChange}
-                className="w-full p-3 rounded bg-gray-800 text-gray-200 focus:outline-none focus:ring-2 focus:ring-purple-500"
-                rows="3"
-              ></textarea>
-            </div>
+    </div>
           </div>
         );
       default:
@@ -406,7 +419,6 @@ const InductionForm = () => {
 
   return (
     <div className="min-h-screen bg-gray-950 text-gray-200 relative overflow-hidden">
-      {/* Background Animation */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="stars"></div>
         <div className="twinkling"></div>
@@ -457,50 +469,52 @@ const InductionForm = () => {
                     type="button"
                     onClick={handleNext}
                     className="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-300 flex items-center ml-auto"
-                  >
-                    Next
-                    <FaArrowRight className="ml-2" />
-                  </button>
-                ) : (
-                  <button
-                    type="submit"
-                    className="bg-green-600 m-2 text-white py-2 px-4 rounded-lg hover:bg-green-700 transition duration-300 flex items-center ml-auto"
-                    disabled={submiting}
-                  >
-                    {submiting ? (
-                      <div
-                        className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-e-transparent align-[-0.125em] text-surface motion-reduce:animate-[spin_1.5s_linear_infinite] dark:text-white"
-                        role="status"
-                      >
-                        <span className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">
-                          Loading...
-                        </span>
-                      </div>
-                    ) : (
-                      <FaPlane className="m-2" />
-                    )}
-                    &nbsp;Submit Application
-                  </button>
-                )}
-              </div>
-            </form>
+                    >
+                      Next
+                      <FaArrowRight className="ml-2" />
+                    </button>
+                  ) : (
+                    <button
+                      type="submit"
+                      className={`bg-green-600 m-2 text-white py-2 px-4 rounded-lg hover:bg-green-700 transition duration-300 flex items-center ml-auto ${
+                        !induction.I_active_status ? "cursor-not-allowed opacity-50" : ""
+                      }`}
+                      disabled={submiting || !induction.I_active_status}
+                    >
+                      {submiting ? (
+                        <div
+                          className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-e-transparent align-[-0.125em] text-surface motion-reduce:animate-[spin_1.5s_linear_infinite] dark:text-white"
+                          role="status"
+                        >
+                          <span className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">
+                            Loading...
+                          </span>
+                        </div>
+                      ) : (
+                        <FaPlane className="m-2" />
+                      )}
+                      &nbsp;Submit Application
+                    </button>
+                  )}
+                </div>
+              </form>
+            </div>
+          </div>
+  
+          {/* Progress Indicator */}
+          <div className="mt-8 flex justify-center">
+            {[0, 1, 2].map((stage) => (
+              <div
+                key={stage}
+                className={`w-4 h-4 rounded-full mx-2 ${
+                  currentStage >= stage ? "bg-blue-500" : "bg-gray-600"
+                }`}
+              ></div>
+            ))}
           </div>
         </div>
-
-        {/* Progress Indicator */}
-        <div className="mt-8 flex justify-center">
-          {[0, 1, 2].map((stage) => (
-            <div
-              key={stage}
-              className={`w-4 h-4 rounded-full mx-2 ${
-                currentStage >= stage ? "bg-blue-500" : "bg-gray-600"
-              }`}
-            ></div>
-          ))}
-        </div>
       </div>
-    </div>
-  );
-};
-
-export default InductionForm;
+    );
+  };
+  
+  export default InductionForm;
