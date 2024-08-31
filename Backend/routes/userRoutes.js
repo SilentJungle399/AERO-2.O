@@ -9,6 +9,7 @@ const {
   saveParticipants,
   getInductionforSelections,
   sendNotification,
+  fetchInductie,
 } = require("../controllers/InductionController");
 const {
   create_meet,
@@ -65,6 +66,7 @@ userRoutes.post("/:id/notifications",showOneNotification);
 
 userRoutes.post("/createinduction", authMiddleware(["admin"]), createInduction);
 userRoutes.get("/getallinduction", getAllInductions);
+userRoutes.get("/induction/:Iid/inductee/:uid", fetchInductie);
 userRoutes.get("/getinduction/:id", getInduction);
 userRoutes.get("/getinductionforselectingstudent/:id", getInductionforSelections);
 userRoutes.post(
@@ -73,6 +75,8 @@ userRoutes.post(
   saveParticipants
 );
 userRoutes.post("/sendnotification/:id",authMiddleware(["admin"]),upload.array('notification_file',100),galleryUploadMiddleware,sendNotification);
+
+
 
 //////////////////////////////////////////////////////////////////////////////////////////
 

@@ -93,6 +93,43 @@ const sendNotification = async (req, res) => {
   }
 };
 
+
+const fetchInductie = async (req, res) => {
+  const { Iid, uid } = req.params;
+
+  try {
+    // Find the induction by ID
+    const induction = await InductionModel.findById(Iid);
+
+    if (!induction) {
+      return res.status(404).json({ message: 'Induction not found' });
+    }
+
+    // Find the inductee ID that matches the user ID in Inducties_id array
+    const inducteeId = induction.Inducties_id.find(inductee => inductee.toString() === uid);
+
+    if (!inducteeId) {
+      return res.status(404).json({ message: 'Inductee not found in this induction' });
+    }
+
+    // Fetch the inductee's details from the InductiesModel using the found ID
+    const inductee = await InductiesModel.findById(inducteeId);
+
+    if (!inductee) {
+      return res.status(404).json({ message: 'Inductee details not found' });
+    }
+
+    // Return the inductee's details
+    return res.status(200).json(inductee);
+
+  } catch (error) {
+    console.error('Error fetching inductee:', error);
+    return res.status(500).json({ message: 'Server error' });
+  }
+};
+
+
+
 const saveParticipants = async (req, res) => {
   try {
     const inId = req.params.id;
@@ -270,6 +307,7 @@ const getInductionforSelections = async (req, res) => {
 };
 
 module.exports = {
+  fetchInductie,
   createInduction,
   getAllInductions,
   saveParticipants,

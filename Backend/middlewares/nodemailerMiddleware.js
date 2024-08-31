@@ -272,7 +272,7 @@ const sendSelectionConfirmationEmail = (uid,name,email, inductionName, selection
 
                     <div class="badge-box">
                         <p>Share your achievement with your friends!</p>
-                        <a href="http://localhost:5000/aero-pride-of-houner/${uid}" target="_blank">Get Your Instagram Share Badge</a>
+                        <a href="https://aeronitkkr.in/aero-pride-of-houner/${uid}" target="_blank">Get Your Instagram Share Badge</a>
                     </div>
 
                     <div class="info-box">
