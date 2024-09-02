@@ -108,7 +108,7 @@ const sendPasswordResetEmail = async (email, resetToken) => {
     });
 };
 
-const sendSelectionConfirmationEmail = (uid,name,email, inductionName, selectionDate, rollNumber, branch, year, phoneNumber, teamPreference, fileDownloadURLs) => {
+const sendSelectionConfirmationEmail = (uid,Iid,name,email, inductionName, selectionDate, rollNumber, branch, year, phoneNumber, teamPreference, fileDownloadURLs) => {
     
     const fileHtml = fileDownloadURLs.map(url => {
         // Extract file extension
@@ -272,7 +272,7 @@ const sendSelectionConfirmationEmail = (uid,name,email, inductionName, selection
 
                     <div class="badge-box">
                         <p>Share your achievement with your friends!</p>
-                        <a href="https://aeronitkkr.in/aero-pride-of-houner/${uid}" target="_blank">Get Your Instagram Share Badge</a>
+                        <a href="https://aeronitkkr.in/aero-pride-of-honor/${Iid}/${uid}" target="_blank">Get Your Instagram Share Badge</a>
                     </div>
 
                     <div class="info-box">

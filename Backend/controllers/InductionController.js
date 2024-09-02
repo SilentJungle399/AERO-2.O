@@ -71,7 +71,8 @@ const sendNotification = async (req, res) => {
 
         // Send email to participant
         await sendSelectionConfirmationEmail(
-          participant.user_id,
+          participantId,
+          In_id,
           participant.name,
           user.email,
           induction.I_name,
@@ -100,13 +101,18 @@ const fetchInductie = async (req, res) => {
   try {
     // Find the induction by ID
     const induction = await InductionModel.findById(Iid);
+    // console.log(induction)
+    console.log(uid)
 
     if (!induction) {
       return res.status(404).json({ message: 'Induction not found' });
     }
 
-    // Find the inductee ID that matches the user ID in Inducties_id array
-    const inducteeId = induction.Inducties_id.find(inductee => inductee.toString() === uid);
+    const uidString = uid.toString();
+    const inducteeId = induction.Inducties_id.find(inductee => {
+      console.log("Checking inductee:", inductee.toString(), "against uid:", uidString);
+      return inductee.toString() === uidString;
+    });
 
     if (!inducteeId) {
       return res.status(404).json({ message: 'Inductee not found in this induction' });
