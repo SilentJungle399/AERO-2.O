@@ -117,11 +117,14 @@ userSchema.pre("save", async function (next) {
 });
 
 // Generate JWT
-userSchema.methods.generateAuthToken = function () {
+userSchema.methods.generateAuthToken = function ({ expiresIn }) {
+  console.log("expiresIn from user model");
+  console.log(expiresIn);
+
   return jwt.sign(
     { id: this._id, email: this.email, role: this.role },
     process.env.JWT_SECRET,
-    { expiresIn: "1h" }
+    { expiresIn } // Use the expiresIn parameter directly
   );
 };
 

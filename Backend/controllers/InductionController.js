@@ -71,7 +71,8 @@ const sendNotification = async (req, res) => {
 
         // Send email to participant
         await sendSelectionConfirmationEmail(
-          participant.user_id,
+          participantId,
+          In_id,
           participant.name,
           user.email,
           induction.I_name,
@@ -92,6 +93,48 @@ const sendNotification = async (req, res) => {
     res.status(500).json({ error: "Failed to send notifications" });
   }
 };
+
+
+const fetchInductie = async (req, res) => {
+  const { Iid, uid } = req.params;
+
+  try {
+    // Find the induction by ID
+    const induction = await InductionModel.findById(Iid);
+    // console.log(induction)
+    console.log(uid)
+
+    if (!induction) {
+      return res.status(404).json({ message: 'Induction not found' });
+    }
+
+    const uidString = uid.toString();
+    const inducteeId = induction.Inducties_id.find(inductee => {
+      console.log("Checking inductee:", inductee.toString(), "against uid:", uidString);
+      return inductee.toString() === uidString;
+    });
+
+    if (!inducteeId) {
+      return res.status(404).json({ message: 'Inductee not found in this induction' });
+    }
+
+    // Fetch the inductee's details from the InductiesModel using the found ID
+    const inductee = await InductiesModel.findById(inducteeId);
+
+    if (!inductee) {
+      return res.status(404).json({ message: 'Inductee details not found' });
+    }
+
+    // Return the inductee's details
+    return res.status(200).json(inductee);
+
+  } catch (error) {
+    console.error('Error fetching inductee:', error);
+    return res.status(500).json({ message: 'Server error' });
+  }
+};
+
+
 
 const saveParticipants = async (req, res) => {
   try {
@@ -270,6 +313,7 @@ const getInductionforSelections = async (req, res) => {
 };
 
 module.exports = {
+  fetchInductie,
   createInduction,
   getAllInductions,
   saveParticipants,

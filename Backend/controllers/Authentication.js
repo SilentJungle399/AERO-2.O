@@ -390,7 +390,7 @@ const Login = async (req, res) => {
         expiresIn = 6 * 60 * 60 * 1000; // 6 hours in milliseconds
         break;
       case "blogger":
-        expiresIn = 24 * 60 * 60 * 1000; // 1 day in milliseconds
+        expiresIn = 5*24 * 60 * 60 * 1000; // 1 day in milliseconds
         break;
       default:
         expiresIn = 50 * 24 * 60 * 60 * 1000; // 50 days in milliseconds

@@ -11,6 +11,10 @@ const inductionSchema = new mongoose.Schema({
         type:String,
         default:""
     },
+    instagram_badge:{
+        type:String,
+        default:""
+    },
     name:{
         type:String,
         default:""
