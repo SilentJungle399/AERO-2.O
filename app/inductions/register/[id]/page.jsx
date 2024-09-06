@@ -182,7 +182,7 @@ const InductionForm = () => {
       currentStage == 1 &&
       formData.answers.some((item) => item.answer === "")
     ) {
-      _set2ndPass(false);
+      _set2ndPass(true); //should be false but here to check for 2Pass input
       return;
     } else _set2ndPass(true);
     setCurrentStage((prev) => Math.min(prev + 1, 2));
@@ -362,8 +362,9 @@ const InductionForm = () => {
                 </option>
                 <option value="Drones">Drones</option>
                 <option value="Rc Planes">RC Planes</option>
+                <option value="Media">Media</option>
+                <option value="WebDev">WebDev</option>
               </select>
-
               <textarea
                 name="hobbies"
                 placeholder="Hobbies"
