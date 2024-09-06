@@ -252,41 +252,52 @@ const sendSelectionConfirmationEmail = (uid,Iid,name,email, inductionName, selec
         </head>
         <body>
             <div class="container">
-                <div class="header">
-                    <h1>🏅Congratulations, ${name}!</h1>
-                </div>
-                <div class="content">
-                    <h2>Welcome to the AeroModelliing Club 🛩️🛩️🛩️!</h2>
-                    <p>We're thrilled to inform you that you've been selected for the <strong>${inductionName}</strong> held on <strong>${selectionDate}</strong>. Your journey with us has just begun, and we're excited to see the amazing things you'll accomplish!</p>
-                    
-                    <div class="info-box">
-                        <h2>Your Details:</h2>
-                        <ul>
-                            <li><strong>Roll Number:</strong> ${rollNumber}</li>
-                            <li><strong>Branch:</strong> ${branch}</li>
-                            <li><strong>Year:</strong> ${year}</li>
-                            <li><strong>Phone Number:</strong> ${phoneNumber}</li>
-                            <li><strong>Team Preference:</strong> ${teamPreference}</li>
-                        </ul>
-                    </div>
+    <div class="header">
+        <h1>🏅 Congratulations, ${name}!</h1>
+    </div>
+    <div class="content">
+        <h2>Welcome to the AeroModelling Club!!</h2>
+        <p>We're absolutely delighted to announce that you have been selected for the <strong>${inductionName}</strong> held on <strong>${selectionDate}</strong>. Your skills, dedication, and enthusiasm have earned you a place in this prestigious club, and we can’t wait to see how you’ll soar as part of our team. You’re now joining a legacy of creativity, innovation, and engineering excellence. Get ready for an exciting journey where the sky is truly the limit!</p>
+        
+        <div class="info-box">
+            <h2>Your Details:</h2>
+            <ul>
+                <li><strong>Roll Number:</strong> ${rollNumber}</li>
+                <li><strong>Branch:</strong> ${branch}</li>
+                <li><strong>Year:</strong> ${year}</li>
+                <li><strong>Phone Number:</strong> ${phoneNumber}</li>
+                <li><strong>Team Preference:</strong> ${teamPreference}</li>
+            </ul>
+        </div>
 
-                    <div class="badge-box">
-                        <p>Share your achievement with your friends!</p>
-                        <a href="https://aeronitkkr.in/aero-pride-of-honor/${Iid}/${uid}" target="_blank">Get Your Instagram Share Badge</a>
-                    </div>
+        <div class="info-box">
+            <h2>What Comes Next:</h2>
+            <p>We are excited to see your active participation in upcoming projects, workshops, and events. As a member, you’ll have the chance to work with cutting-edge technologies, build incredible models, and compete in national and international competitions. Don’t hesitate to reach out to your team leads and mentors, who are here to guide you every step of the way. Make the most of this opportunity to collaborate with like-minded peers and hone your technical and leadership skills.</p>
+        </div>
 
-                    <div class="info-box">
-                        <h2>Downloadable Files:</h2>
-                        ${fileHtml}
-                    </div>
+        <div class="info-box">
+            <h2>Downloadable Files:</h2>
+            <p>We’ve attached some important files below that will help you get started. Please go through the guidelines and onboarding material to get familiar with our processes:</p>
+            ${fileHtml}
+        </div>
 
-                    <p>A big cheers 👏 for your enthusiasm and dedication🔥. If you have any questions, feel free to reach out to us.</p>
-                </div>
-                <div class="footer">
-                    <p>Best regards,<br>The Aeromodelling Induction Team</p>
-                    <p><a href="#">Visit our website</a> | <a href="#">Follow us on Instagram</a></p>
-                </div>
-            </div>
+        <div class="info-box">
+            <h2>Stay Connected:</h2>
+            <p>As part of the AeroModelling family, communication is key. Stay updated with the latest news, events, and team discussions by following us on our social media channels and website:</p>
+            <ul>
+                <li><a href="https://aeronitkkr.in">Visit our official website</a></li>
+                <li><a href="https://www.instagram.com/aeroclub.nitkkr/">Follow us on Instagram</a></li>
+            </ul>
+        </div>
+
+        <p>A big round of applause 👏 for your efforts and energy! We can’t wait to see you in action and be part of this fantastic journey ahead. If you have any queries or need support, our team is always here to assist you. Feel free to reach out to us at any time.</p>
+    </div>
+    
+    <div class="footer">
+        <p>Best regards,<br>The Aeromodelling Induction Team,<br>Nit kurukshetra</p>
+    </div>
+</div>
+
         </body>
         </html>
     `;

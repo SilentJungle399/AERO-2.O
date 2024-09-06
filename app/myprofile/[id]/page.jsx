@@ -158,7 +158,7 @@ const MyProfile = () => {
 <form onSubmit={handleSubmit} className="space-y-6 text-gray-200">
   <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
     {Object.keys(user)
-      .filter(key => key !== 'profile_pic' && key !== '_id' && key !== 'email' && key !== 'roll_no' && key !== 'college_name' && key !== 'session' && key !== 'branch' && key !== 'current_post' && key !== 'team_name') // Exclude fields
+      .filter(key => key !== 'profile_pic' && key !== '_id' && key !== 'email' && key !== 'roll_no' && key !== 'college_name'  && key !== 'branch' && key !== 'current_post' && key !== 'team_name') // Exclude fields
       .map(key => (
         <div key={key}>
           <label className="block text-sm font-medium text-gray-300 capitalize">
