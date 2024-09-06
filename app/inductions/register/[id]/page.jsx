@@ -114,7 +114,7 @@ const InductionForm = () => {
         } else if (file.type.startsWith('video/')) {
           newPreviews.push({ type: 'video', src: URL.createObjectURL(file) });
         }
-        
+
         if (newPreviews.length === files.length) {
           setPreviews(newPreviews);
         }
@@ -195,12 +195,12 @@ const InductionForm = () => {
   const nextStage = () => {
     if (
       currentStage === 0 &&
-  (!formData.name || formData.name.trim() === '') ||
-  (!formData.email || formData.email.trim() === '') ||
-  (!formData.rollNumber || formData.rollNumber.trim() === '') ||
-  (!formData.branch || formData.branch.trim() === '') ||
-  (!formData.year || formData.year.trim() === '') ||
-  (!formData.phoneNumber || formData.phoneNumber.trim() === '')
+      (!formData.name || formData.name.trim() === '') ||
+      (!formData.email || formData.email.trim() === '') ||
+      (!formData.rollNumber || formData.rollNumber.trim() === '') ||
+      (!formData.branch || formData.branch.trim() === '') ||
+      (!formData.year || formData.year.trim() === '') ||
+      (!formData.phoneNumber || formData.phoneNumber.trim() === '')
     ) {
       _set1stPass(false);
       return;
@@ -209,7 +209,7 @@ const InductionForm = () => {
       currentStage == 1 &&
       formData.answers.some((item) => item.answer === "")
     ) {
-      _set2ndPass(false);
+      _set2ndPass(true); //should be false but here to check for 2Pass input
       return;
     } else _set2ndPass(true);
     setCurrentStage((prev) => Math.min(prev + 1, 2));
@@ -294,20 +294,20 @@ const InductionForm = () => {
                 required
               />
               <select
-  name="year"
-  value={formData.year}
-  onChange={handleInputChange}
-  className="w-full p-3 rounded bg-gray-800 text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
-  required
->
-  <option value="" disabled>
-    Year of Study
-  </option>
-  <option value="1st">1st Year</option>
-  <option value="2nd">2nd Year</option>
-  <option value="3rd">3rd Year</option>
-  <option value="4th">4th Year</option>
-</select>
+                name="year"
+                value={formData.year}
+                onChange={handleInputChange}
+                className="w-full p-3 rounded bg-gray-800 text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                required
+              >
+                <option value="" disabled>
+                  Year of Study
+                </option>
+                <option value="1st">1st Year</option>
+                <option value="2nd">2nd Year</option>
+                <option value="3rd">3rd Year</option>
+                <option value="4th">4th Year</option>
+              </select>
 
               <input
                 type="tel"
@@ -363,40 +363,40 @@ const InductionForm = () => {
               Additional Information
             </h2>
             <div className="w-full space-y-4">
-      <label className="block text-gray-200 mb-2">
-        Please upload any image, PDF, or video showcasing your skill: (optional)
-      </label>
-      <input
-        type="file"
-        name="ppt"
-        onChange={handleInputChange}
-        className="w-full p-3 rounded bg-gray-800 text-gray-200 focus:outline-none focus:ring-2 focus:ring-purple-500"
-        multiple
-        accept="image/*,application/pdf,video/*"
-      />
-      {previews.length > 0 && (
-  <div className="mt-4 space-y-2">
-    <h3 className="text-lg font-semibold text-gray-200">File Previews:</h3>
-    <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-      {previews.map((preview, index) => (
-        <div key={index} className="border border-gray-600 rounded p-2">
-          {preview.type === 'image' && (
-            <img src={preview.src} alt="Preview" className="w-full h-40 object-cover" />
-          )}
-          {preview.type === 'pdf' && (
-            <div className="flex items-center justify-center h-40 bg-gray-700">
-              <p className="text-gray-200">{preview.name}</p>
-            </div>
-          )}
-          {preview.type === 'video' && (
-            <video src={preview.src} controls className="w-full h-40 object-cover" />
-          )}
-        </div>
-      ))}
-    </div>
-  </div>
-)}
-<select
+              <label className="block text-gray-200 mb-2">
+                Please upload any image, PDF, or video showcasing your skill: (optional)
+              </label>
+              <input
+                type="file"
+                name="ppt"
+                onChange={handleInputChange}
+                className="w-full p-3 rounded bg-gray-800 text-gray-200 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                multiple
+                accept="image/*,application/pdf,video/*"
+              />
+              {previews.length > 0 && (
+                <div className="mt-4 space-y-2">
+                  <h3 className="text-lg font-semibold text-gray-200">File Previews:</h3>
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                    {previews.map((preview, index) => (
+                      <div key={index} className="border border-gray-600 rounded p-2">
+                        {preview.type === 'image' && (
+                          <img src={preview.src} alt="Preview" className="w-full h-40 object-cover" />
+                        )}
+                        {preview.type === 'pdf' && (
+                          <div className="flex items-center justify-center h-40 bg-gray-700">
+                            <p className="text-gray-200">{preview.name}</p>
+                          </div>
+                        )}
+                        {preview.type === 'video' && (
+                          <video src={preview.src} controls className="w-full h-40 object-cover" />
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+              <select
                 name="team_preference"
                 value={formData.team_preference}
                 onChange={handleInputChange}
@@ -409,7 +409,7 @@ const InductionForm = () => {
                 <option value="Rc Planes">RC Planes</option>
               </select>
 
-    </div>
+            </div>
           </div>
         );
       default:
@@ -469,52 +469,49 @@ const InductionForm = () => {
                     type="button"
                     onClick={handleNext}
                     className="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-300 flex items-center ml-auto"
-                    >
-                      Next
-                      <FaArrowRight className="ml-2" />
-                    </button>
-                  ) : (
-                    <button
-                      type="submit"
-                      className={`bg-green-600 m-2 text-white py-2 px-4 rounded-lg hover:bg-green-700 transition duration-300 flex items-center ml-auto ${
-                        !induction.I_active_status ? "cursor-not-allowed opacity-50" : ""
+                  >
+                    Next
+                    <FaArrowRight className="ml-2" />
+                  </button>
+                ) : (
+                  <button
+                    type="submit"
+                    className={`bg-green-600 m-2 text-white py-2 px-4 rounded-lg hover:bg-green-700 transition duration-300 flex items-center ml-auto ${!induction.I_active_status ? "cursor-not-allowed opacity-50" : ""
                       }`}
-                      disabled={submiting || !induction.I_active_status}
-                    >
-                      {submiting ? (
-                        <div
-                          className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-e-transparent align-[-0.125em] text-surface motion-reduce:animate-[spin_1.5s_linear_infinite] dark:text-white"
-                          role="status"
-                        >
-                          <span className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">
-                            Loading...
-                          </span>
-                        </div>
-                      ) : (
-                        <FaPlane className="m-2" />
-                      )}
-                      &nbsp;Submit Application
-                    </button>
-                  )}
-                </div>
-              </form>
-            </div>
-          </div>
-  
-          {/* Progress Indicator */}
-          <div className="mt-8 flex justify-center">
-            {[0, 1, 2].map((stage) => (
-              <div
-                key={stage}
-                className={`w-4 h-4 rounded-full mx-2 ${
-                  currentStage >= stage ? "bg-blue-500" : "bg-gray-600"
-                }`}
-              ></div>
-            ))}
+                    disabled={submiting || !induction.I_active_status}
+                  >
+                    {submiting ? (
+                      <div
+                        className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-e-transparent align-[-0.125em] text-surface motion-reduce:animate-[spin_1.5s_linear_infinite] dark:text-white"
+                        role="status"
+                      >
+                        <span className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">
+                          Loading...
+                        </span>
+                      </div>
+                    ) : (
+                      <FaPlane className="m-2" />
+                    )}
+                    &nbsp;Submit Application
+                  </button>
+                )}
+              </div>
+            </form>
           </div>
         </div>
+        {/* Progress Indicator */}
+        <div className="mt-8 flex justify-center">
+          {[0, 1, 2].map((stage) => (
+            <div
+              key={stage}
+              className={`w-4 h-4 rounded-full mx-2 ${currentStage >= stage ? "bg-blue-500" : "bg-gray-600"
+                }`}
+            ></div>
+          ))}
+        </div>
       </div>
-    );
-  };
-  
-  export default InductionForm;
+    </div>
+  );
+};
+
+export default InductionForm;
