@@ -407,8 +407,6 @@ const InductionForm = () => {
                 </option>
                 <option value="Drones">Drones</option>
                 <option value="Rc Planes">RC Planes</option>
-                <option value="Media">Media</option>
-                <option value="WebDev">WebDev</option>
               </select>
 
             </div>
@@ -501,7 +499,6 @@ const InductionForm = () => {
             </form>
           </div>
         </div>
-
         {/* Progress Indicator */}
         <div className="mt-8 flex justify-center">
           {[0, 1, 2].map((stage) => (
