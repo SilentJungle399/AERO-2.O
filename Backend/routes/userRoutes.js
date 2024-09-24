@@ -88,7 +88,7 @@ userRoutes.get("/getmeets/:id", getMeet);
 userRoutes.post("/scan-meet/:id", markAttendance);
 userRoutes.post("/createevent", upload.single("E_main_img"),uploadMiddleware,createEvent);
 userRoutes.post("/createteam/:id",upload.single('payment_screenshot'),uploadMiddleware, createTeam);
-userRoutes.post("/jointeam", joinTeam);
+userRoutes.post("/jointeam",upload.single('payment_screenshot'),uploadMiddleware, joinTeam);
 userRoutes.get("/getallevents", getAllEvents);
 userRoutes.get("/event/:id", getEventById);
 userRoutes.post("/checktoken", checkToken);

@@ -3,7 +3,7 @@ const GroupModel = require("../models/GroupModel");
 const TeamMembersModel = require("../models/TeamMembers");
 const EventModel = require("../models/Events");
 const mongoose=require('mongoose');
-const { sendWorkshopConfirmationEmail } = require("../middlewares/nodemailerMiddleware");
+const { sendWorkshopConfirmationEmail, sendTeamJoiningConfirmationEmail } = require("../middlewares/nodemailerMiddleware");
 
 const getTeamByToken=async(req,res)=>{
     const {Group_token}=req.body;
@@ -230,8 +230,11 @@ const joinTeam=async (req, res) => {
     try {
         const { uid,Group_token, Member_name, Member_college_name, Member_branch, Member_year,Member_roll_no, Member_mob_no, Member_email, Member_gender } = req.body;
 
+        Payment_screenshot=req.body.fileDownloadURL;
         // Find the group by Group_id
-        const group = await GroupModel.findOne({ Group_token });
+        const group = await GroupModel.findOne({ Group_token })
+    .populate('Group_leader_id', 'full_name mobile_no'); // 'name' and 'mobile' are the fields from 'User'
+
         if (!group) {
             return res.status(404).json({
                 message: "Group not found !! Ask your leader to create Team***"
@@ -239,8 +242,9 @@ const joinTeam=async (req, res) => {
         }
         //fist check if the user allready a particpant
         const event=await EventModel.findById(group.Event_id);
+        
         if(event.participants_id.includes(uid)){
-            return res.status(200).json({
+            return res.status(400).json({
                 msg:"you are allready a participant of this Event",
                 team:group
             })
@@ -279,7 +283,22 @@ const joinTeam=async (req, res) => {
         await event.save();
         
 
-
+        sendTeamJoiningConfirmationEmail(
+            Member_name,
+            Member_email,
+            Group_token,
+            group.team_name, // Assuming the group object has a name
+            event.E_name, // Assuming the event object has a name
+            group.Group_leader_id.full_name, // Leader's name
+            group.Group_leader_id. mobile_no,  // Leader's contact info
+            Member_college_name,
+            Member_branch,
+            Member_year,
+            Member_roll_no,
+            Member_mob_no,
+            Payment_screenshot
+        );
+        
         res.status(200).json({
             message: "User added to the group successfully",
             group: group

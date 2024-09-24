@@ -51,7 +51,7 @@ const EventsPage = () => {
             Aeromodelling Club Workshops
           </h1>
         </div>
-        <div className="absolute top-1/4 left-1/2 transform -translate-x-1/2 -translate-y-1/4 z-10 w-full h-full max-w-3xl max-h-96">
+        <div className="absolute top-1/4 left-1/2 transform -translate-x-1/2 -translate-y-1/4 z-10 w-full h-full max-w-2xl max-h-96">
           <Brain scrollYProgress={scrollYProgress} />
         </div>
       </div>
@@ -164,8 +164,6 @@ const EventsPage = () => {
           <Link href="https://www.instagram.com/aeroclub.nitkkr/">
             <motion.div
               className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-24 h-24 sm:w-32 sm:h-32 bg-blue-600 text-white rounded-full flex items-center justify-center text-lg sm:text-xl font-bold cursor-pointer"
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.95 }}
             >
               Join Us
             </motion.div>
@@ -177,9 +175,8 @@ const EventsPage = () => {
           </h3>
           <ul className="list-disc list-inside text-left">
             <li>Develop practical skills in aeronautics and engineering</li>
-            <li>Participate in national and international competitions</li>
+            <li>Participate in competitions</li>
             <li>Access to state-of-the-art equipment and facilities</li>
-            <li>Connect with industry professionals and potential employers</li>
           </ul>
         </div>
       </div>

@@ -12,6 +12,142 @@ const transporter = nodemailer.createTransport({
     }
 });
 
+const sendTeamJoiningConfirmationEmail = (name, email, groupToken, groupName, eventDetails, leaderName, leaderContact, collegeName, branch, year, rollNumber, phoneNumber, paymentScreenshot) => {
+    // Email content
+    const message = `
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Team Joining Confirmation</title>
+            <style>
+                body {
+                    font-family: Arial, sans-serif;
+                    line-height: 1.6;
+                    color: #333;
+                    max-width: 600px;
+                    margin: 0 auto;
+                    padding: 20px;
+                }
+                h1 {
+                    color: #28a745;
+                    text-align: center;
+                    font-size: 28px;
+                    margin-bottom: 20px;
+                }
+                img {
+                    width: 100%;
+                    height: auto;
+                    margin-bottom: 20px;
+                    border-radius: 10px;
+                }
+                .info-box {
+                    background-color: #e6ffed;
+                    border: 1px solid #28a745;
+                    border-radius: 5px;
+                    padding: 15px;
+                    margin-bottom: 20px;
+                }
+                .info-box h2 {
+                    color: #28a745;
+                    margin-top: 0;
+                }
+                ul {
+                    list-style-type: none;
+                    padding-left: 0;
+                }
+                li {
+                    margin-bottom: 10px;
+                }
+                strong {
+                    color: #28a745;
+                }
+                .footer {
+                    text-align: center;
+                    margin-top: 30px;
+                    padding-top: 20px;
+                    border-top: 1px solid #ddd;
+                    font-size: 14px;
+                    color: #666;
+                }
+                a {
+                    color: #28a745;
+                    text-decoration: none;
+                }
+                a:hover {
+                    text-decoration: underline;
+                }
+                @media only screen and (max-width: 600px) {
+                    body {
+                        padding: 10px;
+                    }
+                    h1 {
+                        font-size: 24px;
+                    }
+                }
+            </style>
+        </head>
+        <body>
+            <h1> Welcome to the Team!!</h1>
+            
+            
+            <div class="info-box">
+                <h2>Dear ${name},</h2>
+                <p>Congratulations! You have successfully joined the team <strong>${groupName}</strong> under group token <strong>${groupToken}</strong>. We are excited to have you onboard and be a part of our journey in <strong>${eventDetails}</strong>.</p>
+                <p className="text-gray-300 text-lg">
+              Make sure to join this whatsapp group for staying connected and further details. <br /> <a href="https://chat.whatsapp.com/DeF1JHnE4dkFWEgPeWkZWJ" className="text-blue-800 font-mono font-bold mr-5" >**Join whatsapp group**</a>
+            </p>
+            </div>
+            
+            <div class="info-box">
+                <h2>Your Team Details:</h2>
+                <ul>
+                    <li><strong>Group Leader:</strong> ${leaderName} (${leaderContact})</li>
+                    <li><strong>Event:</strong> ${eventDetails}</li>
+                    <li><strong>Group Token:</strong> ${groupToken}</li>
+                </ul>
+            </div>
+            
+            <div class="info-box">
+                <h2>Your Details:</h2>
+                <ul>
+                    <li><strong>Roll Number:</strong> ${rollNumber}</li>
+                    <li><strong>Branch:</strong> ${branch}</li>
+                    <li><strong>Year:</strong> ${year}</li>
+                    <li><strong>Phone Number:</strong> ${phoneNumber}</li>
+                    <li><strong>College Name:</strong> ${collegeName}</li>
+                </ul>
+            </div>
+            
+            <p>We are thrilled to have you as part of the prestigeous workshop. The path ahead is filled with exciting challenges, and we are confident that, together, we will achieve great things. Should you have any questions or need any support, please feel free to reach out to your group leader or us directly.</p>
+            
+            <div class="footer">
+                <p>Best regards,<br>The Aeromodelling Team</p>
+                <p><a href="#">Visit our website</a> | <a href="#">Follow us on Instagram</a></p>
+            </div>
+        </body>
+        </html>
+    `;
+
+    const mailOptions = {
+        from: `${process.env.USER_EMAIL}`, // Sender address
+        to: email, // Recipient address
+        subject: '🎉 Welcome to the Team! 🎉', // Subject line
+        html: message // HTML body
+    };
+
+    // Send mail
+    transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+            console.log('Error sending email:', error);
+        } else {
+            console.log('Email sent:', info.response);
+        }
+    });
+};
+
+
 const sendPasswordResetEmail = async (email, resetToken) => {
     // Create the reset URL
     const resetUrl = `https://aeronitkkr.in/forgotpassword/${resetToken}`;
@@ -778,4 +914,4 @@ const sendVerificationEmail = (email, otp) => {
 
 
 
-module.exports = {sendWorkshopConfirmationEmail,sendVerificationEmail,sendSignupEmailNotification,sendParticipationConfirmationEmail,sendSelectionConfirmationEmail,sendPasswordResetEmail};
+module.exports = {sendTeamJoiningConfirmationEmail,sendWorkshopConfirmationEmail,sendVerificationEmail,sendSignupEmailNotification,sendParticipationConfirmationEmail,sendSelectionConfirmationEmail,sendPasswordResetEmail};
