@@ -14,6 +14,8 @@ import {
   FiCalendar,
   FiHash,
   FiMap,
+  FiCopy,
+
 } from "react-icons/fi";
 import { FaPlane } from "react-icons/fa";
 
@@ -33,23 +35,31 @@ export default function CreateTeamPage() {
     g_leader_email: "",
     g_leader_year: "",
     g_leader_roll_no: "",
-    g_leader_gender: "",
-    g_leader_college_name: "",
+    g_leader_gender: "M",
+    g_leader_college_name: "Nit Kurukshetra",
     is_external_participation: false,
+    payment_screenshot: null,
   });
   const [groupToken, setGroupToken] = useState("");
   const [isAgreed, setIsAgreed] = useState(false);
+  const [copied, setCopied] = useState(false);
+  const [paymentPreview, setPaymentPreview] = useState(null);
+
+  const copyToClipboard = (token) => {
+    navigator.clipboard.writeText(token);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 60*60*1000);
+  };
 
   useEffect(() => {
     const fetchEventData = async () => {
       setIsLoading(true);
       try {
-        const baseUrl = process.env.NODE_ENV === 'production' 
-          ? process.env.NEXT_PUBLIC_BACKEND_URL 
-          : 'http://localhost:5000';
-        const response = await fetch(
-          `${baseUrl}/api/users/event/${id}`
-        );
+        const baseUrl =
+          process.env.NODE_ENV === "production"
+            ? process.env.NEXT_PUBLIC_BACKEND_URL
+            : "http://localhost:5000";
+        const response = await fetch(`${baseUrl}/api/users/event/${id}`);
         if (!response.ok) throw new Error("Failed to fetch event data");
         const data = await response.json();
         setEventData(data.event);
@@ -63,38 +73,56 @@ export default function CreateTeamPage() {
   }, [id]);
 
   const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: type === "checkbox" ? checked : value,
-    }));
+    const { name, value, type, checked, files } = e.target;
+    if (type === "file") {
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: files[0],
+      }));
+      handlePreviewFileInputChange(e);
+    } else {
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: type === "checkbox" ? checked : value,
+      }));
+    }
+  };
+
+  const handlePreviewFileInputChange = (event) => {
+    const file = event.target.files[0];
+    if (file && file.type.startsWith('image/')) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setPaymentPreview(e.target.result);
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const baseUrl = process.env.NODE_ENV === 'production' 
-          ? process.env.NEXT_PUBLIC_BACKEND_URL 
-          : 'http://localhost:5000';
-      const response = await fetch(
-        `${baseUrl}/api/users/createteam/${id}`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            ...formData,
-            Group_leader_id: localStorage.getItem("_id"),
-          }),
-        }
-      );
+      const baseUrl =
+        process.env.NODE_ENV === "production"
+          ? process.env.NEXT_PUBLIC_BACKEND_URL
+          : "http://localhost:5000";
+      
+      const formDataToSend = new FormData();
+      Object.keys(formData).forEach(key => {
+        formDataToSend.append(key, formData[key]);
+      });
+      formDataToSend.append("Group_leader_id", localStorage.getItem("_id"));
+
+      const response = await fetch(`${baseUrl}/api/users/createteam/${id}`, {
+        method: "POST",
+        body: formDataToSend,
+      });
       if (response.ok) {
         const data = await response.json();
         console.log(data);
-
         setGroupToken(data.group.Group_token);
         setStage(6);
       } else {
-        //   respond on frontend with response that comes from backend
         const data = await response.json();
         setErrorMessage(data.message || "Failed to create team");
         setStage(5);
@@ -154,13 +182,12 @@ export default function CreateTeamPage() {
                 <FiMap className="mr-2" /> Location: {eventData.E_location}
               </p>
               <p className="flex items-center">
-                <FiUser className="mr-2" /> Max Team Size:{" "}
-                {eventData.E_team_size}
+                <FiUser className="mr-2" /> Max Team Size: {eventData.E_team_size}
               </p>
             </div>
             <div className="space-y-4">
               <h3 className="text-2xl font-semibold text-indigo-300 flex items-center">
-                <FiBook className="mr-2" /> Guidelines
+                <FiBook className="mr-2" /> Guidelines <strong className="text-sm ml-4 text-red-500">***Read carefully before registering</strong>
               </h3>
               <ul className="list-none pl-5 space-y-2">
                 {eventData.E_guidelines.map((guideline, index) => (
@@ -180,18 +207,24 @@ export default function CreateTeamPage() {
                 className="form-checkbox h-5 w-5 text-indigo-600"
               />
               <label htmlFor="agree" className="text-sm">
-                I agree to the guidelines
+               I Agree that have read all guidlines carefully and am completely aware of all rules and guidlines of workshop.
               </label>
             </div>
-            
-              <button
-                onClick={() => isAgreed?setStage(2):""}
-                className={`${isAgreed?"bg-indigo-400":"bg-indigo-200"} text-white font-semibold py-3 px-6 rounded-full ${isAgreed?"":"cursor-not-allowed"}  ${isAgreed?"hover:bg-indigo-500 transition-colors ":"bg-indigo-200"} flex items-center space-x-2 text-lg`}
-              >
-                <span>Next</span>
-                <FiArrowRight />
-              </button>
-            
+            <button
+              onClick={() => (isAgreed ? setStage(2) : null)}
+              className={`${
+                isAgreed ? "bg-indigo-400" : "bg-indigo-200"
+              } text-white font-semibold py-3 px-6 rounded-full ${
+                isAgreed ? "" : "cursor-not-allowed"
+              } ${
+                isAgreed
+                  ? "hover:bg-indigo-500 transition-colors"
+                  : "bg-indigo-200"
+              } flex items-center space-x-2 text-lg`}
+            >
+              <span>Next</span>
+              <FiArrowRight />
+            </button>
           </motion.div>
         );
 
@@ -202,18 +235,17 @@ export default function CreateTeamPage() {
           stage === 2
             ? [
                 { name: "team_name", icon: <FiStar /> },
-                { name: "g_leader_name", icon: <FiUser /> },
                 { name: "g_leader_email", icon: <FiMail /> },
                 { name: "g_leader_mobile", icon: <FiPhone /> },
               ]
             : stage === 3
-            ? [{ name: "g_leader_college_name", icon: <FiBook /> }]
+            ? [
+                { name: "g_leader_name", icon: <FiUser /> },
+              ]
             : [
                 { name: "g_leader_branch", icon: <FiBook /> },
-                { name: "g_leader_year", icon: <FiCalendar /> },
                 { name: "g_leader_roll_no", icon: <FiHash /> },
-                { name: "g_leader_gender", icon: <FiUser /> },
-                { name: "address", icon: <FiMap /> },
+                { name: "g_leader_year", icon: <FiCalendar /> },
               ];
 
         return (
@@ -222,9 +254,9 @@ export default function CreateTeamPage() {
             onSubmit={(e) => {
               e.preventDefault();
               if (stage === 4) {
-                handleSubmit(e); // Call handleSubmit function
+                handleSubmit(e);
               } else {
-                setStage(stage + 1); // Progress to the next stage
+                setStage(stage + 1);
               }
             }}
             initial={{ opacity: 0, y: 20 }}
@@ -240,18 +272,50 @@ export default function CreateTeamPage() {
             </h2>
             {fields.map(renderInput)}
             {stage === 3 && (
-              <div className="flex items-center space-x-2 mt-4">
-                <input
-                  type="checkbox"
-                  name="is_external_participation"
-                  checked={formData.is_external_participation}
+              <div className="flex flex-col space-y-2 mt-4">
+                <select
+                  name="g_leader_gender"
+                  value={formData.g_leader_gender}
                   onChange={handleChange}
-                  className="form-checkbox h-5 w-5 text-indigo-600"
+                  className="form-select h-8 w-full text-gray-600 bg-gray-400 border-gray-800 rounded-sm"
                   required
-                />
-                <label htmlFor="is_external_participation" className="text-sm">
-                  External Participation
-                </label>
+                >
+                  <option value="" disabled>
+                    Select Gender
+                  </option>
+                  <option value="M">Male</option>
+                  <option value="F">Female</option>
+                </select>
+              </div>
+            )}
+            {stage === 4 && (
+              <div className="space-y-6">
+                <div className="text-center">
+                  <h3 className="text-xl font-semibold text-indigo-300 mb-4">Payment QR Code</h3>
+                  <div className="bg-white p-4 inline-block rounded-lg">
+                    <img src="/payment_qr.jpg" className="w-40 h-44" alt="not found"/>
+                  </div>
+                  <p className="mt-2 text-sm text-gray-400">Scan to make payment</p>
+                </div>
+                <div className="w-full space-y-4">
+                  <label className="block text-gray-200 mb-2">
+                    Upload screenshot of payment:
+                  </label>
+                  <input
+                    type="file"
+                    name="payment_screenshot"
+                    onChange={handleChange}
+                    className="w-full p-3 rounded bg-gray-800 text-gray-200 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                    accept="image/*"
+                    required
+                  />
+                  {paymentPreview && (
+                    <div className="mt-4">
+                      <h3 className="text-lg font-semibold text-gray-200 mb-2">Payment Screenshot Preview:</h3>
+                      <img src={paymentPreview} alt="Payment Screenshot" className="w-36 h-36 h-auto rounded-lg border border-gray-600" />
+                    </div>
+                  )}
+                </div>
               </div>
             )}
             <div className="flex justify-between">
@@ -274,59 +338,51 @@ export default function CreateTeamPage() {
             </div>
           </motion.form>
         );
+
       case 5:
         return (
           <motion.div>
             {errorMessage && (
               <div className="text-red-500 text-sm">{errorMessage}</div>
             )}
-            
           </motion.div>
         );
 
       case 6:
         return (
-          <motion.div
-            className="text-center space-y-8"
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5 }}
-          >
+          <div className="text-center space-y-8">
             <h2 className="text-4xl font-bold text-indigo-400 mb-6 leading-tight">
               Team Created Successfully!
             </h2>
             <p className="text-2xl">Your Group Token:</p>
-            <div className="relative">
-              <motion.div
-                className="text-3xl font-mono bg-indigo-900 p-6 rounded-lg tracking-wider"
-                initial={{ rotate: 0 }}
-                animate={{ rotate: 360 }}
-                transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
-              >
+            <div className="relative inline-flex items-center justify-center">
+              <div className="text-3xl font-mono bg-indigo-900 p-6 rounded-lg tracking-wider">
                 {groupToken}
-              </motion.div>
-              <motion.div
-                className="absolute inset-0 flex items-center justify-center"
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                transition={{ duration: 0.5, delay: 1 }}
+              </div>
+              <button
+                onClick={() => copyToClipboard(groupToken)}
+                className="ml-4 bg-gray-800 text-white p-2 rounded-full hover:bg-gray-700 transition-colors"
               >
-                <div className="h-24 w-24 bg-yellow-400 rounded-full flex items-center justify-center text-4xl">
-                  🎉
-                </div>
-              </motion.div>
+                <FiCopy className="w-6 h-6" />
+              </button>
             </div>
+            {copied && <p className="text-green-500 text-sm">Token copied to clipboard!</p>}
             <p className="text-gray-300 text-lg">
-              Keep this token safe. You&apos;ll need it to manage your team.
-            </p>
+              Keep this token safe. We've also sent it to your email along with more details. Please check your email for future reference
+              
+              </p>
+
+           
             <button
               onClick={() => setStage(6)}
               className="w-full bg-green-600 text-white font-semibold py-3 px-6 rounded-full hover:bg-green-500 transition-colors flex items-center justify-center space-x-2 text-lg"
             >
-              <span>View Team Panel</span>
-              <FiArrowRight />
+               <p className="text-gray-300 text-lg">
+              Make sure to join this whatsapp group for staying connected and further details. <br /> <a href="https://chat.whatsapp.com/DeF1JHnE4dkFWEgPeWkZWJ" className="text-blue-800 font-mono font-bold mr-5" >**Join whatsapp group**</a>
+            </p>
+              
             </button>
-          </motion.div>
+          </div>
         );
 
       default:
@@ -344,13 +400,13 @@ export default function CreateTeamPage() {
       <div className="w-full max-w-7xl relative z-10">
         <div className="text-center mb-12 mt-20">
           <FaPlane className="text-6xl text-blue-500 mx-auto mb-4" />
-          <h1 className="text-4xl monoton md:text-6xl  text-white mb-2">
+          <h1 className="text-4xl monoton md:text-6xl text-white mb-2">
             Aeromodeling&nbsp;&nbsp; Club
           </h1>
           <h3 className="text-xl monoton md:text-4xl text-gray-300">
             Event &nbsp;&nbsp; Sessions
           </h3>
-          <h2 className="text-2xl monoton md:text-3xl  text-blue-400 mb-8">
+          <h2 className="text-2xl monoton md:text-3xl text-blue-400 mb-8">
             NIT&nbsp;&nbsp; Kurukshetra
           </h2>
         </div>

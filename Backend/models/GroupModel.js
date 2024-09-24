@@ -3,10 +3,12 @@ const { type } = require("os");
 const Schema = mongoose.Schema;
 
 const groupSchema = new mongoose.Schema({
+
     Event_id:{
         type:Schema.Types.ObjectId,
         ref:'Event',
     },
+    
     // this will be created and provided to team leader and asked to join the team
     Group_token: {
         type: String,
@@ -28,7 +30,6 @@ const groupSchema = new mongoose.Schema({
     }],
     team_name: {
         type: String,
-        required: true
     },
     winning_status: {
         type: String,
@@ -39,8 +40,6 @@ const groupSchema = new mongoose.Schema({
     },
     gender: {
         type: String,
-        enum: ['M', 'F'],
-        required: true
     },
     Group_leader_id: {
         type: Schema.Types.ObjectId,
@@ -48,11 +47,10 @@ const groupSchema = new mongoose.Schema({
     },
     g_leader_college_name: {
         type: String,
-        required: true
+        default:""
     },
     g_leader_email: {
         type: String,
-        required: true
     },
     is_external_participation: {
         type: Boolean

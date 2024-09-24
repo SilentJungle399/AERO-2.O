@@ -6,31 +6,29 @@ const teamMembersSchema = new mongoose.Schema({
     //this will be provided to team leader and asked to join the team
     Member_name:{
         type:String,
-        required:true,
+    },
+    Payment_sc:{
+        type: String,
+        default:""
     },
     Member_college_name: {
         type: String,
-        required:true
+        default:""
     },
     Member_branch:{
         type:String,
-        required:true,
     },
     Member_year:{
         type:String,
-        required:true,
     },
     Member_roll_no:{
         type:String,
-        required:true,
     },
     Member_mob_no:{
         type:Number,
-        required:true,
     },
     Member_email:{
         type:String,
-        required:true,
     },
     Member_gender:{
         type:String,

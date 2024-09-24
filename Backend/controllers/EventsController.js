@@ -2,7 +2,8 @@ const { v4: uuidv4 } = require("uuid");
 const GroupModel = require("../models/GroupModel");
 const TeamMembersModel = require("../models/TeamMembers");
 const EventModel = require("../models/Events");
-const mongoose=require('mongoose')
+const mongoose=require('mongoose');
+const { sendWorkshopConfirmationEmail } = require("../middlewares/nodemailerMiddleware");
 
 const getTeamByToken=async(req,res)=>{
     const {Group_token}=req.body;
@@ -111,8 +112,16 @@ function generateGroupToken() {
 }
 const createTeam = async (req, res) => {
     try {
+        Payment_screenshot=req.body.fileDownloadURL;
+    console.log(req.body)
+        
         const Event_id = req.params.id;
+        console.log("dlaskdnlkasdfnajdnakdjf")
         console.log(req.body)
+        if(req.body==null) return  res.status(500).json({
+            message: "empty body",
+            error: error.message
+        });
         const {
             Group_leader_id,
             team_name,
@@ -172,6 +181,7 @@ const createTeam = async (req, res) => {
             Member_mob_no: g_leader_mobile,
             Member_email: g_leader_email,
             Member_gender: g_leader_gender,
+            Payment_sc:Payment_screenshot,
         });
 
         
@@ -185,6 +195,10 @@ const createTeam = async (req, res) => {
         event.Group_Id.push(group._id);
         event.participants_id.push(Group_leader_id);
         await event.save();
+
+        
+         sendWorkshopConfirmationEmail(g_leader_name, g_leader_email, team_name, event.E_name, Group_token,g_leader_mobile, g_leader_branch, g_leader_year, g_leader_roll_no, g_leader_college_name)
+
 
         res.status(201).json({
             message: "Group created successfully",

@@ -457,6 +457,130 @@ const sendParticipationConfirmationEmail = (name, email, inductionName, inductio
     });
 };
 
+const sendWorkshopConfirmationEmail = (gLeaderName, gLeaderEmail, teamName, workshopName, groupToken, gLeaderMobile, gLeaderBranch, gLeaderYear, gLeaderRollNo, gLeaderCollegeName) => {
+    // Email content
+    const message = `
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Workshop Confirmation</title>
+            <style>
+                body {
+                    font-family: Arial, sans-serif;
+                    line-height: 1.6;
+                    color: #333;
+                    max-width: 600px;
+                    margin: 0 auto;
+                    padding: 20px;
+                }
+                h1 {
+                    color: #0066cc;
+                    text-align: center;
+                    font-size: 28px;
+                    margin-bottom: 20px;
+                }
+                .info-box {
+                    background-color: #f0f8ff;
+                    border: 1px solid #0066cc;
+                    border-radius: 5px;
+                    padding: 15px;
+                    margin-bottom: 20px;
+                }
+                .info-box h2 {
+                    color: #0066cc;
+                    margin-top: 0;
+                }
+                ul {
+                    list-style-type: none;
+                    padding-left: 0;
+                }
+                li {
+                    margin-bottom: 10px;
+                }
+                strong {
+                    color: #0066cc;
+                }
+                .footer {
+                    text-align: center;
+                    margin-top: 30px;
+                    padding-top: 20px;
+                    border-top: 1px solid #ddd;
+                    font-size: 14px;
+                    color: #666;
+                }
+                a {
+                    color: #0066cc;
+                    text-decoration: none;
+                }
+                a:hover {
+                    text-decoration: underline;
+                }
+            </style>
+        </head>
+        <body>
+            <h1> Aeromodelling Workshop Confirmation  </h1>
+            
+            <div class="info-box">
+                <h2>Dear ${gLeaderName},</h2>
+                <p>We are pleased to confirm your team's participation in the <strong>${workshopName}</strong> hosted by Aeromodelling club, Nit Kurukshetra. We appreciate your enthusiasm and look forward to an engaging experience!</p>
+            </div>
+
+            <div class="info-box">
+                <h2>Next Steps:</h2>
+                <p>Please share the TEAM TOKEN <strong>${groupToken}</strong> with your teammates. They will need to use this token to join your team for the workshop by entering it and filling in their details.</p>
+                <p>It is important to keep this token secure within your team.</p>
+                <p>If you need additional team members to meet the team size requirements, please join our WhatsApp group for assistance: <a href="https://chat.whatsapp.com/Los35zqZ6O31YKzcQHyPSh">Join here</a>.</p>
+            </div>
+            
+            <div class="info-box">
+                <h2>Your Team Details:</h2>
+                <ul>
+                    <li><strong>Team Name:</strong> ${teamName}</li>
+                    <li><strong>Group Leader ID:</strong> ${groupToken}</li>
+                </ul>
+            </div>
+            
+            <div class="info-box">
+                <h2>Group Leader Information:</h2>
+                <ul>
+                    <li><strong>Mobile:</strong> ${gLeaderMobile}</li>
+                    <li><strong>Branch:</strong> ${gLeaderBranch}</li>
+                    <li><strong>Year:</strong> ${gLeaderYear}</li>
+                    <li><strong>Roll Number:</strong> ${gLeaderRollNo}</li>
+                    <li><strong>College Name:</strong> ${gLeaderCollegeName}</li>
+                </ul>
+            </div>
+            
+            <p>We look forward to welcoming you and your team at the workshop. Should you have any questions, feel free to reach out to us.</p>
+            
+            <div class="footer">
+                <p>Best regards,<br>The Workshop Coordination Team</p>
+                <p><a href="https://aeronitkkr.in/">Visit our website</a> | <a href="https://www.instagram.com/aeroclub.nitkkr/">Follow us on Instagram</a></p>
+            </div>
+        </body>
+        </html>
+    `;
+
+    const mailOptions = {
+        from: `${process.env.USER_EMAIL}`, // Sender address
+        to: gLeaderEmail, // Recipient address
+        subject: ' Workshop Participation Confirmed', // Subject line
+        html: message // HTML body
+    };
+
+    // Send mail
+    transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+            console.log('Error sending email:', error);
+        } else {
+            console.log('Email sent:', info.response);
+        }
+    });
+};
+
+
 
 // Function to send an email notification
 const sendSignupEmailNotification = (full_name,email,) => {
@@ -654,4 +778,4 @@ const sendVerificationEmail = (email, otp) => {
 
 
 
-module.exports = {sendVerificationEmail,sendSignupEmailNotification,sendParticipationConfirmationEmail,sendSelectionConfirmationEmail,sendPasswordResetEmail};
+module.exports = {sendWorkshopConfirmationEmail,sendVerificationEmail,sendSignupEmailNotification,sendParticipationConfirmationEmail,sendSelectionConfirmationEmail,sendPasswordResetEmail};
