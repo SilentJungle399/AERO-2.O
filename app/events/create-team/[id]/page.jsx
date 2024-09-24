@@ -26,6 +26,7 @@ export default function CreateTeamPage() {
   const [eventData, setEventData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [submitLoading,setSubmitLoading]=useState(false)
   const [formData, setFormData] = useState({
     team_name: "",
     address: "",
@@ -100,8 +101,10 @@ export default function CreateTeamPage() {
   };
 
   const handleSubmit = async (e) => {
+
     e.preventDefault();
     try {
+      setSubmitLoading(true);
       const baseUrl =
         process.env.NODE_ENV === "production"
           ? process.env.NEXT_PUBLIC_BACKEND_URL
@@ -121,6 +124,7 @@ export default function CreateTeamPage() {
         const data = await response.json();
         console.log(data);
         setGroupToken(data.group.Group_token);
+        setSubmitLoading(false)
         setStage(6);
       } else {
         const data = await response.json();
@@ -327,14 +331,25 @@ export default function CreateTeamPage() {
                 <FiArrowLeft />
                 <span>Back</span>
               </button>
-              <button
-                type={stage === 4 ? "submit" : "button"}
-                onClick={() => stage < 4 && setStage(stage + 1)}
-                className="bg-indigo-600 text-white font-semibold py-3 px-6 rounded-full hover:bg-indigo-500 transition-colors flex items-center space-x-2 text-lg"
-              >
-                <span>{stage === 4 ? "Submit" : "Next"}</span>
-                <FiArrowRight />
-              </button>
+              {submitLoading ? (
+  <button
+    type="button"
+    className="bg-indigo-600 text-white font-semibold py-3 px-6 rounded-full flex items-center space-x-2 text-lg"
+    disabled
+  >
+    <span>Submitting your form...</span>
+  </button>
+) : (
+  <button
+    type={stage === 4 ? "submit" : "button"}
+    onClick={() => stage < 4 && setStage(stage + 1)}
+    className="bg-indigo-600 text-white font-semibold py-3 px-6 rounded-full hover:bg-indigo-500 transition-colors flex items-center space-x-2 text-lg"
+  >
+    <span>{stage === 4 ? "Submit" : "Next"}</span>
+    <FiArrowRight />
+  </button>
+)}
+
             </div>
           </motion.form>
         );
