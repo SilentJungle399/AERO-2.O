@@ -263,6 +263,7 @@ const joinTeam=async (req, res) => {
             Member_mob_no,
             Member_email,
             Member_gender,
+            Payment_sc:Payment_screenshot
         });
 
         // Save the team member to the database

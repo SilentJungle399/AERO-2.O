@@ -61,7 +61,6 @@ export default function CreateTeamPage() {
             ? process.env.NEXT_PUBLIC_BACKEND_URL
             : "http://localhost:5000";
         const response = await fetch(`${baseUrl}/api/users/event/${id}`);
-        if (!response.ok) throw new Error("Failed to fetch event data");
         const data = await response.json();
         setEventData(data.event);
       } catch (err) {
