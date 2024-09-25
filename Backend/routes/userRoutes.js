@@ -25,6 +25,7 @@ const {
   getAllEvents,
   getEventById,
   checkToken,
+  teamDashboard,
 } = require("../controllers/EventsController");
 const {
   getAllCAtegories,
@@ -92,6 +93,8 @@ userRoutes.post("/jointeam",upload.single('payment_screenshot'),uploadMiddleware
 userRoutes.get("/getallevents", getAllEvents);
 userRoutes.get("/event/:id", getEventById);
 userRoutes.post("/checktoken", checkToken);
+userRoutes.post("/teamdashboard", teamDashboard);
+
 
 // //blog routes
 // module.exports ={deletecategory,updateCategory,getOneCategory,addNewCategory,getAllCAtegories,deleteBlog,updatedBlog,getOneBlog,createNewBlog,getAllBlogs}

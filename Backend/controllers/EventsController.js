@@ -225,6 +225,20 @@ const checkToken=async(req,res)=>{
     }
 }
 
+const teamDashboard=async(req,res)=>{
+    const {Group_token}=req.body;
+    console.log("hey"+Group_token)
+    const tokenfound = await GroupModel
+    .findOne({ Group_token: Group_token })
+    .populate('Group_members_team_ids')  // Populate the team details
+    .populate('Group_leader_id'); 
+    if(tokenfound){
+        res.status(200).json(tokenfound);
+    }else{
+        res.status(201).json({msg:"invalid token"});
+    }
+}
+
 const joinTeam=async (req, res) => {
     try {
         const { uid,Group_token, Member_name, Member_college_name, Member_branch, Member_year,Member_roll_no, Member_mob_no, Member_email, Member_gender } = req.body;
@@ -307,4 +321,4 @@ const joinTeam=async (req, res) => {
 }
 
 
-module.exports={createEvent,createTeam,joinTeam,getAllEvents,getEventById,checkToken}
+module.exports={teamDashboard,createEvent,createTeam,joinTeam,getAllEvents,getEventById,checkToken}

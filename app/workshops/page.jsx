@@ -6,6 +6,7 @@ import Brain from "./Brain";
 import Loader from "@/components/Loader";
 import { jwtDecode } from "jwt-decode";
 import Login from "../login/page";
+import { FaTeamspeak, FaUser, FaUserFriends } from "react-icons/fa";
 const EventsPage = () => {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -26,19 +27,19 @@ const EventsPage = () => {
       return true;
     }
   }
-  
+
   function LoginCheck() {
     const token = localStorage.getItem('token');
     const isExpired = isTokenExpired(token);
     if (!token) {
       alert('Please log in to Aeromodelling.');
       window.location.href = '/login';
-    } else if(isExpired){
+    } else if (isExpired) {
       alert('Session Expired !!! Please log in Again...');
       console.log('Token is valid');
     }
   }
-  
+
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -76,7 +77,7 @@ const EventsPage = () => {
             Aeromodelling Club Workshops
           </h1>
         </div>
-        <div className="absolute top-1/4 left-1/2 transform -translate-x-1/2 -translate-y-1/4 z-10 w-full h-full max-w-2xl max-h-96">
+        <div className="absolute top-1/4 left-1/2 transform -translate-x-1/2 -translate-y-1/4 z-10 w-full h-full max-w-2xl pr-16 opacity-80 max-h-96">
           <Brain scrollYProgress={scrollYProgress} />
         </div>
       </div>
@@ -95,9 +96,25 @@ const EventsPage = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
             >
-              <h2 className="text-2xl md:text-4xl font-bold font-mono mb-6 text-white">
-                {event.E_name}
-              </h2>
+              <div className="flex space-x-10">
+                <h2 className="text-2xl md:text-4xl font-bold font-mono mb-6 text-white">
+                  {event.E_name}
+                </h2>
+                <Link href={`/events/team-panel/${event._id}`} passHref>
+                  <div className="mt-2">
+                    <motion.a
+                      onClick={LoginCheck}
+                      className="flex-1 bg-blue-600 border-2 border-green-500 text-white font-semibold py-2 px-4 w-auto rounded-3xl hover:bg-green-500 transition-colors text-center shadow-md flex items-center justify-center"
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                    >
+                      MyTeam <FaUserFriends className="ml-2" />
+                    </motion.a>
+                  </div>
+                </Link>
+
+
+              </div>
               <div className="md:flex md:space-x-6 space-y-6 md:space-y-0">
                 <div className="md:w-1/2">
                   <img
