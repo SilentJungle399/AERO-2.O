@@ -127,7 +127,7 @@ const JoinTeam = () => {
         toast.success(responseData.msg);
         setStep(3); // Move to success step
       } else {
-        setError(responseData.msg || "Error joining team. Please try again.");
+        setError(responseData.message || "Error joining team. Please try again.");
       }
     } catch (error) {
       setError("Error joining team. Please try again.");

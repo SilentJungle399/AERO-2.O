@@ -4,7 +4,8 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import Link from "next/link";
 import Brain from "./Brain";
 import Loader from "@/components/Loader";
-
+import { jwtDecode } from "jwt-decode";
+import Login from "../login/page";
 const EventsPage = () => {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -14,6 +15,30 @@ const EventsPage = () => {
 
   const { scrollYProgress } = useScroll({ target: ref });
   const x = useTransform(scrollYProgress, [0, 1], ["0%", "-92%"]);
+
+  function isTokenExpired(token) {
+    try {
+      const decodedToken = jwtDecode(token);
+      const currentTime = Math.floor(Date.now() / 1000);
+      return parseInt(decodedToken.exp) < currentTime;
+    } catch (error) {
+      console.error('Invalid token', error);
+      return true;
+    }
+  }
+  
+  function LoginCheck() {
+    const token = localStorage.getItem('token');
+    const isExpired = isTokenExpired(token);
+    if (!token) {
+      alert('Please log in to Aeromodelling.');
+      window.location.href = '/login';
+    } else if(isExpired){
+      alert('Session Expired !!! Please log in Again...');
+      console.log('Token is valid');
+    }
+  }
+  
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -106,6 +131,7 @@ const EventsPage = () => {
                   <div className="flex flex-wrap justify-between gap-4 mt-8">
                     <Link href={`/events/create-team/${event._id}`} passHref>
                       <motion.a
+                        // onClick={LoginCheck}
                         className="flex-1 bg-blue-600 text-white font-semibold py-3 px-6 rounded-lg hover:bg-blue-500 transition-colors text-center shadow-md"
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
@@ -115,6 +141,7 @@ const EventsPage = () => {
                     </Link>
                     <Link href={`/events/join-team/${event._id}`} passHref>
                       <motion.a
+                        // onClick={LoginCheck}
                         className="flex-1 bg-green-600 text-white font-semibold py-3 px-6 rounded-lg hover:bg-green-500 transition-colors text-center shadow-md"
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
