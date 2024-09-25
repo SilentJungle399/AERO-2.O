@@ -103,7 +103,7 @@ const EventsPage = () => {
                   <img
                     src={event.E_main_img || "/default-event-image.jpg"}
                     alt={event.E_name}
-                    className="w-full h-64 object-cover rounded-lg shadow-md"
+                    className="w-full h-auto rounded-lg shadow-md"
                   />
                 </div>
                 <div className="md:w-1/2 space-y-4 font-mono">
@@ -129,9 +129,9 @@ const EventsPage = () => {
                   </p>
                   <p className="text-gray-300">{event.E_mini_description}</p>
                   <div className="flex flex-wrap justify-between gap-4 mt-8">
-                    <Link href={`/events/create-team/${event._id}`} passHref>
+                    <Link href={`/events/create-team/${event._id}`} className="mt-2" passHref>
                       <motion.a
-                        // onClick={LoginCheck}
+                        onClick={LoginCheck}
                         className="flex-1 bg-blue-600 text-white font-semibold py-3 px-6 rounded-lg hover:bg-blue-500 transition-colors text-center shadow-md"
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
@@ -139,9 +139,9 @@ const EventsPage = () => {
                         Create Team
                       </motion.a>
                     </Link>
-                    <Link href={`/events/join-team/${event._id}`} passHref>
+                    <Link href={`/events/join-team/${event._id}`} className="mt-2" passHref>
                       <motion.a
-                        // onClick={LoginCheck}
+                        onClick={LoginCheck}
                         className="flex-1 bg-green-600 text-white font-semibold py-3 px-6 rounded-lg hover:bg-green-500 transition-colors text-center shadow-md"
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
