@@ -340,7 +340,7 @@ const Navbar: React.FC = () => {
                     Blogs-dashboard
                   </Link>
                   <Link
-                    href="/admin/events/create"
+                    href="/admin/events/dashboard"
                     className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular"
                   >
                     Events-dashboard

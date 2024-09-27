@@ -96,6 +96,7 @@ userRoutes.post("/checktoken", checkToken);
 userRoutes.post("/teamdashboard", teamDashboard);
 
 
+
 // //blog routes
 // module.exports ={deletecategory,updateCategory,getOneCategory,addNewCategory,getAllCAtegories,deleteBlog,updatedBlog,getOneBlog,createNewBlog,getAllBlogs}
 userRoutes.get("/getallcategories", getAllCAtegories);

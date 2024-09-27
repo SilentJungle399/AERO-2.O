@@ -34,7 +34,6 @@ const TeamDashboard = () => {
                 }
 
                 const data = await response.json();
-                console.log(data);
                 setTeam(data);
                 setLoading(false);
             } catch (err) {

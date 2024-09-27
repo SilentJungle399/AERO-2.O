@@ -33,7 +33,10 @@ const getAllEvents = async (req, res) => {
 const getEventById = async (req, res) => {
     try {
         const Event_id = req.params.id;
-        const event = await EventModel.findById(Event_id);
+        const event = await EventModel.findById(Event_id).populate({
+            path: 'Group_Id',
+            select : 'Group_token team_name Group_members_team_ids'
+        });
 
         if (!event) {
             return res.status(404).json({
@@ -226,8 +229,7 @@ const checkToken=async(req,res)=>{
 }
 
 const teamDashboard=async(req,res)=>{
-    const {Group_token}=req.body;
-    console.log("hey"+Group_token)
+    const {Group_token} = req.body;
     const tokenfound = await GroupModel
     .findOne({ Group_token: Group_token })
     .populate('Group_members_team_ids')  // Populate the team details

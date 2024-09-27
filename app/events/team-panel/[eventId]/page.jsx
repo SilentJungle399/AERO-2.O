@@ -27,7 +27,6 @@ const GroupTokenVerification = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ Group_token: groupToken }),
       });
-
       if (response.ok) {
         setLoading(false);
         window.location.href = `/events/team-panel/${eventId}/${groupToken}/dashboard`;
