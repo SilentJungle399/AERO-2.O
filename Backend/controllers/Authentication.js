@@ -356,7 +356,8 @@ const Signup = async (req, res) => {
     });
 
     const savedUser = await newUser.save();
-    const token = savedUser.generateAuthToken();
+    const expiresIn = 50 * 24 * 60 * 60 * 1000;
+    const token = savedUser.generateAuthToken({expiresIn});
     if (savedUser) {
       sendSignupEmailNotification(savedUser.full_name, savedUser.email);
     }

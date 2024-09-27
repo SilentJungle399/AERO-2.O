@@ -46,6 +46,8 @@ export default function CreateTeamPage() {
   const [copied, setCopied] = useState(false);
   const [paymentPreview, setPaymentPreview] = useState(null);
 
+  
+
   const copyToClipboard = (token) => {
     navigator.clipboard.writeText(token);
     setCopied(true);

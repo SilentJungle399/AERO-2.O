@@ -145,7 +145,7 @@ const createTeam = async (req, res) => {
             return res.status(404).json({ message: "Event not found" });
         }
 
-        // Check if leader has already created a team
+        // Check if leader has already created a team (check user id if inserted by joining or creating the team)
         const alreadyFormedGroup = await GroupModel.findOne({ Group_leader_id, Event_id});
         if (alreadyFormedGroup) {
             return res.status(400).json({ message: "You have already created a team" });
@@ -225,13 +225,25 @@ const checkToken=async(req,res)=>{
     }
 }
 
+const teamDashboard=async(req,res)=>{
+    const {Group_token}=req.body;
+    console.log("hey"+Group_token)
+    const tokenfound = await GroupModel
+    .findOne({ Group_token: Group_token })
+    .populate('Group_members_team_ids')  // Populate the team details
+    .populate('Group_leader_id'); 
+    if(tokenfound){
+        res.status(200).json(tokenfound);
+    }else{
+        res.status(201).json({msg:"invalid token"});
+    }
+}
 
 const joinTeam=async (req, res) => {
     try {
         const { uid,Group_token, Member_name, Member_college_name, Member_branch, Member_year,Member_roll_no, Member_mob_no, Member_email, Member_gender } = req.body;
 
         Payment_screenshot=req.body.fileDownloadURL;
-        // Find the group by Group_id
         const group = await GroupModel.findOne({ Group_token })
     .populate('Group_leader_id', 'full_name mobile_no'); // 'name' and 'mobile' are the fields from 'User'
 
@@ -240,20 +252,16 @@ const joinTeam=async (req, res) => {
                 message: "Group not found !! Ask your leader to create Team***"
             });
         }
-        //fist check if the user allready a particpant
-        const event=await EventModel.findById(group.Event_id);
+
+        const event = await EventModel.findById(group.Event_id);
         
         if(event.participants_id.includes(uid)){
             return res.status(400).json({
-                msg:"you are allready a participant of this Event",
+                msg:"you are already a participant of this Event",
                 team:group
             })
         }
 
-
-        //?email verification
-
-        // Create a new team member instance
         const teamMember = new TeamMembersModel({
             Member_name,
             Member_college_name,
@@ -305,7 +313,6 @@ const joinTeam=async (req, res) => {
             group: group
         });
     } catch (error) {
-        console.error("Error joining group:", error);
         res.status(500).json({
             message: "Error joining group",
             error: error.message
@@ -314,4 +321,4 @@ const joinTeam=async (req, res) => {
 }
 
 
-module.exports={createEvent,createTeam,joinTeam,getAllEvents,getEventById,checkToken}
+module.exports={teamDashboard,createEvent,createTeam,joinTeam,getAllEvents,getEventById,checkToken}
