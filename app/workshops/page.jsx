@@ -149,17 +149,16 @@ const EventsPage = () => {
                     <Link href={event.active_status ? `/events/create-team/${event._id}` : "https://th.bing.com/th/id/OIP._mYdcpBTqU7VJiRimoP9wwHaEV?rs=1&pid=ImgDetMain"} className="mt-2" passHref>
                       <motion.a
                         onClick={LoginCheck}
-                        className={`flex-1 bg-blue-600 text-white font-semibold py-3 px-6 rounded-lg transition-colors text-center shadow-md ${!event.active_status ? "opacity-50" : "hover:bg-blue-500"
+                        className={`flex-1 bg-blue-600 text-white font-semibold py-3 px-6 rounded-lg transition-colors text-center shadow-md ${!event.active_status ? "opacity-50 cursor-not-allowed" : "hover:bg-blue-500"
                           }`}
                       >
                         Create Team
                       </motion.a>
                     </Link>
-
                     <Link href={event.active_status ? `/events/join-team/${event._id}` : "https://th.bing.com/th/id/OIP._mYdcpBTqU7VJiRimoP9wwHaEV?rs=1&pid=ImgDetMain"} className="mt-2" passHref>
                       <motion.a
                         onClick={LoginCheck}
-                        className={`flex-1 bg-green-600 text-white font-semibold py-3 px-6 rounded-lg transition-colors text-center shadow-md ${!event.active_status ? "opacity-50" : "hover:bg-green-500"
+                        className={`flex-1 bg-green-600 text-white font-semibold py-3 px-6 rounded-lg transition-colors text-center shadow-md ${!event.active_status ? "opacity-50 cursor-not-allowed" : "hover:bg-green-500"
                           }`}
                       >
                         Join Team
