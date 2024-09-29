@@ -146,32 +146,28 @@ const EventsPage = () => {
                   </p>
                   <p className="text-gray-300">{event.E_mini_description}</p>
                   <div className="flex flex-wrap justify-between gap-4 mt-8">
-                    <Link href={`/events/create-team/${event._id}`} className="mt-2" passHref>
+                    <Link href={event.active_status ? `/events/create-team/${event._id}` : "https://th.bing.com/th/id/OIP._mYdcpBTqU7VJiRimoP9wwHaEV?rs=1&pid=ImgDetMain"} className="mt-2" passHref>
                       <motion.a
                         onClick={LoginCheck}
-                        className={`flex-1 bg-blue-600 text-white font-semibold py-3 px-6 rounded-lg transition-colors text-center shadow-md ${!event.active_status ? "opacity-50 cursor-not-allowed" : "hover:bg-blue-500"
+                        className={`flex-1 bg-blue-600 text-white font-semibold py-3 px-6 rounded-lg transition-colors text-center shadow-md ${!event.active_status ? "opacity-50" : "hover:bg-blue-500"
                           }`}
-                        whileHover={event.active_status ? { scale: 1.05 } : {}}
-                        whileTap={event.active_status ? { scale: 0.95 } : {}}
-                        disabled={!event.active_status}
                       >
                         Create Team
                       </motion.a>
                     </Link>
-                    <Link href={`/events/join-team/${event._id}`} className="mt-2" passHref>
+
+                    <Link href={event.active_status ? `/events/join-team/${event._id}` : "https://th.bing.com/th/id/OIP._mYdcpBTqU7VJiRimoP9wwHaEV?rs=1&pid=ImgDetMain"} className="mt-2" passHref>
                       <motion.a
                         onClick={LoginCheck}
-                        className={`flex-1 bg-green-600 text-white font-semibold py-3 px-6 rounded-lg transition-colors text-center shadow-md ${!event.active_status ? "opacity-50 cursor-not-allowed" : "hover:bg-green-500"
+                        className={`flex-1 bg-green-600 text-white font-semibold py-3 px-6 rounded-lg transition-colors text-center shadow-md ${!event.active_status ? "opacity-50" : "hover:bg-green-500"
                           }`}
-                        whileHover={event.active_status ? { scale: 1.05 } : {}}
-                        whileTap={event.active_status ? { scale: 0.95 } : {}}
-                        disabled={!event.active_status}
                       >
                         Join Team
                       </motion.a>
                     </Link>
+
                   </div>
-                    {!event.active_status && <h3 className="text-center text-red-500">Registration Closed!!!</h3>}
+                  {!event.active_status && <h3 className="text-center text-red-500">Registration Closed!!!</h3>}
                 </div>
               </div>
             </motion.div>
