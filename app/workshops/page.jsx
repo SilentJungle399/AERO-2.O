@@ -149,9 +149,11 @@ const EventsPage = () => {
                     <Link href={`/events/create-team/${event._id}`} className="mt-2" passHref>
                       <motion.a
                         onClick={LoginCheck}
-                        className="flex-1 bg-blue-600 text-white font-semibold py-3 px-6 rounded-lg hover:bg-blue-500 transition-colors text-center shadow-md"
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
+                        className={`flex-1 bg-blue-600 text-white font-semibold py-3 px-6 rounded-lg transition-colors text-center shadow-md ${!event.active_status ? "opacity-50 cursor-not-allowed" : "hover:bg-blue-500"
+                          }`}
+                        whileHover={event.active_status ? { scale: 1.05 } : {}}
+                        whileTap={event.active_status ? { scale: 0.95 } : {}}
+                        disabled={!event.active_status}
                       >
                         Create Team
                       </motion.a>
@@ -159,14 +161,17 @@ const EventsPage = () => {
                     <Link href={`/events/join-team/${event._id}`} className="mt-2" passHref>
                       <motion.a
                         onClick={LoginCheck}
-                        className="flex-1 bg-green-600 text-white font-semibold py-3 px-6 rounded-lg hover:bg-green-500 transition-colors text-center shadow-md"
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
+                        className={`flex-1 bg-green-600 text-white font-semibold py-3 px-6 rounded-lg transition-colors text-center shadow-md ${!event.active_status ? "opacity-50 cursor-not-allowed" : "hover:bg-green-500"
+                          }`}
+                        whileHover={event.active_status ? { scale: 1.05 } : {}}
+                        whileTap={event.active_status ? { scale: 0.95 } : {}}
+                        disabled={!event.active_status}
                       >
                         Join Team
                       </motion.a>
                     </Link>
                   </div>
+                    {!event.active_status && <h3 className="text-center text-red-500">Registration Closed!!!</h3>}
                 </div>
               </div>
             </motion.div>

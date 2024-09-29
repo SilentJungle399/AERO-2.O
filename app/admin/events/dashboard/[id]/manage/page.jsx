@@ -102,7 +102,7 @@ const EventDashboard = () => {
           <div className="bg-gradient-to-r from-blue-600 to-indigo-700 p-6">
             <h1 className="text-3xl font-bold mb-2">{eventData.E_name}</h1>
             <h2 className="text-lg font-bold">Total Groups : {eventData.Group_Id.length}</h2>
-            <h2 className="text-lg font-bold">Total Groups : {eventData.participants_id.length}</h2>
+            <h2 className="text-lg font-bold">Total Participants : {eventData.participants_id.length}</h2>
           </div>
           <div className="p-6">
             <div className="flex flex-wrap gap-4 text-sm">
