@@ -233,6 +233,19 @@ const TeamDashboard = () => {
                             </li>
                         </ul>
                     </div>
+                    <div className="bg-gray-800 bg-opacity-50 backdrop-filter backdrop-blur-lg rounded-xl shadow-2xl p-4 sm:p-6 mb-8">
+                        <h2 className="text-xl sm:text-2xl font-semibold mb-4 text-purple-400">
+                            <FaBook className="inline-block mr-2" /> Feedback
+                        </h2>
+                        <p className="text-yellow-300 mb-4">Below you will get link to feedback form!!</p> 
+                        <ul className="list-disc list-inside text-blue-300">
+                            <li>
+                                <a href="https://docs.google.com/forms/d/e/1FAIpQLSeOqaIL_guNVc4oXY2VzS3C6jTy7YYfCANnpnjV8qux9UVJfw/viewform?usp=sf_link" target="_blank" rel="noopener noreferrer" className="underline hover:text-blue-400">
+                                    Feedback Form
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </>
