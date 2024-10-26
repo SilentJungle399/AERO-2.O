@@ -11,7 +11,28 @@ const TeamDashboard = () => {
 
     const params = useParams();
     const groupToken = params?.groupToken;
-
+    const schedule = [
+        {
+            day : "Day 1",
+            venue: "Senate Hall",
+            Timing: "5:15 PM - 8:00 PM",
+        },
+        {
+            day : "Day 2",
+            venue: "Senate Hall",
+            Timing: "10:00 AM - 5:00 PM ",
+        },
+        {
+            day : "Day 3",
+            venue: "Sports Complex",
+            Timing: "to be conveyed...",
+        },
+        {
+            day : "Day 4",
+            venue: "Senate Hall",
+            Timing: "to be conveyed...",
+        }
+    ]
     useEffect(() => {
         const fetchTeamData = async () => {
             try {
@@ -96,12 +117,12 @@ const TeamDashboard = () => {
                         Skyforge 1.0
                     </h1>
                     <div className="text-center">
-                    <h2 className="text-xl sm:text-2xl font-mono md:text-3xl mb-8 sm:mb-12 text-center text-blue-300">
-                        4-Day Drone Workshop by Aeromodelling Club
-                    </h2>
-                    <p className="font-bold text-2xl font-mono italic da text-gray-300">Team Name: {team.team_name}</p>
+                        <h2 className="text-xl sm:text-2xl font-mono md:text-3xl mb-8 sm:mb-12 text-center text-blue-300">
+                            4-Day Drone Workshop by Aeromodelling Club
+                        </h2>
+                        <p className="font-bold text-2xl font-mono italic da text-gray-300">Team Name: {team.team_name}</p>
 
-                            </div>
+                    </div>
 
                     <div className="bg-gray-800 mt-4 bg-opacity-50 backdrop-filter backdrop-blur-lg rounded-xl shadow-2xl p-4 sm:p-6 mb-8">
                         <h2 className="text-xl sm:text-2xl font-semibold mb-4 text-purple-400">
@@ -177,12 +198,13 @@ const TeamDashboard = () => {
                         <h2 className="text-xl sm:text-2xl font-semibold mb-4 text-purple-400">
                             <FaCalendarAlt className="inline-block mr-2" /> Workshop Schedule
                         </h2>
-                        <p className="text-yellow-300 mb-4">The detailed schedule will be available soon. Stay tuned!</p>
+                        {/* <p className="text-yellow-300 mb-4">The detailed schedule will be available soon. Stay tuned!</p> */}
                         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-                            {['Day 1', 'Day 2', 'Day 3', 'Day 4'].map((day, index) => (
+                            {schedule.map((day, index) => (
                                 <div key={index} className="bg-gray-700 bg-opacity-50 p-4 rounded-lg">
-                                    <h3 className="text-lg font-semibold mb-2">{day}</h3>
-                                    <p>Schedule coming soon...</p>
+                                    <h3 className="text-lg font-semibold mb-2">{day.day}</h3>
+                                    <h6>Venue : {day.venue}</h6>
+                                    <h6>Timing : {day.Timing}</h6>
                                 </div>
                             ))}
                         </div>
@@ -195,18 +217,31 @@ const TeamDashboard = () => {
                         <p className="text-yellow-300 mb-4">Below you will get all resources of workshop once we will start with the workshop will get started!!</p>
                         <ul className="list-disc list-inside text-blue-300">
                             <li>
-                                <a href="https://th.bing.com/th/id/OIP.M7dk3pRrcLHX_4GqSX0IwwHaHa?rs=1&pid=ImgDetMain" target="_blank" rel="noopener noreferrer" className="underline hover:text-blue-400">
-                                    Resource 1:Coming soon
+                                <a href="https://docs.google.com/presentation/d/1Zj_Fzg6LNh6NAWKn1RmH3d4c84XhnWIg/edit?usp=sharing&ouid=108628649323282460611&rtpof=true&sd=true" target="_blank" rel="noopener noreferrer" className="underline hover:text-blue-400">
+                                    Day 1 : Introduction to Drones
                                 </a>
                             </li>
                             <li>
-                                <a href="https://th.bing.com/th/id/OIP.M7dk3pRrcLHX_4GqSX0IwwHaHa?rs=1&pid=ImgDetMain" target="_blank" rel="noopener noreferrer" className="underline hover:text-blue-400">
-                                    Resource 2: coming soon 
+                                <a href="https://docs.google.com/presentation/d/1Ogqio2iLtnQHSw0DBce3mm8zYWoA-lLh/edit?usp=sharing&ouid=108628649323282460611&rtpof=true&sd=true" target="_blank" rel="noopener noreferrer" className="underline hover:text-blue-400">
+                                    Day 2: Basics of Drone
                                 </a>
                             </li>
                             <li>
-                                <a href="https://th.bing.com/th/id/OIP.M7dk3pRrcLHX_4GqSX0IwwHaHa?rs=1&pid=ImgDetMain" target="_blank" rel="noopener noreferrer" className="underline hover:text-blue-400">
-                                    Resource 3: coming soon
+                                <a href="https://docs.google.com/presentation/d/1jyi86x2pOrv5a4o9kIkh9UJZR26Y3ZQg/edit?usp=sharing&ouid=108628649323282460611&rtpof=true&sd=true" target="_blank" rel="noopener noreferrer" className="underline hover:text-blue-400">
+                                    Day 2: Advance Topics
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div className="bg-gray-800 bg-opacity-50 backdrop-filter backdrop-blur-lg rounded-xl shadow-2xl p-4 sm:p-6 mb-8">
+                        <h2 className="text-xl sm:text-2xl font-semibold mb-4 text-purple-400">
+                            <FaBook className="inline-block mr-2" /> Feedback
+                        </h2>
+                        <p className="text-yellow-300 mb-4">Below you will get link to feedback form!!</p> 
+                        <ul className="list-disc list-inside text-blue-300">
+                            <li>
+                                <a href="https://docs.google.com/forms/d/e/1FAIpQLSeOqaIL_guNVc4oXY2VzS3C6jTy7YYfCANnpnjV8qux9UVJfw/viewform?usp=sf_link" target="_blank" rel="noopener noreferrer" className="underline hover:text-blue-400">
+                                    Feedback Form
                                 </a>
                             </li>
                         </ul>
