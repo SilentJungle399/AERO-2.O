@@ -115,6 +115,7 @@ export default function CreateTeamPage() {
       Object.keys(formData).forEach(key => {
         formDataToSend.append(key, formData[key]);
       });
+      
       formDataToSend.append("Group_leader_id", localStorage.getItem("_id"));
 
       const response = await fetch(`${baseUrl}/api/users/createteam/${id}`, {
