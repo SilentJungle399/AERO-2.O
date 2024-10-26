@@ -36,6 +36,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+      
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" />
@@ -55,6 +56,10 @@ export default function RootLayout({
         <meta property="og:url" content="https://aeronitkkr.in" />
         <meta property="og:image" content="/favicon.ico" />
         <meta property="og:site_name" content="AeroModelling Club" />
+
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2566086108871666"
+     crossOrigin="anonymous"></script>
+
       </head>
       <body className={inter.className}>
         <ClientLayout>{children}</ClientLayout>
