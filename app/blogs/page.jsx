@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { FaEye, FaThumbsUp, FaUser, FaCalendarAlt, FaStar } from "react-icons/fa";
+import AutoAdSense from '../../components/AutoAdSense'
 
 const Blogs = () => {
   const [blogs, setBlogs] = useState([]);
@@ -110,6 +111,7 @@ const Blogs = () => {
           </Link>
           ))}
         </div>
+        <AutoAdSense />
       </div>
     );
   };

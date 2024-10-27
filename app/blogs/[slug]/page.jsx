@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { useParams } from "next/navigation";
 import { FaUser, FaCalendarAlt, FaEye, FaThumbsUp } from "react-icons/fa";
+import AutoAdSense from '../../../components/AutoAdSense'
 
 const BlogPage = () => {
   const [blog, setBlog] = useState(null);
@@ -166,6 +167,8 @@ const BlogPage = () => {
           </div>
         </>
       )}
+              <AutoAdSense />
+
     </div>
   );
 };
