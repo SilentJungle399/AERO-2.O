@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import ClientLayout from "../components/ClientLayout";
+import AdSence from "../components/Adsence"
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -36,7 +37,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-      
+      <AdSence publisherId="pub-2566086108871666" />
+      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2566086108871666"
+     crossOrigin="anonymous"></script>
+
+
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" />
@@ -57,8 +62,9 @@ export default function RootLayout({
         <meta property="og:image" content="/favicon.ico" />
         <meta property="og:site_name" content="AeroModelling Club" />
 
-        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2566086108871666"
-     crossOrigin="anonymous"></script>
+       
+
+     
 
       </head>
       <body className={inter.className}>
