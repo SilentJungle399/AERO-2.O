@@ -42,21 +42,14 @@ const AdSense: React.FC<AdSenseProps> = ({ publisherId }) => {
           <Script
             id="adsbygoogle-init"
             async
-            src={`https://pagead2.googlesyndleware.com/pagead/js/adsbygoogle.js?client=ca-pub-${publisherId}`}
+            src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-${publisherId}`}
             crossOrigin="anonymous"
             strategy="afterInteractive"
             onError={(error) => {
               console.error('Failed to load AdSense script:', error);
             }}
           />
-          <ins
-            className="adsbygoogle"
-            style={{ display: 'block', textAlign: 'center' }}
-            data-ad-client={`ca-pub-${publisherId}`}
-            data-ad-layout="in-article"
-            data-ad-format="fluid"
-            data-full-width-responsive="true"
-          />
+          {/* For Auto Ads, you don't need to define the <ins> element */}
         </>
       )}
     </>
