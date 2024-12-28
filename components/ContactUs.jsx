@@ -64,7 +64,7 @@ class ContactUsPage extends Component {
           <h2 className="text-3xl font-bold text-blue-500 text-center mb-6">
             Connect With Us
           </h2>
-          <div className="flex flex-col md:flex-row">
+          <div className="flex flex-col md:flex-row gap-5">
             {<div className="flex-1">
             <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2713.621113508049!2d76.81762199640569!3d29.946413601785384!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390e3f422f5244e7%3A0x9c630c311d6349b8!2sNIT%20KURUKSHETRA!5e0!3m2!1sen!2sin!4v1724629070863!5m2!1sen!2sin" allowFullScreen="" loading="lazy" referrerPolicy="no-referrer-when-downgrade" className="w-full h-full justify-center"></iframe>
             </div>}
@@ -84,7 +84,7 @@ class ContactUsPage extends Component {
                     type="text"
                     id="name"
                     name="name"
-                    className="mt-1 block w-full h-10 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                    className="mt-1 block w-full h-10 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-black p-2"
                     required
                   />
                 </div>
@@ -99,7 +99,7 @@ class ContactUsPage extends Component {
                     type="email"
                     id="email"
                     name="email"
-                    className="mt-1 block w-full h-10 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                    className="mt-1 block w-full h-10 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-black p-2"
                     required
                   />
                 </div>
@@ -114,7 +114,7 @@ class ContactUsPage extends Component {
                     id="message"
                     name="message"
                     rows="4"
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-black p-2"
                     required
                   ></textarea>
                 </div>
