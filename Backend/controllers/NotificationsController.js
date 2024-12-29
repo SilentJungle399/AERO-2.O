@@ -1,6 +1,18 @@
 const NotificationModel = require("../models/notificationmodels/Notifications");
 const ContactUsModel = require("../models/notificationmodels/ContactUs");
 const User = require("../models/usermodel");
+const nodemailer = require("nodemailer");
+
+const transporter = nodemailer.createTransport({
+  host: process.env.SMTP_HOST,
+  port: process.env.SMTP_PORT,
+  secure: false, // true for port 465, false for other ports
+  auth: {
+    user: process.env.SMTP_USER,
+    pass: process.env.SMTP_PASS,
+  },
+});
+
 
 const showAllNotification = async (req, res) => {
   const userId = req.params.id;
@@ -92,6 +104,81 @@ const submitContactUs = async (req, res) => {
     })
 
     await contactUsMessage.save();
+    await transporter.sendMail({
+      from: `"Contact form" <${email}>`, // sender address
+      to: process.env.USER_EMAIL, // list of receivers
+      subject: "Contact us message", // Subject line
+      text: message, // plain text body
+      html: `
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us Email</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            color: #333333;
+        }
+
+        .email-container {
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: #ffffff;
+            border: 1px solid #dddddd;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .email-header {
+            background-color: #4CAF50;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .email-body {
+            padding: 20px;
+        }
+
+        .email-body p {
+            margin: 10px 0;
+            line-height: 1.6;
+        }
+
+        .email-body .field {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="email-container">
+        <div class="email-header">
+            New Contact Us Message
+        </div>
+        <div class="email-body">
+            <p><span class="field">Name:</span> ${name}</p>
+            <p><span class="field">Email:</span> ${email}</p>
+            <p><span class="field">Message:</span></p>
+            <p><i>${message}</i></p>
+        </div>
+    </div>
+</body>
+
+</html>
+      `,
+    });
+
     res.status(200).json({message: "Message sent"});
   } catch (error) {
     console.error("Error submitting contact us message:", error);
