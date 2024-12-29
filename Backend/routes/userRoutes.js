@@ -44,26 +44,35 @@ const userRoutes = express.Router();
 
 // Set up multer for handling file uploads
 const multer = require("multer");
-const { processUploads } = require("../middlewares/BlogMiddleware");
-const { uploadMiddleware } = require("../controllers/uploadMiddleware");
-const { getBlogPostBySlug } = require("../controllers/BlogController");
-const { getAlbum, getAllAlbums, createAlbum, addImageToAlbum, handleLike, handleView } = require("../controllers/GalleryControllers");
-const { galleryUploadMiddleware } = require("../middlewares/GalleryUploadMiddleware");
-const { showAllNotification, showOneNotification } = require("../controllers/NotificationsController");
-const { getourmembers } = require("../controllers/Authentication");
+const {processUploads} = require("../middlewares/BlogMiddleware");
+const {uploadMiddleware} = require("../controllers/uploadMiddleware");
+const {getBlogPostBySlug} = require("../controllers/BlogController");
+const {
+  getAlbum,
+  getAllAlbums,
+  createAlbum,
+  addImageToAlbum,
+  handleLike,
+  handleView
+} = require("../controllers/GalleryControllers");
+const {galleryUploadMiddleware} = require("../middlewares/GalleryUploadMiddleware");
+const {showAllNotification, showOneNotification, submitContactUs} = require("../controllers/NotificationsController");
+const {getourmembers} = require("../controllers/Authentication");
 const upload = multer({
   storage: multer.memoryStorage(),
   limits: {
-    fileSize: 100*20 * 1024 * 1024, // limit file size to 5MB
+    fileSize: 100 * 20 * 1024 * 1024, // limit file size to 5MB
   },
 });
 
 
-userRoutes.get("/notifications/:id",showAllNotification);
+userRoutes.get("/notifications/:id", showAllNotification);
 
-userRoutes.get("/getourmembers",getourmembers);
+userRoutes.get("/getourmembers", getourmembers);
 
-userRoutes.post("/:id/notifications",showOneNotification);
+userRoutes.post("/contactus", submitContactUs);
+
+userRoutes.post("/:id/notifications", showOneNotification);
 
 userRoutes.post("/createinduction", authMiddleware(["admin"]), createInduction);
 userRoutes.get("/getallinduction", getAllInductions);
@@ -72,29 +81,28 @@ userRoutes.get("/getinduction/:id", getInduction);
 userRoutes.get("/getinductionforselectingstudent/:id", getInductionforSelections);
 userRoutes.post(
   "/register/:id",
-  authMiddleware(["admin", "user","member","blogger"]),upload.array('ppt', 100),galleryUploadMiddleware,
+  authMiddleware(["admin", "user", "member", "blogger"]), upload.array('ppt', 100), galleryUploadMiddleware,
   saveParticipants
 );
-userRoutes.post("/sendnotification/:id",authMiddleware(["admin"]),upload.array('notification_file',100),galleryUploadMiddleware,sendNotification);
-
+userRoutes.post("/sendnotification/:id", authMiddleware(["admin"]), upload.array('notification_file', 100), galleryUploadMiddleware, sendNotification);
+userRoutes.post("/contactus",)
 
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
 
-userRoutes.post("/endmeet/:id",authMiddleware(["admin"]),endMeet)
+userRoutes.post("/endmeet/:id", authMiddleware(["admin"]), endMeet)
 userRoutes.post("/createmeet", authMiddleware(["admin"]), create_meet);
 userRoutes.get("/getallmeets", getAllMeets);
 userRoutes.get("/getmeets/:id", getMeet);
 userRoutes.post("/scan-meet/:id", markAttendance);
-userRoutes.post("/createevent", upload.single("E_main_img"),uploadMiddleware,createEvent);
-userRoutes.post("/createteam/:id",upload.single('payment_screenshot'),uploadMiddleware, createTeam);
-userRoutes.post("/jointeam",upload.single('payment_screenshot'),uploadMiddleware, joinTeam);
+userRoutes.post("/createevent", upload.single("E_main_img"), uploadMiddleware, createEvent);
+userRoutes.post("/createteam/:id", upload.single('payment_screenshot'), uploadMiddleware, createTeam);
+userRoutes.post("/jointeam", upload.single('payment_screenshot'), uploadMiddleware, joinTeam);
 userRoutes.get("/getallevents", getAllEvents);
 userRoutes.get("/event/:id", getEventById);
 userRoutes.post("/checktoken", checkToken);
 userRoutes.post("/teamdashboard", teamDashboard);
-
 
 
 // //blog routes
@@ -106,10 +114,10 @@ userRoutes.post("/updatecategory/:id", updateCategory);
 userRoutes.delete("/deletecategory/:id", deletecategory);
 
 userRoutes.get("/getallblogs", getAllBlogs);
-userRoutes.post("/addnewblog",upload.fields([
-{ name: "main_image", maxCount: 1 },
-{ name: "additional_images", maxCount: 5 },
-]),processUploads,createNewBlog
+userRoutes.post("/addnewblog", upload.fields([
+    {name: "main_image", maxCount: 1},
+    {name: "additional_images", maxCount: 5},
+  ]), processUploads, createNewBlog
 );
 // userRoutes.post("/addnewblog", createNewBlog);
 userRoutes.get("/getoneblog/:slug", getBlogPostBySlug);
@@ -119,7 +127,7 @@ userRoutes.delete("/deleteblog/:id", deleteBlog);
 //gallery routes
 userRoutes.post('/createalbum', createAlbum);
 // Upload multiple images to an album
-userRoutes.post('/album/:id', upload.array('album_images', 100),galleryUploadMiddleware, addImageToAlbum);
+userRoutes.post('/album/:id', upload.array('album_images', 100), galleryUploadMiddleware, addImageToAlbum);
 // Get all albums
 userRoutes.get('/albums', getAllAlbums);
 // Get a specific album
@@ -134,13 +142,13 @@ userRoutes.post('/album/:album_id/images/:id/view', handleView);
 
 // Create a new user (Admin only)
 userRoutes.post("/create", authMiddleware(["admin"]), async (req, res) => {
-  const { full_name, roll_no, email, password, date_of_joining, role } =
+  const {full_name, roll_no, email, password, date_of_joining, role} =
     req.body;
 
   try {
-    const existingUser = await User.findOne({ email });
+    const existingUser = await User.findOne({email});
     if (existingUser) {
-      return res.status(400).json({ error: "User already exists" });
+      return res.status(400).json({error: "User already exists"});
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -157,10 +165,10 @@ userRoutes.post("/create", authMiddleware(["admin"]), async (req, res) => {
     await newUser.save();
     res
       .status(201)
-      .json({ message: "User created successfully", user: newUser });
+      .json({message: "User created successfully", user: newUser});
   } catch (error) {
     console.error("Error creating user:", error);
-    res.status(500).json({ error: "Failed to create user" });
+    res.status(500).json({error: "Failed to create user"});
   }
 });
 
@@ -174,25 +182,25 @@ userRoutes.get(
       const user = await User.findById(req.params.id).select(fields);
 
       if (!user) {
-        return res.status(404).json({ error: "User not found" });
+        return res.status(404).json({error: "User not found"});
       }
 
       res.status(200).json(user);
     } catch (error) {
       console.error("Error fetching user:", error);
-      res.status(500).json({ error: "Failed to fetch user" });
+      res.status(500).json({error: "Failed to fetch user"});
     }
   }
 );
 
 userRoutes.post('/profile/:id', authMiddleware(["user", "member", "admin"]), upload.single('profile_file'), uploadMiddleware, async (req, res) => {
-  const { id } = req.params;
+  const {id} = req.params;
   try {
-  
-    
+
+
     const user = await User.findById(id);
     if (!user) {
-      return res.status(404).json({ error: 'User not found' });
+      return res.status(404).json({error: 'User not found'});
     }
 
     if (req.file && req.body.fileDownloadURL) {
@@ -215,14 +223,14 @@ userRoutes.post('/profile/:id', authMiddleware(["user", "member", "admin"]), upl
 
 // Update profile
 userRoutes.patch('/update/:id', authMiddleware(["user", "member", "admin"]), async (req, res) => {
-  const { id } = req.params;
+  const {id} = req.params;
   const updates = req.body;
 
   try {
     const fields = 'full_name email roll_no year branch session college_name mobile_no profile_pic team_name';
-    const user = await User.findByIdAndUpdate(id, updates, { new: true, runValidators: true }).select(fields);
+    const user = await User.findByIdAndUpdate(id, updates, {new: true, runValidators: true}).select(fields);
     if (!user) {
-      return res.status(404).json({ error: 'User not found' });
+      return res.status(404).json({error: 'User not found'});
     }
 
     res.status(200).json({
@@ -239,8 +247,6 @@ userRoutes.patch('/update/:id', authMiddleware(["user", "member", "admin"]), asy
 });
 
 
-
-
 userRoutes.get(
   "/:id",
   authMiddleware(["user", "member"]),
@@ -255,13 +261,13 @@ userRoutes.get(
       const user = await User.findById(req.params.id).select(fields);
 
       if (!user) {
-        return res.status(404).json({ error: "User not found" });
+        return res.status(404).json({error: "User not found"});
       }
 
       res.status(200).json(user);
     } catch (error) {
       console.error("Error fetching user:", error);
-      res.status(500).json({ error: "Failed to fetch user" });
+      res.status(500).json({error: "Failed to fetch user"});
     }
   }
 );
@@ -272,13 +278,13 @@ userRoutes.put(
   "/:id",
   authMiddleware(["user", "admin", "blogger"]),
   async (req, res) => {
-    const { full_name, roll_no, email, password, date_of_joining, role } =
+    const {full_name, roll_no, email, password, date_of_joining, role} =
       req.body;
 
     try {
       const user = await User.findById(req.params.id);
       if (!user) {
-        return res.status(404).json({ error: "User not found" });
+        return res.status(404).json({error: "User not found"});
       }
 
       if (password) {
@@ -293,10 +299,10 @@ userRoutes.put(
       user.role = role || user.role;
 
       await user.save();
-      res.status(200).json({ message: "User updated successfully", user });
+      res.status(200).json({message: "User updated successfully", user});
     } catch (error) {
       console.error("Error updating user:", error);
-      res.status(500).json({ error: "Failed to update user" });
+      res.status(500).json({error: "Failed to update user"});
     }
   }
 );
@@ -306,12 +312,12 @@ userRoutes.delete("/:id", authMiddleware(["admin"]), async (req, res) => {
   try {
     const user = await User.findByIdAndDelete(req.params.id);
     if (!user) {
-      return res.status(404).json({ error: "User not found" });
+      return res.status(404).json({error: "User not found"});
     }
-    res.status(200).json({ message: "User deleted successfully" });
+    res.status(200).json({message: "User deleted successfully"});
   } catch (error) {
     console.error("Error deleting user:", error);
-    res.status(500).json({ error: "Failed to delete user" });
+    res.status(500).json({error: "Failed to delete user"});
   }
 });
 
