@@ -27,6 +27,7 @@ const ContactUsPage = () => {
 
   const submitContactUs = (event) => {
     event.preventDefault();
+    setMessage("Message sending...")
     const baseUrl =
       process.env.NODE_ENV === "production"
         ? process.env.NEXT_PUBLIC_BACKEND_URL
