@@ -10,7 +10,7 @@ export default function Techspardha() {
       </Head>
 
       {/* Hero Section */}
-      <header className="relative py-20 overflow-hidden">
+      <header className="relative py-44 overflow-hidden">
         <div className="absolute inset-0 bg-[url('/grid-pattern.svg')] opacity-20 animate-grid-pulse"></div>
         <div className="container mx-auto px-4 text-center">
           {/* Main Heading */}
@@ -25,7 +25,7 @@ export default function Techspardha() {
           </h1>
 
           {/* Sponsors Section */}
-          <div className="max-w-4xl mx-auto mb-16">
+          <div className="max-w-4xl mx-auto ">
             <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl p-6 border border-cyan-500/20">
               <h3 className="text-lg font-semibold mb-4 text-cyan-300 glow-cyan">Proudly Supported By</h3>
               <div className="flex flex-wrap justify-center gap-6">

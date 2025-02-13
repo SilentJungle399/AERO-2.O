@@ -34,10 +34,10 @@ const SaleNotification = () => {
           >
             <Link href="/techevents">
               <motion.div
-                className="w-[200px] h-[200px] rounded-full flex items-center justify-center overflow-hidden"
+                className="w-[250px] h-[250px] rounded-full flex items-center justify-center overflow-hidden"
               >
                 <div 
-                  className="w-[180px] h-[180px] rounded-full flex items-center justify-center"
+                  className="w-[2n80px] h-[180px] rounded-full flex items-center justify-center"
                   style={{
                     backgroundImage: "url('/R.png')",
                     backgroundSize: 'contain',

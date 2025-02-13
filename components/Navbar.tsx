@@ -289,7 +289,14 @@ const Navbar: React.FC = () => {
       <nav
         className={`bg-[#110e12] transition-colors duration-300 ${navBackground} w-full pointer-events-auto`}
       >
-        <div className="w-full px-0">
+        <div className="w-full bg-blue-500 hover:bg-blue-600 text-gray-200 text-center py-1 absolute top-0 overflow-hidden">
+      <div className="whitespace-nowrap animate-marquee ">
+        <Link href="/techevents" className="text-sm font-semibold">
+        🌟🌟🚀🚀 Techspardha is live! Register now! 
+        </Link>
+      </div>
+    </div>
+        <div className="w-full px-0 py-8">
           <div className="flex items-center justify-between h-24 px-2 md:px-4">
             <button
               className="xl:hidden text-white focus:outline-none"
@@ -971,6 +978,10 @@ const Navbar: React.FC = () => {
               </>
             )}
           </div>
+        </div>
+        <div>
+
+      
         </div>
       </nav>
     </div>
