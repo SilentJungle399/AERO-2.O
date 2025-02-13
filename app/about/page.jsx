@@ -8,7 +8,7 @@ export default function AboutUs() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-900 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-3xl w-full space-y-8">
+      <div className="max-w-3xl pt-14 w-full space-y-8">
         <div>
           <h2 className="text-center text-4xl font-extrabold text-gray-100">
             About Us
