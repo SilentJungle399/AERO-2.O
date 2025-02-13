@@ -1,5 +1,6 @@
 "use client";
 import Head from 'next/head';
+import Link from "next/link";
 import { Rocket, Zap, Trophy, Cloud, ShoppingBag } from 'lucide-react';
 
 export default function Techspardha() {
@@ -50,7 +51,7 @@ export default function Techspardha() {
         <h2 className="text-4xl font-bold my-4 flex items-center">
           <Trophy className="mr-4 text-purple-400" />
           <span className="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
-                Events
+            Events
           </span>
         </h2>
         <div className="grid md:grid-cols-2 gap-8">
@@ -152,12 +153,15 @@ export default function Techspardha() {
                     <div className="text-2xl font-bold">₹{item.price}</div>
                     <div className="text-sm text-gray-400">{item.color} T-Shirt</div>
                   </div>
-                  <button className="px-4 py-2 bg-blue-600 rounded-lg hover:bg-blue-500 transition-colors glow-blue">
-                    Quick Buy
-                  </button>
                 </div>
               </div>
             ))}
+          </div>
+          <div className='flex justify-center'>
+          <Link className="px-4 py-2 mt-2 bg-blue-600 rounded-lg hover:bg-blue-500 transition-colors glow-blue"
+            href="/techevents/buy">
+            Quick Buy
+          </Link>
           </div>
         </div>
       </div>
