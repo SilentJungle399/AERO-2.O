@@ -1,18 +1,13 @@
 "use client"
-// import { useEffect, useState } from 'react';
-// import Cookies from 'js-cookie';
 import ContactUsPage from '@/components/ContactUs';
 import React, { Suspense } from 'react';
-import SponsorsPage from "../components/sponsers"
-// import Navbar from '@/components/Navbar';
-// import dynamic from 'next/dynamic';
-// import AdminNavBar from '@/components/AdminNavBar';
-// import AlumniCarousel from '@/components/AlumniCarousel';
+import SaleNotification from "../components/Sale"
 
 const Scene = React.lazy(() => import('@/components/Scene'));
 export default function Home() {
   return (
     <>
+      <SaleNotification/>
     <span className='overflow-hidden backdr hide-scrollbar'>
       <Scene />
     </span>
