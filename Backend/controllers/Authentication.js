@@ -402,6 +402,7 @@ const Login = async (req, res) => {
     const full_name = user.full_name;
     const profile_pic = user.profile_pic;
     const role = user.role;
+    const email = user.email;
 
     // Set the cookie
     res.cookie("token", token, {
@@ -416,7 +417,7 @@ const Login = async (req, res) => {
     res.setHeader("Set-Cookie", res.getHeader("Set-Cookie"));
 
     // Send the response after setting the cookie
-    res.status(200).json({ token, _id, full_name, profile_pic, role });
+    res.status(200).json({ token, _id, full_name, profile_pic, role,email });
   } catch (error) {
     console.error("Error during login:", error);
     res.status(500).json({ error: "Failed to login" });

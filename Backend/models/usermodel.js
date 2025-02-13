@@ -122,7 +122,7 @@ userSchema.methods.generateAuthToken = function ({ expiresIn }) {
   console.log(expiresIn);
 
   return jwt.sign(
-    { id: this._id, email: this.email, role: this.role },
+    { id: this._id, email: this.email, role: this.role,name:this.full_name },
     process.env.JWT_SECRET,
     { expiresIn } // Use the expiresIn parameter directly
   );
