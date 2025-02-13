@@ -58,6 +58,7 @@ const {
 const {galleryUploadMiddleware} = require("../middlewares/GalleryUploadMiddleware");
 const {showAllNotification, showOneNotification, submitContactUs} = require("../controllers/NotificationsController");
 const {getourmembers} = require("../controllers/Authentication");
+const { createOrder } = require("../controllers/MerchController");
 const upload = multer({
   storage: multer.memoryStorage(),
   limits: {
@@ -320,5 +321,8 @@ userRoutes.delete("/:id", authMiddleware(["admin"]), async (req, res) => {
     res.status(500).json({error: "Failed to delete user"});
   }
 });
+// Merch Rooutes
+userRoutes.post("/order/:id",upload.single('payment_screenshot'),uploadMiddleware, createOrder);
+// userRoutes.post("/order/:id", createOrder);
 
 module.exports = userRoutes;

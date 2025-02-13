@@ -39,9 +39,6 @@ const uploadMiddleware = async (req, res, next) => {
         ...req.body,
         fileDownloadURL: downloadURL
       };
-  
-      console.log('File successfully uploaded.'+downloadURL);
-      console.log(req.body)
       next();
     } catch (error) {
       console.error('Error in uploadMiddleware:', error);

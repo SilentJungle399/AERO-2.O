@@ -59,7 +59,7 @@ const MyProfile = () => {
       const formData = new FormData();
       formData.append('profile_file', file);
       setLoading(true)
-      try {
+      try { 
         const token = localStorage.getItem('token');
         const baseUrl = process.env.NODE_ENV === 'production'
           ? process.env.NEXT_PUBLIC_BACKEND_URL

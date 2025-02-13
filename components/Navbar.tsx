@@ -289,15 +289,18 @@ const Navbar: React.FC = () => {
       <nav
         className={`bg-[#110e12] transition-colors duration-300 ${navBackground} w-full pointer-events-auto`}
       >
-        <div className="w-full bg-blue-500 hover:bg-blue-600 text-gray-200 text-center py-1 absolute top-0 overflow-hidden">
-          <div className="whitespace-nowrap animate-marquee ">
-            <Link href="/techevents" className="text-sm font-semibold">
-              🌟🌟🚀🚀 Techspardha is live! Register now!
-            </Link>
+        {/* Conditionally show banner only on homepage */}
+        {pathname === "/" && (
+          <div className="w-full -z-0 bg-blue-500 hover:bg-blue-600 text-gray-200 text-center py-1 absolute top-0 overflow-hidden">
+            <div className="whitespace-nowrap animate-marquee">
+              <Link href="/techevents" className="text-sm font-semibold">
+                🌟🌟🚀🚀 Techspardha is live! Register now!
+              </Link>
+            </div>
           </div>
-        </div>
-        <div className="w-full px-0 py-8">
-          <div className="flex items-center justify-between h-24 px-2 md:px-4">
+        )}
+        <div className="w-full px-0 py-2">
+          <div className="flex items-center justify-between h-20 px-2 md:px-4">
             <button
               className="xl:hidden text-white focus:outline-none"
               onClick={() => setSidebarOpen(!sidebarOpen)}
@@ -336,31 +339,31 @@ const Navbar: React.FC = () => {
                 <>
                   <Link
                     href="/gallery"
-                    className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular"
+                    className="text-white hover:text-[#3494D1] px-1 md:px-2 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular"
                   >
                     Gallery-Dashboard
                   </Link>
                   <Link
                     href="/admin/blogs"
-                    className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular"
+                    className="text-white hover:text-[#3494D1] px-1 md:px-2 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular"
                   >
                     Blogs-dashboard
                   </Link>
                   <Link
                     href="/admin/events/dashboard"
-                    className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular"
+                    className="text-white hover:text-[#3494D1] px-1 md:px-2 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular"
                   >
                     Events-dashboard
                   </Link>
                   <Link
                     href="/admin/inductions"
-                    className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular"
+                    className="text-white hover:text-[#3494D1] px-1 md:px-2 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular"
                   >
                     Inductions-dashboard
                   </Link>
                   <Link
                     href="/admin/meets"
-                    className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular"
+                    className="text-white hover:text-[#3494D1] px-1 md:px-2 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular"
                   >
                     Meets-dashboard
                   </Link>
@@ -372,24 +375,24 @@ const Navbar: React.FC = () => {
                 <>
                   <Link
                     href="/blogs"
-                    className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular"
+                    className="text-white hover:text-[#3494D1] px-1 md:px-2 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular"
                   >
                     Blogs
                   </Link>
                   <Link
                     href="/drones"
-                    className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular"
+                    className="text-white hover:text-[#3494D1] px-1 md:px-2 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular"
                   >
                     Drones
                   </Link>
                   <Link
                     href="/rcplanes"
-                    className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular"
+                    className="text-white hover:text-[#3494D1] px-1 md:px-2 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular"
                   >
                     Rc Planes
                   </Link>
                   <div className="relative group">
-                    <button className="flex items-center text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular">
+                    <button className="flex items-center text-white hover:text-[#3494D1] px-1 md:px-2 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular">
                       Activities <FaCaretDown className="ml-1 w-5 h-5" />
                     </button>
                     <div className="absolute left-0 mt-2 w-48 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 backdrop-blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-300">
@@ -428,19 +431,19 @@ const Navbar: React.FC = () => {
 
                   <Link
                     href="/inductions"
-                    className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular"
+                    className="text-white hover:text-[#3494D1] px-1 md:px-2 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular"
                   >
                     Inductions
                   </Link>
                   <Link
                     href="/gallery"
-                    className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular"
+                    className="text-white hover:text-[#3494D1] px-1 md:px-2 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular"
                   >
                     Gallery
                   </Link>
 
                   <div className="relative group">
-                    <button className="flex items-center text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular">
+                    <button className="flex items-center text-white hover:text-[#3494D1] px-1 md:px-2 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular">
                       community <FaCaretDown className="ml-1 w-5 h-5" />
                     </button>
                     <div className="absolute left-0 mt-2 w-48 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 backdrop-blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-300">
@@ -480,8 +483,8 @@ const Navbar: React.FC = () => {
                     <div className="relative flex items-center">
                       <FaBell
                         className={`w-8 h-8 cursor-pointer ${newNotificationCount > 0
-                            ? "text-yellow-400"
-                            : "text-white"
+                          ? "text-yellow-400"
+                          : "text-white"
                           }`}
                         onClick={handleBellClick}
                       />
@@ -503,7 +506,7 @@ const Navbar: React.FC = () => {
                         alt="Profile Picture"
                         width={100}
                         height={100}
-                        className="rounded-full rounded-full object-cover w-11 h-11"
+                        className="rounded-full rounded-full object-cover w-9 h-9"
                       />
                     </button>
                   </div>
@@ -551,8 +554,8 @@ const Navbar: React.FC = () => {
                           <FaBell
                             onClick={() => setSidebarOpen(!sidebarOpen)}
                             className={` absolute left-1 w-4 h-4 cursor-pointer ${newNotificationCount > 0
-                                ? "text-yellow-400"
-                                : "text-white"
+                              ? "text-yellow-400"
+                              : "text-white"
                               }`}
                           />
                           {newNotificationCount > 0 && (
@@ -697,8 +700,8 @@ const Navbar: React.FC = () => {
                   <FaBell
                     onClick={() => setSidebarOpen(!sidebarOpen)}
                     className={` absolute left-1 w-4 h-4 cursor-pointer ${newNotificationCount > 0
-                        ? "text-yellow-400"
-                        : "text-white"
+                      ? "text-yellow-400"
+                      : "text-white"
                       }`}
                   />
                   {newNotificationCount > 0 && (
@@ -749,35 +752,35 @@ const Navbar: React.FC = () => {
                 <Link
                   onClick={() => setSidebarOpen(!sidebarOpen)}
                   href="/gallery"
-                  className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular"
+                  className="text-white hover:text-[#3494D1] px-1 md:px-2 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular"
                 >
                   Gallery-Dashboard
                 </Link>
                 <Link
                   onClick={() => setSidebarOpen(!sidebarOpen)}
                   href="/admin/blogs"
-                  className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular"
+                  className="text-white hover:text-[#3494D1] px-1 md:px-2 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular"
                 >
                   Blogs-dashboard
                 </Link>
                 <Link
                   onClick={() => setSidebarOpen(!sidebarOpen)}
                   href="/admin/events/create"
-                  className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular"
+                  className="text-white hover:text-[#3494D1] px-1 md:px-2 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular"
                 >
                   Events-dashboard
                 </Link>
                 <Link
                   onClick={() => setSidebarOpen(!sidebarOpen)}
                   href="/admin/inductions"
-                  className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular"
+                  className="text-white hover:text-[#3494D1] px-1 md:px-2 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular"
                 >
                   Inductions-dashboard
                 </Link>
                 <Link
                   onClick={() => setSidebarOpen(!sidebarOpen)}
                   href="/admin/meets"
-                  className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular"
+                  className="text-white hover:text-[#3494D1] px-1 md:px-2 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular"
                 >
                   Meets-dashboard
                 </Link>
@@ -793,7 +796,7 @@ const Navbar: React.FC = () => {
                     setActivitiesDropdownOpen(false);
                   }}
                   href="/blogs"
-                  className="text-white hover:text-[#3494D1] px-1 pt-8 md:px-3 rounded-md text-xl md:text-xl lg:text-2xl bebas-neue-regular"
+                  className="text-white hover:text-[#3494D1] px-1 pt-8 md:px-2 rounded-md text-xl md:text-xl lg:text-2xl bebas-neue-regular"
                 >
                   Blogs
                 </Link>
@@ -803,7 +806,7 @@ const Navbar: React.FC = () => {
                     setActivitiesDropdownOpen(false);
                   }}
                   href="/drones"
-                  className="text-white hover:text-[#3494D1] px-1 py-2 md:px-3 rounded-md text-xl md:text-xl lg:text-2xl font-medium bebas-neue-regular"
+                  className="text-white hover:text-[#3494D1] px-1 py-2 md:px-2 rounded-md text-xl md:text-xl lg:text-2xl font-medium bebas-neue-regular"
                 >
                   Drones
                 </Link>
@@ -813,13 +816,13 @@ const Navbar: React.FC = () => {
                     setActivitiesDropdownOpen(false);
                   }}
                   href="/rcplanes"
-                  className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-xl md:text-xl lg:text-2xl font-medium bebas-neue-regular"
+                  className="text-white hover:text-[#3494D1] px-1 md:px-2 py-2 rounded-md text-xl md:text-xl lg:text-2xl font-medium bebas-neue-regular"
                 >
                   Rc Planes
                 </Link>
                 <div className="relative group z-10">
                   <button
-                    className="flex items-center text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-xl md:text-xl lg:text-2xl font-medium bebas-neue-regular"
+                    className="flex items-center text-white hover:text-[#3494D1] px-1 md:px-2 py-2 rounded-md text-xl md:text-xl lg:text-2xl font-medium bebas-neue-regular"
                     onClick={() =>
                       setActivitiesDropdownOpen(!activitiesDropdownOpen)
                     }
@@ -873,7 +876,7 @@ const Navbar: React.FC = () => {
                     setActivitiesDropdownOpen(false);
                   }}
                   href="/meets"
-                  className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-xl md:text-xl lg:text-2xl font-medium bebas-neue-regular"
+                  className="text-white hover:text-[#3494D1] px-1 md:px-2 py-2 rounded-md text-xl md:text-xl lg:text-2xl font-medium bebas-neue-regular"
                 >
                   Meets
                 </Link>
@@ -883,7 +886,7 @@ const Navbar: React.FC = () => {
                     setActivitiesDropdownOpen(false);
                   }}
                   href="/inductions"
-                  className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-xl md:text-xl lg:text-2xl font-medium bebas-neue-regular"
+                  className="text-white hover:text-[#3494D1] px-1 md:px-2 py-2 rounded-md text-xl md:text-xl lg:text-2xl font-medium bebas-neue-regular"
                 >
                   Inductions
                 </Link>
@@ -893,12 +896,12 @@ const Navbar: React.FC = () => {
                     setActivitiesDropdownOpen(false);
                   }}
                   href="/gallery"
-                  className="text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-xl md:text-xl lg:text-2xl font-medium bebas-neue-regular"
+                  className="text-white hover:text-[#3494D1] px-1 md:px-2 py-2 rounded-md text-xl md:text-xl lg:text-2xl font-medium bebas-neue-regular"
                 >
                   Gallery
                 </Link>
                 <div className="relative group" >
-                  <button className="flex items-center text-white hover:text-[#3494D1] px-1 md:px-3 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular">
+                  <button className="flex items-center text-white hover:text-[#3494D1] px-1 md:px-2 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular">
                     community <FaCaretDown className="ml-1 w-5 h-5" />
                   </button>
                   <div className="absolute left-0 mt-2 w-48 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 backdrop-blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-300">
@@ -945,7 +948,7 @@ const Navbar: React.FC = () => {
                         AeroModelling Club
                       </h1>
                     </div>
-                    <div className="flex ml-28 text-center space-x-2">
+                    <div className="flex ml-28 text-center space-x-1">
                       <a
                         href="https://www.instagram.com/aeroclub.nitkkr/"
                         target="_blank"

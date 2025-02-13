@@ -23,6 +23,7 @@ function LoginCheck() {
 
 const Buy = () => {
     const [formData, setFormData] = useState({
+        full_name: '',
         customize: false,
         customName: '',
         phone: '',
@@ -30,17 +31,20 @@ const Buy = () => {
         items: {
             'T-Shirt': { quantity: 0, size: 'M' },
             'Badge': { quantity: 0 }
-        }
+        },
+        total_price: 0,
+        file: null,
     });
-    const [userName, setUserName] = useState('');
-    const [email, setEmail] = useState('');
     const [qrCode, setQrCode] = useState('');
     const [showForm, setShowForm] = useState(true);
     const [loading, setLoading] = useState(false);
     const [screenshot, setScreenshot] = useState(null);
     const [isSubmitted, setIsSubmitted] = useState(false);
     const [viewingImage, setViewingImage] = useState(null);
-    const [costFactor, setCostFactor] = useState(7); // ₹7 per character for customization
+    const [submitloading, setSubmitLoading]=useState(false);
+    const [errorMessage, setErrorMessage] = useState("");
+    const [costFactor, setCostFactor] = useState(7); 
+    const [id, setId] = useState('');
     const merchandiseData = {
         'T-Shirt': {
             price: 599,
@@ -64,8 +68,9 @@ const Buy = () => {
         const token = localStorage.getItem('token');
         if (token) {
             const decoded = jwtDecode(token);
-            setUserName(decoded.name || '');
-            setEmail(decoded.email || '');
+            setFormData(name => ({ ...name, full_name: decoded.name || '' }));
+            setFormData(email => ({ ...email, email: decoded.email || '' }));
+            setId(localStorage.getItem('_id') || '');
         }
         LoginCheck();
     }, []);
@@ -106,7 +111,7 @@ const Buy = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         const totalAmount = calculateTotal();
-
+        setFormData(prev => ({ ...prev, total_price: totalAmount }));
         if (totalAmount === 0) {
             alert('Please select at least one item');
             return;
@@ -123,6 +128,54 @@ const Buy = () => {
             setLoading(false);
         }
     };
+    const handleOrder = async (e) => {
+        e.preventDefault();
+    
+        const totalAmount = calculateTotal();
+        if (totalAmount === 0) {
+            alert('Please select at least one item');
+            return;
+        }
+    
+        try {
+            setSubmitLoading(true);
+            const baseUrl = process.env.NODE_ENV === "production"
+                ? process.env.NEXT_PUBLIC_BACKEND_URL
+                : "http://localhost:5000";
+    
+            const formDataToSend = new FormData();
+            Object.keys(formData).forEach(key => {
+                if (key === "items") {
+                    formDataToSend.append("items", JSON.stringify(formData[key]));
+                } else {
+                    formDataToSend.append(key, formData[key]);
+                }
+            });
+    
+            formDataToSend.append("payment_screenshot", screenshot);
+    
+            const response = await fetch(`${baseUrl}/api/users/order/${id}`, {
+                method: "POST",
+                body: formDataToSend,
+            });
+    
+            const data = await response.json();
+    
+            if (response.ok) {
+                console.log(data);
+                setSubmitLoading(false);
+                setIsSubmitted(true);
+                alert("Order placed successfully!");
+                window.location.href = '/';
+            } else {
+                setErrorMessage(data.message || "Failed to place order");
+            }
+        } catch (error) {
+            console.error("Error placing order:", error);
+            setErrorMessage("Something went wrong, please try again!");
+        }
+    };
+    
 
     const handleQuantityChange = (item, delta) => {
         setFormData(prev => ({
@@ -183,12 +236,13 @@ const Buy = () => {
         }
     };
 
+
     const totalAmount = calculateTotal();
     return (
         <div className="min-h-screen bg-gray-900 text-white pt-28 py-12 px-4 sm:px-6 lg:px-8">
             <div className="max-w-2xl mx-auto space-y-8">
-                <h2 className="text-4xl font-bold text-center text-blue-400 mb-12">
-                    Techspardha 2025 Merchandise
+                <h2 className="font-['Press_Start_2P'] text-4xl font-bold text-center text-blue-400 mb-12">
+                    Techspardha 2025 <span className='text-blue-600'>Merchandise</span> 
                 </h2>
 
                 {showForm ? (
@@ -201,7 +255,7 @@ const Buy = () => {
                                     </label>
                                     <input
                                         type="text"
-                                        value={userName}
+                                        value={formData.full_name}
                                         className="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 cursor-not-allowed"
                                         readOnly
                                     />
@@ -213,7 +267,7 @@ const Buy = () => {
                                     <input
                                         type="email"
                                         name="email"
-                                        value={email}
+                                        value={formData.email}
                                         onChange={handleChange}
                                         className="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 cursor-not-allowed"
                                         readOnly
@@ -238,7 +292,7 @@ const Buy = () => {
                                     />
                                 </div>
 
-                                <div className="flex items-center space-x-2">
+                                <div className="flex items-center justify-center space-x-2">
                                     <input
                                         type="checkbox"
                                         name="customize"
@@ -389,7 +443,7 @@ const Buy = () => {
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                                 <div className="space-y-2">
-                                    <p><span className="text-blue-300">Name:</span> {userName}</p>
+                                    <p><span className="text-blue-300">Name:</span> {formData.full_name}</p>
                                     {formData.customize && (
                                         <p><span className="text-blue-300">Custom Name:</span> {formData.customName}</p>
                                     )}
@@ -481,8 +535,8 @@ const Buy = () => {
                                 Edit Details
                             </button>
                             <button
-                                onClick={() => setIsSubmitted(true)}
-                                disabled={!screenshot || isSubmitted}
+                                onClick={handleOrder}
+                                disabled={!screenshot || isSubmitted || submitloading}
                                 className={`px-6 py-2 rounded-lg ${
                                     isSubmitted 
                                         ? 'bg-green-600 cursor-not-allowed'
@@ -491,7 +545,7 @@ const Buy = () => {
                                             : 'bg-gray-600 cursor-not-allowed'
                                 } transition-colors`}
                             >
-                                {isSubmitted ? 'Payment Verified ✓' : 'Confirm Payment'}
+                                {submitloading ? 'Processing...' : isSubmitted ? 'Payment Verified ✓' : 'Confirm Payment'}
                             </button>
                         </div>
                     </div>
