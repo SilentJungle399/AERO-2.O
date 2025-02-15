@@ -367,6 +367,12 @@ const Navbar: React.FC = () => {
                   >
                     Meets-dashboard
                   </Link>
+                  <Link
+                    href="/admin/merch"
+                    className="text-white hover:text-[#3494D1] px-1 md:px-2 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular"
+                  >
+                    Merch-dashboard
+                  </Link>
                 </>
               )}
 
