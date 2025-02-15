@@ -420,20 +420,20 @@ const Navbar: React.FC = () => {
                           Workshops
                         </Link>
                         <Link
-                          href="/techevents"
+                          href="/inductions"
                           className="bebas-neue-regular block px-4 py-2 text-md text-gray-300 hover:text-[#3494D1]"
                         >
-                          Techspardha Events
+                          Inductions
                         </Link>
                       </div>
                     </div>
                   </div>
 
                   <Link
-                    href="/inductions"
-                    className="text-white hover:text-[#3494D1] px-1 md:px-2 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular"
+                    href="/techevents"
+                    className="font-['Press_Start_2P'] text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-500 to-cyan-400 animate-text-shine hover:text-[#3494D1] px-1 md:px-2 py-2 rounded-md text-sm md:text-xl lg:text-sm"
                   >
-                    Inductions
+                    Techspardha
                   </Link>
                   <Link
                     href="/gallery"
@@ -885,10 +885,10 @@ const Navbar: React.FC = () => {
                     setSidebarOpen(!sidebarOpen);
                     setActivitiesDropdownOpen(false);
                   }}
-                  href="/inductions"
-                  className="text-white hover:text-[#3494D1] px-1 md:px-2 py-2 rounded-md text-xl md:text-xl lg:text-2xl font-medium bebas-neue-regular"
+                  href="/techevents"
+                  className="font-['Press_Start_2P'] text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-500 to-cyan-400 animate-text-shine hover:text-[#3494D1] px-1 md:px-2 py-2 rounded-md text-sm md:text-lg"
                 >
-                  Inductions
+                  Techspardha
                 </Link>
                 <Link
                   onClick={() => {
