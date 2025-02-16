@@ -50,16 +50,16 @@ const Buy = () => {
             price: 599,
             sizes: ['S', 'M', 'L', 'XL', 'XXL'],
             images: {
-                main: '/T-shirt.png',
-                back: '/T-shirt.png',
-                sizeChart: '/T-shirt.png'
+                main: '/T-shirt-front.png',
+                back: '/T-shirt-back.png',
+                sizeChart: '/size-chart.png'
             }
         },
         'Badge': {
             price: 199,
             images: {
-                main: '/approved1.png',
-                back: '/approved1.png'
+                main: '/aeronewlogo.jpg',
+                back: '/aeronewlogo.jpg'
             }
         }
     };

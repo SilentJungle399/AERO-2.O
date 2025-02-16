@@ -48,10 +48,10 @@ const NotificationModal: React.FC<NotificationModalProps> = ({
   const sortedNotifications = notifications.sort((a, b) => {
     return a.read === b.read
       ? new Date(b.notification.created_at).getTime() -
-      new Date(a.notification.created_at).getTime()
+          new Date(a.notification.created_at).getTime()
       : a.read
-        ? 1
-        : -1;
+      ? 1
+      : -1;
   });
 
   const unreadNotifications = sortedNotifications.filter(
@@ -290,19 +290,24 @@ const Navbar: React.FC = () => {
         className={`bg-[#110e12] transition-colors duration-300 ${navBackground} w-full pointer-events-auto`}
       >
         {/* Conditionally show banner only on homepage */}
-        {pathname === "/" && (
-          <div className="w-full -z-0 bg-blue-500 hover:bg-blue-600 text-gray-200 text-center py-1 absolute top-0 overflow-hidden">
-            <div className="whitespace-nowrap animate-marquee">
-              <Link href="/techevents" className="text-sm font-semibold">
-                🌟🌟🚀🚀 Techspardha is live! Register now!
-              </Link>
+        {pathname !== "/techevents" && (
+            <Link href="/techevents" className="text-sm font-semibold">
+            <div className="w-full -z-0 bg-blue-500 hover:bg-blue-600 text-gray-200 text-center py-1 absolute top-0 overflow-hidden">
+              <div className="inline-block whitespace-nowrap animate-marquee">
+                <span className="animate-[blink_1s_infinite]">
+                  🌟🌟🚀🚀 Techspardha is live! Register now!
+                </span>
+              </div>
             </div>
-          </div>
+          </Link>
+          
+          
+          
         )}
-        <div className="w-full px-0 py-2">
-          <div className="flex items-center justify-between h-20 px-2 md:px-4">
+        <div className="w-full space-x-5 pt-7">
+          <div className="flex items-center justify-between h-20 px-1 md:px-1">
             <button
-              className="xl:hidden text-white focus:outline-none"
+              className="lg:hidden text-white focus:outline-none"
               onClick={() => setSidebarOpen(!sidebarOpen)}
             >
               <svg
@@ -339,37 +344,37 @@ const Navbar: React.FC = () => {
                 <>
                   <Link
                     href="/gallery"
-                    className="text-white hover:text-[#3494D1] px-1 md:px-2 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular"
+                    className="text-white hover:text-[#3494D1] px-1 md:px-2 py-2 rounded-md text-base md:text-xl lg:text-xl font-medium bebas-neue-regular"
                   >
                     Gallery-Dashboard
                   </Link>
                   <Link
                     href="/admin/blogs"
-                    className="text-white hover:text-[#3494D1] px-1 md:px-2 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular"
+                    className="text-white hover:text-[#3494D1] px-1 md:px-2 py-2 rounded-md text-base md:text-xl lg:text-xl font-medium bebas-neue-regular"
                   >
                     Blogs-dashboard
                   </Link>
                   <Link
                     href="/admin/events/dashboard"
-                    className="text-white hover:text-[#3494D1] px-1 md:px-2 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular"
+                    className="text-white hover:text-[#3494D1] px-1 md:px-2 py-2 rounded-md text-base md:text-xl lg:text-xl font-medium bebas-neue-regular"
                   >
                     Events-dashboard
                   </Link>
                   <Link
                     href="/admin/inductions"
-                    className="text-white hover:text-[#3494D1] px-1 md:px-2 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular"
+                    className="text-white hover:text-[#3494D1] px-1 md:px-2 py-2 rounded-md text-base md:text-xl lg:text-xl font-medium bebas-neue-regular"
                   >
                     Inductions-dashboard
                   </Link>
                   <Link
                     href="/admin/meets"
-                    className="text-white hover:text-[#3494D1] px-1 md:px-2 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular"
+                    className="text-white hover:text-[#3494D1] px-1 md:px-2 py-2 rounded-md text-base md:text-xl lg:text-xl font-medium bebas-neue-regular"
                   >
                     Meets-dashboard
                   </Link>
                   <Link
                     href="/admin/merch"
-                    className="text-white hover:text-[#3494D1] px-1 md:px-2 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular"
+                    className="text-white hover:text-[#3494D1] px-1 md:px-2 py-2 rounded-md text-base md:text-lg lg:text-xl font-medium bebas-neue-regular"
                   >
                     Merch-dashboard
                   </Link>
@@ -381,24 +386,24 @@ const Navbar: React.FC = () => {
                 <>
                   <Link
                     href="/blogs"
-                    className="text-white hover:text-[#3494D1] px-1 md:px-2 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular"
+                    className="text-white hover:text-[#3494D1] px-1 md:px-2 py-2 rounded-md text-base md:text-xl lg:text-xl font-medium bebas-neue-regular"
                   >
                     Blogs
                   </Link>
                   <Link
                     href="/drones"
-                    className="text-white hover:text-[#3494D1] px-1 md:px-2 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular"
+                    className="text-white hover:text-[#3494D1] px-1 md:px-2 py-2 rounded-md text-base md:text-xl lg:text-xl font-medium bebas-neue-regular"
                   >
                     Drones
                   </Link>
                   <Link
                     href="/rcplanes"
-                    className="text-white hover:text-[#3494D1] px-1 md:px-2 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular"
+                    className="text-white hover:text-[#3494D1] px-1 md:px-2 py-2 rounded-md text-base md:text-xl lg:text-xl font-medium bebas-neue-regular"
                   >
                     Rc Planes
                   </Link>
                   <div className="relative group">
-                    <button className="flex items-center text-white hover:text-[#3494D1] px-1 md:px-2 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular">
+                    <button className="flex items-center text-white hover:text-[#3494D1] px-1 md:px-2 py-2 rounded-md text-base md:text-xl lg:text-xl font-medium bebas-neue-regular">
                       Activities <FaCaretDown className="ml-1 w-5 h-5" />
                     </button>
                     <div className="absolute left-0 mt-2 w-48 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 backdrop-blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-300">
@@ -437,19 +442,19 @@ const Navbar: React.FC = () => {
 
                   <Link
                     href="/techevents"
-                    className="font-['Press_Start_2P'] text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-500 to-cyan-400 animate-text-shine hover:text-[#3494D1] px-1 md:px-2 py-2 rounded-md text-sm md:text-xl lg:text-sm"
+                    className="font-['Press_Start_2P']   text-blue-400 bg-clip-text  animate-text-shine hover:text-[#3495d18a] px-1 md:px-2 py-2 rounded-md text-sm md:text-2xl lg:text-lg "
                   >
                     Techspardha
                   </Link>
                   <Link
                     href="/gallery"
-                    className="text-white hover:text-[#3494D1] px-1 md:px-2 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular"
+                    className="text-white hover:text-[#3494D1] px-1 md:px-2 py-2 rounded-md text-base md:text-xl lg:text-xl font-medium bebas-neue-regular"
                   >
                     Gallery
                   </Link>
 
                   <div className="relative group">
-                    <button className="flex items-center text-white hover:text-[#3494D1] px-1 md:px-2 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular">
+                    <button className="flex items-center text-white hover:text-[#3494D1] px-1 md:px-2 py-2 rounded-md text-base md:text-xl lg:text-xl font-medium bebas-neue-regular">
                       community <FaCaretDown className="ml-1 w-5 h-5" />
                     </button>
                     <div className="absolute left-0 mt-2 w-48 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 backdrop-blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-300">
@@ -488,10 +493,11 @@ const Navbar: React.FC = () => {
                   <div className="flex items-center cursor-pointer">
                     <div className="relative flex items-center">
                       <FaBell
-                        className={`w-8 h-8 cursor-pointer ${newNotificationCount > 0
-                          ? "text-yellow-400"
-                          : "text-white"
-                          }`}
+                        className={`w-8 h-8 cursor-pointer ${
+                          newNotificationCount > 0
+                            ? "text-yellow-400"
+                            : "text-white"
+                        }`}
                         onClick={handleBellClick}
                       />
                       {newNotificationCount > 0 && (
@@ -559,10 +565,11 @@ const Navbar: React.FC = () => {
                         >
                           <FaBell
                             onClick={() => setSidebarOpen(!sidebarOpen)}
-                            className={` absolute left-1 w-4 h-4 cursor-pointer ${newNotificationCount > 0
-                              ? "text-yellow-400"
-                              : "text-white"
-                              }`}
+                            className={` absolute left-1 w-4 h-4 cursor-pointer ${
+                              newNotificationCount > 0
+                                ? "text-yellow-400"
+                                : "text-white"
+                            }`}
                           />
                           {newNotificationCount > 0 && (
                             <div
@@ -610,8 +617,9 @@ const Navbar: React.FC = () => {
 
         {/* Sidebar for Mobile */}
         <div
-          className={`fixed inset-y-0 left-0 transform ${sidebarOpen ? "translate-x-0" : "-translate-x-full"
-            } md:hidden transition-transform duration-300 ease-in-out bg-black bg-opacity-90 w-64 p-4 z-50`}
+          className={`fixed inset-y-0 left-0 transform ${
+            sidebarOpen ? "translate-x-0" : "-translate-x-full"
+          } md:hidden transition-transform duration-300 ease-in-out bg-black bg-opacity-90 w-64 p-4 z-50`}
         >
           <button
             className="text-white focus:outline-none mb-4"
@@ -705,10 +713,11 @@ const Navbar: React.FC = () => {
                 >
                   <FaBell
                     onClick={() => setSidebarOpen(!sidebarOpen)}
-                    className={` absolute left-1 w-4 h-4 cursor-pointer ${newNotificationCount > 0
-                      ? "text-yellow-400"
-                      : "text-white"
-                      }`}
+                    className={` absolute left-1 w-4 h-4 cursor-pointer ${
+                      newNotificationCount > 0
+                        ? "text-yellow-400"
+                        : "text-white"
+                    }`}
                   />
                   {newNotificationCount > 0 && (
                     <div
@@ -906,7 +915,7 @@ const Navbar: React.FC = () => {
                 >
                   Gallery
                 </Link>
-                <div className="relative group" >
+                <div className="relative group">
                   <button className="flex items-center text-white hover:text-[#3494D1] px-1 md:px-2 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular">
                     community <FaCaretDown className="ml-1 w-5 h-5" />
                   </button>
@@ -984,10 +993,7 @@ const Navbar: React.FC = () => {
             )}
           </div>
         </div>
-        <div>
-
-
-        </div>
+        <div></div>
       </nav>
     </div>
   );

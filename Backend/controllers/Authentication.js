@@ -370,10 +370,12 @@ const Signup = async (req, res) => {
 };
 
 const Login = async (req, res) => {
-  const { email, password } = req.body;
-
+  
   try {
+    const { email, password } = req.body;
+    console.log(email)
     const user = await User.findOne({ email });
+    console.log(user)
     if (!user) {
       return res.status(400).json({ error: "Invalid email" });
     }
@@ -402,7 +404,6 @@ const Login = async (req, res) => {
     const full_name = user.full_name;
     const profile_pic = user.profile_pic;
     const role = user.role;
-    const email = user.email;
 
     // Set the cookie
     res.cookie("token", token, {
