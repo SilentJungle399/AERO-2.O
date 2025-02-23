@@ -47,7 +47,7 @@ const Buy = () => {
   const [id, setId] = useState('');
   const merchandiseData = {
     'T-Shirt': {
-      price: 599,
+      price: 499,
       sizes: ['S', 'M', 'L', 'XL', 'XXL'],
       images: {
         main: '/T-shirt-front.png',
@@ -58,7 +58,7 @@ const Buy = () => {
     'Badge': {
       price: 199,
       images: {
-        main: '/aeronewlogo.jpg',
+        main: '/222.jpg',
         back: '/aeronewlogo.jpg'
       }
     }
@@ -347,7 +347,7 @@ const Buy = () => {
                         <div className="flex justify-between items-start mb-4">
                           <div>
                             <p className="font-medium text-lg">{item}</p>
-                            <p className="text-sm text-blue-300">₹{data.price.toLocaleString()}</p>
+                            <p className="text-sm text-blue-300">₹coming soon</p>
                             {item === 'T-Shirt' && (
                               <button
                                 type="button"

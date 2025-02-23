@@ -59,36 +59,36 @@ export default function Techspardha() {
               title: "High Sky",
               icon: <Rocket className="w-6 h-6" />,
               color: "from-blue-600 to-cyan-500",
-              description: "Aerial robotics challenge testing autonomous flight systems",
-              poster: "2ndyr.jpg"
+              description: "28 feb in sports ground ( 8 AM to 1 PM). Aerial robotics challenge testing autonomous flight systems",
+              poster: "2_e.png"
             },
             {
               title: "Drone Web Fiesta",
               icon: <Zap className="w-6 h-6" />,
               color: "from-purple-600 to-pink-500",
-              description: "Drone racing competition with obstacle navigation",
-              poster: "2ndyr.jpg"
+              description: " 1 march in sports ground (8 AM to 1 PM). Drone racing competition with obstacle navigation",
+              poster: "1_e.png"
             },
             {
               title: "SimSky",
               icon: <Cloud className="w-6 h-6" />,
               color: "from-emerald-600 to-cyan-400",
-              description: "Flight simulation challenge with emergency scenarios",
-              poster: "2ndyr.jpg"
+              description: "ED hall chemistry department (27, 28, 1, 2) (3 PM to 8:00 PM). Flight simulation challenge with emergency scenarios",
+              poster: "4_e.png"
             },
             {
               title: "DRL",
               icon: <Trophy className="w-6 h-6" />,
               color: "from-rose-600 to-amber-500",
-              description: "Professional drone racing league competition",
-              poster: "2ndyr.jpg"
+              description: "ED hall front ground (27, 28, 1, 2) (3 PM to 8:00 PM). Professional drone racing league competition",
+              poster: "3_e.png"
             }
           ].map((event, idx) => (
             <div key={idx} className="group relative bg-gray-800 rounded-2xl overflow-hidden transition-transform duration-300 md:hover:scale-[1.02] border border-cyan-500/20 md:hover:border-cyan-400/40">
               <div className={`absolute inset-0 bg-gradient-to-br opacity-30 ${event.color} md:group-hover:opacity-50 transition-opacity`}></div>
 
               {/* Event Poster */}
-              <div className="relative h-48 md:h-40 overflow-hidden border-b border-cyan-500/20">
+              <div className="relative h-64 lg:h-68 overflow-hidden border-b border-cyan-500/20">
                 <img
                   src={event.poster}
                   alt={event.title}
@@ -97,7 +97,7 @@ export default function Techspardha() {
                 <div className="absolute inset-0 bg-gradient-to-t from-gray-900/80 to-transparent" />
               </div>
 
-              <div className="p-4 md:p-6 relative">
+              <div className="p-4 md:p-3 relative">
                 <div className="flex items-center justify-between mb-3 md:mb-4">
                   <div className={`text-xl md:text-2xl font-bold bg-gradient-to-r ${event.color} bg-clip-text text-transparent`}>
                     {event.icon} {event.title}
@@ -158,7 +158,7 @@ export default function Techspardha() {
                       className="w-auto h-auto object-cover"
                     />
                   </div>
-                  <div className="text-xl font-bold">₹{item.price}</div>
+                  <div className="text-xl font-bold">###</div>
                   <div className="text-sm text-gray-400">{item.color} T-Shirt</div>
                 </div>
               ))}
@@ -184,7 +184,7 @@ export default function Techspardha() {
                   <div className="absolute inset-0 bg-gradient-to-t from-gray-900/60 to-transparent" />
                 </div>
                 <div>
-                  <div className="text-2xl font-bold">₹{item.price}</div>
+                  <div className="text-2xl font-bold">###coming soon</div>
                   <div className="text-sm text-gray-400">{item.color} T-Shirt</div>
                 </div>
               </div>
