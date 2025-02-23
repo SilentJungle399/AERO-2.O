@@ -64,29 +64,37 @@ export default function Techspardha() {
               title: "High Sky",
               icon: <Rocket className="w-6 h-6"/>,
               color: "from-blue-600 to-cyan-500",
-              description: "28 feb in sports ground ( 8 AM to 1 PM). Aerial robotics challenge testing autonomous flight systems",
-              poster: "2_e.png"
+              description: "Design and launch a glider that stays in the air for the longest duration.",
+              poster: "2_e.png",
+              teamSize: 4,
+              registerLink: "https://forms.gle/2CVYnPjT8bpdhda98"
             },
             {
               title: "Drone Web Fiesta",
               icon: <Zap className="w-6 h-6"/>,
               color: "from-purple-600 to-pink-500",
-              description: " 1 march in sports ground (8 AM to 1 PM). Drone racing competition with obstacle navigation",
-              poster: "1_e.png"
+              description: "Test your piloting skills as you navigate an obstacle course to reach the finish line.",
+              poster: "1_e.png",
+              teamSize: 4,
+              registerLink: "https://forms.gle/rig2Mr1obon68shTA"
             },
             {
               title: "SimSky",
               icon: <Cloud className="w-6 h-6"/>,
               color: "from-emerald-600 to-cyan-400",
-              description: "ED hall chemistry department (27, 28, 1, 2) (3 PM to 8:00 PM). Flight simulation challenge with emergency scenarios",
-              poster: "4_e.png"
+              description: "Experience the thrill of flying drones and RC planes on high-quality simulators.",
+              poster: "4_e.png",
+              teamSize: 1,
+              registerLink: "https://forms.gle/6ASFAbuDJdSZjaBi8"
             },
             {
               title: "DRL",
               icon: <Trophy className="w-6 h-6"/>,
               color: "from-rose-600 to-amber-500",
-              description: "ED hall front ground (27, 28, 1, 2) (3 PM to 8:00 PM). Professional drone racing league competition",
-              poster: "3_e.png"
+              description: "Fly mini drones through small obstacles and compete for the fastest time!",
+              poster: "3_e.png",
+              teamSize: 1,
+              registerLink: "https://forms.gle/qYYK86qafGVAnq2q9"
             }
           ].map((event, idx) => (
             <div key={idx}
@@ -116,18 +124,22 @@ export default function Techspardha() {
                 {/* Mobile Content */}
                 <div className="md:hidden space-y-3">
                   <p className="text-gray-300 text-sm">{event.description}</p>
-                  <button className="w-full py-2 bg-gradient-to-r from-blue-500 to-cyan-400 rounded-lg font-semibold text-sm glow-cyan">
-                    Register Now
-                  </button>
+                  <a href={event.registerLink}>
+                    <button className="w-full py-2 bg-gradient-to-r from-blue-500 to-cyan-400 rounded-lg font-semibold text-sm glow-cyan">
+                      Register Now
+                    </button>
+                  </a>
                 </div>
 
                 {/* Desktop Hover Content */}
                 <div className="hidden md:block overflow-hidden">
                   <div className="md:group-hover:translate-y-0 translate-y-full transition-transform duration-300">
                     <p className="text-gray-300 mb-4 text-sm">{event.description}</p>
-                    <button className="w-full py-3 bg-gradient-to-r from-blue-500 to-cyan-400 rounded-xl font-semibold hover:opacity-90 transition-opacity glow-cyan">
-                      Register Now
-                    </button>
+                    <a href={event.registerLink}>
+                      <button className="w-full py-3 bg-gradient-to-r from-blue-500 to-cyan-400 rounded-xl font-semibold hover:opacity-90 transition-opacity glow-cyan">
+                        Register Now
+                      </button>
+                    </a>
                   </div>
                 </div>
               </div>
