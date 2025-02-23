@@ -1,9 +1,14 @@
 "use client";
 import Head from 'next/head';
 import Link from "next/link";
-import { Rocket, Zap, Trophy, Cloud, ShoppingBag } from 'lucide-react';
+import {Cloud, Rocket, ShoppingBag, Trophy, Zap} from 'lucide-react';
 
 export default function Techspardha() {
+  const shirtVariants = [
+    {price: 399, color: "(without name)", image: "TechShirt-wobg.png"},
+    {price: 449, color: "(with name)", image: "T-shirt.png"},
+  ]
+
   return (
     <div className="min-h-screen pt-5 bg-gray-900 text-white">
       <Head>
@@ -30,12 +35,12 @@ export default function Techspardha() {
               <h3 className="text-lg font-semibold mb-4 text-cyan-300 glow-cyan">Proudly Supported By</h3>
               <div className="flex flex-wrap justify-center gap-6">
                 <div className="flex items-center space-x-2 glow-blue">
-                  <img className="w-6 h-6 rounded-full glow-blue" src="dass.png" alt="Sponsor" />
+                  <img className="w-6 h-6 rounded-full glow-blue" src="dass.png" alt="Sponsor"/>
                   <span className="text-lg">Main Sponsor</span>
                 </div>
                 {['Tech Giant Corp', 'InnovateX', 'Future Labs'].map((sponsor, idx) => (
                   <div key={idx} className="flex items-center space-x-2 glow-blue">
-                    <img className="w-6 h-6 rounded-full glow-blue" src="dass.png" alt="Sponsor" />
+                    <img className="w-6 h-6 rounded-full glow-blue" src="dass.png" alt="Sponsor"/>
                     <span className="text-lg">{sponsor}</span>
                   </div>
                 ))}
@@ -48,7 +53,7 @@ export default function Techspardha() {
       {/* Events Section */}
       <div className="container mx-auto px-4 pb-16">
         <h2 className="text-4xl font-bold my-4 flex items-center">
-          <Trophy className="mr-4 text-purple-400" />
+          <Trophy className="mr-4 text-purple-400"/>
           <span className="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
             Events
           </span>
@@ -57,34 +62,35 @@ export default function Techspardha() {
           {[
             {
               title: "High Sky",
-              icon: <Rocket className="w-6 h-6" />,
+              icon: <Rocket className="w-6 h-6"/>,
               color: "from-blue-600 to-cyan-500",
               description: "28 feb in sports ground ( 8 AM to 1 PM). Aerial robotics challenge testing autonomous flight systems",
               poster: "2_e.png"
             },
             {
               title: "Drone Web Fiesta",
-              icon: <Zap className="w-6 h-6" />,
+              icon: <Zap className="w-6 h-6"/>,
               color: "from-purple-600 to-pink-500",
               description: " 1 march in sports ground (8 AM to 1 PM). Drone racing competition with obstacle navigation",
               poster: "1_e.png"
             },
             {
               title: "SimSky",
-              icon: <Cloud className="w-6 h-6" />,
+              icon: <Cloud className="w-6 h-6"/>,
               color: "from-emerald-600 to-cyan-400",
               description: "ED hall chemistry department (27, 28, 1, 2) (3 PM to 8:00 PM). Flight simulation challenge with emergency scenarios",
               poster: "4_e.png"
             },
             {
               title: "DRL",
-              icon: <Trophy className="w-6 h-6" />,
+              icon: <Trophy className="w-6 h-6"/>,
               color: "from-rose-600 to-amber-500",
               description: "ED hall front ground (27, 28, 1, 2) (3 PM to 8:00 PM). Professional drone racing league competition",
               poster: "3_e.png"
             }
           ].map((event, idx) => (
-            <div key={idx} className="group relative bg-gray-800 rounded-2xl overflow-hidden transition-transform duration-300 md:hover:scale-[1.02] border border-cyan-500/20 md:hover:border-cyan-400/40">
+            <div key={idx}
+                 className="group relative bg-gray-800 rounded-2xl overflow-hidden transition-transform duration-300 md:hover:scale-[1.02] border border-cyan-500/20 md:hover:border-cyan-400/40">
               <div className={`absolute inset-0 bg-gradient-to-br opacity-30 ${event.color} md:group-hover:opacity-50 transition-opacity`}></div>
 
               {/* Event Poster */}
@@ -94,7 +100,7 @@ export default function Techspardha() {
                   alt={event.title}
                   className="w-full h-full object-cover md:group-hover:scale-105 transition-transform duration-300"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-gray-900/80 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-gray-900/80 to-transparent"/>
               </div>
 
               <div className="p-4 md:p-3 relative">
@@ -103,7 +109,7 @@ export default function Techspardha() {
                     {event.icon} {event.title}
                   </div>
                   <span className="px-3 py-1 text-[6px] md:text-sm bg-gray-700/50 rounded-full backdrop-blur-sm">
-                    Team Size: 4
+                    {event.teamSize > 1 ? `Team Size: ${event.teamSize}` : "Solo event"}
                   </span>
                 </div>
 
@@ -134,7 +140,7 @@ export default function Techspardha() {
       <div className="container mx-auto px-4 py-8 md:py-16">
         <div className="bg-gradient-to-br from-gray-800 to-blue-900/20 rounded-2xl p-6 md:p-8 relative overflow-hidden border border-cyan-500/20">
           <h2 className="text-3xl md:text-4xl font-bold mb-6 flex items-center">
-            <ShoppingBag className="mr-3 text-purple-400" />
+            <ShoppingBag className="mr-3 text-purple-400"/>
             <span className="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
               Official Merchandise
             </span>
@@ -142,50 +148,40 @@ export default function Techspardha() {
 
           {/* Mobile Carousel */}
           <div className='md:hidden flex flex-row justify-center items-center space-x-4 overflow-x-auto pb-4'>
-          <div>⬅️</div>
-          <div className="md:hidden overflow-x-auto pb-4">
-            <div className="flex space-x-4 ">
-              {[
-                { price: 599, color: "Black", image: "T-shirt.png" },
-                { price: 599, color: "White", image: "T-shirt.png" },
-                { price: 699, color: "Limited Edition", image: "T-shirt.png" }
-              ].map((item, idx) => (
-                <div key={idx} className="flex-shrink-0 w-40 bg-gray-800/50 rounded-xl p-4 border border-cyan-500/20">
-                  <div className="relative h-auto overflow-hidden rounded-lg mb-3">
-                    <img
-                      src={item.image}
-                      alt={`Techspardha ${item.color} T-Shirt`}
-                      className="w-auto h-auto object-cover"
-                    />
+            <div className="md:hidden overflow-x-auto pb-4 w-full">
+              <div className="flex flex-col gap-4">
+                {shirtVariants.map((item, idx) => (
+                  <div key={idx} className="flex-shrink-0 w-40 bg-gray-800/50 rounded-xl p-4 border border-cyan-500/20 w-full">
+                    <div className="relative h-auto overflow-hidden rounded-lg mb-3">
+                      <img
+                        src={item.image}
+                        alt={`Techspardha ${item.color}`}
+                        className="w-auto h-auto object-cover"
+                      />
+                    </div>
+                    <div className="text-xl font-bold">₹{item.price}</div>
+                    <div className="text-sm text-gray-400">T-Shirt {item.color}</div>
                   </div>
-                  <div className="text-xl font-bold">###</div>
-                  <div className="text-sm text-gray-400">{item.color} T-Shirt</div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
-          </div>
-          <div>➡️</div>
           </div>
 
           {/* Desktop Grid */}
-          <div className="hidden md:grid md:grid-cols-3 gap-6">
-            {[
-              { price: 599, color: "Black", image: "T-shirt.png" },
-              { price: 599, color: "White", image: "T-shirt.png" },
-              { price: 699, color: "Limited Edition", image: "T-shirt.png" }
-            ].map((item, idx) => (
+          <div className="hidden md:grid md:grid-cols-2 gap-6">
+            {shirtVariants.map((item, idx) => (
               <div key={idx} className="bg-gray-800/50 rounded-xl p-6 hover:bg-gray-700/30 transition-colors group relative border border-cyan-500/20">
-                <div className="relative h-64 overflow-hidden rounded-lg mb-4">
+                <div className="relative overflow-hidden rounded-lg mb-4">
                   <img
                     src={item.image}
-                    alt={`Techspardha ${item.color} T-Shirt`}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    alt={`Techspardha ${item.color}`}
+                    className="h-full object-cover group-hover:scale-105 transition-transform duration-300"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-gray-900/60 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-gray-900/60 to-transparent"/>
                 </div>
                 <div>
-                  <div className="text-2xl font-bold">###coming soon</div>
-                  <div className="text-sm text-gray-400">{item.color} T-Shirt</div>
+                  <div className="text-2xl font-bold">₹{item.price}</div>
+                  <div className="text-sm text-gray-400">T-Shirt {item.color}</div>
                 </div>
               </div>
             ))}
@@ -202,32 +198,45 @@ export default function Techspardha() {
         </div>
       </div>
 
-
-
       {/* Global Styles */}
       <style jsx global>{`
-        @keyframes text-shine {
-          0% { background-position: 0% 50%; }
-          100% { background-position: 100% 50%; }
-        }
-        @keyframes grid-pulse {
-          0% { opacity: 0.1; }
-          50% { opacity: 0.2; }
-          100% { opacity: 0.1; }
-        }
-        .animate-text-shine {
-          background-size: 200% auto;
-          animation: text-shine 3s linear infinite;
-        }
-        .animate-grid-pulse {
-          animation: grid-pulse 3s ease-in-out infinite;
-        }
-        .glow-cyan {
-          filter: drop-shadow(0 0 8px rgba(34, 211, 238, 0.5));
-        }
-        .glow-blue {
-          filter: drop-shadow(0 0 8px rgba(59, 130, 246, 0.5));
-        }
+          @keyframes text-shine {
+              0% {
+                  background-position: 0% 50%;
+              }
+              100% {
+                  background-position: 100% 50%;
+              }
+          }
+
+          @keyframes grid-pulse {
+              0% {
+                  opacity: 0.1;
+              }
+              50% {
+                  opacity: 0.2;
+              }
+              100% {
+                  opacity: 0.1;
+              }
+          }
+
+          .animate-text-shine {
+              background-size: 200% auto;
+              animation: text-shine 3s linear infinite;
+          }
+
+          .animate-grid-pulse {
+              animation: grid-pulse 3s ease-in-out infinite;
+          }
+
+          .glow-cyan {
+              filter: drop-shadow(0 0 8px rgba(34, 211, 238, 0.5));
+          }
+
+          .glow-blue {
+              filter: drop-shadow(0 0 8px rgba(59, 130, 246, 0.5));
+          }
       `}</style>
     </div>
   );

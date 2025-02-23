@@ -30,7 +30,7 @@ const Buy = () => {
     email: '',
     items: {
       'T-Shirt': {quantity: 0, size: 'M'},
-      'Badge': {quantity: 0}
+      // 'Badge': {quantity: 0}
     },
     total_price: 0,
     file: null,
@@ -47,21 +47,22 @@ const Buy = () => {
   const [id, setId] = useState('');
   const merchandiseData = {
     'T-Shirt': {
-      price: 499,
+      price: 399,
       sizes: ['S', 'M', 'L', 'XL', 'XXL'],
       images: {
         main: '/T-shirt-front.png',
         back: '/T-shirt-back.png',
+        wobg: '/TechShirt-wobg-back.png',
         sizeChart: '/size-chart.png'
       }
     },
-    'Badge': {
-      price: 199,
-      images: {
-        main: '/222.jpg',
-        back: '/aeronewlogo.jpg'
-      }
-    }
+    // 'Badge': {
+    //   price: 199,
+    //   images: {
+    //     main: '/aeronewlogo.jpg',
+    //     back: '/aeronewlogo.jpg'
+    //   }
+    // }
   };
 
   useEffect(() => {
@@ -79,7 +80,7 @@ const Buy = () => {
     const itemTotal = Object.entries(formData.items)
       .reduce((sum, [item, data]) => sum + (merchandiseData[item].price * data.quantity), 0);
     const customizationCost = formData.customize ?
-      (formData.customName.length * costFactor) : 0;
+      50 : 0;
     return itemTotal + customizationCost;
   };
 
@@ -87,7 +88,7 @@ const Buy = () => {
     try {
       const totalAmount = calculateTotal();
       const {qr} = await upiqr({
-        payeeVPA: 'jaystrp2022@ybl',
+        payeeVPA: 'abhimanyumittal.am@oksbi',
         payeeName: 'Techspardha 2025',
         amount: totalAmount,
         transactionNote: `Order: ${Object.entries(formData.items)
@@ -316,10 +317,11 @@ const Buy = () => {
                     maxLength={15}
                     placeholder='Name to print (max 15 letters)'
                     className="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3"
+                    required
                   />
                   <p className="text-sm text-blue-300 mt-1">
-                    {formData.customName.length}/15 characters •
-                    Cost: ₹{formData.customName.length * costFactor}
+                    {formData.customName.length}/10 characters •
+                    Cost: ₹50
                   </p>
                 </div>
               )}
@@ -333,13 +335,13 @@ const Buy = () => {
                         <img
                           src={data.images.main}
                           alt={item}
-                          className="w-32 h-32 object-contain cursor-zoom-in border border-blue-600 rounded-lg"
+                          className="h-32 object-contain cursor-zoom-in border border-blue-600 rounded-lg"
                           onClick={() => setViewingImage(data.images.main)}
                         />
                         <img
-                          src={data.images.back}
+                          src={formData.customize ? data.images.back : data.images.wobg}
                           alt={`${item} back`}
-                          className="w-32 h-32 object-contain cursor-zoom-in border border-blue-600 rounded-lg"
+                          className="h-32 object-contain cursor-zoom-in border border-blue-600 rounded-lg"
                           onClick={() => setViewingImage(data.images.back)}
                         />
                       </div>
@@ -347,7 +349,8 @@ const Buy = () => {
                         <div className="flex justify-between items-start mb-4">
                           <div>
                             <p className="font-medium text-lg">{item}</p>
-                            <p className="text-sm text-blue-300">₹coming soon</p>
+                            <p
+                              className="text-sm text-blue-300">₹{data.price.toLocaleString()}</p>
                             {item === 'T-Shirt' && (
                               <button
                                 type="button"
@@ -492,6 +495,9 @@ const Buy = () => {
                     className="w-full h-auto rounded-lg"
                   />
                 </div>
+                <p className="text-center my-4 text-blue-300 text-xl">
+                  UPI: <code className="text-gray-400 font-mono">abhimanyumittal.am@oksbi</code>
+                </p>
               </div>
 
               <div className="pt-6">
@@ -551,7 +557,7 @@ const Buy = () => {
             </div>
             <div className="absolute bottom-0 left-0 w-full bg-gray-700 rounded-b-2xl">
               <p className="text-center text-gray-400 text-sm">
-                Contact: 7320967983 (Jay), 9929866706 (Divyanshu), 9835424032 (Harsh)
+                Contact: 9810718018 (Abhimanyu), 9812763151 (Priyanshu)
               </p>
             </div>
           </div>
