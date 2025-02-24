@@ -1,7 +1,6 @@
 "use client";
 import Head from 'next/head';
-import Link from "next/link";
-import {Cloud, Rocket, ShoppingBag, Trophy, Zap} from 'lucide-react';
+import {Cloud, Rocket, Trophy, Zap} from 'lucide-react';
 
 export default function Techspardha() {
   const shirtVariants = [
@@ -149,66 +148,66 @@ export default function Techspardha() {
       </div>
 
       {/* Merchandise Section */}
-      <div className="container mx-auto px-4 py-8 md:py-16">
-        <div className="bg-gradient-to-br from-gray-800 to-blue-900/20 rounded-2xl p-6 md:p-8 relative overflow-hidden border border-cyan-500/20">
-          <h2 className="text-3xl md:text-4xl font-bold mb-6 flex items-center">
-            <ShoppingBag className="mr-3 text-purple-400"/>
-            <span className="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
-              Official Merchandise
-            </span>
-          </h2>
+      {/*<div className="container mx-auto px-4 py-8 md:py-16">*/}
+      {/*  <div className="bg-gradient-to-br from-gray-800 to-blue-900/20 rounded-2xl p-6 md:p-8 relative overflow-hidden border border-cyan-500/20">*/}
+      {/*    <h2 className="text-3xl md:text-4xl font-bold mb-6 flex items-center">*/}
+      {/*      <ShoppingBag className="mr-3 text-purple-400"/>*/}
+      {/*      <span className="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">*/}
+      {/*        Official Merchandise*/}
+      {/*      </span>*/}
+      {/*    </h2>*/}
 
-          {/* Mobile Carousel */}
-          <div className='md:hidden flex flex-row justify-center items-center space-x-4 overflow-x-auto pb-4'>
-            <div className="md:hidden overflow-x-auto pb-4 w-full">
-              <div className="flex flex-col gap-4">
-                {shirtVariants.map((item, idx) => (
-                  <div key={idx} className="flex-shrink-0 w-40 bg-gray-800/50 rounded-xl p-4 border border-cyan-500/20 w-full">
-                    <div className="relative h-auto overflow-hidden rounded-lg mb-3">
-                      <img
-                        src={item.image}
-                        alt={`Techspardha ${item.color}`}
-                        className="w-auto h-auto object-cover"
-                      />
-                    </div>
-                    <div className="text-xl font-bold">₹{item.price}</div>
-                    <div className="text-sm text-gray-400">T-Shirt {item.color}</div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
+      {/*    /!* Mobile Carousel *!/*/}
+      {/*    <div className='md:hidden flex flex-row justify-center items-center space-x-4 overflow-x-auto pb-4'>*/}
+      {/*      <div className="md:hidden overflow-x-auto pb-4 w-full">*/}
+      {/*        <div className="flex flex-col gap-4">*/}
+      {/*          {shirtVariants.map((item, idx) => (*/}
+      {/*            <div key={idx} className="flex-shrink-0 w-40 bg-gray-800/50 rounded-xl p-4 border border-cyan-500/20 w-full">*/}
+      {/*              <div className="relative h-auto overflow-hidden rounded-lg mb-3">*/}
+      {/*                <img*/}
+      {/*                  src={item.image}*/}
+      {/*                  alt={`Techspardha ${item.color}`}*/}
+      {/*                  className="w-auto h-auto object-cover"*/}
+      {/*                />*/}
+      {/*              </div>*/}
+      {/*              <div className="text-xl font-bold">₹{item.price}</div>*/}
+      {/*              <div className="text-sm text-gray-400">T-Shirt {item.color}</div>*/}
+      {/*            </div>*/}
+      {/*          ))}*/}
+      {/*        </div>*/}
+      {/*      </div>*/}
+      {/*    </div>*/}
 
-          {/* Desktop Grid */}
-          <div className="hidden md:grid md:grid-cols-2 gap-6">
-            {shirtVariants.map((item, idx) => (
-              <div key={idx} className="bg-gray-800/50 rounded-xl p-6 hover:bg-gray-700/30 transition-colors group relative border border-cyan-500/20">
-                <div className="relative overflow-hidden rounded-lg mb-4">
-                  <img
-                    src={item.image}
-                    alt={`Techspardha ${item.color}`}
-                    className="h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-gray-900/60 to-transparent"/>
-                </div>
-                <div>
-                  <div className="text-2xl font-bold">₹{item.price}</div>
-                  <div className="text-sm text-gray-400">T-Shirt {item.color}</div>
-                </div>
-              </div>
-            ))}
-          </div>
+      {/*    /!* Desktop Grid *!/*/}
+      {/*    <div className="hidden md:grid md:grid-cols-2 gap-6">*/}
+      {/*      {shirtVariants.map((item, idx) => (*/}
+      {/*        <div key={idx} className="bg-gray-800/50 rounded-xl p-6 hover:bg-gray-700/30 transition-colors group relative border border-cyan-500/20">*/}
+      {/*          <div className="relative overflow-hidden rounded-lg mb-4">*/}
+      {/*            <img*/}
+      {/*              src={item.image}*/}
+      {/*              alt={`Techspardha ${item.color}`}*/}
+      {/*              className="h-full object-cover group-hover:scale-105 transition-transform duration-300"*/}
+      {/*            />*/}
+      {/*            <div className="absolute inset-0 bg-gradient-to-t from-gray-900/60 to-transparent"/>*/}
+      {/*          </div>*/}
+      {/*          <div>*/}
+      {/*            <div className="text-2xl font-bold">₹{item.price}</div>*/}
+      {/*            <div className="text-sm text-gray-400">T-Shirt {item.color}</div>*/}
+      {/*          </div>*/}
+      {/*        </div>*/}
+      {/*      ))}*/}
+      {/*    </div>*/}
 
-          <div className='flex justify-center mt-6'>
-            <Link
-              className="px-6 py-3 bg-gradient-to-r from-blue-500 to-cyan-400 rounded-lg font-semibold text-lg hover:opacity-90 transition-opacity glow-cyan"
-              href="/techevents/buy"
-            >
-              Purchase
-            </Link>
-          </div>
-        </div>
-      </div>
+      {/*    <div className='flex justify-center mt-6'>*/}
+      {/*      <Link*/}
+      {/*        className="px-6 py-3 bg-gradient-to-r from-blue-500 to-cyan-400 rounded-lg font-semibold text-lg hover:opacity-90 transition-opacity glow-cyan"*/}
+      {/*        href="/techevents/buy"*/}
+      {/*      >*/}
+      {/*        Purchase*/}
+      {/*      </Link>*/}
+      {/*    </div>*/}
+      {/*  </div>*/}
+      {/*</div>*/}
 
       {/* Global Styles */}
       <style jsx global>{`
