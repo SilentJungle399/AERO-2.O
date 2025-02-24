@@ -315,7 +315,7 @@ const Buy = () => {
                     value={formData.customName}
                     onChange={handleChange}
                     maxLength={15}
-                    placeholder='Name to print (max 15 letters)'
+                    placeholder='Name to print'
                     className="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3"
                     required
                   />
@@ -472,7 +472,7 @@ const Buy = () => {
                   {formData.customize && (
                     <div className="flex justify-between">
                       <span>Customization Cost</span>
-                      <span>₹{formData.customName.length * costFactor}</span>
+                      <span>₹50</span>
                     </div>
                   )}
                   <div className="pt-2 border-t border-blue-600">
