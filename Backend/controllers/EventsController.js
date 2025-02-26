@@ -38,7 +38,7 @@ const getEventById = async (req, res) => {
             select : 'Group_token team_name Group_members_team_ids'
         });
 
-        if (!event) {
+        if(!event) {
             return res.status(404).json({
                 message: "Event not found"
             });
@@ -110,9 +110,9 @@ const createEvent= async (req, res) => {
         });
     }
 }
-function generateGroupToken() {
-    return uuidv4();
-}
+// function generateGroupToken() {
+//     return uuidv4();
+// }
 const createTeam = async (req, res) => {
     try {
         Payment_screenshot=req.body.fileDownloadURL;
@@ -140,7 +140,7 @@ const createTeam = async (req, res) => {
             is_external_participation,
         } = req.body;
 
-        const Group_token = generateGroupToken();
+        // const Group_token = generateGroupToken();
 
         const event = await EventModel.findOne({ _id: Event_id });
 
@@ -191,7 +191,7 @@ const createTeam = async (req, res) => {
         group.Group_members_uids.push(Group_leader_id);
         group.Group_members_team_ids.push(teamMember._id);
         
-        await group.save();
+        const newGroup=await group.save();
         await teamMember.save();
 
         // Update event with new group and participant
@@ -206,7 +206,7 @@ const createTeam = async (req, res) => {
         res.status(201).json({
             message: "Group created successfully",
             group,
-            token: Group_token
+            token: group.Group_token
         });
     } catch (error) {
         console.error("Error creating group:", error);

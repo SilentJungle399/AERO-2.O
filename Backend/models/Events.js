@@ -80,7 +80,18 @@ const eventSchema = new mongoose.Schema({
     participants_id:[{
         type:Schema.Types.ObjectId,
         ref:'User',
-    }]
+    }],
+     // **New Field: Tracks the total number of participants in the event**
+     total_participant_count: {
+        type: Number,
+        default: 0,
+    },
+
+    // **New Field: Tracks the current token number for queue management**
+    current_token_number: {
+        type: Number,
+        default: 1, // Starts from 1 and increments with each new participant
+    },
 });
 
 const EventModel = mongoose.model("Event", eventSchema);
