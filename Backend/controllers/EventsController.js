@@ -163,7 +163,6 @@ const createTeam = async (req, res) => {
         // Create a new group
         const group = new GroupModel({
             Event_id,
-            Group_token,
             Group_leader_id,
             team_name,
             gender:g_leader_gender,
@@ -200,13 +199,13 @@ const createTeam = async (req, res) => {
         await event.save();
 
         
-         sendWorkshopConfirmationEmail(g_leader_name, g_leader_email, team_name, event.E_name, Group_token,g_leader_mobile, g_leader_branch, g_leader_year, g_leader_roll_no, g_leader_college_name)
+        const savedGroup = await GroupModel.findById(newGroup._id);
+         sendWorkshopConfirmationEmail(g_leader_name, g_leader_email, team_name, event.E_name, savedGroup.Group_token,g_leader_mobile, g_leader_branch, g_leader_year, g_leader_roll_no, g_leader_college_name)
 
-
-        res.status(201).json({
+         res.status(201).json({
             message: "Group created successfully",
-            group,
-            token: group.Group_token
+            group: newGroup,
+            token: savedGroup.Group_token // Ensure the generated token is returned
         });
     } catch (error) {
         console.error("Error creating group:", error);

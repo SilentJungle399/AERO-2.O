@@ -70,18 +70,30 @@ groupSchema.pre("save", async function (next) {
 
     const event = await mongoose.model("Event").findByIdAndUpdate(
         this.Event_id,
-        { $inc: { participantCount: 1 } }, // Increment participant count
+        { $inc: { total_participant_count: 1 } }, // Increment participant count
         { new: true }
     );
 
     if (!event) return next(new Error("Event not found"));
 
-    // Format Group_token as "EventName-001", "EventName-002"...
-    const formattedNumber = String(event.participantCount).padStart(3, "0");
+    // Get the latest group for this event
+    const lastGroup = await mongoose.model("Group").findOne({ Event_id: this.Event_id })
+        .sort({ Group_token: -1 }) // Get the last created group
+        .select("Group_token");
+
+    let newGroupNumber = 1; // Default if no groups exist
+
+    if (lastGroup) {
+        const lastNumber = parseInt(lastGroup.Group_token.split("-").pop(), 10);
+        newGroupNumber = lastNumber + 1;
+    }
+
+    const formattedNumber = String(newGroupNumber).padStart(3, "0");
     this.Group_token = `${event.E_name}-${formattedNumber}`;
 
     next();
 });
+
 
 const GroupModel = mongoose.model("Group", groupSchema);
 module.exports = GroupModel;
