@@ -35,7 +35,7 @@ const getEventById = async (req, res) => {
         const Event_id = req.params.id;
         const event = await EventModel.findById(Event_id).populate({
             path: 'Group_Id',
-            select : 'Group_token team_name Group_members_team_ids'
+            select : 'Group_token team_name Group_members_team_ids completion_time'
         });
 
         if(!event) {
@@ -321,5 +321,127 @@ const joinTeam=async (req, res) => {
     }
 }
 
+const updateGroupTime = async (req, res) => {
+    try {
+      const { group_id, group_token, event_id, completion_time } = req.body;
+      console.log(req.body);
+      
+      // Validate time format (MM:SS)
+      if (!/^([0-5]?[0-9]):([0-5][0-9])$/.test(completion_time)) {
+        return res.status(400).json({ message: 'Invalid time format. Use MM:SS format.' });
+      }
+      
+      // Validate that group exists and belongs to the event
+      const event = await EventModel.findByIdAndUpdate(
+        event_id,
+        { $inc: { current_token_number: 1 } }, // Increment by 1
+        { new: true } // Return the updated document
+      );
 
-module.exports={teamDashboard,createEvent,createTeam,joinTeam,getAllEvents,getEventById,checkToken}
+      if (!event) {
+        return res.status(404).json({ message: 'Event not found' });
+      }
+      
+      // Check if group belongs to event
+      const groupBelongsToEvent = event.Group_Id.some(id => id.toString() === group_id);
+      if (!groupBelongsToEvent) {
+        return res.status(400).json({ message: 'Group does not belong to this event' });
+      }
+      
+      // Update group time
+      const updatedGroup = await GroupModel.findOneAndUpdate(
+        { _id: group_id, Group_token: group_token },
+        { completion_time },
+        { new: true }
+      );
+      
+      if (!updatedGroup) {
+        return res.status(404).json({ message: 'Group not found or token mismatch' });
+      }
+      
+      return res.status(200).json({ 
+        message: 'Group time updated successfully',
+        group: updatedGroup 
+      });
+    } catch (error) {
+      console.error('Error updating group time:', error);
+      return res.status(500).json({ message: 'Server error', error: error.message });
+    }
+  };
+  
+const updateMemberTime = async (req, res) => {
+    try {
+      const { member_id, group_token, event_id, completion_time } = req.body;
+      
+      // Validate time format (MM:SS)
+      if (!/^([0-5]?[0-9]):([0-5][0-9])$/.test(completion_time)) {
+        return res.status(400).json({ message: 'Invalid time format. Use MM:SS format.' });
+      }
+      
+      // Find the group to ensure member belongs to it
+      const group = await GroupModel.findOne({ Group_token });
+      if (!group) {
+        return res.status(404).json({ message: 'Group not found' });
+      }
+      
+      // Check if member belongs to group
+      const memberBelongsToGroup = group.Group_members_team_ids.some(
+        id => id.toString() === member_id
+      );
+      if (!memberBelongsToGroup) {
+        return res.status(400).json({ message: 'Member does not belong to this group' });
+      }
+      
+      // Update member time
+      const updatedMember = await Member.findByIdAndUpdate(
+        member_id,
+        { completion_time },
+        { new: true }
+      );
+      
+      if (!updatedMember) {
+        return res.status(404).json({ message: 'Member not found' });
+      }
+      
+      // If this is the fastest time in the group, update the group time as well
+      const groupMembers = await Member.find({
+        _id: { $in: group.Group_members_team_ids }
+      });
+      
+      // Find the fastest time among members
+      let fastestTime = completion_time;
+      let fastestTimeInSeconds = convertTimeToSeconds(completion_time);
+      
+      groupMembers.forEach(member => {
+        if (member.completion_time) {
+          const memberTimeInSeconds = convertTimeToSeconds(member.completion_time);
+          if (memberTimeInSeconds < fastestTimeInSeconds) {
+            fastestTimeInSeconds = memberTimeInSeconds;
+            fastestTime = member.completion_time;
+          }
+        }
+      });
+      
+      // Update group with fastest time if needed
+      if (fastestTime !== group.completion_time) {
+        await Group.findByIdAndUpdate(group._id, { completion_time: fastestTime });
+      }
+      
+      return res.status(200).json({ 
+        message: 'Member time updated successfully',
+        member: updatedMember 
+      });
+    } catch (error) {
+      console.error('Error updating member time:', error);
+      return res.status(500).json({ message: 'Server error', error: error.message });
+    }
+  };
+
+  function convertTimeToSeconds(timeString) {
+    if (!timeString) return Infinity;
+    const [minutes, seconds] = timeString.split(':').map(Number);
+    return minutes * 60 + seconds;
+  }
+
+
+module.exports={teamDashboard,createEvent,createTeam,joinTeam,getAllEvents,getEventById,checkToken,updateGroupTime,updateMemberTime}
