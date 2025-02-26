@@ -112,6 +112,19 @@ const EventsPage = () => {
                       {event.E_team_size == 1? "Participate" : "Create Team"}
                     </motion.a>
                   </Link>
+                  { event.E_team_size != 1? "" :  <Link
+                    href={`/events/lederboard/${event._id}`}
+                    passHref
+                    className="mt-8"
+                  >
+                    <motion.a
+                      className="flex-1 bg-red-600 text-white font-semibold py-3 px-6 rounded-lg hover:bg-blue-500 transition-colors text-center shadow-md"
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                    >
+                      Leaderboard
+                    </motion.a>
+                  </Link>}
                   <Link
                     href={`/events/join-team/${event._id}`}
                     passHref
