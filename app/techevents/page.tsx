@@ -75,7 +75,7 @@ export default function Techspardha() {
               description: "Test your piloting skills as you navigate an obstacle course to reach the finish line.",
               poster: "1_e.png",
               teamSize: 4,
-              registerLink: "https://forms.gle/rig2Mr1obon68shTA"
+              registerLink: "/events"
             },
             {
               title: "SimSky",
@@ -84,7 +84,8 @@ export default function Techspardha() {
               description: "Experience the thrill of flying drones and RC planes on high-quality simulators.",
               poster: "4_e.png",
               teamSize: 1,
-              registerLink: "https://forms.gle/6ASFAbuDJdSZjaBi8"
+              // registerLink: "https://forms.gle/6ASFAbuDJdSZjaBi8"
+              registerLink: "/events"
             },
             {
               title: "DRL",
@@ -93,6 +94,7 @@ export default function Techspardha() {
               description: "Fly mini drones through small obstacles and compete for the fastest time!",
               poster: "3_e.png",
               teamSize: 1,
+              // registerLink: "https://forms.gle/qYYK86qafGVAnq2q9"
               registerLink: "https://forms.gle/qYYK86qafGVAnq2q9"
             }
           ].map((event, idx) => (
