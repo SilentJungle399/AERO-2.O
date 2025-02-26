@@ -65,34 +65,44 @@ const groupSchema = new mongoose.Schema({
 });
 
 // **Pre-save hook to auto-increment participant count and generate Group_token**
+
 groupSchema.pre("save", async function (next) {
     if (!this.isNew) return next();
 
-    const event = await mongoose.model("Event").findByIdAndUpdate(
-        this.Event_id,
-        { $inc: { total_participant_count: 1 } }, // Increment participant count
-        { new: true }
-    );
+    try {
+        // Find the related event and increment the participant count
+        const event = await mongoose.model("Event").findByIdAndUpdate(
+            this.Event_id,
+            { $inc: { total_participant_count: 1 } },
+            { new: true }
+        );
 
-    if (!event) return next(new Error("Event not found"));
+        if (!event) return next(new Error("Event not found"));
 
-    // Get the latest group for this event
-    const lastGroup = await mongoose.model("Group").findOne({ Event_id: this.Event_id })
-        .sort({ Group_token: -1 }) // Get the last created group
-        .select("Group_token");
+        // Ensure Group_token is unique by checking the last created group
+        let newGroupNumber = 1;
+        while (true) {
+            const formattedNumber = String(newGroupNumber).padStart(3, "0");
+            const newToken = `${event.E_name}-${formattedNumber}`;
 
-    let newGroupNumber = 1; // Default if no groups exist
+            // Check if the generated token already exists
+            const existingGroup = await mongoose.model("Group").findOne({ Group_token: newToken });
 
-    if (lastGroup) {
-        const lastNumber = parseInt(lastGroup.Group_token.split("-").pop(), 10);
-        newGroupNumber = lastNumber + 1;
+            if (!existingGroup) {
+                this.Group_token = newToken;
+                break;
+            }
+
+            newGroupNumber++; // Increment and try again if duplicate found
+        }
+
+        next();
+    } catch (error) {
+        next(error);
     }
-
-    const formattedNumber = String(newGroupNumber).padStart(3, "0");
-    this.Group_token = `${event.E_name}-${formattedNumber}`;
-
-    next();
 });
+
+
 
 
 const GroupModel = mongoose.model("Group", groupSchema);
