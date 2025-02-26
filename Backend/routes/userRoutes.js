@@ -26,6 +26,8 @@ const {
   getEventById,
   checkToken,
   teamDashboard,
+  updateGroupTime,
+  updateMemberTime,
 } = require("../controllers/EventsController");
 const {
   getAllCAtegories,
@@ -104,6 +106,9 @@ userRoutes.get("/getallevents", getAllEvents);
 userRoutes.get("/event/:id", getEventById);
 userRoutes.post("/checktoken", checkToken);
 userRoutes.post("/teamdashboard", teamDashboard);
+
+userRoutes.post('/update-group-time', updateGroupTime);
+userRoutes.post('/update-member-time', updateMemberTime);
 
 
 // //blog routes

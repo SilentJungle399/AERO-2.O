@@ -62,6 +62,13 @@ const groupSchema = new mongoose.Schema({
         type: String,
         default: "",
     },
+    completion_time:{
+        type:String,
+        default:""
+    },
+    curr_token:{
+        type:String,
+    }
 });
 
 // **Pre-save hook to auto-increment participant count and generate Group_token**
