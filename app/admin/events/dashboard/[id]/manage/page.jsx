@@ -126,7 +126,7 @@ const EventDashboard = () => {
           <div className="p-6">
             <h2 className="text-2xl font-semibold mb-4 text-gray-100">Groups</h2>
             <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-700">
+              <table className="min-w-full divide-y divide-gray-700 ">
                 <thead className="bg-gray-700">
                   <tr>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">

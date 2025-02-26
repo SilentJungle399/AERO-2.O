@@ -109,7 +109,7 @@ const EventsPage = () => {
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                     >
-                      Create Team
+                      {event.E_team_size == 1? "Participate" : "Create Team"}
                     </motion.a>
                   </Link>
                   <Link
@@ -117,13 +117,13 @@ const EventsPage = () => {
                     passHref
                     className="mt-8"
                   >
-                    <motion.a
+                    {event.E_team_size == 1? "" : <motion.a
                       className="flex-1 bg-green-600 text-white font-semibold py-3 px-6 rounded-lg hover:bg-green-500 transition-colors text-center shadow-md"
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                     >
                       Join Team
-                    </motion.a>
+                    </motion.a>}
                   </Link>
                 </div>
               </div>
