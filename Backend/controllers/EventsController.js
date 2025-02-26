@@ -149,16 +149,16 @@ const createTeam = async (req, res) => {
         }
 
         // Check if leader has already created a team (check user id if inserted by joining or creating the team)
-        const alreadyFormedGroup = await GroupModel.findOne({ Group_leader_id, Event_id});
-        if (alreadyFormedGroup) {
-            return res.status(400).json({ message: "You have already created a team" });
-        }
+        // const alreadyFormedGroup = await GroupModel.findOne({ Group_leader_id, Event_id});
+        // if (alreadyFormedGroup) {
+        //     return res.status(400).json({ message: "You have already created a team" });
+        // }
 
         // Check if leader is already a participant
-        if (event.participants_id.includes(Group_leader_id)) {
-            const team = await GroupModel.findOne({ group_members_uids: new mongoose.Types.ObjectId(Group_leader_id) });
-            return res.status(400).json({ message: "You are already a participant", team });
-        }
+        // if (event.participants_id.includes(Group_leader_id)) {
+        //     const team = await GroupModel.findOne({ group_members_uids: new mongoose.Types.ObjectId(Group_leader_id) });
+        //     return res.status(400).json({ message: "You are already a participant", team });
+        // }
 
         // Create a new group
         const group = new GroupModel({

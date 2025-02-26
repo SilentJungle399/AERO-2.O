@@ -68,7 +68,6 @@ const groupSchema = new mongoose.Schema({
 
 groupSchema.pre("save", async function (next) {
     if (!this.isNew) return next();
-
     try {
         // Find the related event and increment the participant count
         const event = await mongoose.model("Event").findByIdAndUpdate(
@@ -80,10 +79,10 @@ groupSchema.pre("save", async function (next) {
         if (!event) return next(new Error("Event not found"));
 
         // Ensure Group_token is unique by checking the last created group
-        let newGroupNumber = 1;
+        let newGroupNumber = event.total_participant_count;
         while (true) {
-            const formattedNumber = String(newGroupNumber).padStart(3, "0");
-            const newToken = `${event.E_name}-${formattedNumber}`;
+            // const formattedNumber = String(newGroupNumber).padStart(3, "0");
+            const newToken = `${event.E_name}-${newGroupNumber}`;
 
             // Check if the generated token already exists
             const existingGroup = await mongoose.model("Group").findOne({ Group_token: newToken });
