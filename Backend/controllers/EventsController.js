@@ -325,49 +325,62 @@ const updateGroupTime = async (req, res) => {
     try {
       const { group_id, group_token, event_id, completion_time } = req.body;
       console.log(req.body);
-      
+  
       // Validate time format (MM:SS)
       if (!/^([0-5]?[0-9]):([0-5][0-9])$/.test(completion_time)) {
-        return res.status(400).json({ message: 'Invalid time format. Use MM:SS format.' });
+        return res.status(400).json({ message: "Invalid time format. Use MM:SS format." });
       }
-      
-      // Validate that group exists and belongs to the event
-      const event = await EventModel.findByIdAndUpdate(
-        event_id,
-        { $inc: { current_token_number: 1 } }, // Increment by 1
-        { new: true } // Return the updated document
-      );
-
+  
+      // Fetch the event
+      const event = await EventModel.findById(event_id);
       if (!event) {
-        return res.status(404).json({ message: 'Event not found' });
+        return res.status(404).json({ message: "Event not found" });
       }
-      
+  
+      // Extract numeric part from group token (e.g., "simsky-123" → 123)
+      const tokenParts = group_token.split("-");
+      const userTokenNumber = parseInt(tokenParts[tokenParts.length - 1], 10);
+  
+      // Ensure valid number extraction
+      if (isNaN(userTokenNumber)) {
+        return res.status(400).json({ message: "Invalid group token format." });
+      }
+  
+      // Update current_token_number **only if user token is greater**
+      if (userTokenNumber > event.current_token_number) {
+        await EventModel.findByIdAndUpdate(event_id, { current_token_number: userTokenNumber });
+        console.log(`Updated event token number to: ${userTokenNumber}`);
+      } else {
+        console.log("User token is not greater. No update.");
+      }
+  
       // Check if group belongs to event
       const groupBelongsToEvent = event.Group_Id.some(id => id.toString() === group_id);
       if (!groupBelongsToEvent) {
-        return res.status(400).json({ message: 'Group does not belong to this event' });
+        return res.status(400).json({ message: "Group does not belong to this event" });
       }
-      
-      // Update group time
+  
+      // Update group completion time
       const updatedGroup = await GroupModel.findOneAndUpdate(
         { _id: group_id, Group_token: group_token },
         { completion_time },
         { new: true }
       );
-      
+  
       if (!updatedGroup) {
-        return res.status(404).json({ message: 'Group not found or token mismatch' });
+        return res.status(404).json({ message: "Group not found or token mismatch" });
       }
-      
-      return res.status(200).json({ 
-        message: 'Group time updated successfully',
-        group: updatedGroup 
+  
+      return res.status(200).json({
+        message: "Group time updated successfully",
+        group: updatedGroup,
       });
     } catch (error) {
-      console.error('Error updating group time:', error);
-      return res.status(500).json({ message: 'Server error', error: error.message });
+      console.error("Error updating group time:", error);
+      return res.status(500).json({ message: "Server error", error: error.message });
     }
   };
+  
   
 const updateMemberTime = async (req, res) => {
     try {
