@@ -95,7 +95,7 @@ export default function Techspardha() {
               poster: "3_e.png",
               teamSize: 1,
               // registerLink: "https://forms.gle/qYYK86qafGVAnq2q9"
-              registerLink: "https://forms.gle/qYYK86qafGVAnq2q9"
+              registerLink: "/events"
             }
           ].map((event, idx) => (
             <div key={idx}
