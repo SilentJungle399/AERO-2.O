@@ -121,7 +121,7 @@ export default function CreateTeamPage() {
       const formDataToSend = new FormData();
       Object.keys(formData).forEach(key => {
         let value = formData[key];
-        if (key === 'g_leader_name' && !formData[key].trim()) {
+        if (key === 'g_leader_name' && !formData[key].trim() && isIndividualEvent) {
           value = formData.team_name;
         }
         formDataToSend.append(key, value);
