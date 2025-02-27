@@ -15,7 +15,6 @@ import {
   FiHash,
   FiMap,
   FiCopy,
-
 } from "react-icons/fi";
 import { FaPlane } from "react-icons/fa";
 
@@ -26,7 +25,8 @@ export default function CreateTeamPage() {
   const [eventData, setEventData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [submitLoading,setSubmitLoading]=useState(false)
+  const [submitLoading, setSubmitLoading] = useState(false);
+  const [isIndividualEvent, setIsIndividualEvent] = useState(false);
   const [formData, setFormData] = useState({
     team_name: "",
     address: "",
@@ -46,12 +46,10 @@ export default function CreateTeamPage() {
   const [copied, setCopied] = useState(false);
   const [paymentPreview, setPaymentPreview] = useState(null);
 
-  
-
   const copyToClipboard = (token) => {
     navigator.clipboard.writeText(token);
     setCopied(true);
-    setTimeout(() => setCopied(false), 60*60*1000);
+    setTimeout(() => setCopied(false), 60 * 60 * 1000);
   };
 
   useEffect(() => {
@@ -65,6 +63,8 @@ export default function CreateTeamPage() {
         const response = await fetch(`${baseUrl}/api/users/event/${id}`);
         const data = await response.json();
         setEventData(data.event);
+        // Set individual event flag based on team size
+        setIsIndividualEvent(data.event.E_team_size === 1);
       } catch (err) {
         setError(err.message);
       } finally {
@@ -102,7 +102,6 @@ export default function CreateTeamPage() {
   };
 
   const handleSubmit = async (e) => {
-
     e.preventDefault();
     try {
       setSubmitLoading(true);
@@ -110,6 +109,14 @@ export default function CreateTeamPage() {
         process.env.NODE_ENV === "production"
           ? process.env.NEXT_PUBLIC_BACKEND_URL
           : "http://localhost:5000";
+      
+      // If individual event but team_name is empty, use the person's name
+      if (isIndividualEvent && !formData.team_name.trim()) {
+        setFormData(prev => ({
+          ...prev,
+          team_name: formData.g_leader_name
+        }));
+      }
       
       const formDataToSend = new FormData();
       Object.keys(formData).forEach(key => {
@@ -126,19 +133,22 @@ export default function CreateTeamPage() {
         const data = await response.json();
         console.log(data);
         setGroupToken(data.group.Group_token);
-        setSubmitLoading(false)
+        setSubmitLoading(false);
         setStage(6);
       } else {
         const data = await response.json();
-        setErrorMessage(data.message || "Failed to create team");
+        setErrorMessage(data.message || "Failed to create registration");
         setStage(5);
       }
     } catch (error) {
-      console.error("Error creating team:", error);
+      console.error("Error creating registration:", error);
+      setErrorMessage("An unexpected error occurred. Please try again.");
+      setStage(5);
+      setSubmitLoading(false);
     }
   };
 
-  const renderInput = ({ name, icon }) => (
+  const renderInput = ({ name, icon, placeholder }) => (
     <div key={name} className="relative mb-6">
       <div className="absolute left-0 top-1/2 -translate-y-1/2 text-gray-400">
         {icon}
@@ -149,7 +159,7 @@ export default function CreateTeamPage() {
         value={formData[name]}
         onChange={handleChange}
         className="w-full bg-transparent border-b-2 border-gray-600 focus:border-indigo-500 outline-none py-2 pl-8 text-white transition-colors"
-        placeholder={name
+        placeholder={placeholder || name
           .split("_")
           .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
           .join(" ")}
@@ -188,18 +198,18 @@ export default function CreateTeamPage() {
                 <FiMap className="mr-2" /> Location: {eventData.E_location}
               </p>
               <p className="flex items-center">
-                <FiUser className="mr-2" /> Max Team Size: {eventData.E_team_size}
+                <FiUser className="mr-2" /> {isIndividualEvent ? "Individual Event" : `Max Team Size: ${eventData.E_team_size}`}
               </p>
             </div>
             <div className="space-y-4">
               <h3 className="text-2xl font-semibold text-indigo-300 flex items-center">
                 <FiBook className="mr-2" /> Guidelines <strong className="text-sm ml-4 text-red-500">***Read carefully before registering</strong>
               </h3>
-              <ul className="list-none pl-5 space-y-2">
-                {eventData.E_guidelines.map((guideline, index) => (
+              <ul className="space-y-2">
+                {eventData.E_guidelines[0]?.split('","').map((guideline, index) => (
                   <li key={index} className="flex items-start">
                     <FiStar className="mr-2 mt-1 flex-shrink-0 text-yellow-400" />
-                    <span>{guideline}</span>
+                    <span>{guideline.trim()}</span>
                   </li>
                 ))}
               </ul>
@@ -213,7 +223,7 @@ export default function CreateTeamPage() {
                 className="form-checkbox h-5 w-5 text-indigo-600"
               />
               <label htmlFor="agree" className="text-sm">
-               I Agree that have read all guidlines carefully and am completely aware of all rules and guidlines of workshop.
+               I agree that I have read all guidelines carefully and am completely aware of all rules and guidelines of the workshop.
               </label>
             </div>
             <button
@@ -240,13 +250,21 @@ export default function CreateTeamPage() {
         const fields =
           stage === 2
             ? [
-                { name: "team_name", icon: <FiStar /> },
+                { 
+                  name: "team_name", 
+                  icon: <FiStar />, 
+                  placeholder: isIndividualEvent ? "Your Name (Optional)" : "Team Name" 
+                },
                 { name: "g_leader_email", icon: <FiMail /> },
                 { name: "g_leader_mobile", icon: <FiPhone /> },
               ]
             : stage === 3
             ? [
-                { name: "g_leader_name", icon: <FiUser /> },
+                { 
+                  name: "g_leader_name", 
+                  icon: <FiUser />,
+                  placeholder: isIndividualEvent ? "Your Name" : "Leader Name" 
+                },
               ]
             : [
                 { name: "g_leader_branch", icon: <FiBook /> },
@@ -271,9 +289,9 @@ export default function CreateTeamPage() {
           >
             <h2 className="text-3xl font-bold text-indigo-400 mb-6 leading-tight">
               {stage === 2
-                ? "Team Information"
+                ? isIndividualEvent ? "Personal Information" : "Team Information"
                 : stage === 3
-                ? "Leader Details"
+                ? isIndividualEvent ? "Personal Details" : "Leader Details"
                 : "College Information"}
             </h2>
             {fields.map(renderInput)}
@@ -334,34 +352,49 @@ export default function CreateTeamPage() {
                 <span>Back</span>
               </button>
               {submitLoading ? (
-  <button
-    type="button"
-    className="bg-indigo-600 text-white font-semibold py-3 px-6 rounded-full flex items-center space-x-2 text-lg"
-    disabled
-  >
-    <span>Submitting your form...</span>
-  </button>
-) : (
-  <button
-    type={stage === 4 ? "submit" : "button"}
-    onClick={() => stage < 4 && setStage(stage + 1)}
-    className="bg-indigo-600 text-white font-semibold py-3 px-6 rounded-full hover:bg-indigo-500 transition-colors flex items-center space-x-2 text-lg"
-  >
-    <span>{stage === 4 ? "Submit" : "Next"}</span>
-    <FiArrowRight />
-  </button>
-)}
-
+                <button
+                  type="button"
+                  className="bg-indigo-600 text-white font-semibold py-3 px-6 rounded-full flex items-center space-x-2 text-lg"
+                  disabled
+                >
+                  <span>Submitting your form...</span>
+                </button>
+              ) : (
+                <button
+                  type={stage === 4 ? "submit" : "button"}
+                  onClick={() => stage < 4 && setStage(stage + 1)}
+                  className="bg-indigo-600 text-white font-semibold py-3 px-6 rounded-full hover:bg-indigo-500 transition-colors flex items-center space-x-2 text-lg"
+                >
+                  <span>{stage === 4 ? "Submit" : "Next"}</span>
+                  <FiArrowRight />
+                </button>
+              )}
             </div>
           </motion.form>
         );
 
       case 5:
         return (
-          <motion.div>
+          <motion.div
+            className="text-center space-y-6"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            <h2 className="text-3xl font-bold text-red-500 mb-6">
+              Registration Failed
+            </h2>
             {errorMessage && (
-              <div className="text-red-500 text-sm">{errorMessage}</div>
+              <div className="text-red-400 text-lg bg-gray-800 p-4 rounded-lg">
+                {errorMessage}
+              </div>
             )}
+            <button
+              onClick={() => setStage(2)}
+              className="bg-indigo-600 text-white font-semibold py-3 px-6 rounded-full hover:bg-indigo-500 transition-colors"
+            >
+              Try Again
+            </button>
           </motion.div>
         );
 
@@ -369,9 +402,9 @@ export default function CreateTeamPage() {
         return (
           <div className="text-center space-y-8">
             <h2 className="text-4xl font-bold text-indigo-400 mb-6 leading-tight">
-              Team Created Successfully!
+              {isIndividualEvent ? "Registration Successful!" : "Team Created Successfully!"}
             </h2>
-            <p className="text-2xl">Your Group Token:</p>
+            <p className="text-2xl">{isIndividualEvent ? "Your Registration Token:" : "Your Group Token:"}</p>
             <div className="relative inline-flex items-center justify-center">
               <div className="text-3xl font-mono bg-indigo-900 p-6 rounded-lg tracking-wider">
                 {groupToken}
@@ -385,20 +418,21 @@ export default function CreateTeamPage() {
             </div>
             {copied && <p className="text-green-500 text-sm">Token copied to clipboard!</p>}
             <p className="text-gray-300 text-lg">
-              Keep this token safe. We've also sent it to your email along with more details. Please check your email for future reference
-              
-              </p>
-
-           
-            <button
-              onClick={() => setStage(6)}
-              className="w-full bg-green-600 text-white font-semibold py-3 px-6 rounded-full hover:bg-green-500 transition-colors flex items-center justify-center space-x-2 text-lg"
-            >
-               <p className="text-gray-300 text-lg">
-              Make sure to join this whatsapp group for staying connected and further details. <br /> <a href="https://chat.whatsapp.com/DeF1JHnE4dkFWEgPeWkZWJ" className="text-blue-800 font-mono font-bold mr-5" >**Join whatsapp group**</a>
+              Keep this token safe. We've also sent it to your email along with more details. Please check your email for future reference.
             </p>
-              
-            </button>
+            <div className="mt-8">
+              <p className="text-gray-300 text-lg">
+                Make sure to join this WhatsApp group for staying connected and further details.
+              </p>
+              <a 
+                href="https://chat.whatsapp.com/DeF1JHnE4dkFWEgPeWkZWJ" 
+                className="block w-full bg-green-600 text-white font-semibold py-3 px-6 rounded-full hover:bg-green-500 transition-colors mt-4"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Join WhatsApp Group
+              </a>
+            </div>
           </div>
         );
 
