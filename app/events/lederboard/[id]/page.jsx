@@ -11,11 +11,10 @@ import {
   Share2,
   ArrowUpCircle,
 } from "lucide-react";
-import Link from "next/link";
 
 const EventLeaderboard = () => {
   const [eventData, setEventData] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const { id } = useParams();
 
@@ -27,12 +26,13 @@ const EventLeaderboard = () => {
   const fetchEventData = async () => {
     if (!id) return;
     try {
-      setLoading(true);
+      // setLoading(true);
       const response = await fetch(`${baseUrl}/api/users/event/${id}`);
       if (!response.ok) {
         throw new Error("Failed to fetch event data");
       }
       const data = await response.json();
+      console.log(data)
 
       // Sort groups by time (lowest first)
       const sortedGroups = [...data.event.Group_Id].sort((a, b) => {
@@ -53,8 +53,14 @@ const EventLeaderboard = () => {
     }
   };
 
+  // setTimeout(fetchEventData, 5000);
   useEffect(() => {
     fetchEventData();
+    const interval = setInterval(() => {
+      fetchEventData();
+    }, 4000); // Fetch every 5 seconds
+
+    return () => clearInterval(interval);
   }, [id]);
 
   const convertTimeToSeconds = (timeString) => {
