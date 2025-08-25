@@ -1,24 +1,15 @@
 // components/Navbar.tsx
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
-import { useRouter } from "next/navigation";
-import {
-  FaArrowCircleDown,
-  FaBell,
-  FaCaretDown,
-  FaDropbox,
-  FaEnvelope,
-  FaInstagram,
-  FaTwitter,
-} from "react-icons/fa";
+import {usePathname, useRouter} from "next/navigation";
+import {FaBell, FaCaretDown, FaEnvelope, FaInstagram, FaTwitter,} from "react-icons/fa";
 
-import { initializeApp } from "firebase/app";
+import {initializeApp} from "firebase/app";
 import firebaseConfig from "@/Backend/Firebseconfig/FirebaseConfig";
-import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import {getAuth, GoogleAuthProvider} from "firebase/auth";
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
@@ -42,16 +33,16 @@ interface NotificationModalProps {
 }
 
 const NotificationModal: React.FC<NotificationModalProps> = ({
-  notifications,
-  closeModal,
-}) => {
+                                                               notifications,
+                                                               closeModal,
+                                                             }) => {
   const sortedNotifications = notifications.sort((a, b) => {
     return a.read === b.read
       ? new Date(b.notification.created_at).getTime() -
-          new Date(a.notification.created_at).getTime()
+      new Date(a.notification.created_at).getTime()
       : a.read
-      ? 1
-      : -1;
+        ? 1
+        : -1;
   });
 
   const unreadNotifications = sortedNotifications.filter(
@@ -66,7 +57,7 @@ const NotificationModal: React.FC<NotificationModalProps> = ({
       <div className="bg-white text-gray-900 rounded-lg shadow-lg  p-6">
         <div className="flex justify-between items-center border-b pb-2 mb-4">
           <h2 className="flex items-center space-x-2 text-xl font-semibold">
-            <FaBell className="text-yellow-400 mr-3" /> Notifications
+            <FaBell className="text-yellow-400 mr-3"/> Notifications
           </h2>
           <button
             onClick={closeModal}
@@ -226,7 +217,7 @@ const Navbar: React.FC = () => {
           : "http://localhost:5000";
       const response = await fetch(`${baseUrl}/api/auth/logout`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {"Content-Type": "application/json"},
         credentials: "include",
       });
 
@@ -290,21 +281,19 @@ const Navbar: React.FC = () => {
         className={`bg-[#110e12] transition-colors duration-300 ${navBackground} w-full pointer-events-auto`}
       >
         {/* Conditionally show banner only on homepage */}
-        {pathname !== "/techevents" && (
-            <Link href="/techevents" className="text-sm font-semibold">
-            <div className="w-full -z-0 bg-blue-500 hover:bg-blue-600 text-gray-200 text-center py-1 absolute top-0 overflow-hidden">
-              <div className="inline-block whitespace-nowrap animate-marquee">
-                <span className="animate-[blink_1s_infinite]">
-                  🌟🌟🚀🚀 Techspardha is live! Register now!
-                </span>
-              </div>
-            </div>
-          </Link>
-          
-          
-          
-        )}
-        <div className="w-full space-x-5 pt-7">
+        {/*{pathname !== "/techevents" && (*/}
+        {/*  <Link href="/techevents" className="text-sm font-semibold">*/}
+        {/*    <div className="w-full -z-0 bg-blue-500 hover:bg-blue-600 text-gray-200 text-center py-1 absolute top-0 overflow-hidden">*/}
+        {/*      <div className="inline-block whitespace-nowrap animate-marquee">*/}
+        {/*        <span className="animate-[blink_1s_infinite]">*/}
+        {/*          🌟🌟🚀🚀 Techspardha is live! Register now!*/}
+        {/*        </span>*/}
+        {/*      </div>*/}
+        {/*    </div>*/}
+        {/*  </Link>*/}
+        {/*)}*/}
+
+        <div className="w-full space-x-5 py-4">
           <div className="flex items-center justify-between h-20 px-1 md:px-1">
             <button
               className="lg:hidden text-white focus:outline-none"
@@ -404,7 +393,7 @@ const Navbar: React.FC = () => {
                   </Link>
                   <div className="relative group">
                     <button className="flex items-center text-white hover:text-[#3494D1] px-1 md:px-2 py-2 rounded-md text-base md:text-xl lg:text-xl font-medium bebas-neue-regular">
-                      Activities <FaCaretDown className="ml-1 w-5 h-5" />
+                      Activities <FaCaretDown className="ml-1 w-5 h-5"/>
                     </button>
                     <div className="absolute left-0 mt-2 w-48 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 backdrop-blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                       <div
@@ -440,12 +429,12 @@ const Navbar: React.FC = () => {
                     </div>
                   </div>
 
-                  <Link
-                    href="/techevents"
-                    className="font-['Press_Start_2P']   text-blue-400 bg-clip-text  animate-text-shine hover:text-[#3495d18a] px-1 md:px-2 py-2 rounded-md text-sm md:text-2xl lg:text-lg "
-                  >
-                    Techspardha
-                  </Link>
+                  {/*<Link*/}
+                  {/*  href="/techevents"*/}
+                  {/*  className="font-['Press_Start_2P']   text-blue-400 bg-clip-text  animate-text-shine hover:text-[#3495d18a] px-1 md:px-2 py-2 rounded-md text-sm md:text-2xl lg:text-lg "*/}
+                  {/*>*/}
+                  {/*  Techspardha*/}
+                  {/*</Link>*/}
                   <Link
                     href="/gallery"
                     className="text-white hover:text-[#3494D1] px-1 md:px-2 py-2 rounded-md text-base md:text-xl lg:text-xl font-medium bebas-neue-regular"
@@ -455,7 +444,7 @@ const Navbar: React.FC = () => {
 
                   <div className="relative group">
                     <button className="flex items-center text-white hover:text-[#3494D1] px-1 md:px-2 py-2 rounded-md text-base md:text-xl lg:text-xl font-medium bebas-neue-regular">
-                      community <FaCaretDown className="ml-1 w-5 h-5" />
+                      community <FaCaretDown className="ml-1 w-5 h-5"/>
                     </button>
                     <div className="absolute left-0 mt-2 w-48 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 backdrop-blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                       <div
@@ -593,7 +582,7 @@ const Navbar: React.FC = () => {
                         >
                           Settings
                         </Link>
-                        <hr />
+                        <hr/>
                         <button
                           onClick={logout}
                           className="block px-4 py-2 text-sm text-red-700 hover:bg-gray-900 w-full text-left"
@@ -741,7 +730,7 @@ const Navbar: React.FC = () => {
                 >
                   Settings
                 </Link>
-                <hr />
+                <hr/>
                 <button
                   onClick={logout}
                   className="block px-4 py-2 text-sm text-red-700 hover:bg-gray-900 w-full text-left"
@@ -842,7 +831,7 @@ const Navbar: React.FC = () => {
                       setActivitiesDropdownOpen(!activitiesDropdownOpen)
                     }
                   >
-                    Activities <FaCaretDown className="ml-1 w-5 h-5" />
+                    Activities <FaCaretDown className="ml-1 w-5 h-5"/>
                   </button>
                   {activitiesDropdownOpen && (
                     <div className="absolute left-0 mt-2 w-48 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 backdrop-blur-md">
@@ -917,7 +906,7 @@ const Navbar: React.FC = () => {
                 </Link>
                 <div className="relative group">
                   <button className="flex items-center text-white hover:text-[#3494D1] px-1 md:px-2 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular">
-                    community <FaCaretDown className="ml-1 w-5 h-5" />
+                    community <FaCaretDown className="ml-1 w-5 h-5"/>
                   </button>
                   <div className="absolute left-0 mt-2 w-48 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 backdrop-blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                     <div
@@ -948,7 +937,7 @@ const Navbar: React.FC = () => {
                     </div>
                   </div>
                 </div>
-                <hr className="text-blue-500 bg-blue-900" />
+                <hr className="text-blue-500 bg-blue-900"/>
                 <div className="items-center justify-between text-white">
                   <div>
                     <div className="flex items-center text-center justify-between">
@@ -970,7 +959,7 @@ const Navbar: React.FC = () => {
                         rel="noopener noreferrer"
                         className="text-pink-500 hover:text-gray-50"
                       >
-                        <FaInstagram size={16} />
+                        <FaInstagram size={16}/>
                       </a>
                       <a
                         href="https://www.linkedin.com/company/aero-club-nit-kurukshetra/?originalSubdomain=in"
@@ -978,13 +967,13 @@ const Navbar: React.FC = () => {
                         rel="noopener noreferrer"
                         className="text-blue-400 hover:text-gray-50"
                       >
-                        <FaTwitter size={16} />
+                        <FaTwitter size={16}/>
                       </a>
                       <a
                         href="mailto:aeronitkkr.club@gmail.com"
                         className="text-yellow-50 hover:text-gray-50"
                       >
-                        <FaEnvelope size={16} />
+                        <FaEnvelope size={16}/>
                       </a>
                     </div>
                   </div>
