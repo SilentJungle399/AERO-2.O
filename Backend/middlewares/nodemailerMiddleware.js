@@ -3,18 +3,18 @@ require('dotenv').config();
 
 // Create a transporter object using SMTP transport
 const transporter = nodemailer.createTransport({
-    host: 'smtp.gmail.com', // Your SMTP host
-    port: 587, // Your SMTP port
-    secure: false, // Set to true if your SMTP provider requires TLS
-    auth: {
-        user: process.env.USER_EMAIL, // Your email address
-        pass: process.env.USER_PASS // Your email password
-    }
+  host: 'smtp.gmail.com', // Your SMTP host
+  port: 587, // Your SMTP port
+  secure: false, // Set to true if your SMTP provider requires TLS
+  auth: {
+    user: process.env.USER_EMAIL, // Your email address
+    pass: process.env.USER_PASS // Your email password
+  }
 });
 
 const sendTeamJoiningConfirmationEmail = (name, email, groupToken, groupName, eventDetails, leaderName, leaderContact, collegeName, branch, year, rollNumber, phoneNumber, paymentScreenshot) => {
-    // Email content
-    const message = `
+  // Email content
+  const message = `
         <!DOCTYPE html>
         <html lang="en">
         <head>
@@ -130,30 +130,30 @@ const sendTeamJoiningConfirmationEmail = (name, email, groupToken, groupName, ev
         </html>
     `;
 
-    const mailOptions = {
-        from: `${process.env.USER_EMAIL}`, // Sender address
-        to: email, // Recipient address
-        subject: '🎉 Welcome to the Team! 🎉', // Subject line
-        html: message // HTML body
-    };
+  const mailOptions = {
+    from: `${process.env.USER_EMAIL}`, // Sender address
+    to: email, // Recipient address
+    subject: '🎉 Welcome to the Team! 🎉', // Subject line
+    html: message // HTML body
+  };
 
-    // Send mail
-    transporter.sendMail(mailOptions, (error, info) => {
-        if (error) {
-            console.log('Error sending email:', error);
-        } else {
-            console.log('Email sent:', info.response);
-        }
-    });
+  // Send mail
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.log('Error sending email:', error);
+    } else {
+      console.log('Email sent:', info.response);
+    }
+  });
 };
 
 
 const sendPasswordResetEmail = async (email, resetToken) => {
-    // Create the reset URL
-    const resetUrl = `https://aeronitkkr.in/forgotpassword/${resetToken}`;
+  // Create the reset URL
+  const resetUrl = `https://aeronitkkr.in/forgotpassword/${resetToken}`;
 
-    // Email content
-    const message = `<!DOCTYPE html>
+  // Email content
+  const message = `<!DOCTYPE html>
     <html lang="en">
     <head>
         <meta charset="UTF-8">
@@ -220,68 +220,68 @@ const sendPasswordResetEmail = async (email, resetToken) => {
                 <a href="${resetUrl}" target="_blank">Reset Your Password</a>
             </div>
             <p>If you didn't request a password reset, please ignore this email.</p>
-            <p class="footer">Best regards,<br>The Hms Team<br><a href="#">Visit our website</a></p>
+            <p class="footer">Best regards,<br>The Aeromodelling Team<br><a href="#">Visit our website</a></p>
         </div>
     
     </body>
     </html>
     `;
 
-    const mailOptions = {
-        from: `${process.env.USER_EMAIL}`,
-        to: email,
-        subject: 'Aeronitkkr.in Password Reset Mail',
-        html: message
-    };
+  const mailOptions = {
+    from: `${process.env.USER_EMAIL}`,
+    to: email,
+    subject: 'Aeronitkkr.in Password Reset Mail',
+    html: message
+  };
 
-    // Send mail
-    transporter.sendMail(mailOptions, (error, info) => {
-        if (error) {
-            console.log('Error sending email:', error);
-        } else {
-            console.log('Email sent:', info.response);
-        }
-    });
+  // Send mail
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.log('Error sending email:', error);
+    } else {
+      console.log('Email sent:', info.response);
+    }
+  });
 };
 
-const sendSelectionConfirmationEmail = (uid,Iid,name,email, inductionName, selectionDate, rollNumber, branch, year, phoneNumber, teamPreference, fileDownloadURLs) => {
-    
-    const fileHtml = fileDownloadURLs.map(url => {
-        // Extract file extension
-        const fileType = url.file_type.contentType;
-        console.log(url)
+const sendSelectionConfirmationEmail = (uid, Iid, name, email, inductionName, selectionDate, rollNumber, branch, year, phoneNumber, teamPreference, fileDownloadURLs) => {
 
-        // Generate appropriate HTML based on file type
-        if (fileType.includes('image')) {
-            return `
+  const fileHtml = fileDownloadURLs.map(url => {
+    // Extract file extension
+    const fileType = url.file_type.contentType;
+    console.log(url)
+
+    // Generate appropriate HTML based on file type
+    if (fileType.includes('image')) {
+      return `
                 <div style="text-align: center; margin-bottom: 15px;">
                     <img src="${url.downloadURL}" alt="Uploaded image" style="width: 100%; height: auto; border-radius: 5px; margin-bottom: 10px;" />
                     <div>
                         <a href="${url.downloadURL}" download style="color: #0066cc; text-decoration: none; font-weight: bold;">Download Image</a>
                     </div>
                 </div>`;
-        } else if (fileType.includes('pdf')) {
-            return `
+    } else if (fileType.includes('pdf')) {
+      return `
                 <div style="border: 1px solid #ddd; border-radius: 5px; overflow: hidden; margin-bottom: 15px;">
                     <iframe src="${url.downloadURL}" style="width: 100%; height: 400px;" frameborder="0"></iframe>
                     <div style="text-align: center; margin-top: 10px;">
                         <a href="${url.downloadURL}" download style="color: #0066cc; text-decoration: none; font-weight: bold;">Download PDF</a>
                     </div>
                 </div>`;
-        } else if (fileType.includes('video')) {
-            return `
+    } else if (fileType.includes('video')) {
+      return `
                 <div style="text-align: center; margin-bottom: 15px;">
                     <video src="${url.downloadURL}" controls style="width: 100%; height: auto; border-radius: 5px;">
                         Your browser does not support the video tag.
                     </video>
                 </div>`;
-        } else {
-            return `<p>Unsupported file type: ${url.downloadURL}</p>`;
-        }
-        
-    }).join('');
-    // Email content
-    const message = `
+    } else {
+      return `<p>Unsupported file type: ${url.downloadURL}</p>`;
+    }
+
+  }).join('');
+  // Email content
+  const message = `
         <!DOCTYPE html>
         <html lang="en">
         <head>
@@ -438,27 +438,27 @@ const sendSelectionConfirmationEmail = (uid,Iid,name,email, inductionName, selec
         </html>
     `;
 
-    const mailOptions = {
-        from:  `${process.env.USER_EMAIL}`, // Sender address
-        to: email, // Recipient address
-        subject: '🎉 Congratulations on Your Selection! 🎉', // Subject line
-        html: message, // HTML body
-    };
+  const mailOptions = {
+    from: `${process.env.USER_EMAIL}`, // Sender address
+    to: email, // Recipient address
+    subject: '🎉 Congratulations on Your Selection! 🎉', // Subject line
+    html: message, // HTML body
+  };
 
-    // Send mail
-    transporter.sendMail(mailOptions, (error, info) => {
-        if (error) {
-            console.log('Error sending email:', error);
-        } else {
-            console.log('Email sent:', info.response);
-        }
-    });
+  // Send mail
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.log('Error sending email:', error);
+    } else {
+      console.log('Email sent:', info.response);
+    }
+  });
 };
 
 
 const sendParticipationConfirmationEmail = (name, email, inductionName, inductionDate, rollNumber, branch, year, phoneNumber, queries, teamPreference, hobbies, skills, inductionImagePath) => {
-    // Email content
-    const message = `
+  // Email content
+  const message = `
         <!DOCTYPE html>
         <html lang="en">
         <head>
@@ -576,26 +576,26 @@ const sendParticipationConfirmationEmail = (name, email, inductionName, inductio
         </html>
     `;
 
-    const mailOptions = {
-        from:  `${process.env.USER_EMAIL}`, // Sender address
-        to: email, // Recipient address
-        subject: '🛩️ Welcome to Aeromodelling! Induction Participation Confirmed', // Subject line
-        html: message // HTML body
-    };
+  const mailOptions = {
+    from: `${process.env.USER_EMAIL}`, // Sender address
+    to: email, // Recipient address
+    subject: '🛩️ Welcome to Aeromodelling! Induction Participation Confirmed', // Subject line
+    html: message // HTML body
+  };
 
-    // Send mail
-    transporter.sendMail(mailOptions, (error, info) => {
-        if (error) {
-            console.log('Error sending email:', error);
-        } else {
-            console.log('Email sent:', info.response);
-        }
-    });
+  // Send mail
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.log('Error sending email:', error);
+    } else {
+      console.log('Email sent:', info.response);
+    }
+  });
 };
 
 const sendWorkshopConfirmationEmail = (gLeaderName, gLeaderEmail, teamName, workshopName, groupToken, gLeaderMobile, gLeaderBranch, gLeaderYear, gLeaderRollNo, gLeaderCollegeName) => {
-    // Email content
-    const message = `
+  // Email content
+  const message = `
         <!DOCTYPE html>
         <html lang="en">
         <head>
@@ -699,29 +699,28 @@ const sendWorkshopConfirmationEmail = (gLeaderName, gLeaderEmail, teamName, work
         </html>
     `;
 
-    const mailOptions = {
-        from: `${process.env.USER_EMAIL}`, // Sender address
-        to: gLeaderEmail, // Recipient address
-        subject: ' Workshop Participation Confirmed', // Subject line
-        html: message // HTML body
-    };
+  const mailOptions = {
+    from: `${process.env.USER_EMAIL}`, // Sender address
+    to: gLeaderEmail, // Recipient address
+    subject: ' Workshop Participation Confirmed', // Subject line
+    html: message // HTML body
+  };
 
-    // Send mail
-    transporter.sendMail(mailOptions, (error, info) => {
-        if (error) {
-            console.log('Error sending email:', error);
-        } else {
-            console.log('Email sent:', info.response);
-        }
-    });
+  // Send mail
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.log('Error sending email:', error);
+    } else {
+      console.log('Email sent:', info.response);
+    }
+  });
 };
 
 
-
 // Function to send an email notification
-const sendSignupEmailNotification = (full_name,email,) => {
-    // Email content
-    const message=`<!DOCTYPE html>
+const sendSignupEmailNotification = (full_name, email,) => {
+  // Email content
+  const message = `<!DOCTYPE html>
     <html lang="en">
     <head>
         <meta charset="UTF-8">
@@ -794,35 +793,35 @@ const sendSignupEmailNotification = (full_name,email,) => {
             </ul>
             <p>If you have any questions or need assistance, feel free to reach out to us.</p>
             <p>Thank you for choosing us. We're excited to have you on board!</p>
-            <p class="footer">Best regards,<br>The Hms Team<br><a href="#">Visit our website</a></p>
+            <p class="footer">Best regards,<br>The Aeromodelling Team<br><a href="#">Visit our website</a></p>
         </div>
     
     </body>
     </html>
     `
-    console.log(full_name,email)
-    const mailOptions = {
-        from:  `${process.env.USER_EMAIL}`, // Sender address
-        to: email, // Recipient address
-        subject: 'Thankyou for signing up', // Subject line
-        html: message // Plain text body
-    };
+  console.log(full_name, email)
+  const mailOptions = {
+    from: `${process.env.USER_EMAIL}`, // Sender address
+    to: email, // Recipient address
+    subject: 'Thankyou for signing up', // Subject line
+    html: message // Plain text body
+  };
 
-    // Send mail
-    transporter.sendMail(mailOptions, (error, info) => {
-        if (error) {
-            console.log('Error sending email:', error);
-        } else {
-            console.log('Email sent:', info.response);
-        }
-    });
+  // Send mail
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.log('Error sending email:', error);
+    } else {
+      console.log('Email sent:', info.response);
+    }
+  });
 };
 
 
 const sendVerificationEmail = (email, otp) => {
-   
-    // Email content
-    const message = `<!DOCTYPE html>
+
+  // Email content
+  const message = `<!DOCTYPE html>
     <html lang="en">
     <head>
         <meta charset="UTF-8">
@@ -886,32 +885,39 @@ const sendVerificationEmail = (email, otp) => {
             <p>Please use the following OTP to verify your email address : ${email}</p>
             <div class="otp">${otp}</div>
             <p>If you didn't request this verification, you can safely ignore this email.</p>
-            <p class="footer">Best regards,<br>The Hms Team<br><a href="#">Visit our website</a></p>
+            <p class="footer">Best regards,<br>The Aeromodelling Team<br><a href="#">Visit our website</a></p>
         </div>
     
     </body>
     </html>
     `;
 
-    const mailOptions = {
-        from:  `${process.env.USER_EMAIL}`, // Sender address
-        to: email, // Recipient address
-        subject: 'Email Verification OTP', // Subject line
-        html: message // HTML content
-    };
+  const mailOptions = {
+    from: `${process.env.USER_EMAIL}`, // Sender address
+    to: email, // Recipient address
+    subject: 'Email Verification OTP', // Subject line
+    html: message // HTML content
+  };
 
-    // Send mail
-    transporter.sendMail(mailOptions, (error, info) => {
-        if (error) {
-            console.log('Error sending email:1', error);
- 
-        } else {
-            console.log('Email sent:', info.response);
+  // Send mail
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.log('Error sending email:1', error);
 
-        }
-    });
+    } else {
+      console.log('Email sent:', info.response);
+
+    }
+  });
 };
 
 
-
-module.exports = {sendTeamJoiningConfirmationEmail,sendWorkshopConfirmationEmail,sendVerificationEmail,sendSignupEmailNotification,sendParticipationConfirmationEmail,sendSelectionConfirmationEmail,sendPasswordResetEmail};
+module.exports = {
+  sendTeamJoiningConfirmationEmail,
+  sendWorkshopConfirmationEmail,
+  sendVerificationEmail,
+  sendSignupEmailNotification,
+  sendParticipationConfirmationEmail,
+  sendSelectionConfirmationEmail,
+  sendPasswordResetEmail
+};
