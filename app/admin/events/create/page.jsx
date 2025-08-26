@@ -1,5 +1,5 @@
 "use client";
-import { useState } from 'react';
+import {useState} from 'react';
 
 const CreateEvent = () => {
   const [formData, setFormData] = useState({
@@ -19,29 +19,29 @@ const CreateEvent = () => {
     E_main_img: null
   });
   const [message, setMessage] = useState('');
-  
+
   const handleChange = (e) => {
-    const { name, value, files } = e.target;
+    const {name, value, files} = e.target;
     if (name === 'E_main_img') {
-      setFormData((prevData) => ({ ...prevData, [name]: files[0] }));
+      setFormData((prevData) => ({...prevData, [name]: files[0]}));
     } else {
-      setFormData((prevData) => ({ ...prevData, [name]: value }));
+      setFormData((prevData) => ({...prevData, [name]: value}));
     }
   };
 
   const handleGuidelineChange = (index, value) => {
     const newGuidelines = [...formData.E_guidelines];
     newGuidelines[index] = value;
-    setFormData((prevData) => ({ ...prevData, E_guidelines: newGuidelines }));
+    setFormData((prevData) => ({...prevData, E_guidelines: newGuidelines}));
   };
 
   const addGuideline = () => {
-    setFormData((prevData) => ({ ...prevData, E_guidelines: [...prevData.E_guidelines, ''] }));
+    setFormData((prevData) => ({...prevData, E_guidelines: [...prevData.E_guidelines, '']}));
   };
 
   const removeGuideline = (index) => {
     const newGuidelines = formData.E_guidelines.filter((_, i) => i !== index);
-    setFormData((prevData) => ({ ...prevData, E_guidelines: newGuidelines }));
+    setFormData((prevData) => ({...prevData, E_guidelines: newGuidelines}));
   };
 
   const handleSubmit = async (e) => {
@@ -57,9 +57,9 @@ const CreateEvent = () => {
     });
 
     try {
-      const baseUrl = process.env.NODE_ENV === 'production' 
-          ? process.env.NEXT_PUBLIC_BACKEND_URL 
-          : 'http://localhost:5000';
+      const baseUrl = process.env.NODE_ENV === 'production'
+        ? ""
+        : 'http://localhost:5000';
       const response = await fetch(`${baseUrl}/api/users/createevent`, {
         method: 'POST',
         body: formDataToSubmit,

@@ -1,18 +1,18 @@
 "use client";
-import React, { useState } from "react";
+import React, {useState} from "react";
 import {
-  FaUsers,
-  FaCheckCircle,
-  FaTimesCircle,
-  FaUniversity,
-  FaCode,
   FaCalendarAlt,
+  FaCheckCircle,
+  FaCode,
+  FaEnvelope,
   FaIdCard,
   FaMobile,
-  FaEnvelope,
+  FaTimesCircle,
+  FaUniversity,
+  FaUsers,
   FaVenusMars,
 } from "react-icons/fa";
-import toast, { Toaster } from "react-hot-toast";
+import toast, {Toaster} from "react-hot-toast";
 
 const JoinTeam = () => {
   const [step, setStep] = useState(1);
@@ -38,12 +38,12 @@ const JoinTeam = () => {
     try {
       const baseUrl =
         process.env.NODE_ENV === "production"
-          ? process.env.NEXT_PUBLIC_BACKEND_URL
+          ? ""
           : "http://localhost:5000";
       const response = await fetch(`${baseUrl}/api/users/checktoken`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ Group_token: groupToken }),
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({Group_token: groupToken}),
       });
       const data = await response.json();
       if (response.ok) {
@@ -69,8 +69,7 @@ const JoinTeam = () => {
         payment_screenshot: file, // Store the image file
       }));
       handlePreviewFileInputChange(file);
-    }
-    else{
+    } else {
       setPaymentPreview("")
     }
   };
@@ -113,7 +112,7 @@ const JoinTeam = () => {
 
       const baseUrl =
         process.env.NODE_ENV === "production"
-          ? process.env.NEXT_PUBLIC_BACKEND_URL
+          ? ""
           : "http://localhost:5000";
 
       const response = await fetch(`${baseUrl}/api/users/jointeam`, {
@@ -137,13 +136,13 @@ const JoinTeam = () => {
   };
 
   const handleInputChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    setFormData({...formData, [e.target.name]: e.target.value});
   };
 
   return (
     <div className="max-w-lg mx-auto mt-52 mb-20 p-6 rounded-lg shadow-md bg-black">
       <h2 className="text-3xl font-bold text-center text-blue-400 mb-6 flex items-center justify-center">
-        <FaUsers className="mr-2 text-blue-500" /> Join a Team
+        <FaUsers className="mr-2 text-blue-500"/> Join a Team
       </h2>
       {step === 1 && (
         <div className="bg-gray-900 p-6 rounded-lg shadow-sm animate-fade-in">
@@ -170,7 +169,7 @@ const JoinTeam = () => {
               placeholder="Enter group token"
               className="w-full px-4 py-3 mb-4 border-2 border-blue-500 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600 bg-gray-800 text-blue-100 placeholder-blue-300"
             />
-            <FaIdCard className="absolute right-3 top-3 text-blue-400" />
+            <FaIdCard className="absolute right-3 top-3 text-blue-400"/>
           </div>
           <button
             onClick={validateGroupToken}
@@ -193,13 +192,13 @@ const JoinTeam = () => {
           </h3>
           <form onSubmit={handleSubmit}>
             {[
-              { name: "Member_name", placeholder: "Full Name", icon: FaUsers },
+              {name: "Member_name", placeholder: "Full Name", icon: FaUsers},
               {
                 name: "Member_college_name",
                 placeholder: "College Name",
                 icon: FaUniversity,
               },
-              { name: "Member_branch", placeholder: "Branch", icon: FaCode },
+              {name: "Member_branch", placeholder: "Branch", icon: FaCode},
               {
                 name: "Member_year",
                 placeholder: "Year of Study 1st/2nd/3rd/4th",
@@ -215,7 +214,7 @@ const JoinTeam = () => {
                 placeholder: "Mobile Number",
                 icon: FaMobile,
               },
-              { name: "Member_email", placeholder: "Email", icon: FaEnvelope },
+              {name: "Member_email", placeholder: "Email", icon: FaEnvelope},
             ].map((field) => (
               <div key={field.name} className="relative mb-4">
                 <input
@@ -223,8 +222,8 @@ const JoinTeam = () => {
                     field.name === "Member_email"
                       ? "email"
                       : field.name === "Member_mob_no"
-                      ? "tel"
-                      : "text"
+                        ? "tel"
+                        : "text"
                   }
                   name={field.name}
                   value={formData[field.name]}
@@ -233,7 +232,7 @@ const JoinTeam = () => {
                   className="w-full px-4 py-3 pl-10 border-2 border-blue-500 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600 bg-gray-800 text-blue-100 placeholder-blue-300"
                   required
                 />
-                <field.icon className="absolute left-3 top-3 text-blue-400" />
+                <field.icon className="absolute left-3 top-3 text-blue-400"/>
               </div>
             ))}
             <div className="relative mb-4">
@@ -249,7 +248,7 @@ const JoinTeam = () => {
                 <option value="F">Female</option>
                 <option value="O">Other</option>
               </select>
-              <FaVenusMars className="absolute left-3 top-3 text-blue-400" />
+              <FaVenusMars className="absolute left-3 top-3 text-blue-400"/>
             </div>
 
             {/* Upload payment screenshot */}
@@ -260,26 +259,26 @@ const JoinTeam = () => {
                 onChange={handleImageChange}
                 className="w-full px-4 py-3 border-2 border-blue-500 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600 bg-gray-800 text-blue-100 placeholder-blue-300"
               />
-              <FaTimesCircle className="absolute right-3 top-3 text-blue-400" />
+              <FaTimesCircle className="absolute right-3 top-3 text-blue-400"/>
               <div className="flex justify-between p-2">
-              {paymentPreview && (
+                {paymentPreview && (
+                  <img
+                    src={paymentPreview}
+                    alt="Payment Screenshot Preview"
+                    className="mt-2 w-36 h-36"
+                  />
+                )}
                 <img
-                  src={paymentPreview}
-                  alt="Payment Screenshot Preview"
-                  className="mt-2 w-36 h-36"
-                />
-              )}
-              <img
                   src="/payment_qr.jpg"
                   alt="Payment QR"
                   className="mt-2 w-36 h-36"
                 />
               </div>
-              
+
             </div>
-            
+
             {error && <p className="text-red-400 mb-4">{error}</p>}
-            
+
             <button
               type="submit"
               disabled={isLoading}
@@ -297,11 +296,13 @@ const JoinTeam = () => {
       {step === 3 && (
         <div className="bg-gray-900 p-6 rounded-lg shadow-sm animate-fade-in text-center">
           <h3 className="text-xl font-semibold mb-4 text-green-400">
-            <FaCheckCircle className="inline-block mr-2" />
+            <FaCheckCircle className="inline-block mr-2"/>
             Success!
           </h3>
-          <p className="text-blue-100 mb-2">You have successfully joined the team and check your mail for further Details <strong className="text-red-500">Check Spam</strong>.</p>
-          <a className="text-white bg-green-500 p-2 m-3 rounded-lg" href="https://chat.whatsapp.com/DeF1JHnE4dkFWEgPeWkZWJ">Join Our WhatsApp Group</a>
+          <p className="text-blue-100 mb-2">You have successfully joined the team and check your mail for further
+            Details <strong className="text-red-500">Check Spam</strong>.</p>
+          <a className="text-white bg-green-500 p-2 m-3 rounded-lg"
+             href="https://chat.whatsapp.com/DeF1JHnE4dkFWEgPeWkZWJ">Join Our WhatsApp Group</a>
         </div>
       )}
     </div>

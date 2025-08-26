@@ -1,12 +1,12 @@
 "use client";
-import { useState, useEffect, useRef } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import {useEffect, useRef, useState} from "react";
+import {motion, useScroll, useTransform} from "framer-motion";
 import Link from "next/link";
 import Brain from "./Brain";
 import Loader from "@/components/Loader";
-import { jwtDecode } from "jwt-decode";
-import Login from "../login/page";
-import { FaTeamspeak, FaUser, FaUserFriends } from "react-icons/fa";
+import {jwtDecode} from "jwt-decode";
+import {FaUserFriends} from "react-icons/fa";
+
 const EventsPage = () => {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -14,7 +14,7 @@ const EventsPage = () => {
 
   const ref = useRef(null);
 
-  const { scrollYProgress } = useScroll({ target: ref });
+  const {scrollYProgress} = useScroll({target: ref});
   const x = useTransform(scrollYProgress, [0, 1], ["0%", "-92%"]);
 
   function isTokenExpired(token) {
@@ -44,7 +44,7 @@ const EventsPage = () => {
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:5000";
+        const baseUrl = "" || "http://localhost:5000";
         const response = await fetch(`${baseUrl}/api/users/getallevents`);
         if (!response.ok) {
           throw new Error("Failed to fetch events");
@@ -60,25 +60,27 @@ const EventsPage = () => {
     fetchEvents();
   }, []);
 
-  if (loading) return <Loader />;
+  if (loading) return <Loader/>;
   if (error) return <p className="text-center text-red-500">{error}</p>;
 
   return (
     <motion.div
       className="min-h-screen bg-gray-900 text-gray-100"
-      initial={{ y: "-200vh" }}
-      animate={{ y: "0%" }}
-      transition={{ duration: 1 }}
+      initial={{y: "-200vh"}}
+      animate={{y: "0%"}}
+      transition={{duration: 1}}
     >
       {/* First Section */}
       <div className="h-screen relative overflow-hidden bg-black">
-        <div className="absolute inset-0 flex items-center justify-center text-3xl sm:text-4xl md:text-6xl lg:text-8xl text-center">
+        <div
+          className="absolute inset-0 flex items-center justify-center text-3xl sm:text-4xl md:text-6xl lg:text-8xl text-center">
           <h1 className="z-10 px-4 text-white monoton">
             Aeromodelling Club Workshops
           </h1>
         </div>
-        <div className="absolute top-1/4 left-1/2 transform -translate-x-1/2 -translate-y-1/4 z-10 w-full h-full max-w-2xl pr-16 opacity-80 max-h-96">
-          <Brain scrollYProgress={scrollYProgress} />
+        <div
+          className="absolute top-1/4 left-1/2 transform -translate-x-1/2 -translate-y-1/4 z-10 w-full h-full max-w-2xl pr-16 opacity-80 max-h-96">
+          <Brain scrollYProgress={scrollYProgress}/>
         </div>
       </div>
 
@@ -92,9 +94,9 @@ const EventsPage = () => {
             <motion.div
               key={event._id}
               className="bg-black bg-opacity-70 rounded-lg shadow-lg p-6"
-              initial={{ opacity: 0, y: 50 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
+              initial={{opacity: 0, y: 50}}
+              animate={{opacity: 1, y: 0}}
+              transition={{duration: 0.5, delay: index * 0.1}}
             >
               <div className="flex space-x-10">
                 <h2 className="text-2xl md:text-4xl font-bold font-mono mb-6 text-white">
@@ -105,10 +107,10 @@ const EventsPage = () => {
                     <motion.a
                       onClick={LoginCheck}
                       className="flex-1 bg-blue-600 border-2 border-green-500 text-white font-semibold py-2 px-4 w-auto rounded-3xl hover:bg-green-500 transition-colors text-center shadow-md flex items-center justify-center"
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
+                      whileHover={{scale: 1.05}}
+                      whileTap={{scale: 0.95}}
                     >
-                      MyTeam <FaUserFriends className="ml-2" />
+                      MyTeam <FaUserFriends className="ml-2"/>
                     </motion.a>
                   </div>
                 </Link>
@@ -146,20 +148,24 @@ const EventsPage = () => {
                   </p>
                   <p className="text-gray-300">{event.E_mini_description}</p>
                   <div className="flex flex-wrap justify-between gap-4 mt-8">
-                    <Link href={event.active_status ? `/events/create-team/${event._id}` : "https://th.bing.com/th/id/OIP._mYdcpBTqU7VJiRimoP9wwHaEV?rs=1&pid=ImgDetMain"} className="mt-2" passHref>
+                    <Link
+                      href={event.active_status ? `/events/create-team/${event._id}` : "https://th.bing.com/th/id/OIP._mYdcpBTqU7VJiRimoP9wwHaEV?rs=1&pid=ImgDetMain"}
+                      className="mt-2" passHref>
                       <motion.a
                         onClick={LoginCheck}
                         className={`flex-1 bg-blue-600 text-white font-semibold py-3 px-6 rounded-lg transition-colors text-center shadow-md ${!event.active_status ? "opacity-50 cursor-not-allowed" : "hover:bg-blue-500"
-                          }`}
+                        }`}
                       >
                         Create Team
                       </motion.a>
                     </Link>
-                    <Link href={event.active_status ? `/events/join-team/${event._id}` : "https://th.bing.com/th/id/OIP._mYdcpBTqU7VJiRimoP9wwHaEV?rs=1&pid=ImgDetMain"} className="mt-2" passHref>
+                    <Link
+                      href={event.active_status ? `/events/join-team/${event._id}` : "https://th.bing.com/th/id/OIP._mYdcpBTqU7VJiRimoP9wwHaEV?rs=1&pid=ImgDetMain"}
+                      className="mt-2" passHref>
                       <motion.a
                         onClick={LoginCheck}
                         className={`flex-1 bg-green-600 text-white font-semibold py-3 px-6 rounded-lg transition-colors text-center shadow-md ${!event.active_status ? "opacity-50 cursor-not-allowed" : "hover:bg-green-500"
-                          }`}
+                        }`}
                       >
                         Join Team
                       </motion.a>
@@ -175,7 +181,8 @@ const EventsPage = () => {
       </div>
 
       {/* Final Section */}
-      <div className="w-full min-h-screen flex flex-col gap-8 sm:gap-16 items-center justify-center text-center bg-gradient-to-b from-gray-800 to-black p-4 sm:p-8">
+      <div
+        className="w-full min-h-screen flex flex-col gap-8 sm:gap-16 items-center justify-center text-center bg-gradient-to-b from-gray-800 to-black p-4 sm:p-8">
         <h2 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold px-4 text-white">
           Ready to{" "}
           <span className="bg-gradient-to-r from-blue-400 via-green-300 to-purple-400 text-transparent bg-clip-text">
@@ -185,8 +192,8 @@ const EventsPage = () => {
         </h2>
         <div className="relative w-full h-64 sm:h-80 md:h-96 flex items-center justify-center">
           <motion.svg
-            animate={{ rotate: 360 }}
-            transition={{ duration: 8, ease: "linear", repeat: Infinity }}
+            animate={{rotate: 360}}
+            transition={{duration: 8, ease: "linear", repeat: Infinity}}
             viewBox="0 0 300 300"
             className="w-full h-full max-w-sm sm:max-w-md md:max-w-lg"
           >

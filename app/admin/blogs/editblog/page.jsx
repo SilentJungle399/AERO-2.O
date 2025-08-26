@@ -1,11 +1,12 @@
 "use client";
 
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import {useEffect, useState} from 'react';
 import Image from 'next/image';
-import { motion } from 'framer-motion';
+import {motion} from 'framer-motion';
 import Cookies from 'js-cookie';
 import Loader from '@/components/Loader'
+
 const withAdminAuth = (WrappedComponent) => {
   const WithAdminAuth = (props) => {
     const [isLoading, setIsLoading] = useState(true);
@@ -21,7 +22,7 @@ const withAdminAuth = (WrappedComponent) => {
 
         try {
           const baseUrl = process.env.NODE_ENV === 'production'
-            ? process.env.NEXT_PUBLIC_BACKEND_URL
+            ? ""
             : 'http://localhost:5000';
           const response = await fetch(`${baseUrl}/api/auth/check-admin`, {
             method: 'POST',
@@ -84,8 +85,8 @@ const Blogs = () => {
     fetchBlogs();
   }, []);
 
-  const filteredBlogs = selectedCategory === 'All' 
-    ? blogs 
+  const filteredBlogs = selectedCategory === 'All'
+    ? blogs
     : blogs.filter(blog => blog.categories.some(cat => cat.name === selectedCategory));
 
   if (error) {
@@ -95,20 +96,20 @@ const Blogs = () => {
   return (
     <div className="min-h-screen pt-24 bg-gray-900 py-12 px-4 sm:px-6 lg:px-8 overflow-hidden">
       <div className="max-w-7xl mx-auto relative">
-        <motion.h1 
+        <motion.h1
           className="text-5xl font-extrabold text-center mb-12 text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600"
-          initial={{ opacity: 0, y: -50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
+          initial={{opacity: 0, y: -50}}
+          animate={{opacity: 1, y: 0}}
+          transition={{duration: 0.8}}
         >
           Explore Our Blogs
         </motion.h1>
-        
-        <motion.div 
+
+        <motion.div
           className="flex justify-center mb-12 space-x-2 overflow-x-auto"
-          initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
+          initial={{opacity: 0, y: 50}}
+          animate={{opacity: 1, y: 0}}
+          transition={{duration: 0.8, delay: 0.2}}
         >
           {categories.map((category) => (
             <button
@@ -125,24 +126,24 @@ const Blogs = () => {
           ))}
         </motion.div>
 
-        <motion.div 
+        <motion.div
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.8, delay: 0.4 }}
+          initial={{opacity: 0}}
+          animate={{opacity: 1}}
+          transition={{duration: 0.8, delay: 0.4}}
         >
           {filteredBlogs.map((blog, index) => (
             <motion.div
               key={blog._id}
               className="bg-gray-800 rounded-xl shadow-lg overflow-hidden transform transition duration-500 hover:scale-105 hover:rotate-1 perspective-1000"
-              initial={{ opacity: 0, y: 50 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              whileHover={{ 
+              initial={{opacity: 0, y: 50}}
+              animate={{opacity: 1, y: 0}}
+              transition={{duration: 0.5, delay: index * 0.1}}
+              whileHover={{
                 rotateY: 5,
                 rotateX: 5,
                 scale: 1.05,
-                transition: { duration: 0.3 }
+                transition: {duration: 0.3}
               }}
             >
               <div className="relative h-48">
@@ -159,7 +160,7 @@ const Blogs = () => {
               <div className="p-6">
                 <p className="text-gray-300 mb-4 line-clamp-3">{blog.summary}</p>
                 <div className="flex items-center mb-4">
-                  
+
                   <div>
                     <p className="font-medium text-purple-400">author:{blog.author.name}</p>
                     <p className="text-sm text-gray-400">
@@ -175,7 +176,8 @@ const Blogs = () => {
                   ))}
                 </div>
                 <Link href={`editblog/${blog.slug}`} passHref>
-                  <div className="block bg-purple-600 hover:bg-purple-700 text-white text-center px-4 py-2 rounded-lg transition-colors duration-300 transform hover:scale-105">
+                  <div
+                    className="block bg-purple-600 hover:bg-purple-700 text-white text-center px-4 py-2 rounded-lg transition-colors duration-300 transform hover:scale-105">
                     Read More
                   </div>
                 </Link>

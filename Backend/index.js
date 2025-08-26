@@ -10,8 +10,8 @@ const app = express();
 app.use(cors({
   origin: [
     'https://aeronitkkr.in',   // Production URL
-    'http://localhost:3000',       // Development URL
-    'http://192.168.219.247:3000',       // Development URL
+    `http://localhost:${process.env.PROD_PORT}`,       // Development URL
+    'http://192.168.219.247:process.env.PROD_PORT',       // Development URL
   ],
   credentials: true // Enable credentials (cookies)
 }));
@@ -19,7 +19,7 @@ app.use(cors({
 app.options('*', cors({ // Preflight OPTIONS request for credentials
   origin: [
     'https://aeronitkkr.in',   // Production URL
-    'http://localhost:3000'       // Development URL
+    `http://localhost:${process.env.PROD_PORT}`       // Development URL
   ],
   credentials: true
 }));

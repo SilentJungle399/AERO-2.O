@@ -1,9 +1,10 @@
 "use client";
-import { useParams } from "next/navigation";
-import { useState, useEffect } from "react";
+import {useParams} from "next/navigation";
+import {useEffect, useState} from "react";
 import Loader from '@/components/Loader'
+
 export default function AdminInductions() {
-  const { id } = useParams();
+  const {id} = useParams();
   const [induction, setInduction] = useState(null);
   const [selectedParticipants, setSelectedParticipants] = useState([]);
   const [message, setMessage] = useState("");
@@ -17,9 +18,9 @@ export default function AdminInductions() {
 
   const fetchInduction = async () => {
     try {
-      const baseUrl = process.env.NODE_ENV === 'production' 
-          ? process.env.NEXT_PUBLIC_BACKEND_URL 
-          : 'http://localhost:5000';
+      const baseUrl = process.env.NODE_ENV === 'production'
+        ? ""
+        : 'http://localhost:5000';
       const response = await fetch(
         `${baseUrl}/api/users/getinductionforselectingstudent/${id}`
       );
@@ -174,7 +175,8 @@ export default function AdminInductions() {
           className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full"
           id="my-modal"
         >
-          <div className="relative text-black top-20 mx-auto p-5 border w-11/12 md:w-3/4 lg:w-2/3 shadow-lg rounded-md bg-white">
+          <div
+            className="relative text-black top-20 mx-auto p-5 border w-11/12 md:w-3/4 lg:w-2/3 shadow-lg rounded-md bg-white">
             <div className="mt-3">
               <h3 className="text-2xl font-semibold text-center mb-4">
                 {selectedStudent.name}&apos;s Details

@@ -1,15 +1,14 @@
 "use client";
-import { useState } from "react";
-import { useRouter } from "next/router";
-import { useParams } from "next/navigation";
-import { FaUsers, FaIdCard } from "react-icons/fa";
-import { Toaster } from "react-hot-toast";
+import {useState} from "react";
+import {useParams} from "next/navigation";
+import {FaIdCard, FaUsers} from "react-icons/fa";
+import {Toaster} from "react-hot-toast";
 
 const GroupTokenVerification = () => {
   const [groupToken, setGroupToken] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const { eventId } = useParams();
+  const {eventId} = useParams();
 
   const handleTokenSubmit = async (e) => {
     e.preventDefault();
@@ -19,13 +18,13 @@ const GroupTokenVerification = () => {
     try {
       const baseUrl =
         process.env.NODE_ENV === "production"
-          ? process.env.NEXT_PUBLIC_BACKEND_URL
+          ? ""
           : "http://localhost:5000";
 
       const response = await fetch(`${baseUrl}/api/users/teamdashboard`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ Group_token: groupToken }),
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({Group_token: groupToken}),
       });
       if (response.ok) {
         setLoading(false);
@@ -43,7 +42,7 @@ const GroupTokenVerification = () => {
     <div className="min-h-screen flex items-center justify-center bg-gray-950">
       <div className="max-w-lg mx-auto mt-52 mb-20 p-6 rounded-lg shadow-md bg-black">
         <h2 className="text-3xl font-bold text-center text-blue-400 mb-6 flex items-center justify-center">
-          <FaUsers className="mr-2 text-blue-500" /> Join a Team
+          <FaUsers className="mr-2 text-blue-500"/> Join a Team
         </h2>
         <div className="bg-gray-900 p-6 rounded-lg shadow-sm animate-fade-in">
           <Toaster
@@ -70,7 +69,7 @@ const GroupTokenVerification = () => {
               className="w-full px-4 py-3 mb-4 border-2 border-blue-500 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600 bg-gray-800 text-blue-100 placeholder-blue-300"
               required
             />
-            <FaIdCard className="absolute right-3 top-3 text-blue-400" />
+            <FaIdCard className="absolute right-3 top-3 text-blue-400"/>
           </div>
           <button
             onClick={handleTokenSubmit}

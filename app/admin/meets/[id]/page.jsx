@@ -1,9 +1,10 @@
 "use client"
 
-import { useState, useEffect } from 'react';
-import { useParams, useSearchParams } from 'next/navigation';
+import {useEffect, useState} from 'react';
+import {useParams} from 'next/navigation';
 import Image from 'next/image';
 import Loader from '@/components/Loader'
+
 export default function MeetAnalyticsPage() {
   const [meet, setMeet] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -18,18 +19,18 @@ export default function MeetAnalyticsPage() {
         .split("; ")
         .find((row) => row.startsWith("token="))
         .split("=")[1];
-        const baseUrl = process.env.NODE_ENV === 'production' 
-          ? process.env.NEXT_PUBLIC_BACKEND_URL 
-          : 'http://localhost:5000';
-        const response = await fetch(
-          `${baseUrl}/api/users/endmeet/${id}`,
-          {
-            method: "POST",
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-            }
+      const baseUrl = process.env.NODE_ENV === 'production'
+        ? ""
+        : 'http://localhost:5000';
+      const response = await fetch(
+        `${baseUrl}/api/users/endmeet/${id}`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
           }
-        );
+        }
+      );
       const data = await response.json();
       if (response.ok) {
         setTimeout(function () {
@@ -49,8 +50,8 @@ export default function MeetAnalyticsPage() {
       if (!id) return;
       try {
         const baseUrl = process.env.NODE_ENV === 'production'
-        ? process.env.NEXT_PUBLIC_BACKEND_URL
-        : 'http://localhost:5000';
+          ? ""
+          : 'http://localhost:5000';
         const response = await fetch(`${baseUrl}/api/users/getmeets/${id}`);
         if (!response.ok) {
           throw new Error('Failed to fetch meet details');
@@ -117,8 +118,10 @@ export default function MeetAnalyticsPage() {
           <p>Implement your analytics visualizations and data here.</p>
         </div>
         <div className='flex justify-end'>
-          <button onClick={handleEnd} disabled={meet.meet_active_status ? false : true}  className='r-0 p-2 ml-auto  text-md justify-end bg-red-500 rounded-md'>
-            {meet.meet_active_status ? <div>End meet</div> : <div className='cursor-not-allowed' >Meet Already Ended</div>}
+          <button onClick={handleEnd} disabled={meet.meet_active_status ? false : true}
+                  className='r-0 p-2 ml-auto  text-md justify-end bg-red-500 rounded-md'>
+            {meet.meet_active_status ? <div>End meet</div> :
+              <div className='cursor-not-allowed'>Meet Already Ended</div>}
           </button>
         </div>
       </div>

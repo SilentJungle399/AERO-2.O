@@ -1,7 +1,6 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import {useState} from "react";
 import Link from "next/link";
 
 export default function ForgotPassword() {
@@ -17,14 +16,14 @@ export default function ForgotPassword() {
 
     try {
       const baseUrl = process.env.NODE_ENV === 'production'
-        ? process.env.NEXT_PUBLIC_BACKEND_URL
+        ? ""
         : 'http://localhost:5000';
       const response = await fetch(`${baseUrl}/api/auth/sendresetemail`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({email}),
       });
 
       const data = await response.json();
@@ -55,7 +54,7 @@ export default function ForgotPassword() {
           </h2>
         </div>
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-          <input type="hidden" name="remember" value="true" />
+          <input type="hidden" name="remember" value="true"/>
           <div className="rounded-md shadow-sm -space-y-px">
             <div>
               <label htmlFor="email-address" className="sr-only font-mono">

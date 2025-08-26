@@ -1,10 +1,11 @@
 "use client";
 
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import Link from 'next/link';
 import Cookies from 'js-cookie';
-import { FaPlane, FaUsers, FaCalendarAlt, FaTools, FaTrophy, FaCog } from 'react-icons/fa';
+import {FaCalendarAlt, FaCog, FaPlane, FaTools, FaTrophy, FaUsers} from 'react-icons/fa';
 import Loader from '@/components/Loader'
+
 const withAdminAuth = (WrappedComponent) => {
   const WithAdminAuth = (props) => {
     const [isLoading, setIsLoading] = useState(true);
@@ -14,13 +15,13 @@ const withAdminAuth = (WrappedComponent) => {
         const token = Cookies.get('token');
 
         if (!token) {
-          window.location.href="/login"
+          window.location.href = "/login"
           return;
         }
 
         try {
           const baseUrl = process.env.NODE_ENV === 'production'
-            ? process.env.NEXT_PUBLIC_BACKEND_URL
+            ? ""
             : 'http://localhost:5000';
           const response = await fetch(`${baseUrl}/api/auth/check-admin`, {
             method: 'POST',
@@ -34,11 +35,11 @@ const withAdminAuth = (WrappedComponent) => {
           if (data.isAdmin) {
             setIsLoading(false);
           } else {
-            window.location.href="/unauthorized"
+            window.location.href = "/unauthorized"
           }
         } catch (error) {
           console.error('Error checking admin status:', error);
-          window.location.href="/unauthorized"
+          window.location.href = "/unauthorized"
         }
       };
 
@@ -69,31 +70,31 @@ const AeroClubAdminDashboard = () => {
         </div>
         <nav className="mt-6">
           <Link href="/admin/blogs/editblog" className="flex items-center py-3 px-6 bg-blue-900">
-            <FaPlane className="mr-3" />
+            <FaPlane className="mr-3"/>
             Edit blogs
           </Link>
           <Link href="/admin/blogs/createblogs" className="flex items-center py-3 px-6 hover:bg-blue-700">
-            <FaUsers className="mr-3" />
+            <FaUsers className="mr-3"/>
             Create blogs
           </Link>
           <Link href="/admin/blogs/addcategory" className="flex items-center py-3 px-6 hover:bg-blue-700">
-            <FaUsers className="mr-3" />
+            <FaUsers className="mr-3"/>
             Add category
           </Link>
           <Link href="/admin/blogs/addsection" className="flex items-center py-3 px-6 hover:bg-blue-700">
-            <FaCalendarAlt className="mr-3" />
+            <FaCalendarAlt className="mr-3"/>
             Add sections
           </Link>
           <Link href="/admin/blogs/update" className="flex items-center py-3 px-6 hover:bg-blue-700">
-            <FaTools className="mr-3" />
+            <FaTools className="mr-3"/>
             Update blogs
           </Link>
           <Link href="/admin/blogs/delete" className="flex items-center py-3 px-6 hover:bg-blue-700">
-            <FaTrophy className="mr-3" />
+            <FaTrophy className="mr-3"/>
             Delete blogs
           </Link>
           <Link href="/admin/blogs/settings" className="flex items-center py-3 px-6 hover:bg-blue-700">
-            <FaCog className="mr-3" />
+            <FaCog className="mr-3"/>
             Settings
           </Link>
         </nav>

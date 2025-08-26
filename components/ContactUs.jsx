@@ -30,7 +30,7 @@ const ContactUsPage = () => {
     setMessage("Message sending...")
     const baseUrl =
       process.env.NODE_ENV === "production"
-        ? process.env.NEXT_PUBLIC_BACKEND_URL
+        ? ""
         : "http://localhost:5000";
     console.log(formData)
     fetch(`${baseUrl}/api/users/contactus`, {

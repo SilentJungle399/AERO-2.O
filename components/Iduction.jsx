@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, {useEffect, useState} from 'react';
 import Loader from '@/components/Loader'
+
 const InductionSessionsList = () => {
   const [inductionSessions, setInductionSessions] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -7,8 +8,8 @@ const InductionSessionsList = () => {
   useEffect(() => {
     const fetchInductionSessions = async () => {
       try {
-        const baseUrl = process.env.NODE_ENV === 'production' 
-          ? process.env.NEXT_PUBLIC_BACKEND_URL 
+        const baseUrl = process.env.NODE_ENV === 'production'
+          ? ""
           : 'http://localhost:5000';
         const response = await fetch(`${baseUrl}/api/users/getallinduction`);
         if (!response.ok) {
@@ -43,7 +44,7 @@ const InductionSessionsList = () => {
       {sortedSessions.map(session => (
         <div key={session._id} className="border rounded-lg overflow-hidden shadow-md">
           {/* Assuming a placeholder image */}
-          <img src="/images/induction-placeholder.jpg" alt="Induction Session" className="w-full h-40 object-cover" />
+          <img src="/images/induction-placeholder.jpg" alt="Induction Session" className="w-full h-40 object-cover"/>
           <div className="p-4">
             <h3 className="text-lg font-semibold">{session.I_date}</h3>
             <p className="text-sm mb-2">Venue: {session.I_venue}</p>

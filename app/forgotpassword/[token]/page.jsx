@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useParams } from "next/navigation";
+import {useState} from "react";
+import {useParams} from "next/navigation";
 
 export default function ResetPassword() {
   const [password, setPassword] = useState("");
@@ -23,15 +23,15 @@ export default function ResetPassword() {
     }
 
     try {
-        const baseUrl = process.env.NODE_ENV === 'production'
-        ? process.env.NEXT_PUBLIC_BACKEND_URL
+      const baseUrl = process.env.NODE_ENV === 'production'
+        ? ""
         : 'http://localhost:5000';
       const response = await fetch(`${baseUrl}/api/auth/reset-password`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ token, password }),
+        body: JSON.stringify({token, password}),
       });
 
       if (response.ok) {

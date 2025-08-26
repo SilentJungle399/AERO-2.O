@@ -1,6 +1,6 @@
 "use client";
-import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import {useEffect, useState} from "react";
+import {motion} from "framer-motion";
 import Link from "next/link";
 import dynamic from "next/dynamic";
 import Loader from "@/components/Loader";
@@ -18,7 +18,7 @@ const EventsPage = () => {
       try {
         const baseUrl =
           process.env.NODE_ENV === "production"
-            ? process.env.NEXT_PUBLIC_BACKEND_URL
+            ? ""
             : "http://localhost:5000";
         const response = await fetch(`${baseUrl}/api/users/getallevents`);
         if (!response.ok) {
@@ -42,14 +42,14 @@ const EventsPage = () => {
   }, []);
 
   if (loading) {
-    return <Loader />;
+    return <Loader/>;
   }
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-black to-blue-300 text-white">
       <header className="relative h-screen mt-20 flex items-center justify-center">
         <div className="absolute top-1/4 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10">
-          <FractalTree />
+          <FractalTree/>
         </div>
         <h1 className="text-4xl md:text-6xl text-white text-center z-20 monoton px-4">
           AEROMODELLING&nbsp;&nbsp; CLUB&nbsp;&nbsp; EVENTS
@@ -61,9 +61,9 @@ const EventsPage = () => {
           <motion.div
             key={event._id}
             className="bg-black bg-opacity-70 rounded-lg shadow-lg p-6"
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: index * 0.1 }}
+            initial={{opacity: 0, y: 50}}
+            animate={{opacity: 1, y: 0}}
+            transition={{duration: 0.5, delay: index * 0.1}}
           >
             <h2 className="text-2xl md:text-4xl font-bold font-mono mb-6 text-white">
               {event.E_name}
@@ -106,21 +106,21 @@ const EventsPage = () => {
                   >
                     <motion.a
                       className="flex-1 bg-blue-600 text-white font-semibold py-3 px-6 rounded-lg hover:bg-blue-500 transition-colors text-center shadow-md"
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
+                      whileHover={{scale: 1.05}}
+                      whileTap={{scale: 0.95}}
                     >
-                      {event.E_team_size == 1? "Participate" : "Create Team"}
+                      {event.E_team_size == 1 ? "Participate" : "Create Team"}
                     </motion.a>
                   </Link>
-                  { event.E_team_size != 1? "" :  <Link
+                  {event.E_team_size != 1 ? "" : <Link
                     href={`/events/lederboard/${event._id}`}
                     passHref
                     className="mt-8"
                   >
                     <motion.a
                       className="flex-1 bg-red-600 text-white font-semibold py-3 px-6 rounded-lg hover:bg-blue-500 transition-colors text-center shadow-md"
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
+                      whileHover={{scale: 1.05}}
+                      whileTap={{scale: 0.95}}
                     >
                       Leaderboard
                     </motion.a>
@@ -130,10 +130,10 @@ const EventsPage = () => {
                     passHref
                     className="mt-8"
                   >
-                    {event.E_team_size == 1? "" : <motion.a
+                    {event.E_team_size == 1 ? "" : <motion.a
                       className="flex-1 bg-green-600 text-white font-semibold py-3 px-6 rounded-lg hover:bg-green-500 transition-colors text-center shadow-md"
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
+                      whileHover={{scale: 1.05}}
+                      whileTap={{scale: 0.95}}
                     >
                       Join Team
                     </motion.a>}
@@ -145,7 +145,8 @@ const EventsPage = () => {
         ))}
       </main>
 
-      <footer className="w-full min-h-screen flex flex-col items-center justify-center text-center bg-gradient-to-b from-blue-900 to-black p-8">
+      <footer
+        className="w-full min-h-screen flex flex-col items-center justify-center text-center bg-gradient-to-b from-blue-900 to-black p-8">
         <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-12">
           Ready to{" "}
           <span className="bg-gradient-to-r from-blue-400 via-green-300 to-indigo-400 text-transparent bg-clip-text">
@@ -155,8 +156,8 @@ const EventsPage = () => {
         </h2>
         <div className="relative w-64 h-64 md:w-80 md:h-80 lg:w-96 lg:h-96 flex items-center justify-center">
           <motion.svg
-            animate={{ rotate: 360 }}
-            transition={{ duration: 20, ease: "linear", repeat: Infinity }}
+            animate={{rotate: 360}}
+            transition={{duration: 20, ease: "linear", repeat: Infinity}}
             viewBox="0 0 300 300"
             className="w-full h-full"
           >

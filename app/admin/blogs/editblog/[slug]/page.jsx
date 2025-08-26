@@ -1,17 +1,18 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import {useCallback, useEffect, useState} from "react";
 import dynamic from "next/dynamic";
 import BlogSection from "../../components/BlogSection";
 import AddSectionModal from "../../components/AddSectionModal";
-import { DndProvider } from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
-import { useParams } from "next/navigation";
+import {DndProvider} from "react-dnd";
+import {HTML5Backend} from "react-dnd-html5-backend";
+import {useParams} from "next/navigation";
 import Cookies from 'js-cookie';
 import Loader from '@/components/Loader'
+
 const DynamicColorPicker = dynamic(
   () => import("../../components/ColorPicker"),
-  { ssr: false }
+  {ssr: false}
 );
 
 const withAdminAuth = (WrappedComponent) => {
@@ -29,7 +30,7 @@ const withAdminAuth = (WrappedComponent) => {
 
         try {
           const baseUrl = process.env.NODE_ENV === 'production'
-            ? process.env.NEXT_PUBLIC_BACKEND_URL
+            ? ""
             : 'http://localhost:5000';
           const response = await fetch(`${baseUrl}/api/auth/check-admin`, {
             method: 'POST',
@@ -68,7 +69,7 @@ const withAdminAuth = (WrappedComponent) => {
 };
 
 const EditBlogPost = () => {
-  const { slug } = useParams();
+  const {slug} = useParams();
   const [blog, setBlog] = useState(null);
   const [blogSections, setBlogSections] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -79,8 +80,8 @@ const EditBlogPost = () => {
     try {
       setLoading(true);
       const baseUrl = process.env.NODE_ENV === 'production'
-            ? process.env.NEXT_PUBLIC_BACKEND_URL
-            : 'http://localhost:5000';
+        ? ""
+        : 'http://localhost:5000';
       const response = await fetch(
         `${baseUrl}/api/users/getoneblog/${slug}`
       );
@@ -132,8 +133,8 @@ const EditBlogPost = () => {
     try {
       setLoading(true);
       const baseUrl = process.env.NODE_ENV === 'production'
-            ? process.env.NEXT_PUBLIC_BACKEND_URL
-            : 'http://localhost:5000';
+        ? ""
+        : 'http://localhost:5000';
       const response = await fetch(
         `${baseUrl}/api/users/updateoneblog/${slug}`,
         {
@@ -141,7 +142,7 @@ const EditBlogPost = () => {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ sections: blogSections }),
+          body: JSON.stringify({sections: blogSections}),
         }
       );
       if (!response.ok) {
@@ -171,7 +172,7 @@ const EditBlogPost = () => {
               <div className="text-gray-800 mb-4">{blog.content}</div>
               {blog.main_image && (
                 <div className="mb-4">
-                  <img src={blog.main_image} alt="Blog" className="w-full rounded-lg" />
+                  <img src={blog.main_image} alt="Blog" className="w-full rounded-lg"/>
                 </div>
               )}
             </div>

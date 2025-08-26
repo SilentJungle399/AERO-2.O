@@ -1,21 +1,9 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, {useEffect, useState} from "react";
 import Message from "@/components/Message";
-import { useParams } from "next/navigation";
-import {
-  FaPaperclip,
-  FaUsers,
-  FaHeart,
-  FaCogs,
-  FaPlane,
-  FaRocket,
-  FaQuestion,
-  FaArrowLeft,
-  FaArrowRight,
-  FaStar,
-  FaBrain,
-} from "react-icons/fa";
+import {useParams} from "next/navigation";
+import {FaArrowLeft, FaArrowRight, FaBrain, FaCogs, FaPlane, FaRocket,} from "react-icons/fa";
 
 const InductionForm = () => {
   const params = useParams();
@@ -55,7 +43,7 @@ const InductionForm = () => {
 
   useEffect(() => {
     const storedId = localStorage.getItem("_id");
-    setFormData((prev) => ({ ...prev, uid: storedId }));
+    setFormData((prev) => ({...prev, uid: storedId}));
     if (id) {
       fetchInductionDetails();
     }
@@ -65,7 +53,7 @@ const InductionForm = () => {
     try {
       const baseUrl =
         process.env.NODE_ENV === "production"
-          ? process.env.NEXT_PUBLIC_BACKEND_URL
+          ? ""
           : "http://localhost:5000";
       const response = await fetch(`${baseUrl}/api/users/getinduction/${id}`);
       if (!response.ok) throw new Error("Failed to fetch induction details");
@@ -86,16 +74,16 @@ const InductionForm = () => {
   };
 
   const handleInputChange = (e, index) => {
-    const { name, value, files } = e.target;
+    const {name, value, files} = e.target;
     if (name === "answer") {
       const newAnswers = [...formData.answers];
-      newAnswers[index] = { ...newAnswers[index], answer: value };
-      setFormData((prev) => ({ ...prev, answers: newAnswers }));
+      newAnswers[index] = {...newAnswers[index], answer: value};
+      setFormData((prev) => ({...prev, answers: newAnswers}));
     } else if (name === "ppt") {
       handlePreviewFileInputChange(e);
       setFiles(files);
     } else {
-      setFormData((prev) => ({ ...prev, [name]: value }));
+      setFormData((prev) => ({...prev, [name]: value}));
     }
   };
 
@@ -108,11 +96,11 @@ const InductionForm = () => {
 
       reader.onload = (e) => {
         if (file.type.startsWith('image/')) {
-          newPreviews.push({ type: 'image', src: e.target.result });
+          newPreviews.push({type: 'image', src: e.target.result});
         } else if (file.type === 'application/pdf') {
-          newPreviews.push({ type: 'pdf', name: file.name });
+          newPreviews.push({type: 'pdf', name: file.name});
         } else if (file.type.startsWith('video/')) {
-          newPreviews.push({ type: 'video', src: URL.createObjectURL(file) });
+          newPreviews.push({type: 'video', src: URL.createObjectURL(file)});
         }
 
         if (newPreviews.length === files.length) {
@@ -150,7 +138,7 @@ const InductionForm = () => {
         .find((row) => row.startsWith("token="))
         .split("=")[1];
 
-      const formDataToSubmit = { ...formData, In_id: id };
+      const formDataToSubmit = {...formData, In_id: id};
       const formDataObject = new FormData();
       Object.keys(formDataToSubmit).forEach((key) => {
         if (key === "answers") {
@@ -170,7 +158,7 @@ const InductionForm = () => {
       });
       const baseUrl =
         process.env.NODE_ENV === "production"
-          ? process.env.NEXT_PUBLIC_BACKEND_URL
+          ? ""
           : "http://localhost:5000";
       const response = await fetch(`${baseUrl}/api/users/register/${id}`, {
         method: "POST",
@@ -253,7 +241,7 @@ const InductionForm = () => {
               </p>
             )}
             <h2 className="text-2xl font-semibold text-blue-400 mb-4 flex items-center">
-              <FaRocket className="mr-2 text-yellow-500" />
+              <FaRocket className="mr-2 text-yellow-500"/>
               Personal Information
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -330,7 +318,7 @@ const InductionForm = () => {
               </p>
             )}
             <h2 className="text-2xl font-semibold text-green-400 mb-4 flex items-center">
-              <FaBrain className="mr-2 " />
+              <FaBrain className="mr-2 "/>
               Aeromodelling Questionnaire
             </h2>
             {formData.answers.map((answer, index) => (
@@ -359,7 +347,7 @@ const InductionForm = () => {
               </p>
             )}
             <h2 className="text-2xl font-semibold text-purple-400 mb-4 flex items-center">
-              <FaCogs className="mr-2 text-purple-500" />
+              <FaCogs className="mr-2 text-purple-500"/>
               Additional Information
             </h2>
             <div className="w-full space-y-4">
@@ -381,7 +369,7 @@ const InductionForm = () => {
                     {previews.map((preview, index) => (
                       <div key={index} className="border border-gray-600 rounded p-2">
                         {preview.type === 'image' && (
-                          <img src={preview.src} alt="Preview" className="w-full h-40 object-cover" />
+                          <img src={preview.src} alt="Preview" className="w-full h-40 object-cover"/>
                         )}
                         {preview.type === 'pdf' && (
                           <div className="flex items-center justify-center h-40 bg-gray-700">
@@ -389,7 +377,7 @@ const InductionForm = () => {
                           </div>
                         )}
                         {preview.type === 'video' && (
-                          <video src={preview.src} controls className="w-full h-40 object-cover" />
+                          <video src={preview.src} controls className="w-full h-40 object-cover"/>
                         )}
                       </div>
                     ))}
@@ -427,7 +415,7 @@ const InductionForm = () => {
 
       <div className="max-w-7xl mx-auto px-4 py-16 relative z-10">
         <div className="text-center mb-12">
-          <FaPlane className="text-6xl text-blue-500 mx-auto mb-4" />
+          <FaPlane className="text-6xl text-blue-500 mx-auto mb-4"/>
           <h1 className="text-4xl monoton md:text-6xl  text-white mb-2">
             Aeromodeling&nbsp;&nbsp; Club
           </h1>
@@ -451,7 +439,7 @@ const InductionForm = () => {
             <form onSubmit={handleSubmit} className="space-y-8">
               {renderStage()}
               {(Error || Sucess) && (
-                <Message error={Error} success={Sucess} message={message} />
+                <Message error={Error} success={Sucess} message={message}/>
               )}
               <div className="flex justify-between">
                 {currentStage > 0 && (
@@ -460,7 +448,7 @@ const InductionForm = () => {
                     onClick={handlePrevious}
                     className="bg-gray-700 m-2 text-gray-200 py-2 px-4 rounded-lg hover:bg-gray-600 transition duration-300 flex items-center"
                   >
-                    <FaArrowLeft className="mr-2" />
+                    <FaArrowLeft className="mr-2"/>
                     Previous
                   </button>
                 )}
@@ -471,13 +459,13 @@ const InductionForm = () => {
                     className="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-300 flex items-center ml-auto"
                   >
                     Next
-                    <FaArrowRight className="ml-2" />
+                    <FaArrowRight className="ml-2"/>
                   </button>
                 ) : (
                   <button
                     type="submit"
                     className={`bg-green-600 m-2 text-white py-2 px-4 rounded-lg hover:bg-green-700 transition duration-300 flex items-center ml-auto ${!induction.I_active_status ? "cursor-not-allowed opacity-50" : ""
-                      }`}
+                    }`}
                     disabled={submiting || !induction.I_active_status}
                   >
                     {submiting ? (
@@ -485,12 +473,13 @@ const InductionForm = () => {
                         className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-e-transparent align-[-0.125em] text-surface motion-reduce:animate-[spin_1.5s_linear_infinite] dark:text-white"
                         role="status"
                       >
-                        <span className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">
+                        <span
+                          className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">
                           Loading...
                         </span>
                       </div>
                     ) : (
-                      <FaPlane className="m-2" />
+                      <FaPlane className="m-2"/>
                     )}
                     &nbsp;Submit Application
                   </button>
@@ -505,7 +494,7 @@ const InductionForm = () => {
             <div
               key={stage}
               className={`w-4 h-4 rounded-full mx-2 ${currentStage >= stage ? "bg-blue-500" : "bg-gray-600"
-                }`}
+              }`}
             ></div>
           ))}
         </div>

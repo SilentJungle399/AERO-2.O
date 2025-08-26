@@ -1,9 +1,7 @@
 "use client";
-import React, { useState, useEffect, useRef } from "react";
-import { useParams } from "next/navigation";
-import { FaRegSmileBeam, FaTrophy } from "react-icons/fa";
-import { MdVerified } from "react-icons/md";
-import { AiOutlineTrophy } from "react-icons/ai";
+import React, {useEffect, useRef, useState} from "react";
+import {useParams} from "next/navigation";
+import {FaTrophy} from "react-icons/fa";
 import html2canvas from "html2canvas";
 
 const InstagramShareBadge = () => {
@@ -11,7 +9,7 @@ const InstagramShareBadge = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isPreview, setIsPreview] = useState(true); // State to toggle preview mode
-  const { Iid, uid } = useParams();
+  const {Iid, uid} = useParams();
   const badgeRef = useRef(null);
 
   useEffect(() => {
@@ -22,7 +20,7 @@ const InstagramShareBadge = () => {
 
         const baseUrl =
           process.env.NODE_ENV === "production"
-            ? process.env.NEXT_PUBLIC_BACKEND_URL
+            ? ""
             : "http://localhost:5000";
 
         const apiUrl = `${baseUrl}/api/users/induction/${Iid}/inductee/${uid}`;
@@ -59,7 +57,7 @@ const InstagramShareBadge = () => {
       try {
         const canvas = await html2canvas(badgeRef.current);
         canvas.toBlob(async (blob) => {
-          const file = new File([blob], "badge.png", { type: "image/png" });
+          const file = new File([blob], "badge.png", {type: "image/png"});
           await navigator.share({
             title: "Honor Badge🏅",
             text: `Congratulations ${badgeData.name} for inducting in Aeromodelling club!!`,
@@ -79,7 +77,8 @@ const InstagramShareBadge = () => {
         <p className="text-2xl font-semibold">
           Generating your personalized badge...
         </p>
-        <div className="mt-4 spinner"></div>{" "}
+        <div className="mt-4 spinner"></div>
+        {" "}
         {/* Add a spinner for loading indication */}
       </div>
     );
@@ -95,7 +94,8 @@ const InstagramShareBadge = () => {
           <p className="text-2xl font-semibold">
             Generating your personalized badge...
           </p>
-          <div className="mt-4 spinner"></div>{" "}
+          <div className="mt-4 spinner"></div>
+          {" "}
           {/* Add a spinner for loading indication */}
         </div>
       ) : (
@@ -182,28 +182,26 @@ const InstagramShareBadge = () => {
 
               <div className="flex justify-between">
 
-              <div >
-                <p className="text-xl mt-4 text-blue-500">Issued by</p>
-                <p className="text-xl mt-2 text-blue-500">Sachin Kamboj</p>
-                <p className="text-xl mt-2 text-blue-500">
-                  Aeromodelling club, Nit kkr
-                </p>
-              </div>
+                <div>
+                  <p className="text-xl mt-4 text-blue-500">Issued by</p>
+                  <p className="text-xl mt-2 text-blue-500">Sachin Kamboj</p>
+                  <p className="text-xl mt-2 text-blue-500">
+                    Aeromodelling club, Nit kkr
+                  </p>
+                </div>
 
-              <div>
-              <img
-                src="/aeronewlogo-removebg.png"
-                alt="Aero Club Logo"
-                className="pb-16 pr-12 relative w-60 h-60"
-              />
-            </div>
+                <div>
+                  <img
+                    src="/aeronewlogo-removebg.png"
+                    alt="Aero Club Logo"
+                    className="pb-16 pr-12 relative w-60 h-60"
+                  />
+                </div>
               </div>
-
-              
 
 
             </div>
-            
+
           </div>
 
           {/* Footer Text */}

@@ -1,10 +1,25 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, {useEffect, useState} from "react";
 import Link from 'next/link';
 import Cookies from 'js-cookie';
-import { FaCalendarAlt, FaCog, FaPlane, FaSignOutAlt, FaTools, FaTrophy, FaUsers, FaBars, FaHeading, FaFileAlt, FaImage, FaTags, FaSearchPlus } from 'react-icons/fa';
+import {
+  FaBars,
+  FaCalendarAlt,
+  FaCog,
+  FaFileAlt,
+  FaHeading,
+  FaImage,
+  FaPlane,
+  FaSearchPlus,
+  FaSignOutAlt,
+  FaTags,
+  FaTools,
+  FaTrophy,
+  FaUsers
+} from 'react-icons/fa';
 import Loader from '@/components/Loader'
+
 const withAdminAuth = (WrappedComponent) => {
   const WithAdminAuth = (props) => {
     const [isLoading, setIsLoading] = useState(true);
@@ -20,7 +35,7 @@ const withAdminAuth = (WrappedComponent) => {
 
         try {
           const baseUrl = process.env.NODE_ENV === 'production'
-            ? process.env.NEXT_PUBLIC_BACKEND_URL
+            ? ""
             : 'http://localhost:5000';
           const response = await fetch(`${baseUrl}/api/auth/check-admin`, {
             method: 'POST',
@@ -100,14 +115,14 @@ const BlogForm = () => {
   }, []);
 
   const handleChange = (e) => {
-    const { name, value, type, files } = e.target;
+    const {name, value, type, files} = e.target;
     if (type === "file") {
       setFormData({
         ...formData,
         [name]: files[0],
       });
     } else {
-      setFormData({ ...formData, [name]: value });
+      setFormData({...formData, [name]: value});
     }
   };
 
@@ -164,46 +179,47 @@ const BlogForm = () => {
   return (
     <div className="flex flex-col md:flex-row min-h-screen bg-black">
       {/* Sidebar */}
-      <aside className={`bg-blue-800 pt-24 text-white w-full md:w-64 space-y-6 py-7 px-2 absolute inset-y-0 left-0 transform ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:relative md:translate-x-0 transition duration-200 ease-in-out z-20`}>
+      <aside
+        className={`bg-blue-800 pt-24 text-white w-full md:w-64 space-y-6 py-7 px-2 absolute inset-y-0 left-0 transform ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:relative md:translate-x-0 transition duration-200 ease-in-out z-20`}>
         <div className="flex items-center justify-between px-4">
           <span className="text-2xl font-extrabold">AERO CLUB</span>
           <button onClick={() => setSidebarOpen(false)} className="md:hidden">
-            <FaBars className="text-white text-2xl" />
+            <FaBars className="text-white text-2xl"/>
           </button>
         </div>
         <nav className="mt-6">
           <Link href="/admin/blogs/editblog" className="flex items-center py-3 px-6 bg-blue-900">
-            <FaPlane className="mr-3" />
+            <FaPlane className="mr-3"/>
             Edit blogs
           </Link>
           <Link href="/admin/blogs/createblogs" className="flex items-center py-3 px-6 hover:bg-blue-700">
-            <FaUsers className="mr-3" />
+            <FaUsers className="mr-3"/>
             Create blogs
           </Link>
           <Link href="/admin/blogs/addcategory" className="flex items-center py-3 px-6 hover:bg-blue-700">
-            <FaUsers className="mr-3" />
+            <FaUsers className="mr-3"/>
             Add category
           </Link>
           <Link href="/admin/blogs/addsection" className="flex items-center py-3 px-6 hover:bg-blue-700">
-            <FaCalendarAlt className="mr-3" />
+            <FaCalendarAlt className="mr-3"/>
             Add sections
           </Link>
           <Link href="/admin/blogs/update" className="flex items-center py-3 px-6 hover:bg-blue-700">
-            <FaTools className="mr-3" />
+            <FaTools className="mr-3"/>
             Update blogs
           </Link>
           <Link href="/admin/blogs/delete" className="flex items-center py-3 px-6 hover:bg-blue-700">
-            <FaTrophy className="mr-3" />
+            <FaTrophy className="mr-3"/>
             Delete blogs
           </Link>
           <Link href="/admin/blogs/settings" className="flex items-center py-3 px-6 hover:bg-blue-700">
-            <FaCog className="mr-3" />
+            <FaCog className="mr-3"/>
             Settings
           </Link>
         </nav>
         <div className="absolute bottom-0 w-64 p-6">
           <Link href="/logout" className="flex items-center text-white opacity-75 hover:opacity-100">
-            <FaSignOutAlt className="mr-3" />
+            <FaSignOutAlt className="mr-3"/>
             Logout
           </Link>
         </div>
@@ -212,17 +228,17 @@ const BlogForm = () => {
       {/* Main content */}
       <div className="flex-1 pt-24 flex flex-col overflow-hidden">
         {/* Top bar */}
-        
+
 
         {/* Blog form */}
         <main className="flex-1  bg-black p-6">
-          
+
           <form onSubmit={handleSubmit} className="mx-auto justify-center items-center space-y-8 max-w-3xl">
             {/* Title input */}
             <h1 className="text-3xl">Create new blog</h1>
             <div className="space-y-2">
               <label htmlFor="title" className="flex items-center text-sm font-medium text-gray-700">
-                <FaHeading className="mr-2" />
+                <FaHeading className="mr-2"/>
                 Title
               </label>
               <input
@@ -240,7 +256,7 @@ const BlogForm = () => {
             {/* Content textarea */}
             <div className="space-y-2">
               <label htmlFor="content" className="flex items-center text-sm font-medium text-gray-700">
-                <FaFileAlt className="mr-2" />
+                <FaFileAlt className="mr-2"/>
                 Content
               </label>
               <textarea
@@ -258,7 +274,7 @@ const BlogForm = () => {
             {/* Summary textarea */}
             <div className="space-y-2">
               <label htmlFor="summary" className="flex items-center text-sm font-medium text-gray-700">
-                <FaFileAlt className="mr-2" />
+                <FaFileAlt className="mr-2"/>
                 Summary
               </label>
               <textarea
@@ -276,7 +292,7 @@ const BlogForm = () => {
             {/* Main Image input */}
             <div className="space-y-2">
               <label htmlFor="main_image" className="flex items-center text-sm font-medium text-gray-700">
-                <FaImage className="mr-2" />
+                <FaImage className="mr-2"/>
                 Main Image
               </label>
               <input
@@ -292,7 +308,7 @@ const BlogForm = () => {
             {/* Slug input */}
             <div className="space-y-2">
               <label htmlFor="slug" className="flex items-center text-sm font-medium text-gray-700">
-                <FaTags className="mr-2" />
+                <FaTags className="mr-2"/>
                 Slug
               </label>
               <input
@@ -309,7 +325,7 @@ const BlogForm = () => {
             {/* Tags input */}
             <div className="space-y-2">
               <label htmlFor="tags" className="flex items-center text-sm font-medium text-gray-700">
-                <FaTags className="mr-2" />
+                <FaTags className="mr-2"/>
                 Tags
               </label>
               <input
@@ -326,7 +342,7 @@ const BlogForm = () => {
             {/* SEO Title input */}
             <div className="space-y-2">
               <label htmlFor="seoTitle" className="flex items-center text-sm font-medium text-gray-700">
-                <FaSearchPlus className="mr-2" />
+                <FaSearchPlus className="mr-2"/>
                 SEO Title
               </label>
               <input
@@ -343,7 +359,7 @@ const BlogForm = () => {
             {/* SEO Description textarea */}
             <div className="space-y-2">
               <label htmlFor="seoDescription" className="flex items-center text-sm font-medium text-gray-700">
-                <FaSearchPlus className="mr-2" />
+                <FaSearchPlus className="mr-2"/>
                 SEO Description
               </label>
               <textarea
@@ -360,7 +376,7 @@ const BlogForm = () => {
             {/* SEO Keywords input */}
             <div className="space-y-2">
               <label htmlFor="seoKeywords" className="flex items-center text-sm font-medium text-gray-700">
-                <FaSearchPlus className="mr-2" />
+                <FaSearchPlus className="mr-2"/>
                 SEO Keywords
               </label>
               <input
@@ -377,7 +393,7 @@ const BlogForm = () => {
             {/* Categories dropdown */}
             <div className="space-y-2">
               <label htmlFor="category" className="flex items-center text-sm font-medium text-gray-700">
-                <FaUsers className="mr-2" />
+                <FaUsers className="mr-2"/>
                 Category
               </label>
               <select

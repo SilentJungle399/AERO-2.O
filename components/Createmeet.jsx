@@ -1,5 +1,5 @@
 // pages/create-meet.js
-import { useState } from 'react';
+import {useState} from 'react';
 
 export default function CreateMeet() {
   const [formData, setFormData] = useState({
@@ -14,7 +14,7 @@ export default function CreateMeet() {
   const [statusMessage, setStatusMessage] = useState('');
 
   const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
+    const {name, value, type, checked} = e.target;
     if (type === 'checkbox') {
       setFormData(prevData => ({
         ...prevData,
@@ -34,7 +34,7 @@ export default function CreateMeet() {
     e.preventDefault();
     const baseUrl =
       process.env.NODE_ENV === "production"
-        ? process.env.NEXT_PUBLIC_BACKEND_URL
+        ? ""
         : "http://localhost:5000";
 
     // Retrieve the token from local storage

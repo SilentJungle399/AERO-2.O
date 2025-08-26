@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import {useEffect, useState} from "react";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import Loader from "../../../components/Loader";
@@ -31,7 +31,7 @@ export default function MerchPage() {
     const fetchData = async () => {
       const baseUrl =
         process.env.NODE_ENV === "production"
-          ? process.env.NEXT_PUBLIC_BACKEND_URL
+          ? ""
           : "http://localhost:5000";
 
       try {
@@ -92,12 +92,12 @@ export default function MerchPage() {
       tableRows.push(orderData);
     });
 
-    autoTable(doc, { head: [tableColumn], body: tableRows });
+    autoTable(doc, {head: [tableColumn], body: tableRows});
     doc.save("Merchandise_Orders.pdf");
   };
 
   if (loading) {
-    return <Loader />;
+    return <Loader/>;
   }
 
   if (error) {
@@ -126,70 +126,70 @@ export default function MerchPage() {
           <div className="overflow-x-auto">
             <table className="min-w-full divide-y divide-slate-700">
               <thead className="bg-blue-950">
-                <tr>
-                  {["User", "Custom Name", "Contact", "Items", "Total Price", "Payment Proof", "Order Date"].map((header) => (
-                    <th
-                      key={header}
-                      className="px-6 py-4 text-left text-xs font-semibold text-blue-300 uppercase tracking-wider"
-                    >
-                      {header}
-                    </th>
-                  ))}
-                </tr>
+              <tr>
+                {["User", "Custom Name", "Contact", "Items", "Total Price", "Payment Proof", "Order Date"].map((header) => (
+                  <th
+                    key={header}
+                    className="px-6 py-4 text-left text-xs font-semibold text-blue-300 uppercase tracking-wider"
+                  >
+                    {header}
+                  </th>
+                ))}
+              </tr>
               </thead>
               <tbody className="bg-slate-800 divide-y divide-slate-700">
-                {merchData.length > 0 ? (
-                  merchData.map((order) => (
-                    <tr key={order._id} className="hover:bg-slate-700 transition-colors">
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-100">
-                        {order.full_name}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-blue-200">
-                        {order.customName || "-"}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
-                        {order.email}
-                        <br />
-                        <span className="text-blue-200">{order.phone}</span>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
-                        {order.items.T_Shirt?.quantity && order.items.T_Shirt.quantity > 0 && `T-Shirt: ${order.items.T_Shirt.quantity} (${order.items.T_Shirt.size ?? "-"})`}
-                        <br />
-                        {order.items.Badge?.quantity && order.items.Badge.quantity > 0 && `Badge: ${order.items.Badge.quantity}`}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-semibold text-green-400">
-                        ₹{order.total_price}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        {order.payment_screenshot ? (
-                          <a
-                            href={order.payment_screenshot}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-blue-400 hover:text-blue-300 underline transition-colors"
-                          >
-                            View Screenshot
-                          </a>
-                        ) : (
-                          <span className="text-slate-400">-</span>
-                        )}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-blue-200">
-                        {new Date(order.createdAt).toLocaleDateString("en-IN", {
-                          year: "numeric",
-                          month: "short",
-                          day: "numeric",
-                        })}
-                      </td>
-                    </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td colSpan={7} className="text-center py-8 text-slate-400 italic">
-                      No merchandise orders found
+              {merchData.length > 0 ? (
+                merchData.map((order) => (
+                  <tr key={order._id} className="hover:bg-slate-700 transition-colors">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-100">
+                      {order.full_name}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-blue-200">
+                      {order.customName || "-"}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                      {order.email}
+                      <br/>
+                      <span className="text-blue-200">{order.phone}</span>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                      {order.items.T_Shirt?.quantity && order.items.T_Shirt.quantity > 0 && `T-Shirt: ${order.items.T_Shirt.quantity} (${order.items.T_Shirt.size ?? "-"})`}
+                      <br/>
+                      {order.items.Badge?.quantity && order.items.Badge.quantity > 0 && `Badge: ${order.items.Badge.quantity}`}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-semibold text-green-400">
+                      ₹{order.total_price}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      {order.payment_screenshot ? (
+                        <a
+                          href={order.payment_screenshot}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-blue-400 hover:text-blue-300 underline transition-colors"
+                        >
+                          View Screenshot
+                        </a>
+                      ) : (
+                        <span className="text-slate-400">-</span>
+                      )}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-blue-200">
+                      {new Date(order.createdAt).toLocaleDateString("en-IN", {
+                        year: "numeric",
+                        month: "short",
+                        day: "numeric",
+                      })}
                     </td>
                   </tr>
-                )}
+                ))
+              ) : (
+                <tr>
+                  <td colSpan={7} className="text-center py-8 text-slate-400 italic">
+                    No merchandise orders found
+                  </td>
+                </tr>
+              )}
               </tbody>
             </table>
           </div>

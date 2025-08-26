@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
-import { useParams } from "next/navigation";
-import { FaUser, FaCalendarAlt, FaEye, FaThumbsUp } from "react-icons/fa";
+import {useCallback, useEffect, useState} from "react";
+import {useParams} from "next/navigation";
+import {FaCalendarAlt, FaEye, FaThumbsUp, FaUser} from "react-icons/fa";
 import AutoAdSense from '../../../components/AutoAdSense'
 
 const BlogPage = () => {
@@ -12,14 +12,14 @@ const BlogPage = () => {
   const [commentText, setCommentText] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const { slug } = useParams(); // Extract slug from URL params
+  const {slug} = useParams(); // Extract slug from URL params
 
   const fetchBlog = useCallback(async () => {
     try {
       setLoading(true);
       const baseUrl =
         process.env.NODE_ENV === "production"
-          ? process.env.NEXT_PUBLIC_BACKEND_URL
+          ? ""
           : "http://localhost:5000";
       const response = await fetch(`${baseUrl}/api/users/getoneblog/${slug}`);
       if (!response.ok) {
@@ -51,7 +51,7 @@ const BlogPage = () => {
     try {
       const baseUrl =
         process.env.NODE_ENV === "production"
-          ? process.env.NEXT_PUBLIC_BACKEND_URL
+          ? ""
           : "http://localhost:5000";
       const response = await fetch(`${baseUrl}/api/blogs/${slug}/comments`, {
         method: "POST",
@@ -59,7 +59,7 @@ const BlogPage = () => {
           "Content-Type": "application/json",
           "Authorization": `Bearer ${userId}`,
         },
-        body: JSON.stringify({ text: commentText }),
+        body: JSON.stringify({text: commentText}),
       });
       if (!response.ok) throw new Error("Failed to add comment");
       const newComment = await response.json();
@@ -89,16 +89,16 @@ const BlogPage = () => {
                 <h1 className="text-4xl font-bold text-white mb-4">{blog.title}</h1>
                 <div className="flex items-center text-sm text-white space-x-4">
                   <span className="flex items-center">
-                    <FaUser className="mr-2" /> {blog.author.name}
+                    <FaUser className="mr-2"/> {blog.author.name}
                   </span>
                   <span className="flex items-center">
-                    <FaCalendarAlt className="mr-2" /> {new Date(blog.createdAt).toLocaleDateString()}
+                    <FaCalendarAlt className="mr-2"/> {new Date(blog.createdAt).toLocaleDateString()}
                   </span>
                   <span className="flex items-center">
-                    <FaEye className="mr-2" /> {blog.views}
+                    <FaEye className="mr-2"/> {blog.views}
                   </span>
                   <span className="flex items-center">
-                    <FaThumbsUp className="mr-2" /> {blog.upvotes.length}
+                    <FaThumbsUp className="mr-2"/> {blog.upvotes.length}
                   </span>
                 </div>
               </div>
@@ -108,12 +108,17 @@ const BlogPage = () => {
                 <div
                   key={section.id}
                   className="mb-6"
-                  style={{ backgroundColor: section.backgroundColor, padding: section.padding, margin: section.margin, borderRadius: section.borderRadius }}
+                  style={{
+                    backgroundColor: section.backgroundColor,
+                    padding: section.padding,
+                    margin: section.margin,
+                    borderRadius: section.borderRadius
+                  }}
                 >
                   {section.headingText && (
                     <h2
                       className={`text-${section.headingSize} font-bold mb-4`}
-                      style={{ color: section.headingColor }}
+                      style={{color: section.headingColor}}
                     >
                       {section.headingText}
                     </h2>
@@ -123,12 +128,16 @@ const BlogPage = () => {
                       src={section.image}
                       alt={section.headingText}
                       className={`w-full ${section.imageStyle.objectFit}`}
-                      style={{ width: section.imageStyle.width, height: section.imageStyle.height, opacity: section.imageStyle.opacity }}
+                      style={{
+                        width: section.imageStyle.width,
+                        height: section.imageStyle.height,
+                        opacity: section.imageStyle.opacity
+                      }}
                     />
                   )}
                   <div
                     className="text-gray-800"
-                    dangerouslySetInnerHTML={{ __html: section.content }}
+                    dangerouslySetInnerHTML={{__html: section.content}}
                   />
                 </div>
               ))}
@@ -167,7 +176,7 @@ const BlogPage = () => {
           </div>
         </>
       )}
-              <AutoAdSense />
+      <AutoAdSense/>
 
     </div>
   );

@@ -25,7 +25,7 @@ export default function Signup() {
     setError("");
     try {
       const baseUrl = process.env.NODE_ENV === 'production'
-        ? process.env.NEXT_PUBLIC_BACKEND_URL
+        ? ""
         : 'http://localhost:5000';
       const response = await fetch(`${baseUrl}/api/auth/emailverification`, {
         method: "POST",
@@ -48,7 +48,7 @@ export default function Signup() {
     setError("");
     try {
       const baseUrl = process.env.NODE_ENV === 'production'
-        ? process.env.NEXT_PUBLIC_BACKEND_URL
+        ? ""
         : 'http://localhost:5000';
       const response = await fetch(`${baseUrl}/api/auth/otpcheck`, {
         method: "POST",
@@ -72,7 +72,7 @@ export default function Signup() {
     try {
       console.log(email + fullName + password + gender)
       const baseUrl = process.env.NODE_ENV === 'production'
-        ? process.env.NEXT_PUBLIC_BACKEND_URL
+        ? ""
         : 'http://localhost:5000';
       const response = await fetch(`${baseUrl}/api/auth/signup`, {
         method: "POST",
@@ -111,7 +111,7 @@ export default function Signup() {
       const user = result.user;
       const token = await user.getIdToken();
       const baseUrl = process.env.NODE_ENV === 'production'
-        ? process.env.NEXT_PUBLIC_BACKEND_URL
+        ? ""
         : 'http://localhost:5000';
       const res = await fetch(`${baseUrl}/api/auth/google-signin`, {
         method: "POST",

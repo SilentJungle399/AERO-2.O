@@ -1,10 +1,10 @@
 "use client";
-import { useParams } from 'next/navigation';
-import React, { useState, useEffect } from 'react';
-import { FaEdit } from 'react-icons/fa';
+import {useParams} from 'next/navigation';
+import React, {useEffect, useState} from 'react';
+import {FaEdit} from 'react-icons/fa';
 
 const MyProfile = () => {
-  const { id } = useParams();
+  const {id} = useParams();
   const [loading, setLoading] = useState(false)
   const [user, setUser] = useState({
     full_name: '',
@@ -31,7 +31,7 @@ const MyProfile = () => {
       const token = localStorage.getItem('token');
       if (!token) throw new Error('No token found');
       const baseUrl = process.env.NODE_ENV === 'production'
-        ? process.env.NEXT_PUBLIC_BACKEND_URL
+        ? ""
         : 'http://localhost:5000';
       const response = await fetch(`${baseUrl}/api/users/${id}`, {
         headers: {
@@ -50,7 +50,7 @@ const MyProfile = () => {
   };
 
   const handleInputChange = (e) => {
-    setUser({ ...user, [e.target.name]: e.target.value });
+    setUser({...user, [e.target.name]: e.target.value});
   };
 
   const handleFileChange = async (e) => {
@@ -59,10 +59,10 @@ const MyProfile = () => {
       const formData = new FormData();
       formData.append('profile_file', file);
       setLoading(true)
-      try { 
+      try {
         const token = localStorage.getItem('token');
         const baseUrl = process.env.NODE_ENV === 'production'
-          ? process.env.NEXT_PUBLIC_BACKEND_URL
+          ? ""
           : 'http://localhost:5000';
         const response = await fetch(`${baseUrl}/api/users/profile/${id}`, {
           method: 'POST',
@@ -74,14 +74,13 @@ const MyProfile = () => {
 
         if (!response.ok) throw new Error('Failed to upload profile picture');
 
-        const { profilePicUrl } = await response.json();
-        setUser({ ...user, profile_pic: profilePicUrl });
+        const {profilePicUrl} = await response.json();
+        setUser({...user, profile_pic: profilePicUrl});
         localStorage.setItem("profile_pic", profilePicUrl)
       } catch (error) {
         console.error('Error uploading profile picture:', error);
         alert('Failed to upload profile picture.');
-      }
-      finally {
+      } finally {
         setLoading(false)
         window.location.reload()
       }
@@ -93,7 +92,7 @@ const MyProfile = () => {
     try {
       const token = localStorage.getItem('token');
       const baseUrl = process.env.NODE_ENV === 'production'
-        ? process.env.NEXT_PUBLIC_BACKEND_URL
+        ? ""
         : 'http://localhost:5000';
       const response = await fetch(`${baseUrl}/api/users/update/${id}`, {
         method: 'PATCH',
@@ -141,7 +140,7 @@ const MyProfile = () => {
                     className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]"
                   >Loading...</span
                   >
-                </div> : <FaEdit className='w-10 h-10  text-yellow-300' />}
+                </div> : <FaEdit className='w-10 h-10  text-yellow-300'/>}
               </button>
             </div>
             <div className='text-center'>
@@ -155,140 +154,147 @@ const MyProfile = () => {
         <div className="p-8 bg-gray-900">
 
 
-<form onSubmit={handleSubmit} className="space-y-6 text-gray-200">
-  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-    {Object.keys(user)
-      .filter(key => key !== 'profile_pic' && key !== '_id' && key !== 'email' && key !== 'roll_no' && key !== 'college_name'  && key !== 'branch' && key !== 'current_post' && key !== 'team_name') // Exclude fields
-      .map(key => (
-        <div key={key}>
-          <label className="block text-sm font-medium text-gray-300 capitalize">
-            {key.replace('_', ' ')}
-          </label>
-          <input
-            type={key === 'email' ? 'email' : 'text'}
-            name={key}
-            value={user[key]}
-            onChange={handleInputChange}
-            className="mt-1 block w-full border-b border-gray-600 focus:border-blue-500 focus:ring-0 sm:text-sm bg-gray-900 text-gray-300"
-          />
-        </div>
-      ))}
-  </div>
+          <form onSubmit={handleSubmit} className="space-y-6 text-gray-200">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              {Object.keys(user)
+                .filter(key => key !== 'profile_pic' && key !== '_id' && key !== 'email' && key !== 'roll_no' && key !== 'college_name' && key !== 'branch' && key !== 'current_post' && key !== 'team_name') // Exclude fields
+                .map(key => (
+                  <div key={key}>
+                    <label className="block text-sm font-medium text-gray-300 capitalize">
+                      {key.replace('_', ' ')}
+                    </label>
+                    <input
+                      type={key === 'email' ? 'email' : 'text'}
+                      name={key}
+                      value={user[key]}
+                      onChange={handleInputChange}
+                      className="mt-1 block w-full border-b border-gray-600 focus:border-blue-500 focus:ring-0 sm:text-sm bg-gray-900 text-gray-300"
+                    />
+                  </div>
+                ))}
+            </div>
 
-  <input
-    type="file"
-    id="profile-pic-input"
-    accept="image/*"
-    onChange={handleFileChange}
-    className="hidden"
-  />
+            <input
+              type="file"
+              id="profile-pic-input"
+              accept="image/*"
+              onChange={handleFileChange}
+              className="hidden"
+            />
 
-  {/* Display current_post and team_name fields as disabled */}
-  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-    <div>
-      <label className="block text-sm font-medium text-gray-300 capitalize">Current Post</label>
-      <input
-        type="text"
-        name="current_post"
-        value={user.current_post || ''}
-        disabled
-        className="mt-1 block w-full border-b border-gray-600 bg-gray-800 text-gray-500 sm:text-sm"
-      />
-    </div>
-    <div>
-      <label className="block text-sm font-medium text-gray-300 capitalize">Team Name</label>
-      <input
-        type="text"
-        name="team_name"
-        value={user.team_name || ''}
-        disabled
-        className="mt-1 block w-full border-b border-gray-600 bg-gray-800 text-gray-500 sm:text-sm"
-      />
-    </div>
-    <div>
-      <label className="block text-sm font-medium text-gray-300 capitalize">Current Post</label>
-      <input
-        type="text"
-        name="current_post"
-        value={user.current_post || ''}
-        disabled
-        className="mt-1 block w-full border-b border-gray-600 bg-gray-800 text-gray-500 sm:text-sm"
-      />
-    </div><div>
-      <label className="block text-sm font-medium text-gray-300 capitalize">Email</label>
-      <input
-        type="text"
-        name="current_post"
-        value={user.email || ''}
-        disabled
-        className="mt-1 block w-full border-b border-gray-600 bg-gray-800 text-gray-500 sm:text-sm"
-      />
-    </div><div>
-      <label className="block text-sm font-medium text-gray-300 capitalize"> Branch</label>
-      <input
-        type="text"
-        name="current_post"
-        value={user.branch || ''}
-        disabled
-        className="mt-1 block w-full border-b border-gray-600 bg-gray-800 text-gray-500 sm:text-sm"
-      />
-    </div><div>
-      <label className="block text-sm font-medium text-gray-300 capitalize">College name</label>
-      <input
-        type="text"
-        name="current_post"
-        value={user.college_name || ''}
-        disabled
-        className="mt-1 block w-full border-b border-gray-600 bg-gray-800 text-gray-500 sm:text-sm"
-      />
-    </div><div>
-      <label className="block text-sm font-medium text-gray-300 capitalize">Roll no</label>
-      <input
-        type="text"
-        name="current_post"
-        value={user.roll_no || ''}
-        disabled
-        className="mt-1 block w-full border-b border-gray-600 bg-gray-800 text-gray-500 sm:text-sm"
-      />
-    </div><div>
-      <label className="block text-sm font-medium text-gray-300 capitalize">Current Post</label>
-      <input
-        type="text"
-        name="current_post"
-        value={user.current_post || ''}
-        disabled
-        className="mt-1 block w-full border-b border-gray-600 bg-gray-800 text-gray-500 sm:text-sm"
-      />
-    </div><div>
-      <label className="block text-sm font-medium text-gray-300 capitalize">session</label>
-      <input
-        type="text"
-        name="current_post"
-        value={user.session || ''}
-        disabled
-        className="mt-1 block w-full border-b border-gray-600 bg-gray-800 text-gray-500 sm:text-sm"
-      />
-    </div><div>
-      <label className="block text-sm font-medium text-gray-300 capitalize">Team name</label>
-      <input
-        type="text"
-        name="current_post"
-        value={user.team_name || ''}
-        disabled
-        className="mt-1 block w-full border-b border-gray-600 bg-gray-800 text-gray-500 sm:text-sm"
-      />
-    </div>
-  </div>
+            {/* Display current_post and team_name fields as disabled */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-300 capitalize">Current Post</label>
+                <input
+                  type="text"
+                  name="current_post"
+                  value={user.current_post || ''}
+                  disabled
+                  className="mt-1 block w-full border-b border-gray-600 bg-gray-800 text-gray-500 sm:text-sm"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-300 capitalize">Team Name</label>
+                <input
+                  type="text"
+                  name="team_name"
+                  value={user.team_name || ''}
+                  disabled
+                  className="mt-1 block w-full border-b border-gray-600 bg-gray-800 text-gray-500 sm:text-sm"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-300 capitalize">Current Post</label>
+                <input
+                  type="text"
+                  name="current_post"
+                  value={user.current_post || ''}
+                  disabled
+                  className="mt-1 block w-full border-b border-gray-600 bg-gray-800 text-gray-500 sm:text-sm"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-300 capitalize">Email</label>
+                <input
+                  type="text"
+                  name="current_post"
+                  value={user.email || ''}
+                  disabled
+                  className="mt-1 block w-full border-b border-gray-600 bg-gray-800 text-gray-500 sm:text-sm"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-300 capitalize"> Branch</label>
+                <input
+                  type="text"
+                  name="current_post"
+                  value={user.branch || ''}
+                  disabled
+                  className="mt-1 block w-full border-b border-gray-600 bg-gray-800 text-gray-500 sm:text-sm"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-300 capitalize">College name</label>
+                <input
+                  type="text"
+                  name="current_post"
+                  value={user.college_name || ''}
+                  disabled
+                  className="mt-1 block w-full border-b border-gray-600 bg-gray-800 text-gray-500 sm:text-sm"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-300 capitalize">Roll no</label>
+                <input
+                  type="text"
+                  name="current_post"
+                  value={user.roll_no || ''}
+                  disabled
+                  className="mt-1 block w-full border-b border-gray-600 bg-gray-800 text-gray-500 sm:text-sm"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-300 capitalize">Current Post</label>
+                <input
+                  type="text"
+                  name="current_post"
+                  value={user.current_post || ''}
+                  disabled
+                  className="mt-1 block w-full border-b border-gray-600 bg-gray-800 text-gray-500 sm:text-sm"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-300 capitalize">session</label>
+                <input
+                  type="text"
+                  name="current_post"
+                  value={user.session || ''}
+                  disabled
+                  className="mt-1 block w-full border-b border-gray-600 bg-gray-800 text-gray-500 sm:text-sm"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-300 capitalize">Team name</label>
+                <input
+                  type="text"
+                  name="current_post"
+                  value={user.team_name || ''}
+                  disabled
+                  className="mt-1 block w-full border-b border-gray-600 bg-gray-800 text-gray-500 sm:text-sm"
+                />
+              </div>
+            </div>
 
-  <div className="flex justify-end">
-    <button
-      type="submit"
-      className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-    >
-      Update Profile
-    </button>
-  </div>
-</form>
+            <div className="flex justify-end">
+              <button
+                type="submit"
+                className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              >
+                Update Profile
+              </button>
+            </div>
+          </form>
 
 
         </div>

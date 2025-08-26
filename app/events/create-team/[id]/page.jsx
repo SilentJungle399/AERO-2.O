@@ -1,25 +1,25 @@
 "use client";
-import { useState, useEffect } from "react";
-import { useParams } from "next/navigation";
-import { motion } from "framer-motion";
+import {useEffect, useState} from "react";
+import {useParams} from "next/navigation";
+import {motion} from "framer-motion";
 import {
   FiArrowLeft,
   FiArrowRight,
-  FiStar,
-  FiInfo,
-  FiUser,
-  FiMail,
-  FiPhone,
   FiBook,
   FiCalendar,
-  FiHash,
-  FiMap,
   FiCopy,
+  FiHash,
+  FiInfo,
+  FiMail,
+  FiMap,
+  FiPhone,
+  FiStar,
+  FiUser,
 } from "react-icons/fi";
-import { FaPlane } from "react-icons/fa";
+import {FaPlane} from "react-icons/fa";
 
 export default function CreateTeamPage() {
-  const { id } = useParams();
+  const {id} = useParams();
   const [errorMessage, setErrorMessage] = useState(null);
   const [stage, setStage] = useState(1);
   const [eventData, setEventData] = useState(null);
@@ -58,7 +58,7 @@ export default function CreateTeamPage() {
       try {
         const baseUrl =
           process.env.NODE_ENV === "production"
-            ? process.env.NEXT_PUBLIC_BACKEND_URL
+            ? ""
             : "http://localhost:5000";
         const response = await fetch(`${baseUrl}/api/users/event/${id}`);
         const data = await response.json();
@@ -75,7 +75,7 @@ export default function CreateTeamPage() {
   }, [id]);
 
   const handleChange = (e) => {
-    const { name, value, type, checked, files } = e.target;
+    const {name, value, type, checked, files} = e.target;
     if (type === "file") {
       setFormData((prevData) => ({
         ...prevData,
@@ -107,9 +107,9 @@ export default function CreateTeamPage() {
       setSubmitLoading(true);
       const baseUrl =
         process.env.NODE_ENV === "production"
-          ? process.env.NEXT_PUBLIC_BACKEND_URL
+          ? ""
           : "http://localhost:5000";
-      
+
       // If individual event but team_name is empty, use the person's name
       if (isIndividualEvent && !formData.team_name.trim()) {
         setFormData(prev => ({
@@ -117,12 +117,12 @@ export default function CreateTeamPage() {
           team_name: formData.g_leader_name
         }));
       }
-      
+
       const formDataToSend = new FormData();
       Object.keys(formData).forEach(key => {
         formDataToSend.append(key, formData[key]);
       });
-      
+
       formDataToSend.append("Group_leader_id", localStorage.getItem("_id"));
 
       const response = await fetch(`${baseUrl}/api/users/createteam/${id}`, {
@@ -148,7 +148,7 @@ export default function CreateTeamPage() {
     }
   };
 
-  const renderInput = ({ name, icon, placeholder }) => (
+  const renderInput = ({name, icon, placeholder}) => (
     <div key={name} className="relative mb-6">
       <div className="absolute left-0 top-1/2 -translate-y-1/2 text-gray-400">
         {icon}
@@ -177,9 +177,9 @@ export default function CreateTeamPage() {
         return (
           <motion.div
             className="space-y-8"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
+            initial={{opacity: 0, y: 20}}
+            animate={{opacity: 1, y: 0}}
+            transition={{duration: 0.5}}
           >
             <h2 className="text-4xl font-bold text-indigo-400 leading-tight">
               {eventData.E_name}
@@ -189,26 +189,28 @@ export default function CreateTeamPage() {
             </p>
             <div className="space-y-4">
               <h3 className="text-2xl font-semibold text-indigo-300 flex items-center">
-                <FiInfo className="mr-2" /> Event Details
+                <FiInfo className="mr-2"/> Event Details
               </h3>
               <p className="flex items-center">
-                <FiCalendar className="mr-2" /> Date: {eventData.E_date}
+                <FiCalendar className="mr-2"/> Date: {eventData.E_date}
               </p>
               <p className="flex items-center">
-                <FiMap className="mr-2" /> Location: {eventData.E_location}
+                <FiMap className="mr-2"/> Location: {eventData.E_location}
               </p>
               <p className="flex items-center">
-                <FiUser className="mr-2" /> {isIndividualEvent ? "Individual Event" : `Max Team Size: ${eventData.E_team_size}`}
+                <FiUser
+                  className="mr-2"/> {isIndividualEvent ? "Individual Event" : `Max Team Size: ${eventData.E_team_size}`}
               </p>
             </div>
             <div className="space-y-4">
               <h3 className="text-2xl font-semibold text-indigo-300 flex items-center">
-                <FiBook className="mr-2" /> Guidelines <strong className="text-sm ml-4 text-red-500">***Read carefully before registering</strong>
+                <FiBook className="mr-2"/> Guidelines <strong className="text-sm ml-4 text-red-500">***Read carefully
+                before registering</strong>
               </h3>
               <ul className="space-y-2">
                 {eventData.E_guidelines[0]?.split('","').map((guideline, index) => (
                   <li key={index} className="flex items-start">
-                    <FiStar className="mr-2 mt-1 flex-shrink-0 text-yellow-400" />
+                    <FiStar className="mr-2 mt-1 flex-shrink-0 text-yellow-400"/>
                     <span>{guideline.trim()}</span>
                   </li>
                 ))}
@@ -223,7 +225,8 @@ export default function CreateTeamPage() {
                 className="form-checkbox h-5 w-5 text-indigo-600"
               />
               <label htmlFor="agree" className="text-sm">
-               I agree that I have read all guidelines carefully and am completely aware of all rules and guidelines of the workshop.
+                I agree that I have read all guidelines carefully and am completely aware of all rules and guidelines of
+                the workshop.
               </label>
             </div>
             <button
@@ -239,7 +242,7 @@ export default function CreateTeamPage() {
               } flex items-center space-x-2 text-lg`}
             >
               <span>Next</span>
-              <FiArrowRight />
+              <FiArrowRight/>
             </button>
           </motion.div>
         );
@@ -250,26 +253,26 @@ export default function CreateTeamPage() {
         const fields =
           stage === 2
             ? [
-                { 
-                  name: "team_name", 
-                  icon: <FiStar />, 
-                  placeholder: isIndividualEvent ? "Your Name (Optional)" : "Team Name" 
-                },
-                { name: "g_leader_email", icon: <FiMail /> },
-                { name: "g_leader_mobile", icon: <FiPhone /> },
-              ]
+              {
+                name: "team_name",
+                icon: <FiStar/>,
+                placeholder: isIndividualEvent ? "Your Name (Optional)" : "Team Name"
+              },
+              {name: "g_leader_email", icon: <FiMail/>},
+              {name: "g_leader_mobile", icon: <FiPhone/>},
+            ]
             : stage === 3
-            ? [
-                { 
-                  name: "g_leader_name", 
-                  icon: <FiUser />,
-                  placeholder: isIndividualEvent ? "Your Name" : "Leader Name" 
+              ? [
+                {
+                  name: "g_leader_name",
+                  icon: <FiUser/>,
+                  placeholder: isIndividualEvent ? "Your Name" : "Leader Name"
                 },
               ]
-            : [
-                { name: "g_leader_branch", icon: <FiBook /> },
-                { name: "g_leader_roll_no", icon: <FiHash /> },
-                { name: "g_leader_year", icon: <FiCalendar /> },
+              : [
+                {name: "g_leader_branch", icon: <FiBook/>},
+                {name: "g_leader_roll_no", icon: <FiHash/>},
+                {name: "g_leader_year", icon: <FiCalendar/>},
               ];
 
         return (
@@ -283,16 +286,16 @@ export default function CreateTeamPage() {
                 setStage(stage + 1);
               }
             }}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
+            initial={{opacity: 0, y: 20}}
+            animate={{opacity: 1, y: 0}}
+            transition={{duration: 0.5}}
           >
             <h2 className="text-3xl font-bold text-indigo-400 mb-6 leading-tight">
               {stage === 2
                 ? isIndividualEvent ? "Personal Information" : "Team Information"
                 : stage === 3
-                ? isIndividualEvent ? "Personal Details" : "Leader Details"
-                : "College Information"}
+                  ? isIndividualEvent ? "Personal Details" : "Leader Details"
+                  : "College Information"}
             </h2>
             {fields.map(renderInput)}
             {stage === 3 && (
@@ -336,7 +339,8 @@ export default function CreateTeamPage() {
                   {paymentPreview && (
                     <div className="mt-4">
                       <h3 className="text-lg font-semibold text-gray-200 mb-2">Payment Screenshot Preview:</h3>
-                      <img src={paymentPreview} alt="Payment Screenshot" className="w-36 h-36 h-auto rounded-lg border border-gray-600" />
+                      <img src={paymentPreview} alt="Payment Screenshot"
+                           className="w-36 h-36 h-auto rounded-lg border border-gray-600"/>
                     </div>
                   )}
                 </div>
@@ -348,7 +352,7 @@ export default function CreateTeamPage() {
                 onClick={() => setStage(stage - 1)}
                 className="bg-gray-700 text-white font-semibold py-3 px-6 rounded-full hover:bg-gray-600 transition-colors flex items-center space-x-2 text-lg"
               >
-                <FiArrowLeft />
+                <FiArrowLeft/>
                 <span>Back</span>
               </button>
               {submitLoading ? (
@@ -366,7 +370,7 @@ export default function CreateTeamPage() {
                   className="bg-indigo-600 text-white font-semibold py-3 px-6 rounded-full hover:bg-indigo-500 transition-colors flex items-center space-x-2 text-lg"
                 >
                   <span>{stage === 4 ? "Submit" : "Next"}</span>
-                  <FiArrowRight />
+                  <FiArrowRight/>
                 </button>
               )}
             </div>
@@ -377,9 +381,9 @@ export default function CreateTeamPage() {
         return (
           <motion.div
             className="text-center space-y-6"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
+            initial={{opacity: 0, y: 20}}
+            animate={{opacity: 1, y: 0}}
+            transition={{duration: 0.5}}
           >
             <h2 className="text-3xl font-bold text-red-500 mb-6">
               Registration Failed
@@ -413,19 +417,20 @@ export default function CreateTeamPage() {
                 onClick={() => copyToClipboard(groupToken)}
                 className="ml-4 bg-gray-800 text-white p-2 rounded-full hover:bg-gray-700 transition-colors"
               >
-                <FiCopy className="w-6 h-6" />
+                <FiCopy className="w-6 h-6"/>
               </button>
             </div>
             {copied && <p className="text-green-500 text-sm">Token copied to clipboard!</p>}
             <p className="text-gray-300 text-lg">
-              Keep this token safe. We've also sent it to your email along with more details. Please check your email for future reference.
+              Keep this token safe. We've also sent it to your email along with more details. Please check your email
+              for future reference.
             </p>
             <div className="mt-8">
               <p className="text-gray-300 text-lg">
                 Make sure to join this WhatsApp group for staying connected and further details.
               </p>
-              <a 
-                href="https://chat.whatsapp.com/DeF1JHnE4dkFWEgPeWkZWJ" 
+              <a
+                href="https://chat.whatsapp.com/DeF1JHnE4dkFWEgPeWkZWJ"
                 className="block w-full bg-green-600 text-white font-semibold py-3 px-6 rounded-full hover:bg-green-500 transition-colors mt-4"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -450,7 +455,7 @@ export default function CreateTeamPage() {
       </div>
       <div className="w-full max-w-7xl relative z-10">
         <div className="text-center mb-12 mt-20">
-          <FaPlane className="text-6xl text-blue-500 mx-auto mb-4" />
+          <FaPlane className="text-6xl text-blue-500 mx-auto mb-4"/>
           <h1 className="text-4xl monoton md:text-6xl text-white mb-2">
             Aeromodeling&nbsp;&nbsp; Club
           </h1>
@@ -465,7 +470,7 @@ export default function CreateTeamPage() {
           <div className="w-full bg-gray-400 rounded-full h-2 mb-8">
             <div
               className="bg-indigo-600 h-2 rounded-full transition-all duration-500 ease-out"
-              style={{ width: `${(stage / 5) * 100}%` }}
+              style={{width: `${(stage / 5) * 100}%`}}
             ></div>
           </div>
           {renderStage()}

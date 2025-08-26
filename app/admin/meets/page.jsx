@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+import {useEffect, useState} from 'react';
 import TimelineCard from '../../../components/TimelineCards';
 import Loader from '@/components/Loader';
 
@@ -31,7 +31,7 @@ export default function AdminMeetListPage() {
   const fetchMeets = async (adminCheckToken) => {
     try {
       const baseUrl = process.env.NODE_ENV === 'production'
-        ? process.env.NEXT_PUBLIC_BACKEND_URL
+        ? ""
         : 'http://localhost:5000';
       const response = await fetch(`${baseUrl}/api/users/getallmeets`, {
         headers: {
@@ -65,7 +65,7 @@ export default function AdminMeetListPage() {
   };
 
   const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
+    const {name, value, type, checked} = e.target;
     if (type === 'checkbox') {
       setFormData(prevData => ({
         ...prevData,
@@ -90,7 +90,7 @@ export default function AdminMeetListPage() {
     }
 
     const baseUrl = process.env.NODE_ENV === 'production'
-      ? process.env.NEXT_PUBLIC_BACKEND_URL
+      ? ""
       : 'http://localhost:5000';
 
     try {
@@ -142,13 +142,14 @@ export default function AdminMeetListPage() {
   };
 
   if (loading) {
-    return <Loader />;
+    return <Loader/>;
   }
 
   return (
     <div className="min-h-screen bg-gray-900 text-gray-800 p-8">
-      <h1 className="mt-16 text-4xl monoton mb-8 text-center text-white">Admin &nbsp;&nbsp;&nbsp; Meet&nbsp;&nbsp;&nbsp; Timeline</h1>
-      
+      <h1
+        className="mt-16 text-4xl monoton mb-8 text-center text-white">Admin &nbsp;&nbsp;&nbsp; Meet&nbsp;&nbsp;&nbsp; Timeline</h1>
+
       <div className="max-w-4xl mx-auto mb-8">
         <button
           onClick={toggleForm}
@@ -228,46 +229,46 @@ export default function AdminMeetListPage() {
             </div>
 
             <div className="mb-4">
-  <span className="block text-gray-700">Essentials</span>
-  {[
-    'Laptop',
-    'Laptop Charger',
-    'USB Type-B Cable',
-    'Arduino Board',
-    'NodeMCU (ESP8266)',
-    'Transmitter Remote Control',
-    'Receiver Module',
-    'Battery Charger',
-    'Lipo Batteries',
-    'Battery Storage Case',
-    'Propeller Tools',
-    'Propellers',
-    'Soldering Iron',
-    'Soldering Wire',
-    'Heat Shrink Tubing',
-    'Multimeter',
-    'GPS Module',
-    'Goggles (FPV)',
-    'FPV Camera',
-    'Wiring and Connectors',
-    'Mini Screwdriver Set',
-    'Spare Screws and Nuts',
-    'Balsa Wood and Glue',
-    'Antennas',
-    'Field Tools (e.g., Allen Wrenches)',
-  ].map(item => (
-    <label key={item} className="inline-flex items-center mt-2">
-      <input
-        type="checkbox"
-        value={item}
-        checked={formData.meet_essentials.includes(item)}
-        onChange={handleChange}
-        className="form-checkbox"
-      />
-      <span className="ml-2">{item}</span>
-    </label>
-  ))}
-</div>
+              <span className="block text-gray-700">Essentials</span>
+              {[
+                'Laptop',
+                'Laptop Charger',
+                'USB Type-B Cable',
+                'Arduino Board',
+                'NodeMCU (ESP8266)',
+                'Transmitter Remote Control',
+                'Receiver Module',
+                'Battery Charger',
+                'Lipo Batteries',
+                'Battery Storage Case',
+                'Propeller Tools',
+                'Propellers',
+                'Soldering Iron',
+                'Soldering Wire',
+                'Heat Shrink Tubing',
+                'Multimeter',
+                'GPS Module',
+                'Goggles (FPV)',
+                'FPV Camera',
+                'Wiring and Connectors',
+                'Mini Screwdriver Set',
+                'Spare Screws and Nuts',
+                'Balsa Wood and Glue',
+                'Antennas',
+                'Field Tools (e.g., Allen Wrenches)',
+              ].map(item => (
+                <label key={item} className="inline-flex items-center mt-2">
+                  <input
+                    type="checkbox"
+                    value={item}
+                    checked={formData.meet_essentials.includes(item)}
+                    onChange={handleChange}
+                    className="form-checkbox"
+                  />
+                  <span className="ml-2">{item}</span>
+                </label>
+              ))}
+            </div>
 
 
             <div className="mb-4">
@@ -307,7 +308,7 @@ export default function AdminMeetListPage() {
       <div className="max-w-4xl mx-auto">
         {meets.length > 0 ? (
           meets.map((meet, index) => (
-            <TimelineCard key={meet._id} meet={meet} index={index} />
+            <TimelineCard key={meet._id} meet={meet} index={index}/>
           ))
         ) : (
           <p className="text-center text-white">No meetings found.</p>

@@ -26,7 +26,7 @@
 //     const fetchEvents = async () => {
 //       try {
 //         const baseUrl = process.env.NODE_ENV === 'production'
-//           ? process.env.NEXT_PUBLIC_BACKEND_URL
+//           ? ""
 //           : 'http://localhost:5000';
 //         const response = await fetch(`${baseUrl}/api/users/getallevents`);
 //         if (!response.ok) {
@@ -56,7 +56,7 @@
 //       <div className="h-[900vh] relative" ref={ref}>
 //         {/* <div className="relative w-screen h-screen flex items-center justify-center text-3xl md:text-6xl lg:text-8xl text-center">
 //           <div className='absolute top-1/4 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10'>
-  
+
 //           </div>
 //           <div className="z-0 mr-8 text-white monoton">
 //             Aeromodelling Club Events
@@ -121,7 +121,6 @@
 //               <div className="flex flex-col lg:flex-row gap-8 text-white p-6 md:p-10 lg:p-16 max-w-6xl">
 //                 <div className="lg:w-1/2 space-y-6">
 //                   <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold">Easteeemed for seeing you in our upcoming events</h1>
-
 
 
 //                 </div>
