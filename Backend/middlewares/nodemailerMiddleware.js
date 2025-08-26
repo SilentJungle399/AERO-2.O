@@ -150,7 +150,7 @@ const sendTeamJoiningConfirmationEmail = (name, email, groupToken, groupName, ev
 
 const sendPasswordResetEmail = async (email, resetToken) => {
   // Create the reset URL
-  const resetUrl = `https://aeronitkkr.in/forgotpassword/${resetToken}`;
+  const resetUrl = `https://${process.env.BACKEND_PROD_ROUTE}/forgotpassword/${resetToken}`;
 
   // Email content
   const message = `<!DOCTYPE html>
