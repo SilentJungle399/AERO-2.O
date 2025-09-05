@@ -1,7 +1,7 @@
 // components/Navbar.tsx
 "use client";
 
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useState, useRef} from "react";
 import Link from "next/link";
 import Image from "next/image";
 import {usePathname, useRouter} from "next/navigation";
@@ -33,9 +33,9 @@ interface NotificationModalProps {
 }
 
 const NotificationModal: React.FC<NotificationModalProps> = ({
-                                                               notifications,
-                                                               closeModal,
-                                                             }) => {
+    notifications,
+    closeModal,
+  }) => {
   const sortedNotifications = notifications.sort((a, b) => {
     return a.read === b.read
       ? new Date(b.notification.created_at).getTime() -
@@ -140,28 +140,6 @@ const Navbar: React.FC = () => {
   const [newNotificationCount, setNewNotificationCount] = useState(0);
   const [isAdmin, setAdmin] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [activitiesDropdownOpen, setActivitiesDropdownOpen] = useState(false);
-
-  // Function to handle click outside of the dropdown
-  const handleClickOutside = (event: MouseEvent) => {
-    if (
-      activitiesDropdownOpen &&
-      event.target instanceof HTMLElement &&
-      !event.target.closest(".relative.group")
-    ) {
-      setActivitiesDropdownOpen(false);
-    }
-  };
-
-  // Add event listener to the document when the component mounts
-  useEffect(() => {
-    document.addEventListener("click", handleClickOutside);
-
-    // Clean up the event listener when the component unmounts
-    return () => {
-      document.removeEventListener("click", handleClickOutside);
-    };
-  }, [activitiesDropdownOpen]);
   const [notifications, setNotifications] = useState<NotificationWithRead[]>(
     []
   );
@@ -169,6 +147,163 @@ const Navbar: React.FC = () => {
 
   const router = useRouter();
   const pathname = usePathname();
+  // Shared nav config and reusable components to avoid duplication
+  type Visibility = "both" | "desktop" | "mobile";
+  interface NavLinkItem { key: string; label: string; href: string; showOn?: Visibility }
+
+  const USER_LINKS: NavLinkItem[] = [
+    { key: "blogs", label: "Blogs", href: "/blogs" },
+    { key: "drones", label: "Drones", href: "/drones" },
+    { key: "rcplanes", label: "Rc Planes", href: "/rcplanes" },
+    { key: "gallery", label: "Gallery", href: "/gallery" },
+  ];
+
+  const ACTIVITY_LINKS: NavLinkItem[] = [
+    { key: "events", label: "Events", href: "/events", showOn: "both" },
+    { key: "meets", label: "Meets", href: "/meets", showOn: "desktop" },
+    { key: "workshops", label: "Workshops", href: "/workshops", showOn: "both" },
+    { key: "inductions", label: "Inductions", href: "/inductions", showOn: "desktop" },
+    { key: "techevents-in-activities", label: "Techspardha Events", href: "/techevents", showOn: "mobile" },
+  ];
+
+  const COMMUNITY_LINKS: NavLinkItem[] = [
+    { key: "devteam", label: "DEVTEAM", href: "/devteam" },
+    { key: "members", label: "Member", href: "/members" },
+  ];
+
+  const ADMIN_LINKS: NavLinkItem[] = [
+    { key: "galleryDash", label: "Gallery-Dashboard", href: "/gallery" },
+    { key: "blogsDash", label: "Blogs-dashboard", href: "/admin/blogs" },
+    { key: "eventsDash", label: "Events-dashboard", href: "/admin/events/dashboard" },
+    { key: "inductionsDash", label: "Inductions-dashboard", href: "/admin/inductions" },
+    { key: "meetsDash", label: "Meets-dashboard", href: "/admin/meets" },
+    { key: "merchDash", label: "Merch-dashboard", href: "/admin/merch" },
+  ];
+
+  const linkBaseCls = "text-white hover:text-[#3494D1] px-1 md:px-2 py-2 rounded-md font-medium bebas-neue-regular";
+  const linkSize = (isMobile: boolean) => (isMobile ? "text-xl md:text-xl lg:text-2xl" : "text-base md:text-xl lg:text-xl");
+
+  const Dropdown: React.FC<{
+    label: string;
+    items: NavLinkItem[];
+    isMobile?: boolean;
+    onNavigate?: () => void;
+  }> = ({ label, items, isMobile = false, onNavigate }) => {
+    const [open, setOpen] = useState(false);
+    const ref = useRef<HTMLDivElement | null>(null);
+    useEffect(() => {
+      if (!isMobile || !open) return;
+      const onDocClick = (e: MouseEvent) => {
+        const t = e.target as Node | null;
+        if (ref.current && t && !ref.current.contains(t)) setOpen(false);
+      };
+      document.addEventListener("click", onDocClick);
+      return () => document.removeEventListener("click", onDocClick);
+    }, [isMobile, open]);
+
+    const filtered = items.filter(i => (i.showOn ?? "both") === "both" || (i.showOn ?? "both") === (isMobile ? "mobile" : "desktop"));
+
+    return (
+      <div ref={ref} className="relative group">
+        <button
+          className={`flex items-center ${linkBaseCls} ${linkSize(isMobile)}`}
+          onClick={() => isMobile && setOpen(v => !v)}
+        >
+          {label} <FaCaretDown className="ml-1 w-5 h-5"/>
+        </button>
+        <div
+          className={`absolute left-0 mt-2 w-48 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 backdrop-blur-md ${
+            isMobile ? (open ? "" : "hidden") : "opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+          }`}
+        >
+          <div className="py-1" role="menu" aria-orientation="vertical">
+            {filtered.map(it => (
+              <Link
+                key={it.key}
+                href={it.href}
+                className="bebas-neue-regular block px-4 py-2 text-md text-gray-300 hover:text-[#3494D1]"
+                onClick={onNavigate}
+              >
+                {it.label}
+              </Link>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  const NavList: React.FC<{ isMobile?: boolean; isAdmin: boolean; onNavigate?: () => void }>
+    = ({ isMobile = false, isAdmin, onNavigate }) => {
+    if (isAdmin) {
+      return (
+        <>
+          {ADMIN_LINKS.map(l => (
+            <Link key={l.key} href={l.href} className={`${linkBaseCls} ${linkSize(isMobile)}`} onClick={onNavigate}>
+              {l.label}
+            </Link>
+          ))}
+        </>
+      );
+    }
+    return (
+      <>
+        {USER_LINKS.filter(l => (l.showOn ?? "both") === "both" || (l.showOn ?? "both") === (isMobile ? "mobile" : "desktop")).map(l => (
+          <Link key={l.key} href={l.href} className={`${linkBaseCls} ${linkSize(isMobile)}`} onClick={onNavigate}>
+            {l.label}
+          </Link>
+        ))}
+        <Dropdown label="Activities" items={ACTIVITY_LINKS} isMobile={isMobile} onNavigate={onNavigate} />
+        <Dropdown label="community" items={COMMUNITY_LINKS} isMobile={isMobile} onNavigate={onNavigate} />
+        {isMobile && (
+          <>
+            <Link href="/meets" className={`${linkBaseCls} ${linkSize(true)}`} onClick={onNavigate}>Meets</Link>
+            <Link href="/techevents" className="font-['Press_Start_2P'] text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-500 to-cyan-400 animate-text-shine hover:text-[#3494D1] px-1 md:px-2 py-2 rounded-md text-sm md:text-lg" onClick={onNavigate}>Techspardha</Link>
+          </>
+        )}
+      </>
+    );
+  };
+
+  // Small reusable profile menu used in both desktop and mobile
+  interface ProfileMenuProps {
+    id: string;
+    username: string;
+    profile: string;
+    isMobile?: boolean;
+  }
+
+  const ProfileMenu: React.FC<ProfileMenuProps> = ({ id, username, profile, isMobile = false }) => (
+    <div className={`origin-top-right text-white absolute ${isMobile ? "right-0 top-20 w-56" : "right-0 top-16 w-48"} rounded-md shadow-lg bg-black ring-1 ring-white ring-opacity-50`}>
+      <div className="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+        <Link href={`/myprofile/${id}`} className="block px-4 py-2 text-sm text-gray-400 hover:bg-gray-900" onClick={() => isMobile && setSidebarOpen(false)}>
+          {username ? (
+            <div className="flex items-center" onClick={() => setProfileOpen(false)}>
+              <img src={profile} alt="Profile Picture" width={24} height={24} className="mr-2 rounded-full object-cover w-11 h-11" />
+              {username}
+            </div>
+          ) : (
+            "My Profile"
+          )}
+        </Link>
+        <Link href={`/myprofile/${id}`} onClick={() => isMobile && setSidebarOpen(false)} className="block px-4 py-2 text-sm text-gray-400 hover:bg-gray-900">
+          Profile
+        </Link>
+        <div className="relative flex items-center" onClick={handleBellClick}>
+          <FaBell className={` absolute left-1 w-4 h-4 cursor-pointer ${newNotificationCount > 0 ? "text-yellow-400" : "text-white"}`} />
+          {newNotificationCount > 0 && (
+            <div className="absolute left-2 flex items-center justify-center w-3 h-3 text-sm font-bold text-white bg-red-500 rounded-full -translate-x-1/2 translate-y-1/2" onClick={handleBellClick}>
+              {newNotificationCount}
+            </div>
+          )}
+          <Link href="/#" className="block px-5 py-2 text-sm text-gray-400 hover:bg-gray-900">Notifications</Link>
+        </div>
+        <Link onClick={() => isMobile && setSidebarOpen(false)} href="#" className="block px-4 py-2 text-sm text-gray-400 hover:bg-gray-900">Settings</Link>
+        <hr />
+        <button onClick={logout} className="block px-4 py-2 text-sm text-red-700 hover:bg-gray-900 w-full text-left">Logout</button>
+      </div>
+    </div>
+  );
 
   const fetchNotifications = async () => {
     const id = localStorage.getItem("_id");
@@ -328,147 +463,7 @@ const Navbar: React.FC = () => {
             </div>
 
             <div className="hidden md:flex items-center space-x-1 md:space-x-2 w-full justify-end mr-4">
-              {/* admin routes in desktop */}
-              {isAdmin && (
-                <>
-                  <Link
-                    href="/gallery"
-                    className="text-white hover:text-[#3494D1] px-1 md:px-2 py-2 rounded-md text-base md:text-xl lg:text-xl font-medium bebas-neue-regular"
-                  >
-                    Gallery-Dashboard
-                  </Link>
-                  <Link
-                    href="/admin/blogs"
-                    className="text-white hover:text-[#3494D1] px-1 md:px-2 py-2 rounded-md text-base md:text-xl lg:text-xl font-medium bebas-neue-regular"
-                  >
-                    Blogs-dashboard
-                  </Link>
-                  <Link
-                    href="/admin/events/dashboard"
-                    className="text-white hover:text-[#3494D1] px-1 md:px-2 py-2 rounded-md text-base md:text-xl lg:text-xl font-medium bebas-neue-regular"
-                  >
-                    Events-dashboard
-                  </Link>
-                  <Link
-                    href="/admin/inductions"
-                    className="text-white hover:text-[#3494D1] px-1 md:px-2 py-2 rounded-md text-base md:text-xl lg:text-xl font-medium bebas-neue-regular"
-                  >
-                    Inductions-dashboard
-                  </Link>
-                  <Link
-                    href="/admin/meets"
-                    className="text-white hover:text-[#3494D1] px-1 md:px-2 py-2 rounded-md text-base md:text-xl lg:text-xl font-medium bebas-neue-regular"
-                  >
-                    Meets-dashboard
-                  </Link>
-                  <Link
-                    href="/admin/merch"
-                    className="text-white hover:text-[#3494D1] px-1 md:px-2 py-2 rounded-md text-base md:text-lg lg:text-xl font-medium bebas-neue-regular"
-                  >
-                    Merch-dashboard
-                  </Link>
-                </>
-              )}
-
-              {/* user routes in desktop */}
-              {!isAdmin && (
-                <>
-                  <Link
-                    href="/blogs"
-                    className="text-white hover:text-[#3494D1] px-1 md:px-2 py-2 rounded-md text-base md:text-xl lg:text-xl font-medium bebas-neue-regular"
-                  >
-                    Blogs
-                  </Link>
-                  <Link
-                    href="/drones"
-                    className="text-white hover:text-[#3494D1] px-1 md:px-2 py-2 rounded-md text-base md:text-xl lg:text-xl font-medium bebas-neue-regular"
-                  >
-                    Drones
-                  </Link>
-                  <Link
-                    href="/rcplanes"
-                    className="text-white hover:text-[#3494D1] px-1 md:px-2 py-2 rounded-md text-base md:text-xl lg:text-xl font-medium bebas-neue-regular"
-                  >
-                    Rc Planes
-                  </Link>
-                  <div className="relative group">
-                    <button className="flex items-center text-white hover:text-[#3494D1] px-1 md:px-2 py-2 rounded-md text-base md:text-xl lg:text-xl font-medium bebas-neue-regular">
-                      Activities <FaCaretDown className="ml-1 w-5 h-5"/>
-                    </button>
-                    <div className="absolute left-0 mt-2 w-48 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 backdrop-blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                      <div
-                        className="py-1"
-                        role="menu"
-                        aria-orientation="vertical"
-                      >
-                        <Link
-                          href="/events"
-                          className="bebas-neue-regular block px-4 py-2 text-md text-gray-300 hover:text-[#3494D1]"
-                        >
-                          Events
-                        </Link>
-                        <Link
-                          href="/meets"
-                          className="bebas-neue-regular block px-4 py-2 text-md text-gray-300 hover:text-[#3494D1]"
-                        >
-                          Meets
-                        </Link>
-                        <Link
-                          href="/workshops"
-                          className="bebas-neue-regular block px-4 py-2 text-md text-gray-300 hover:text-[#3494D1]"
-                        >
-                          Workshops
-                        </Link>
-                        <Link
-                          href="/inductions"
-                          className="bebas-neue-regular block px-4 py-2 text-md text-gray-300 hover:text-[#3494D1]"
-                        >
-                          Inductions
-                        </Link>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/*<Link*/}
-                  {/*  href="/techevents"*/}
-                  {/*  className="font-['Press_Start_2P']   text-blue-400 bg-clip-text  animate-text-shine hover:text-[#3495d18a] px-1 md:px-2 py-2 rounded-md text-sm md:text-2xl lg:text-lg "*/}
-                  {/*>*/}
-                  {/*  Techspardha*/}
-                  {/*</Link>*/}
-                  <Link
-                    href="/gallery"
-                    className="text-white hover:text-[#3494D1] px-1 md:px-2 py-2 rounded-md text-base md:text-xl lg:text-xl font-medium bebas-neue-regular"
-                  >
-                    Gallery
-                  </Link>
-
-                  <div className="relative group">
-                    <button className="flex items-center text-white hover:text-[#3494D1] px-1 md:px-2 py-2 rounded-md text-base md:text-xl lg:text-xl font-medium bebas-neue-regular">
-                      community <FaCaretDown className="ml-1 w-5 h-5"/>
-                    </button>
-                    <div className="absolute left-0 mt-2 w-48 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 backdrop-blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                      <div
-                        className="py-1"
-                        role="menu"
-                        aria-orientation="vertical"
-                      >
-                        <Link
-                          href="/devteam"
-                          className="bebas-neue-regular block px-4 py-2 text-md text-gray-300 hover:text-[#3494D1]"
-                        >
-                          DEVTEAM
-                        </Link>
-                        <Link
-                          href="/members"
-                          className="bebas-neue-regular block px-4 py-2 text-md text-gray-300 hover:text-[#3494D1]"
-                        >
-                          Member
-                        </Link>
-                      </div>
-                    </div>
-                  </div>
-                </>
-              )}
+              <NavList isAdmin={isAdmin} />
 
               {!id ? (
                 <Link
@@ -498,7 +493,7 @@ const Navbar: React.FC = () => {
                         </div>
                       )}
                     </div>
-                    <button
+          <button
                       className="nav-link ml-3"
                       onClick={() => setProfileOpen(!profileOpen)}
                     >
@@ -507,91 +502,11 @@ const Navbar: React.FC = () => {
                         alt="Profile Picture"
                         width={100}
                         height={100}
-                        className="rounded-full rounded-full object-cover w-9 h-9"
+            className="rounded-full object-cover w-9 h-9"
                       />
                     </button>
                   </div>
-                  {profileOpen && (
-                    <div className="origin-top-right top-16 text-white absolute right-0 w-48 rounded-md shadow-lg bg-black ring-1 ring-white ring-opacity-50">
-                      <div
-                        className="py-1"
-                        role="menu"
-                        aria-orientation="vertical"
-                        aria-labelledby="options-menu"
-                      >
-                        <Link
-                          href={`/myprofile/${id}`}
-                          className="block px-4 py-2 text-sm text-gray-400 hover:bg-gray-900"
-                        >
-                          {username ? (
-                            <div
-                              className="flex items-center"
-                              onClick={() => setSidebarOpen(!sidebarOpen)}
-                            >
-                              <img
-                                src={profile}
-                                alt="Profile Picture"
-                                width={24}
-                                height={24}
-                                className="mr-2 rounded-full object-cover w-11 h-11"
-                              />
-                              {username}
-                            </div>
-                          ) : (
-                            "My Profile"
-                          )}
-                        </Link>
-                        <Link
-                          href={`/myprofile/${id}`}
-                          onClick={() => setSidebarOpen(!sidebarOpen)}
-                          className="block px-4 py-2 text-sm text-gray-400 hover:bg-gray-900"
-                        >
-                          Profile
-                        </Link>
-                        <div
-                          className="relative flex items-center"
-                          onClick={handleBellClick}
-                        >
-                          <FaBell
-                            onClick={() => setSidebarOpen(!sidebarOpen)}
-                            className={` absolute left-1 w-4 h-4 cursor-pointer ${
-                              newNotificationCount > 0
-                                ? "text-yellow-400"
-                                : "text-white"
-                            }`}
-                          />
-                          {newNotificationCount > 0 && (
-                            <div
-                              className="absolute left-2 flex items-center justify-center w-3 h-3 text-sm font-bold text-white bg-red-500 rounded-full -translate-x-1/2 translate-y-1/2"
-                              onClick={handleBellClick}
-                            >
-                              {newNotificationCount}
-                            </div>
-                          )}
-                          <Link
-                            href="/#"
-                            className="block px-5 py-2 text-sm text-gray-400 hover:bg-gray-900"
-                          >
-                            Notifications
-                          </Link>
-                        </div>
-                        <Link
-                          onClick={() => setSidebarOpen(!sidebarOpen)}
-                          href="#"
-                          className="block px-4 py-2 text-sm text-gray-400 hover:bg-gray-900"
-                        >
-                          Settings
-                        </Link>
-                        <hr/>
-                        <button
-                          onClick={logout}
-                          className="block px-4 py-2 text-sm text-red-700 hover:bg-gray-900 w-full text-left"
-                        >
-                          Logout
-                        </button>
-                      </div>
-                    </div>
-                  )}
+                  {profileOpen && <ProfileMenu id={id} username={username} profile={profile} />}
                   {isModalOpen && (
                     <NotificationModal
                       notifications={notifications}
@@ -659,327 +574,54 @@ const Navbar: React.FC = () => {
               />
             </button>
           )}
-          {profileOpen && (
-            <div className="origin-top-right text-white absolute right-0 w-48 rounded-md shadow-lg bg-black ring-1 ring-white ring-opacity-50">
-              <div
-                className="py-1"
-                role="menu"
-                aria-orientation="vertical"
-                aria-labelledby="options-menu"
-              >
-                <Link
-                  href={`/myprofile/${id}`}
-                  className="block px-4 py-2 text-sm text-gray-400 hover:bg-gray-900"
-                >
-                  {username ? (
-                    <div
-                      className="flex items-center"
-                      onClick={() => setSidebarOpen(!sidebarOpen)}
-                    >
-                      <img
-                        src={profile}
-                        alt="Profile Picture"
-                        width={24}
-                        height={24}
-                        className="rounded-full mr-2"
-                      />
-                      {username}
-                    </div>
-                  ) : (
-                    "My Profile"
-                  )}
-                </Link>
-                <Link
-                  href={`/myprofile/${id}`}
-                  onClick={() => setSidebarOpen(!sidebarOpen)}
-                  className="block px-4 py-2 text-sm text-gray-400 hover:bg-gray-900"
-                >
-                  Profile
-                </Link>
-                <div
-                  className="relative flex items-center"
-                  onClick={handleBellClick}
-                >
-                  <FaBell
-                    onClick={() => setSidebarOpen(!sidebarOpen)}
-                    className={` absolute left-1 w-4 h-4 cursor-pointer ${
-                      newNotificationCount > 0
-                        ? "text-yellow-400"
-                        : "text-white"
-                    }`}
-                  />
-                  {newNotificationCount > 0 && (
-                    <div
-                      className="absolute left-2 flex items-center justify-center w-3 h-3 text-sm font-bold text-white bg-red-500 rounded-full -translate-x-1/2 translate-y-1/2"
-                      onClick={handleBellClick}
-                    >
-                      {newNotificationCount}
-                    </div>
-                  )}
-                  <Link
-                    href="/#"
-                    className="block px-5 py-2 text-sm text-gray-400 hover:bg-gray-900"
-                  >
-                    Notifications
-                  </Link>
-                </div>
-                <Link
-                  onClick={() => setSidebarOpen(!sidebarOpen)}
-                  href="#"
-                  className="block px-4 py-2 text-sm text-gray-400 hover:bg-gray-900"
-                >
-                  Settings
-                </Link>
-                <hr/>
-                <button
-                  onClick={logout}
-                  className="block px-4 py-2 text-sm text-red-700 hover:bg-gray-900 w-full text-left"
-                >
-                  Logout
-                </button>
-              </div>
-            </div>
-          )}
-          {isModalOpen && (
-            <NotificationModal
-              notifications={notifications}
-              closeModal={() => setIsModalOpen(false)}
-            />
-          )}
+          {profileOpen && <ProfileMenu id={id} username={username} profile={profile} isMobile />}
+                
 
           {/* mobile verision navigation */}
 
           <div className="flex flex-col space-y-4">
-            {/* admin routes in mobile */}
-            {isAdmin && (
-              <>
-                <Link
-                  onClick={() => setSidebarOpen(!sidebarOpen)}
-                  href="/gallery"
-                  className="text-white hover:text-[#3494D1] px-1 md:px-2 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular"
-                >
-                  Gallery-Dashboard
-                </Link>
-                <Link
-                  onClick={() => setSidebarOpen(!sidebarOpen)}
-                  href="/admin/blogs"
-                  className="text-white hover:text-[#3494D1] px-1 md:px-2 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular"
-                >
-                  Blogs-dashboard
-                </Link>
-                <Link
-                  onClick={() => setSidebarOpen(!sidebarOpen)}
-                  href="/admin/events/create"
-                  className="text-white hover:text-[#3494D1] px-1 md:px-2 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular"
-                >
-                  Events-dashboard
-                </Link>
-                <Link
-                  onClick={() => setSidebarOpen(!sidebarOpen)}
-                  href="/admin/inductions"
-                  className="text-white hover:text-[#3494D1] px-1 md:px-2 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular"
-                >
-                  Inductions-dashboard
-                </Link>
-                <Link
-                  onClick={() => setSidebarOpen(!sidebarOpen)}
-                  href="/admin/meets"
-                  className="text-white hover:text-[#3494D1] px-1 md:px-2 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular"
-                >
-                  Meets-dashboard
-                </Link>
-              </>
-            )}
-
-            {/* user routes in mobile */}
-            {!isAdmin && (
-              <>
-                <Link
-                  onClick={() => {
-                    setSidebarOpen(!sidebarOpen);
-                    setActivitiesDropdownOpen(false);
-                  }}
-                  href="/blogs"
-                  className="text-white hover:text-[#3494D1] px-1 pt-8 md:px-2 rounded-md text-xl md:text-xl lg:text-2xl bebas-neue-regular"
-                >
-                  Blogs
-                </Link>
-                <Link
-                  onClick={() => {
-                    setSidebarOpen(!sidebarOpen);
-                    setActivitiesDropdownOpen(false);
-                  }}
-                  href="/drones"
-                  className="text-white hover:text-[#3494D1] px-1 py-2 md:px-2 rounded-md text-xl md:text-xl lg:text-2xl font-medium bebas-neue-regular"
-                >
-                  Drones
-                </Link>
-                <Link
-                  onClick={() => {
-                    setSidebarOpen(!sidebarOpen);
-                    setActivitiesDropdownOpen(false);
-                  }}
-                  href="/rcplanes"
-                  className="text-white hover:text-[#3494D1] px-1 md:px-2 py-2 rounded-md text-xl md:text-xl lg:text-2xl font-medium bebas-neue-regular"
-                >
-                  Rc Planes
-                </Link>
-                <div className="relative group z-10">
-                  <button
-                    className="flex items-center text-white hover:text-[#3494D1] px-1 md:px-2 py-2 rounded-md text-xl md:text-xl lg:text-2xl font-medium bebas-neue-regular"
-                    onClick={() =>
-                      setActivitiesDropdownOpen(!activitiesDropdownOpen)
-                    }
+            <NavList isAdmin={isAdmin} isMobile onNavigate={() => setSidebarOpen(false)} />
+            <hr className="text-blue-500 bg-blue-900"/>
+            <div className="items-center justify-between text-white">
+              <div>
+                <div className="flex items-center text-center justify-between">
+                  <Image
+                    className="justify-end"
+                    src={"/favicon.ico"}
+                    alt="not found"
+                    width={50}
+                    height={50}
+                  />
+                  <h1 className="font-sans font-bold mr-2">
+                    AeroModelling Club
+                  </h1>
+                </div>
+                <div className="flex ml-28 text-center space-x-1">
+                  <a
+                    href="https://www.instagram.com/aeroclub.nitkkr/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-pink-500 hover:text-gray-50"
                   >
-                    Activities <FaCaretDown className="ml-1 w-5 h-5"/>
-                  </button>
-                  {activitiesDropdownOpen && (
-                    <div className="absolute left-0 mt-2 w-48 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 backdrop-blur-md">
-                      <div
-                        className="py-1"
-                        role="menu"
-                        aria-orientation="vertical"
-                      >
-                        <Link
-                          onClick={() => {
-                            setSidebarOpen(!sidebarOpen);
-                            setActivitiesDropdownOpen(false);
-                          }}
-                          href="/events"
-                          className="bebas-neue-regular block px-4 py-2 text-md text-gray-300 hover:text-[#3494D1] text-xl"
-                        >
-                          Events
-                        </Link>
-                        <Link
-                          onClick={() => {
-                            setSidebarOpen(!sidebarOpen);
-                            setActivitiesDropdownOpen(false);
-                          }}
-                          href="/workshops"
-                          className="bebas-neue-regular block px-4 py-2 text-md text-gray-300 hover:text-[#3494D1] text-xl"
-                        >
-                          Workshops
-                        </Link>
-                        <Link
-                          onClick={() => {
-                            setSidebarOpen(!sidebarOpen);
-                            setActivitiesDropdownOpen(false);
-                          }}
-                          href="/techevents"
-                          className="bebas-neue-regular block px-4 py-2 text-md text-gray-300 hover:text-[#3494D1] text-xl"
-                        >
-                          Techspardha Events
-                        </Link>
-                      </div>
-                    </div>
-                  )}
+                    <FaInstagram size={16}/>
+                  </a>
+                  <a
+                    href="https://www.linkedin.com/company/aero-club-nit-kurukshetra/?originalSubdomain=in"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-400 hover:text-gray-50"
+                  >
+                    <FaTwitter size={16}/>
+                  </a>
+                  <a
+                    href="mailto:aeronitkkr.club@gmail.com"
+                    className="text-yellow-50 hover:text-gray-50"
+                  >
+                    <FaEnvelope size={16}/>
+                  </a>
                 </div>
-                <Link
-                  onClick={() => {
-                    setSidebarOpen(!sidebarOpen);
-                    setActivitiesDropdownOpen(false);
-                  }}
-                  href="/meets"
-                  className="text-white hover:text-[#3494D1] px-1 md:px-2 py-2 rounded-md text-xl md:text-xl lg:text-2xl font-medium bebas-neue-regular"
-                >
-                  Meets
-                </Link>
-                <Link
-                  onClick={() => {
-                    setSidebarOpen(!sidebarOpen);
-                    setActivitiesDropdownOpen(false);
-                  }}
-                  href="/techevents"
-                  className="font-['Press_Start_2P'] text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-500 to-cyan-400 animate-text-shine hover:text-[#3494D1] px-1 md:px-2 py-2 rounded-md text-sm md:text-lg"
-                >
-                  Techspardha
-                </Link>
-                <Link
-                  onClick={() => {
-                    setSidebarOpen(!sidebarOpen);
-                    setActivitiesDropdownOpen(false);
-                  }}
-                  href="/gallery"
-                  className="text-white hover:text-[#3494D1] px-1 md:px-2 py-2 rounded-md text-xl md:text-xl lg:text-2xl font-medium bebas-neue-regular"
-                >
-                  Gallery
-                </Link>
-                <div className="relative group">
-                  <button className="flex items-center text-white hover:text-[#3494D1] px-1 md:px-2 py-2 rounded-md text-base md:text-xl lg:text-2xl font-medium bebas-neue-regular">
-                    community <FaCaretDown className="ml-1 w-5 h-5"/>
-                  </button>
-                  <div className="absolute left-0 mt-2 w-48 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 backdrop-blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    <div
-                      className="py-1"
-                      role="menu"
-                      aria-orientation="vertical"
-                    >
-                      <Link
-                        href="/devteam"
-                        className="bebas-neue-regular block px-4 py-2 text-md text-gray-300 hover:text-[#3494D1]"
-                        onClick={() => {
-                          setSidebarOpen(!sidebarOpen);
-                          setActivitiesDropdownOpen(false);
-                        }}
-                      >
-                        DEVTEAM
-                      </Link>
-                      <Link
-                        href="/members"
-                        className="bebas-neue-regular block px-4 py-2 text-md text-gray-300 hover:text-[#3494D1]"
-                        onClick={() => {
-                          setSidebarOpen(!sidebarOpen);
-                          setActivitiesDropdownOpen(false);
-                        }}
-                      >
-                        Member
-                      </Link>
-                    </div>
-                  </div>
-                </div>
-                <hr className="text-blue-500 bg-blue-900"/>
-                <div className="items-center justify-between text-white">
-                  <div>
-                    <div className="flex items-center text-center justify-between">
-                      <Image
-                        className="justify-end"
-                        src={"/favicon.ico"}
-                        alt="not found"
-                        width={50}
-                        height={50}
-                      />
-                      <h1 className="font-sans font-bold mr-2">
-                        AeroModelling Club
-                      </h1>
-                    </div>
-                    <div className="flex ml-28 text-center space-x-1">
-                      <a
-                        href="https://www.instagram.com/aeroclub.nitkkr/"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-pink-500 hover:text-gray-50"
-                      >
-                        <FaInstagram size={16}/>
-                      </a>
-                      <a
-                        href="https://www.linkedin.com/company/aero-club-nit-kurukshetra/?originalSubdomain=in"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-blue-400 hover:text-gray-50"
-                      >
-                        <FaTwitter size={16}/>
-                      </a>
-                      <a
-                        href="mailto:aeronitkkr.club@gmail.com"
-                        className="text-yellow-50 hover:text-gray-50"
-                      >
-                        <FaEnvelope size={16}/>
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              </>
-            )}
+              </div>
+            </div>
           </div>
         </div>
         <div></div>
