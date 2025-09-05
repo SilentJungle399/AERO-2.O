@@ -5,7 +5,12 @@ import "./globals.css";
 import ClientLayout from "../components/ClientLayout";
 import Script from 'next/script';
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-sans',
+  display: 'swap',
+  weight: ['300','400','600','700'] // pick weights you want
+});
 
 export const metadata: Metadata = {
   title: "Aero Club || NIT KURUKSHETRA",
