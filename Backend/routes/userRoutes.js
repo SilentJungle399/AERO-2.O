@@ -3,71 +3,75 @@ const User = require("../models/usermodel");
 const InductionModel = require("../models/Inductions");
 const authMiddleware = require("../middlewares/authMiddleware");
 const {
-  createInduction,
-  getAllInductions,
-  getInduction,
-  saveParticipants,
-  getInductionforSelections,
-  sendNotification,
-  fetchInductie,
+	createInduction,
+	getAllInductions,
+	getInduction,
+	saveParticipants,
+	getInductionforSelections,
+	sendNotification,
+	fetchInductie,
 } = require("../controllers/InductionController");
 const {
-  create_meet,
-  getAllMeets,
-  getMeet,
-  markAttendance,
-  endMeet,
+	create_meet,
+	getAllMeets,
+	getMeet,
+	markAttendance,
+	endMeet,
 } = require("../controllers/MeetsController");
 const {
-  createEvent,
-  createTeam,
-  joinTeam,
-  getAllEvents,
-  getEventById,
-  checkToken,
-  teamDashboard,
-  updateGroupTime,
-  updateMemberTime,
+	createEvent,
+	createTeam,
+	joinTeam,
+	getAllEvents,
+	getEventById,
+	checkToken,
+	teamDashboard,
+	updateGroupTime,
+	updateMemberTime,
 } = require("../controllers/EventsController");
 const {
-  getAllCAtegories,
-  addNewCategory,
-  getOneCategory,
-  updateCategory,
-  deletecategory,
-  getAllBlogs,
-  createNewBlog,
-  getOneBlog,
-  updatedBlog,
-  deleteBlog,
+	getAllCAtegories,
+	addNewCategory,
+	getOneCategory,
+	updateCategory,
+	deletecategory,
+	getAllBlogs,
+	createNewBlog,
+	getOneBlog,
+	updatedBlog,
+	deleteBlog,
 } = require("../controllers/BlogController");
+const { saveDraft, getDraft, deleteDraft } = require("../controllers/FormDraftController");
 
 const userRoutes = express.Router();
 
 // Set up multer for handling file uploads
 const multer = require("multer");
-const {processUploads} = require("../middlewares/BlogMiddleware");
-const {uploadMiddleware} = require("../controllers/uploadMiddleware");
-const {getBlogPostBySlug} = require("../controllers/BlogController");
+const { processUploads } = require("../middlewares/BlogMiddleware");
+const { uploadMiddleware } = require("../controllers/uploadMiddleware");
+const { getBlogPostBySlug } = require("../controllers/BlogController");
 const {
-  getAlbum,
-  getAllAlbums,
-  createAlbum,
-  addImageToAlbum,
-  handleLike,
-  handleView
+	getAlbum,
+	getAllAlbums,
+	createAlbum,
+	addImageToAlbum,
+	handleLike,
+	handleView,
 } = require("../controllers/GalleryControllers");
-const {galleryUploadMiddleware} = require("../middlewares/GalleryUploadMiddleware");
-const {showAllNotification, showOneNotification, submitContactUs} = require("../controllers/NotificationsController");
-const {getourmembers} = require("../controllers/Authentication");
-const { createOrder,getOrders } = require("../controllers/MerchController");
+const { galleryUploadMiddleware } = require("../middlewares/GalleryUploadMiddleware");
+const {
+	showAllNotification,
+	showOneNotification,
+	submitContactUs,
+} = require("../controllers/NotificationsController");
+const { getourmembers } = require("../controllers/Authentication");
+const { createOrder, getOrders } = require("../controllers/MerchController");
 const upload = multer({
-  storage: multer.memoryStorage(),
-  limits: {
-    fileSize: 100 * 20 * 1024 * 1024, // limit file size to 5MB
-  },
+	storage: multer.memoryStorage(),
+	limits: {
+		fileSize: 100 * 20 * 1024 * 1024, // limit file size to 5MB
+	},
 });
-
 
 userRoutes.get("/notifications/:id", showAllNotification);
 
@@ -83,33 +87,43 @@ userRoutes.get("/induction/:Iid/inductee/:uid", fetchInductie);
 userRoutes.get("/getinduction/:id", getInduction);
 userRoutes.get("/getinductionforselectingstudent/:id", getInductionforSelections);
 userRoutes.post(
-  "/register/:id",
-  authMiddleware(["admin", "user", "member", "blogger"]), upload.array('ppt', 100), galleryUploadMiddleware,
-  saveParticipants
+	"/register/:id",
+	authMiddleware(["admin", "user", "member", "blogger"]),
+	upload.array("ppt", 100),
+	galleryUploadMiddleware,
+	saveParticipants
 );
-userRoutes.post("/sendnotification/:id", authMiddleware(["admin"]), upload.array('notification_file', 100), galleryUploadMiddleware, sendNotification);
-userRoutes.post("/contactus",)
-
+userRoutes.post(
+	"/sendnotification/:id",
+	authMiddleware(["admin"]),
+	upload.array("notification_file", 100),
+	galleryUploadMiddleware,
+	sendNotification
+);
+userRoutes.post("/contactus");
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
-
-userRoutes.post("/endmeet/:id", authMiddleware(["admin"]), endMeet)
+userRoutes.post("/endmeet/:id", authMiddleware(["admin"]), endMeet);
 userRoutes.post("/createmeet", authMiddleware(["admin"]), create_meet);
 userRoutes.get("/getallmeets", getAllMeets);
 userRoutes.get("/getmeets/:id", getMeet);
 userRoutes.post("/scan-meet/:id", markAttendance);
 userRoutes.post("/createevent", upload.single("E_main_img"), uploadMiddleware, createEvent);
-userRoutes.post("/createteam/:id", upload.single('payment_screenshot'), uploadMiddleware, createTeam);
-userRoutes.post("/jointeam", upload.single('payment_screenshot'), uploadMiddleware, joinTeam);
+userRoutes.post(
+	"/createteam/:id",
+	upload.single("payment_screenshot"),
+	uploadMiddleware,
+	createTeam
+);
+userRoutes.post("/jointeam", upload.single("payment_screenshot"), uploadMiddleware, joinTeam);
 userRoutes.get("/getallevents", getAllEvents);
 userRoutes.get("/event/:id", getEventById);
 userRoutes.post("/checktoken", checkToken);
 userRoutes.post("/teamdashboard", teamDashboard);
 
-userRoutes.post('/update-group-time', updateGroupTime);
-userRoutes.post('/update-member-time', updateMemberTime);
-
+userRoutes.post("/update-group-time", updateGroupTime);
+userRoutes.post("/update-member-time", updateMemberTime);
 
 // //blog routes
 // module.exports ={deletecategory,updateCategory,getOneCategory,addNewCategory,getAllCAtegories,deleteBlog,updatedBlog,getOneBlog,createNewBlog,getAllBlogs}
@@ -120,10 +134,14 @@ userRoutes.post("/updatecategory/:id", updateCategory);
 userRoutes.delete("/deletecategory/:id", deletecategory);
 
 userRoutes.get("/getallblogs", getAllBlogs);
-userRoutes.post("/addnewblog", upload.fields([
-    {name: "main_image", maxCount: 1},
-    {name: "additional_images", maxCount: 5},
-  ]), processUploads, createNewBlog
+userRoutes.post(
+	"/addnewblog",
+	upload.fields([
+		{ name: "main_image", maxCount: 1 },
+		{ name: "additional_images", maxCount: 5 },
+	]),
+	processUploads,
+	createNewBlog
 );
 // userRoutes.post("/addnewblog", createNewBlog);
 userRoutes.get("/getoneblog/:slug", getBlogPostBySlug);
@@ -131,203 +149,204 @@ userRoutes.put("/updateoneblog/:slug", updatedBlog);
 userRoutes.delete("/deleteblog/:id", deleteBlog);
 
 //gallery routes
-userRoutes.post('/createalbum', createAlbum);
+userRoutes.post("/createalbum", createAlbum);
 // Upload multiple images to an album
-userRoutes.post('/album/:id', upload.array('album_images', 100), galleryUploadMiddleware, addImageToAlbum);
+userRoutes.post(
+	"/album/:id",
+	upload.array("album_images", 100),
+	galleryUploadMiddleware,
+	addImageToAlbum
+);
 // Get all albums
-userRoutes.get('/albums', getAllAlbums);
+userRoutes.get("/albums", getAllAlbums);
 // Get a specific album
-userRoutes.get('/albums/:id', getAlbum);
-userRoutes.post('/:uid/album/:album_id/images/:id/like', handleLike);
-userRoutes.post('/album/:album_id/images/:id/view', handleView);
+userRoutes.get("/albums/:id", getAlbum);
+userRoutes.post("/:uid/album/:album_id/images/:id/like", handleLike);
+userRoutes.post("/album/:album_id/images/:id/view", handleView);
 // .............
-
 
 // notifications route
 // userRoutes.post('/sendnotifiacions',galleryUploadMiddleware,sen)
 
 // Create a new user (Admin only)
 userRoutes.post("/create", authMiddleware(["admin"]), async (req, res) => {
-  const {full_name, roll_no, email, password, date_of_joining, role} =
-    req.body;
+	const { full_name, roll_no, email, password, date_of_joining, role } = req.body;
 
-  try {
-    const existingUser = await User.findOne({email});
-    if (existingUser) {
-      return res.status(400).json({error: "User already exists"});
-    }
+	try {
+		const existingUser = await User.findOne({ email });
+		if (existingUser) {
+			return res.status(400).json({ error: "User already exists" });
+		}
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+		const hashedPassword = await bcrypt.hash(password, 10);
 
-    const newUser = new User({
-      full_name,
-      roll_no,
-      email,
-      password: hashedPassword,
-      date_of_joining,
-      role,
-    });
+		const newUser = new User({
+			full_name,
+			roll_no,
+			email,
+			password: hashedPassword,
+			date_of_joining,
+			role,
+		});
 
-    await newUser.save();
-    res
-      .status(201)
-      .json({message: "User created successfully", user: newUser});
-  } catch (error) {
-    console.error("Error creating user:", error);
-    res.status(500).json({error: "Failed to create user"});
-  }
+		await newUser.save();
+		res.status(201).json({ message: "User created successfully", user: newUser });
+	} catch (error) {
+		console.error("Error creating user:", error);
+		res.status(500).json({ error: "Failed to create user" });
+	}
 });
 
 // Read user details
-userRoutes.get(
-  "/:id",
-  authMiddleware(["user", "member", "admin"]),
-  async (req, res) => {
-    try {
-      const fields = 'full_name email roll_no year branch session college_name mobile_no profile_pic current_post team_name aadhar_no job_location company_name ifsc_code college_name';
-      const user = await User.findById(req.params.id).select(fields);
+userRoutes.get("/:id", authMiddleware(["user", "member", "admin"]), async (req, res) => {
+	try {
+		const fields =
+			"full_name email roll_no year branch session college_name mobile_no profile_pic current_post team_name aadhar_no job_location company_name ifsc_code college_name";
+		const user = await User.findById(req.params.id).select(fields);
 
-      if (!user) {
-        return res.status(404).json({error: "User not found"});
-      }
+		if (!user) {
+			return res.status(404).json({ error: "User not found" });
+		}
 
-      res.status(200).json(user);
-    } catch (error) {
-      console.error("Error fetching user:", error);
-      res.status(500).json({error: "Failed to fetch user"});
-    }
-  }
-);
-
-userRoutes.post('/profile/:id', authMiddleware(["user", "member", "admin"]), upload.single('profile_file'), uploadMiddleware, async (req, res) => {
-  const {id} = req.params;
-  try {
-
-
-    const user = await User.findById(id);
-    if (!user) {
-      return res.status(404).json({error: 'User not found'});
-    }
-
-    if (req.file && req.body.fileDownloadURL) {
-      user.profile_pic = req.body.fileDownloadURL;
-      await user.save();
-    }
-
-    res.status(200).json({
-      message: "Profile picture updated successfully",
-      profilePicUrl: user.profile_pic
-    });
-  } catch (error) {
-    console.error("Error updating profile picture:", error);
-    res.status(500).json({
-      message: "Error updating profile picture",
-      error: error.message
-    });
-  }
+		res.status(200).json(user);
+	} catch (error) {
+		console.error("Error fetching user:", error);
+		res.status(500).json({ error: "Failed to fetch user" });
+	}
 });
+
+userRoutes.post(
+	"/profile/:id",
+	authMiddleware(["user", "member", "admin"]),
+	upload.single("profile_file"),
+	uploadMiddleware,
+	async (req, res) => {
+		const { id } = req.params;
+		try {
+			const user = await User.findById(id);
+			if (!user) {
+				return res.status(404).json({ error: "User not found" });
+			}
+
+			if (req.file && req.body.fileDownloadURL) {
+				user.profile_pic = req.body.fileDownloadURL;
+				await user.save();
+			}
+
+			res.status(200).json({
+				message: "Profile picture updated successfully",
+				profilePicUrl: user.profile_pic,
+			});
+		} catch (error) {
+			console.error("Error updating profile picture:", error);
+			res.status(500).json({
+				message: "Error updating profile picture",
+				error: error.message,
+			});
+		}
+	}
+);
 
 // Update profile
-userRoutes.patch('/update/:id', authMiddleware(["user", "member", "admin"]), async (req, res) => {
-  const {id} = req.params;
-  const updates = req.body;
+userRoutes.patch("/update/:id", authMiddleware(["user", "member", "admin"]), async (req, res) => {
+	const { id } = req.params;
+	const updates = req.body;
 
-  try {
-    const fields = 'full_name email roll_no year branch session college_name mobile_no profile_pic team_name';
-    const user = await User.findByIdAndUpdate(id, updates, {new: true, runValidators: true}).select(fields);
-    if (!user) {
-      return res.status(404).json({error: 'User not found'});
-    }
+	try {
+		const fields =
+			"full_name email roll_no year branch session college_name mobile_no profile_pic team_name";
+		const user = await User.findByIdAndUpdate(id, updates, {
+			new: true,
+			runValidators: true,
+		}).select(fields);
+		if (!user) {
+			return res.status(404).json({ error: "User not found" });
+		}
 
-    res.status(200).json({
-      message: "Profile updated successfully",
-      user: user
-    });
-  } catch (error) {
-    console.error("Error updating profile:", error);
-    res.status(500).json({
-      message: "Error updating profile",
-      error: error.message
-    });
-  }
+		res.status(200).json({
+			message: "Profile updated successfully",
+			user: user,
+		});
+	} catch (error) {
+		console.error("Error updating profile:", error);
+		res.status(500).json({
+			message: "Error updating profile",
+			error: error.message,
+		});
+	}
 });
 
+userRoutes.get("/:id", authMiddleware(["user", "member"]), async (req, res) => {
+	try {
+		console.log("Fetching user data");
 
-userRoutes.get(
-  "/:id",
-  authMiddleware(["user", "member"]),
-  async (req, res) => {
-    try {
-      console.log("Fetching user data");
+		// Define the fields you want to include in the response
+		const fields =
+			"full_name email roll_no year branch session college_name mobile_no profile_pic team_name current_post";
 
-      // Define the fields you want to include in the response
-      const fields = 'full_name email roll_no year branch session college_name mobile_no profile_pic team_name current_post';
+		// Fetch the user with selected fields
+		const user = await User.findById(req.params.id).select(fields);
 
-      // Fetch the user with selected fields
-      const user = await User.findById(req.params.id).select(fields);
+		if (!user) {
+			return res.status(404).json({ error: "User not found" });
+		}
 
-      if (!user) {
-        return res.status(404).json({error: "User not found"});
-      }
-
-      res.status(200).json(user);
-    } catch (error) {
-      console.error("Error fetching user:", error);
-      res.status(500).json({error: "Failed to fetch user"});
-    }
-  }
-);
-
+		res.status(200).json(user);
+	} catch (error) {
+		console.error("Error fetching user:", error);
+		res.status(500).json({ error: "Failed to fetch user" });
+	}
+});
 
 // Update user details (Admin or user themselves)
-userRoutes.put(
-  "/:id",
-  authMiddleware(["user", "admin", "blogger"]),
-  async (req, res) => {
-    const {full_name, roll_no, email, password, date_of_joining, role} =
-      req.body;
+userRoutes.put("/:id", authMiddleware(["user", "admin", "blogger"]), async (req, res) => {
+	const { full_name, roll_no, email, password, date_of_joining, role } = req.body;
 
-    try {
-      const user = await User.findById(req.params.id);
-      if (!user) {
-        return res.status(404).json({error: "User not found"});
-      }
+	try {
+		const user = await User.findById(req.params.id);
+		if (!user) {
+			return res.status(404).json({ error: "User not found" });
+		}
 
-      if (password) {
-        const hashedPassword = await bcrypt.hash(password, 10);
-        user.password = hashedPassword;
-      }
+		if (password) {
+			const hashedPassword = await bcrypt.hash(password, 10);
+			user.password = hashedPassword;
+		}
 
-      user.full_name = full_name || user.full_name;
-      user.roll_no = roll_no || user.roll_no;
-      user.email = email || user.email;
-      user.date_of_joining = date_of_joining || user.date_of_joining;
-      user.role = role || user.role;
+		user.full_name = full_name || user.full_name;
+		user.roll_no = roll_no || user.roll_no;
+		user.email = email || user.email;
+		user.date_of_joining = date_of_joining || user.date_of_joining;
+		user.role = role || user.role;
 
-      await user.save();
-      res.status(200).json({message: "User updated successfully", user});
-    } catch (error) {
-      console.error("Error updating user:", error);
-      res.status(500).json({error: "Failed to update user"});
-    }
-  }
-);
+		await user.save();
+		res.status(200).json({ message: "User updated successfully", user });
+	} catch (error) {
+		console.error("Error updating user:", error);
+		res.status(500).json({ error: "Failed to update user" });
+	}
+});
 
 // Delete user (Admin only)
 userRoutes.delete("/:id", authMiddleware(["admin"]), async (req, res) => {
-  try {
-    const user = await User.findByIdAndDelete(req.params.id);
-    if (!user) {
-      return res.status(404).json({error: "User not found"});
-    }
-    res.status(200).json({message: "User deleted successfully"});
-  } catch (error) {
-    console.error("Error deleting user:", error);
-    res.status(500).json({error: "Failed to delete user"});
-  }
+	try {
+		const user = await User.findByIdAndDelete(req.params.id);
+		if (!user) {
+			return res.status(404).json({ error: "User not found" });
+		}
+		res.status(200).json({ message: "User deleted successfully" });
+	} catch (error) {
+		console.error("Error deleting user:", error);
+		res.status(500).json({ error: "Failed to delete user" });
+	}
 });
-// Merch Rooutes
-userRoutes.post("/order/:id",upload.single('payment_screenshot'),uploadMiddleware, createOrder);
-userRoutes.get("/order/getorders",authMiddleware(["admin"]) ,getOrders);
+// Merch Routes
+userRoutes.post("/order/:id", upload.single("payment_screenshot"), uploadMiddleware, createOrder);
+userRoutes.get("/order/getorders", authMiddleware(["admin"]), getOrders);
+
+// Form Draft Routes
+userRoutes.post("/draft/save", saveDraft);
+userRoutes.get("/draft/:eventId", getDraft);
+userRoutes.delete("/draft/:eventId", deleteDraft);
 
 module.exports = userRoutes;
