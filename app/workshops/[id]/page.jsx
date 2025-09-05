@@ -59,8 +59,8 @@ const WorkshopDetailsPage = () => {
 				}
 				const data = await res.json();
 				if (!aborted) {
-					setEvent(data.event || data);
-					if (!data.is_workshop || !data.active_status) {
+					setEvent(data.event);
+					if (!data.event.is_workshop || !data.event.active_status) {
 						router.replace("/workshops");
 						return;
 					}
