@@ -32,7 +32,6 @@ const formatTime = (time) => {
 	return `${day}${getOrdinalSuffix(day)} ${month} ${year}, ${formattedHour}:${minutes} ${ampm}`;
 };
 
-// Workshop details page (client) — uses dummy data, no backend requests
 const WorkshopDetailsPage = () => {
 	const router = useRouter();
 	const params = useParams();
@@ -61,6 +60,10 @@ const WorkshopDetailsPage = () => {
 				const data = await res.json();
 				if (!aborted) {
 					setEvent(data.event || data);
+					if (!data.is_workshop || !data.active_status) {
+						router.replace("/workshops");
+						return;
+					}
 				}
 			} catch (err) {
 				if (!aborted) {
@@ -107,8 +110,7 @@ const WorkshopDetailsPage = () => {
 			return;
 		}
 
-		// Dummy registration action
-		alert("Registered (demo). Check your profile for details.");
+		router.push(`/workshops/${id}/register`);
 	};
 
 	if (loading) {
