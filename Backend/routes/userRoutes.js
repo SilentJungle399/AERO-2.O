@@ -42,6 +42,14 @@ const {
 	deleteBlog,
 } = require("../controllers/BlogController");
 const { saveDraft, getDraft, deleteDraft } = require("../controllers/FormDraftController");
+const {
+	submitRegistration,
+	getRegistrationStatus,
+	getEventRegistrations,
+	getRegistrationById,
+	exportRegistrationsToSheets,
+} = require("../controllers/WorkshopRegistrationController");
+const { serveFormAsset } = require("../controllers/AssetController");
 
 const userRoutes = express.Router();
 
@@ -348,5 +356,27 @@ userRoutes.get("/order/getorders", authMiddleware(["admin"]), getOrders);
 userRoutes.post("/draft/save", saveDraft);
 userRoutes.get("/draft/:eventId", getDraft);
 userRoutes.delete("/draft/:eventId", deleteDraft);
+
+// Workshop Registration Routes
+userRoutes.post("/workshop/:eventId/register", submitRegistration);
+userRoutes.get("/workshop/:eventId/status", getRegistrationStatus);
+userRoutes.get(
+	"/workshop/:eventId/registrations",
+	authMiddleware(["admin"]),
+	getEventRegistrations
+);
+userRoutes.get(
+	"/workshop/registration/:registrationId",
+	authMiddleware(["admin"]),
+	getRegistrationById
+);
+userRoutes.post(
+	"/workshop/:eventId/export-to-sheets",
+	authMiddleware(["admin"]),
+	exportRegistrationsToSheets
+);
+
+// Asset CDN Route - Serve files from form submissions
+userRoutes.get("/asset/:form_submission_id/:question_key", serveFormAsset);
 
 module.exports = userRoutes;
