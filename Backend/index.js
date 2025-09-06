@@ -15,9 +15,9 @@ app.use(
 		credentials: true,
 	})
 );
-app.use(express.json());
+app.use(express.json({ limit: "10mb" }));
 app.use(cookieParser()); // Add cookie-parser middleware
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ limit: "10mb", extended: true }));
 
 // Connect to MongoDB
 const connectToMongo = async () => {
