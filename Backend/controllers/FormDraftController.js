@@ -4,7 +4,7 @@ const { jwtDecode } = require("jwt-decode");
 // Save or update form draft
 const saveDraft = async (req, res) => {
 	try {
-		const { eventId, formData } = req.body;
+		const { eventId, formData, formType = "workshop" } = req.body;
 		const authHeader = req.headers.authorization;
 
 		if (!authHeader || !authHeader.startsWith("Bearer ")) {
@@ -27,7 +27,11 @@ const saveDraft = async (req, res) => {
 
 		// Use upsert to create or update the draft
 		const draft = await FormDraft.findOneAndUpdate(
-			{ user_id: userId, event_id: eventId },
+			{
+				user_id: userId,
+				form_type: formType,
+				form_reference_id: eventId,
+			},
 			{
 				draft_data: formData,
 				updated_at: new Date(),
@@ -53,6 +57,7 @@ const saveDraft = async (req, res) => {
 const getDraft = async (req, res) => {
 	try {
 		const { eventId } = req.params;
+		const { formType = "workshop" } = req.query;
 		const authHeader = req.headers.authorization;
 
 		if (!authHeader || !authHeader.startsWith("Bearer ")) {
@@ -75,7 +80,8 @@ const getDraft = async (req, res) => {
 
 		const draft = await FormDraft.findOne({
 			user_id: userId,
-			event_id: eventId,
+			form_type: formType,
+			form_reference_id: eventId,
 		});
 
 		if (!draft) {
@@ -101,6 +107,7 @@ const getDraft = async (req, res) => {
 const deleteDraft = async (req, res) => {
 	try {
 		const { eventId } = req.params;
+		const { formType = "workshop" } = req.query;
 		const authHeader = req.headers.authorization;
 
 		if (!authHeader || !authHeader.startsWith("Bearer ")) {
@@ -123,7 +130,8 @@ const deleteDraft = async (req, res) => {
 
 		await FormDraft.findOneAndDelete({
 			user_id: userId,
-			event_id: eventId,
+			form_type: formType,
+			form_reference_id: eventId,
 		});
 
 		res.status(200).json({

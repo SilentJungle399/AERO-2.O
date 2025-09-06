@@ -4,38 +4,10 @@ import { motion } from "framer-motion";
 import { useRouter, useParams } from "next/navigation";
 import { jwtDecode } from "jwt-decode";
 
-const getOrdinalSuffix = (day) => {
-	if (day > 3 && day < 21) return "th";
-	switch (day % 10) {
-		case 1:
-			return "st";
-		case 2:
-			return "nd";
-		case 3:
-			return "rd";
-		default:
-			return "th";
-	}
-};
-
-const formatTime = (time) => {
-	const date = new Date(time);
-	if (isNaN(date.getTime())) return "N/A";
-
-	const day = date.getDate();
-	const month = date.toLocaleString("default", { month: "short" });
-	const year = date.getFullYear();
-	const hours = date.getHours();
-	const minutes = date.getMinutes().toString().padStart(2, "0");
-	const ampm = hours >= 12 ? "PM" : "AM";
-	const formattedHour = hours % 12 || 12;
-	return `${day}${getOrdinalSuffix(day)} ${month} ${year}, ${formattedHour}:${minutes} ${ampm}`;
-};
-
 const WorkshopDetailsPage = () => {
 	const router = useRouter();
 	const params = useParams();
-	const id = params?.id || "demo";
+	const id = params.id;
 
 	const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:5000";
 	const [event, setEvent] = useState(null);
@@ -369,7 +341,25 @@ const WorkshopDetailsPage = () => {
 						required
 					/>
 					{formData[fieldKey] && (
-						<p className="text-sm text-gray-400">Selected: {formData[fieldKey].name}</p>
+						<div className="text-sm text-gray-400">
+							{formData[fieldKey] instanceof File ? (
+								<p>Selected: {formData[fieldKey].name}</p>
+							) : typeof formData[fieldKey] === "string" &&
+							  formData[fieldKey].startsWith("data:") ? (
+								<div>
+									<p>Draft saved with file</p>
+									{formData[fieldKey].startsWith("data:image/") && (
+										<img
+											src={formData[fieldKey]}
+											alt="Preview"
+											className="mt-2 max-w-32 max-h-32 object-cover rounded border border-gray-600"
+										/>
+									)}
+								</div>
+							) : (
+								<p>File selected</p>
+							)}
+						</div>
 					)}
 				</div>
 			);
@@ -378,15 +368,36 @@ const WorkshopDetailsPage = () => {
 		}
 	};
 
-	const handleInputChange = (fieldKey, value) => {
-		const newFormData = {
-			...formData,
-			[fieldKey]: value,
-		};
-		setFormData(newFormData);
+	const handleInputChange = async (fieldKey, value) => {
+		console.log(fieldKey, value);
 
-		// Auto-save draft with debouncing
-		debouncedSaveDraft(newFormData);
+		let processedValue = value;
+
+		// If it's a file, convert to data URI for draft saving
+		if (value && value instanceof File) {
+			try {
+				processedValue = await new Promise((resolve, reject) => {
+					const reader = new FileReader();
+					reader.onload = () => resolve(reader.result);
+					reader.onerror = reject;
+					reader.readAsDataURL(value);
+				});
+			} catch (error) {
+				console.error("Error converting file to data URI:", error);
+				processedValue = value; // Keep original file object if conversion fails
+			}
+		}
+		setFormData({
+			...formData,
+			[fieldKey]: value, // Keep original file object in state for form operations
+		});
+
+		// Auto-save draft with processed value (data URI for files)
+		const draftData = {
+			...formData,
+			[fieldKey]: processedValue,
+		};
+		debouncedSaveDraft(draftData);
 	};
 
 	const handleSubmit = async (e) => {
@@ -409,8 +420,14 @@ const WorkshopDetailsPage = () => {
 		const formQuestions = event?.form || [];
 		const missingAnswers = formQuestions.some((field) => {
 			const value = formData[field.key];
+			console.log(field.key, value);
 			if (field.type === "file") {
-				return !value || !value.name;
+				// Accept both File objects and data URI strings
+				return (
+					!value ||
+					(!(value instanceof File) &&
+						!(typeof value === "string" && value.startsWith("data:")))
+				);
 			}
 			return !value || (typeof value === "string" && !value.trim());
 		});
@@ -422,23 +439,49 @@ const WorkshopDetailsPage = () => {
 
 		setSubmitting(true);
 		try {
-			// Here you would make the actual registration API call
-			// const response = await fetch(`${API_BASE}/api/users/register/${id}`, {
-			//   method: 'POST',
-			//   headers: { 'Content-Type': 'application/json' },
-			//   body: JSON.stringify({ answers: formData })
-			// });
+			// Prepare form data with file conversion to data URI
+			const formDataToSubmit = {};
 
-			// For now, just simulate success
-			await new Promise((resolve) => setTimeout(resolve, 1000));
+			// Process all form fields
+			for (const field of formQuestions) {
+				const value = formData[field.key];
+				if (field.type === "file" && value) {
+					// Convert file to data URI
+					const dataUri = await new Promise((resolve, reject) => {
+						const reader = new FileReader();
+						reader.onload = () => resolve(reader.result);
+						reader.onerror = reject;
+						reader.readAsDataURL(value);
+					});
+					formDataToSubmit[field.key] = dataUri;
+				} else if (value) {
+					formDataToSubmit[field.key] = value;
+				}
+			}
 
-			// Delete draft after successful submission
-			await deleteDraft();
+			const response = await fetch(`${API_BASE}/api/users/workshop/${id}/register`, {
+				method: "POST",
+				headers: {
+					Authorization: `Bearer ${token}`,
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify(formDataToSubmit),
+			});
 
-			alert("Registration successful! Check your profile for details.");
-			router.push("/workshops");
+			const data = await response.json();
+
+			if (response.ok && data.success) {
+				// Delete draft after successful submission
+				await deleteDraft();
+
+				alert(`Registration successful! Your token number is: ${data.tokenNumber}`);
+				router.push("/workshops");
+			} else {
+				throw new Error(data.error || "Registration failed");
+			}
 		} catch (error) {
-			alert("Registration failed. Please try again.");
+			console.error("Registration error:", error);
+			alert(`Registration failed: ${error.message}`);
 		} finally {
 			setSubmitting(false);
 		}
