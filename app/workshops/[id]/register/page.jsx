@@ -188,8 +188,38 @@ const WorkshopDetailsPage = () => {
 		}
 	}, [API_BASE, id]);
 
+	const getRegistrationStatus = useCallback(async () => {
+		const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+		if (!token || isTokenExpired(token)) return null;
+
+		try {
+			const response = await fetch(
+				`${API_BASE}/api/users/workshop/${id}/registration-status`,
+				{
+					method: "GET",
+					headers: {
+						Authorization: `Bearer ${token}`,
+						"Content-Type": "application/json",
+					},
+				}
+			);
+			if (response.ok) {
+				const data = await response.json();
+
+				if (data.isRegistered) {
+					router.push(`/workshops/${id}/team`);
+				}
+			}
+		} catch (error) {
+			console.error("Error fetching registration status:", error);
+			return null;
+		}
+		return null;
+	}, [API_BASE, id]);
+
 	// Fetch user data on component mount
 	useEffect(() => {
+		getRegistrationStatus();
 		fetchUser();
 	}, [fetchUser]);
 
@@ -481,11 +511,11 @@ const WorkshopDetailsPage = () => {
 					userName: data.registrationData?.user_name,
 					userEmail: data.registrationData?.user_email,
 					registrationDate: data.registrationData?.registration_date,
-					registrationId: data.registrationId
+					registrationId: data.registrationId,
 				};
-				
+
 				if (typeof window !== "undefined") {
-					sessionStorage.setItem('registrationSuccess', JSON.stringify(registrationData));
+					sessionStorage.setItem("registrationSuccess", JSON.stringify(registrationData));
 				}
 
 				router.push(`/workshops/${id}/team`);
