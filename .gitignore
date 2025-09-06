@@ -31,6 +31,9 @@ yarn-error.log*
 .env
 Backend/.env
 
+# Google Sheets credentials
+Backend/config/google-credentials.json
+
 # vercel
 .vercel
 
