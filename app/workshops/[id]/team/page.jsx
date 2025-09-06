@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
 import { useRouter, useParams } from "next/navigation";
 import { jwtDecode } from "jwt-decode";
@@ -10,27 +10,29 @@ const TeamPage = () => {
 	const id = params.id;
 
 	const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:5000";
+
+	// State management
 	const [loading, setLoading] = useState(true);
 	const [registrationData, setRegistrationData] = useState(null);
 	const [event, setEvent] = useState(null);
 	const [user, setUser] = useState(null);
-	const [emailSent, setEmailSent] = useState(false);
-	const [sendingEmail, setSendingEmail] = useState(false);
-	const [teamCode, setTeamCode] = useState("");
+	const [teamInfo, setTeamInfo] = useState(null);
 	const [joinTeamCode, setJoinTeamCode] = useState("");
+
+	// Loading states for actions
 	const [creatingTeam, setCreatingTeam] = useState(false);
 	const [joiningTeam, setJoiningTeam] = useState(false);
-	const [teamStatus, setTeamStatus] = useState(null); // null, 'created', 'joined'
-	const [teamInfo, setTeamInfo] = useState(null); // Store complete team information
 	const [leavingTeam, setLeavingTeam] = useState(false);
 	const [disbandingTeam, setDisbandingTeam] = useState(false);
 
-	// WhatsApp group link - This should ideally come from the event data
-	// For now, using a placeholder. In production, you'd store this in the event model
+	// Derived values
 	const whatsappGroupLink =
 		event?.whatsapp_group_link || "https://chat.whatsapp.com/placeholder-link";
+	const isTeamLeader =
+		teamInfo?.user_role === "leader" || teamInfo?.team_leader?._id === user?._id;
 
-	function isTokenExpired(token) {
+	// Utility functions
+	const isTokenExpired = useCallback((token) => {
 		try {
 			if (!token || typeof token !== "string") return true;
 			const decodedToken = jwtDecode(token);
@@ -39,65 +41,80 @@ const TeamPage = () => {
 		} catch (error) {
 			return true;
 		}
-	}
+	}, []);
 
-	useEffect(() => {
-		const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+	const getToken = useCallback(() => {
+		return typeof window !== "undefined" ? localStorage.getItem("token") : null;
+	}, []);
+
+	const getAuthHeaders = useCallback(
+		(token) => ({
+			Authorization: `Bearer ${token}`,
+			"Content-Type": "application/json",
+		}),
+		[]
+	);
+
+	const redirectToLogin = useCallback(() => {
+		router.push("/login");
+	}, [router]);
+
+	const validateAuth = useCallback(() => {
+		const token = getToken();
 		if (!token || isTokenExpired(token)) {
-			router.push("/login");
-			return;
+			redirectToLogin();
+			return null;
 		}
+		return token;
+	}, [getToken, isTokenExpired, redirectToLogin]);
+
+	// Initialize component
+	useEffect(() => {
+		const token = validateAuth();
+		if (!token) return;
 
 		// Check if user came from successful registration
 		const regData =
 			typeof window !== "undefined" ? sessionStorage.getItem("registrationSuccess") : null;
-		if (!regData) {
-			// If no registration data, check if user is actually registered for this workshop
-			checkRegistrationStatus();
-		} else {
+
+		if (regData) {
 			const parsedData = JSON.parse(regData);
 			setRegistrationData(parsedData);
 			fetchEventAndUser();
-			// Clear the session storage after use
-			if (typeof window !== "undefined") {
-				sessionStorage.removeItem("registrationSuccess");
-			}
+			// Clear session storage after use
+			sessionStorage.removeItem("registrationSuccess");
+		} else {
+			checkRegistrationStatus();
 		}
-	}, []);
+	}, [validateAuth]);
 
+	// API functions
 	const checkRegistrationStatus = async () => {
-		const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
-		if (!token || isTokenExpired(token)) return;
+		const token = validateAuth();
+		if (!token) return;
 
 		try {
 			const response = await fetch(
 				`${API_BASE}/api/users/workshop/${id}/registration-status`,
 				{
 					method: "GET",
-					headers: {
-						Authorization: `Bearer ${token}`,
-						"Content-Type": "application/json",
-					},
+					headers: getAuthHeaders(token),
 				}
 			);
 
 			const data = await response.json();
 
-			if (response.ok && data.success) {
-				if (data.isRegistered) {
-					// User is registered, show the team page
-					setRegistrationData({
-						success: true,
-						eventName: data.eventName,
-						registrationDate: data.registration?.registrationDate,
-					});
-					fetchEventAndUser();
-				} else {
-					// User is not registered, redirect to registration page
-					router.push(`/workshops/${id}/register`);
-				}
+			if (response.ok && data.success && data.isRegistered) {
+				setRegistrationData({
+					success: true,
+					eventName: data.eventName,
+					registrationDate: data.registration?.registrationDate,
+				});
+				fetchEventAndUser();
 			} else {
-				router.push(`/workshops/${id}`);
+				router.push(
+					data.isRegistered === false ? `/workshops/${id}/register` : `/workshops/${id}`
+				);
 			}
 		} catch (error) {
 			console.error("Error checking registration status:", error);
@@ -106,31 +123,22 @@ const TeamPage = () => {
 	};
 
 	const fetchEventAndUser = async () => {
-		const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
-		if (!token || isTokenExpired(token)) return;
+		const token = validateAuth();
+		if (!token) return;
 
 		try {
-			// Fetch event data
-			const eventResponse = await fetch(`${API_BASE}/api/users/event/${id}`, {
-				method: "GET",
-			});
+			// Fetch event and user data in parallel
+			const [eventResponse, userResponse] = await Promise.all([
+				fetch(`${API_BASE}/api/users/event/${id}`),
+				fetch(`${API_BASE}/api/users/${jwtDecode(token).id}`, {
+					headers: getAuthHeaders(token),
+				}),
+			]);
 
 			if (eventResponse.ok) {
 				const eventData = await eventResponse.json();
 				setEvent(eventData.event || eventData);
 			}
-
-			// Fetch user data
-			const decoded = jwtDecode(token);
-			const userId = decoded.id;
-
-			const userResponse = await fetch(`${API_BASE}/api/users/${userId}`, {
-				method: "GET",
-				headers: {
-					Authorization: `Bearer ${token}`,
-					"Content-Type": "application/json",
-				},
-			});
 
 			if (userResponse.ok) {
 				const userData = await userResponse.json();
@@ -147,43 +155,30 @@ const TeamPage = () => {
 	};
 
 	const fetchTeamInfo = async () => {
-		const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
-		if (!token || isTokenExpired(token)) return;
+		const token = validateAuth();
+		if (!token) return;
 
 		try {
 			const response = await fetch(`${API_BASE}/api/users/workshop/${id}/team-info`, {
 				method: "GET",
-				headers: {
-					Authorization: `Bearer ${token}`,
-					"Content-Type": "application/json",
-				},
+				headers: getAuthHeaders(token),
 			});
 
 			const data = await response.json();
 
 			if (response.ok && data.success) {
 				setTeamInfo(data.team);
-				setTeamCode(data.team.team_code);
-				if (data.team.user_role === "leader") {
-					setTeamStatus("created");
-				} else {
-					setTeamStatus("joined");
-				}
 			} else {
 				// User is not part of any team
 				setTeamInfo(null);
-				setTeamStatus(null);
-				setTeamCode("");
 			}
 		} catch (error) {
 			console.error("Error fetching team info:", error);
-			// If there's an error, assume user is not in a team
 			setTeamInfo(null);
-			setTeamStatus(null);
-			setTeamCode("");
 		}
 	};
 
+	// Utility functions
 	const copyToClipboard = async (text) => {
 		try {
 			await navigator.clipboard.writeText(text);
@@ -199,41 +194,32 @@ const TeamPage = () => {
 		}
 	};
 
-	const generateTeamCode = () => {
-		return "xxxx-xxxx-xxxx-xxxx"
-			.replace(/[x]/g, function () {
-				return ((Math.random() * 16) | 0).toString(16);
-			})
-			.toUpperCase();
+	const handleApiError = (error, defaultMessage) => {
+		console.error(error);
+		alert(defaultMessage);
 	};
 
+	// Team action functions
 	const createTeam = async () => {
-		const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
-		if (!token || isTokenExpired(token)) {
-			router.push("/login");
-			return;
-		}
+		const token = validateAuth();
+		if (!token) return;
 
 		setCreatingTeam(true);
-
 		try {
 			const response = await fetch(`${API_BASE}/api/users/workshop/${id}/create-team`, {
 				method: "POST",
-				headers: {
-					Authorization: `Bearer ${token}`,
-					"Content-Type": "application/json",
-				},
+				headers: getAuthHeaders(token),
 			});
 
 			const data = await response.json();
 
 			if (response.ok && data.success) {
-				window.location.reload();
+				await fetchTeamInfo(); // Refresh team info instead of page reload
 			} else {
 				alert(data.message || "Failed to create team. Please try again.");
 			}
 		} catch (error) {
-			console.error("Error creating team:", error);
+			handleApiError(error, "Failed to create team. Please try again.");
 		} finally {
 			setCreatingTeam(false);
 		}
@@ -245,21 +231,14 @@ const TeamPage = () => {
 			return;
 		}
 
-		const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
-		if (!token || isTokenExpired(token)) {
-			router.push("/login");
-			return;
-		}
+		const token = validateAuth();
+		if (!token) return;
 
 		setJoiningTeam(true);
-
 		try {
 			const response = await fetch(`${API_BASE}/api/users/workshop/${id}/join-team`, {
 				method: "POST",
-				headers: {
-					Authorization: `Bearer ${token}`,
-					"Content-Type": "application/json",
-				},
+				headers: getAuthHeaders(token),
 				body: JSON.stringify({ teamCode: joinTeamCode.trim() }),
 			});
 
@@ -267,55 +246,41 @@ const TeamPage = () => {
 
 			if (response.ok && data.success) {
 				setTeamInfo(data.team);
-				setTeamCode(data.team.team_code);
-				setTeamStatus("joined");
+				setJoinTeamCode(""); // Clear the input
 			} else {
 				alert(
 					data.message || "Failed to join team. Please check the team code and try again."
 				);
 			}
 		} catch (error) {
-			console.error("Error joining team:", error);
-			alert("An error occurred while joining the team. Please try again.");
+			handleApiError(error, "An error occurred while joining the team. Please try again.");
 		} finally {
 			setJoiningTeam(false);
 		}
 	};
 
 	const leaveTeam = async () => {
-		if (!confirm("Are you sure you want to leave this team?")) {
-			return;
-		}
+		if (!confirm("Are you sure you want to leave this team?")) return;
 
-		const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
-		if (!token || isTokenExpired(token)) {
-			router.push("/login");
-			return;
-		}
+		const token = validateAuth();
+		if (!token) return;
 
 		setLeavingTeam(true);
-
 		try {
 			const response = await fetch(`${API_BASE}/api/users/workshop/${id}/leave-team`, {
 				method: "POST",
-				headers: {
-					Authorization: `Bearer ${token}`,
-					"Content-Type": "application/json",
-				},
+				headers: getAuthHeaders(token),
 			});
 
 			const data = await response.json();
 
 			if (response.ok && data.success) {
 				setTeamInfo(null);
-				setTeamCode("");
-				setTeamStatus(null);
 			} else {
 				alert(data.message || "Failed to leave team. Please try again.");
 			}
 		} catch (error) {
-			console.error("Error leaving team:", error);
-			alert("An error occurred while leaving the team. Please try again.");
+			handleApiError(error, "An error occurred while leaving the team. Please try again.");
 		} finally {
 			setLeavingTeam(false);
 		}
@@ -326,70 +291,60 @@ const TeamPage = () => {
 			!confirm(
 				"Are you sure you want to disband this team? This action cannot be undone and all team members will be removed."
 			)
-		) {
+		)
 			return;
-		}
 
-		const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
-		if (!token || isTokenExpired(token)) {
-			router.push("/login");
-			return;
-		}
+		const token = validateAuth();
+		if (!token) return;
 
 		setDisbandingTeam(true);
-
 		try {
 			const response = await fetch(`${API_BASE}/api/users/workshop/${id}/disband-team`, {
 				method: "POST",
-				headers: {
-					Authorization: `Bearer ${token}`,
-					"Content-Type": "application/json",
-				},
+				headers: getAuthHeaders(token),
 			});
 
 			const data = await response.json();
 
 			if (response.ok && data.success) {
 				setTeamInfo(null);
-				setTeamCode("");
-				setTeamStatus(null);
 			} else {
 				alert(data.message || "Failed to disband team. Please try again.");
 			}
 		} catch (error) {
-			console.error("Error disbanding team:", error);
-			alert("An error occurred while disbanding the team. Please try again.");
+			handleApiError(error, "An error occurred while disbanding the team. Please try again.");
 		} finally {
 			setDisbandingTeam(false);
 		}
 	};
 
-	if (loading) {
-		return (
-			<div className="min-h-screen flex items-center justify-center bg-gray-900 text-gray-100">
-				<div className="text-center">
-					<div className="animate-spin h-8 w-8 border border-blue-500 border-t-transparent rounded-full mx-auto mb-4"></div>
-					<p>Loading...</p>
-				</div>
+	// Component render functions
+	const LoadingScreen = () => (
+		<div className="min-h-screen flex items-center justify-center bg-gray-900 text-gray-100">
+			<div className="text-center">
+				<div className="animate-spin h-8 w-8 border border-blue-500 border-t-transparent rounded-full mx-auto mb-4"></div>
+				<p>Loading...</p>
 			</div>
-		);
-	}
+		</div>
+	);
 
-	if (!registrationData) {
-		return (
-			<div className="min-h-screen flex items-center justify-center bg-gray-900 text-gray-100">
-				<div className="text-center">
-					<p className="text-red-400 mb-4">Registration data not found.</p>
-					<button
-						onClick={() => router.push(`/workshops/${id}`)}
-						className="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-lg"
-					>
-						Go Back to Workshop
-					</button>
-				</div>
+	const ErrorScreen = () => (
+		<div className="min-h-screen flex items-center justify-center bg-gray-900 text-gray-100">
+			<div className="text-center">
+				<p className="text-red-400 mb-4">Registration data not found.</p>
+				<button
+					onClick={() => router.push(`/workshops/${id}`)}
+					className="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-lg"
+				>
+					Go Back to Workshop
+				</button>
 			</div>
-		);
-	}
+		</div>
+	);
+
+	// Early returns for loading and error states
+	if (loading) return <LoadingScreen />;
+	if (!registrationData) return <ErrorScreen />;
 
 	return (
 		<div className="min-h-screen bg-gray-900 text-gray-100 p-6">
@@ -523,7 +478,7 @@ const TeamPage = () => {
 									You are successfully part of a team for this workshop.
 								</p>
 								<p className="text-blue-400 font-medium">
-									{teamInfo.user_role === "leader"
+									{isTeamLeader
 										? "You are the team leader"
 										: "You are a team member"}
 								</p>
@@ -650,7 +605,7 @@ const TeamPage = () => {
 											{teamInfo.team_name || `Team ${teamInfo.team_code}`}
 										</h3>
 										<p className="text-gray-300 text-sm">
-											{teamInfo.user_role === "leader"
+											{isTeamLeader
 												? "You are the team leader"
 												: "You are a team member"}
 										</p>
@@ -746,7 +701,7 @@ const TeamPage = () => {
 
 								{/* Team Actions */}
 								<div className="flex flex-col sm:flex-row gap-3">
-									{teamInfo.team_leader._id === user._id ? (
+									{isTeamLeader ? (
 										<motion.button
 											onClick={disbandTeam}
 											disabled={disbandingTeam}
@@ -811,26 +766,6 @@ const TeamPage = () => {
 											)}
 										</motion.button>
 									)}
-
-									<button
-										onClick={() => copyToClipboard(teamInfo.team_code)}
-										className="bg-gray-700 hover:bg-gray-600 text-white font-medium py-3 px-6 rounded-lg transition-colors flex items-center justify-center gap-2"
-									>
-										<svg
-											className="w-5 h-5"
-											fill="none"
-											stroke="currentColor"
-											viewBox="0 0 24 24"
-										>
-											<path
-												strokeLinecap="round"
-												strokeLinejoin="round"
-												strokeWidth={2}
-												d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
-											/>
-										</svg>
-										Copy Team Code
-									</button>
 								</div>
 							</div>
 						</div>
