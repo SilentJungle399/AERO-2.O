@@ -212,8 +212,12 @@ const Navbar: React.FC = () => {
           {label} <FaCaretDown className="ml-1 w-5 h-5"/>
         </button>
         <div
-          className={`absolute left-0 mt-2 w-48 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 backdrop-blur-md ${
-            isMobile ? (open ? "" : "hidden") : "opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+          className={`absolute left-0 top-full pt-2 w-48 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 backdrop-blur-md ${
+            isMobile
+              ? open
+                ? ""
+                : "hidden"
+              : "hidden group-hover:block"
           }`}
         >
           <div className="py-1" role="menu" aria-orientation="vertical">
