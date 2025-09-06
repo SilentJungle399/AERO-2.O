@@ -474,8 +474,21 @@ const WorkshopDetailsPage = () => {
 				// Delete draft after successful submission
 				await deleteDraft();
 
-				alert(`Registration successful! Your token number is: ${data.tokenNumber}`);
-				router.push("/workshops");
+				// Store registration data for the team page
+				const registrationData = {
+					success: true,
+					eventName: data.registrationData?.event_name || event?.E_name,
+					userName: data.registrationData?.user_name,
+					userEmail: data.registrationData?.user_email,
+					registrationDate: data.registrationData?.registration_date,
+					registrationId: data.registrationId
+				};
+				
+				if (typeof window !== "undefined") {
+					sessionStorage.setItem('registrationSuccess', JSON.stringify(registrationData));
+				}
+
+				router.push(`/workshops/${id}/team`);
 			} else {
 				throw new Error(data.error || "Registration failed");
 			}
