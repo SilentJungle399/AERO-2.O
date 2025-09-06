@@ -20,8 +20,8 @@ const {
 } = require("../controllers/MeetsController");
 const {
 	createEvent,
-	createTeam,
-	joinTeam,
+	// createTeam,
+	// joinTeam,
 	getAllEvents,
 	getEventById,
 	checkToken,
@@ -49,6 +49,14 @@ const {
 	getRegistrationById,
 	exportRegistrationsToSheets,
 } = require("../controllers/WorkshopRegistrationController");
+const {
+	createTeam,
+	joinTeam,
+	getTeamInfo,
+	leaveTeam,
+	disbandTeam,
+	getAllTeams,
+} = require("../controllers/WorkshopTeamController");
 const { serveFormAsset } = require("../controllers/AssetController");
 
 const userRoutes = express.Router();
@@ -359,6 +367,7 @@ userRoutes.delete("/draft/:eventId", deleteDraft);
 
 // Workshop Registration Routes
 userRoutes.post("/workshop/:eventId/register", submitRegistration);
+userRoutes.get("/workshop/:eventId/registration-status", getRegistrationStatus);
 userRoutes.get("/workshop/:eventId/status", getRegistrationStatus);
 userRoutes.get(
 	"/workshop/:eventId/registrations",
@@ -375,6 +384,34 @@ userRoutes.post(
 	authMiddleware(["admin"]),
 	exportRegistrationsToSheets
 );
+
+// Workshop Team Routes
+userRoutes.post(
+	"/workshop/:eventId/create-team",
+	authMiddleware(["admin", "user", "member"]),
+	createTeam
+);
+userRoutes.post(
+	"/workshop/:eventId/join-team",
+	authMiddleware(["admin", "user", "member"]),
+	joinTeam
+);
+userRoutes.get(
+	"/workshop/:eventId/team-info",
+	authMiddleware(["admin", "user", "member"]),
+	getTeamInfo
+);
+userRoutes.post(
+	"/workshop/:eventId/leave-team",
+	authMiddleware(["admin", "user", "member"]),
+	leaveTeam
+);
+userRoutes.post(
+	"/workshop/:eventId/disband-team",
+	authMiddleware(["admin", "user", "member"]),
+	disbandTeam
+);
+userRoutes.get("/workshop/:eventId/teams", authMiddleware(["admin"]), getAllTeams);
 
 // Asset CDN Route - Serve files from form submissions
 userRoutes.get("/asset/:form_submission_id/:question_key", serveFormAsset);
