@@ -87,7 +87,6 @@ const submitRegistration = async (req, res) => {
 		const workshopRegistration = new WorkshopRegistration({
 			user_id: userId,
 			event_id: eventId,
-			token_number: event.current_token_number,
 			form_responses: formResponses,
 		});
 
@@ -96,7 +95,6 @@ const submitRegistration = async (req, res) => {
 		// Update event participant count and token number
 		event.participants_id.push(userId);
 		event.total_participant_count += 1;
-		event.current_token_number += 1;
 
 		await event.save();
 
@@ -118,14 +116,12 @@ const submitRegistration = async (req, res) => {
 		res.status(200).json({
 			success: true,
 			message: "Registration successful",
-			tokenNumber: workshopRegistration.token_number,
 			registrationId: workshopRegistration._id,
 			registrationData: {
 				user_name: user.full_name,
 				user_email: user.email,
 				event_name: event.E_name,
 				registration_date: workshopRegistration.registration_date,
-				token_number: workshopRegistration.token_number,
 			},
 		});
 	} catch (error) {
@@ -171,7 +167,6 @@ const getRegistrationStatus = async (req, res) => {
 			isRegistered,
 			registration: registration
 				? {
-						tokenNumber: registration.token_number,
 						registrationDate: registration.registration_date,
 						status: registration.status,
 				  }
@@ -204,11 +199,9 @@ const getEventRegistrations = async (req, res) => {
 			event: {
 				name: event.E_name,
 				totalParticipants: registrations.length,
-				currentTokenNumber: event.current_token_number,
 			},
 			registrations: registrations.map((reg) => ({
 				registrationId: reg._id,
-				tokenNumber: reg.token_number,
 				registrationDate: reg.registration_date,
 				status: reg.status,
 				userId: reg.user_id,
@@ -239,7 +232,6 @@ const getRegistrationById = async (req, res) => {
 			success: true,
 			registration: {
 				id: registration._id,
-				tokenNumber: registration.token_number,
 				registrationDate: registration.registration_date,
 				status: registration.status,
 				userId: registration.user_id,

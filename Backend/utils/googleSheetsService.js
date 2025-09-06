@@ -1,6 +1,36 @@
 const { google } = require("googleapis");
 const path = require("path");
 
+const publicBackendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:5000";
+
+const getOrdinalSuffix = (day) => {
+	if (day > 3 && day < 21) return "th";
+	switch (day % 10) {
+		case 1:
+			return "st";
+		case 2:
+			return "nd";
+		case 3:
+			return "rd";
+		default:
+			return "th";
+	}
+};
+
+const formatTime = (time) => {
+	const date = new Date(time);
+	if (isNaN(date.getTime())) return "N/A";
+
+	const day = date.getDate();
+	const month = date.toLocaleString("default", { month: "short" });
+	const year = date.getFullYear();
+	const hours = date.getHours();
+	const minutes = date.getMinutes().toString().padStart(2, "0");
+	const ampm = hours >= 12 ? "PM" : "AM";
+	const formattedHour = hours % 12 || 12;
+	return `${day}${getOrdinalSuffix(day)} ${month} ${year}, ${formattedHour}:${minutes} ${ampm}`;
+};
+
 class GoogleSheetsService {
 	constructor() {
 		this.sheets = null;
@@ -97,8 +127,7 @@ class GoogleSheetsService {
 				return false;
 			}
 
-			// Clean event name for worksheet title (remove special characters)
-			const worksheetName = eventName.replace(/[^a-zA-Z0-9\s]/g, "").substring(0, 31);
+			const worksheetName = eventName.replace(/[^a-zA-Z0-9-_.\s]/g, "").substring(0, 31);
 
 			// Ensure worksheet exists
 			await this.createWorksheetIfNotExists(worksheetName);
@@ -141,8 +170,7 @@ class GoogleSheetsService {
 			const dataRow = [
 				registrationData._id.toString(),
 				registrationData.user_id.toString(),
-				registrationData.token_number,
-				registrationData.registration_date.toISOString(),
+				formatTime(registrationData.registration_date),
 				registrationData.status,
 			];
 
@@ -156,7 +184,11 @@ class GoogleSheetsService {
 						typeof answerValue === "string" &&
 						answerValue.startsWith("data:")
 					) {
-						answerValue = "FILE_UPLOADED"; // Replace data URI with placeholder
+						answerValue =
+							publicBackendUrl +
+							`/api/users/asset/${registrationData._id.toString()}/${
+								response.question_key
+							}`;
 					}
 					dataRow.push(answerValue);
 				});
@@ -226,8 +258,7 @@ class GoogleSheetsService {
 				const dataRow = [
 					registration._id.toString(),
 					registration.user_id.toString(),
-					registration.token_number,
-					registration.registration_date.toISOString(),
+					formatTime(registration.registration_date),
 					registration.status,
 				];
 
@@ -240,7 +271,11 @@ class GoogleSheetsService {
 							typeof answerValue === "string" &&
 							answerValue.startsWith("data:")
 						) {
-							answerValue = "FILE_UPLOADED";
+							answerValue =
+								publicBackendUrl +
+								`/api/users/asset/${registrationData._id.toString()}/${
+									response.question_key
+								}`;
 						}
 						dataRow.push(answerValue);
 					});

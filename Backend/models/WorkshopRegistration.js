@@ -12,10 +12,6 @@ const workshopRegistrationSchema = new mongoose.Schema(
 			ref: "EventModel",
 			required: true,
 		},
-		token_number: {
-			type: Number,
-			required: true,
-		},
 		registration_date: {
 			type: Date,
 			default: Date.now,
@@ -54,8 +50,5 @@ const workshopRegistrationSchema = new mongoose.Schema(
 
 // Compound index to ensure one registration per user per event
 workshopRegistrationSchema.index({ user_id: 1, event_id: 1 }, { unique: true });
-
-// Index for token number lookup
-workshopRegistrationSchema.index({ event_id: 1, token_number: 1 });
 
 module.exports = mongoose.model("WorkshopRegistration", workshopRegistrationSchema);
