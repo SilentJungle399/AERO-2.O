@@ -57,7 +57,7 @@ const WorkshopsPage = () => {
 
 	// Prefer env override with sensible default
 	const API_BASE = useMemo(
-		() => process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:5000",
+		() => (process.env.NODE_ENV === "development" ? "http://localhost:5000" : ""),
 		[]
 	);
 

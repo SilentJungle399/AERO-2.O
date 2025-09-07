@@ -40,7 +40,7 @@ const WorkshopDetailsPage = () => {
 	const params = useParams();
 	const id = params?.id || "demo";
 
-	const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:5000";
+	const API_BASE = process.env.NODE_ENV === "development" ? "http://localhost:5000" : "";
 	const [event, setEvent] = useState(null);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState(null);
