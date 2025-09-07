@@ -10,13 +10,46 @@ export default function Home() {
 	const [scrollProgress, setScrollProgress] = useState(0);
 	const [isScrolling, setIsScrolling] = useState(false);
 	
-	const heroImages = [
-		'/banner.jpg',
-		'/banner-drone.jpg',
-		'/rocket-launching.jpg',
-		'/222.jpg',
-		'/reading.jpg',
+	const heroImagesDesktop = [
+		"/gallary/heading/desktop/1.jpg",
+		"/gallary/heading/desktop/2.jpeg",
+		"/gallary/heading/desktop/3.jpg",
+		"/gallary/heading/desktop/4.jpeg",
+		"/gallary/heading/desktop/5.jpg",
 	];
+	
+	const heroImagesMobile = [
+		"/gallary/heading/mobile/1.jpg",
+		"/gallary/heading/mobile/2.jpg",
+		"/gallary/heading/mobile/3.jpg",
+		"/gallary/heading/mobile/4.jpeg",
+		"/gallary/heading/mobile/5.jpeg",
+	];
+
+	const droneImageLocation = [
+		"/gallary/drones/1.jpeg",
+		"/gallary/drones/2.jpeg",
+		"/gallary/drones/3.jpeg",
+		"/gallary/drones/4.jpeg",
+	]
+	const planeImageLocation = [
+		"/gallary/planes/1.jpg",
+		"/gallary/planes/2.jpg",
+		"/gallary/planes/3.jpg",
+		"/gallary/planes/4.jpeg",
+	]
+	const skyforgeImageLocation = [
+		"/gallary/skyforge/1.jpg",
+		"/gallary/skyforge/2.jpg",
+		"/gallary/skyforge/3.jpg",
+		"/gallary/skyforge/4.jpg",
+	]
+	const techspardhaImageLocation = {
+		drl: "/gallary/techspardha/drl.jpeg",
+		dronewebfiesta: "/gallary/techspardha/dronewebfiesta.jpg",
+		highsky: "/gallary/techspardha/highsky.jpg",
+		simsky: "/gallary/techspardha/simsky.jpg",
+	}
 
 	const navigationItems = [
 		{ id: 'drones', label: 'Drones', icon: '🚁', mobile: 'Drones'},
@@ -35,21 +68,42 @@ export default function Home() {
 		},
 		{
 			id: 1,
-			date: 'December 2024',
-			location: 'IIT Bombay',
+			date: '2022',
+			location: 'IIT Kanpur',
+			color: 'cyan',
+			delay: 0.3
+		},
+		{
+			id: 1,
+			date: '2022',
+			location: 'NIT Calicut',
+			color: 'cyan',
+			delay: 0.3
+		},
+		{
+			id: 1,
+			date: '2023',
+			location: 'SIH',
 			color: 'cyan',
 			delay: 0.3
 		},
 		{
 			id: 2,
-			date: 'March 2025',
+			date: '2024',
+			location: 'IIT Bombay',
+			color: 'blue',
+			delay: 0.4
+		},
+		{
+			id: 2,
+			date: '2025',
 			location: 'IIT Roorkee',
 			color: 'blue',
 			delay: 0.4
 		},
 		{
 			id: 3,
-			date: 'December 2025',
+			date: '2025',
 			location: 'NIDAR',
 			color: 'indigo',
 			delay: 0.5
@@ -64,12 +118,35 @@ export default function Home() {
 		}
 	];
 
+	const postHolders = [
+		{
+			name: "Priyanshu Soni",
+			position: "President",
+			image: "/gallary/postholders/President.jpg"
+		},
+		{
+			name: "Omkar Dua",
+			position: "Vice President",
+			image: "/gallary/postholders/Vice-President.jpg"
+		},
+		{
+			name: "Jay Kumar Gupta",
+			position: "Secretary",
+			image: "/gallary/postholders/Secretary.png"
+		},
+		{
+			name: "Harsh Raj",
+			position: "Joint Secretary",
+			image: "/gallary/postholders/Joint-Secretary.jpg"
+		}
+	]
+
 	useEffect(() => {
 		const interval = setInterval(() => {
-			setCurrentImageIndex((prev) => (prev + 1) % heroImages.length);
+			setCurrentImageIndex((prev) => (prev + 1) % heroImagesDesktop.length);
 		}, 5000); // 5 seconds
 		return () => clearInterval(interval);
-	}, [heroImages.length]);
+	}, [heroImagesDesktop.length]);
 
 	// Scroll detection for active section
 	useEffect(() => {
@@ -209,16 +286,34 @@ export default function Home() {
 				>
 					{/* Background slideshow */}
 					<div className="absolute inset-0">
-						{heroImages.map((src, idx) => (
-							<div
-								key={src + idx}
-								className={`absolute inset-0 bg-center bg-cover transition-opacity duration-1000 ${
-									idx === currentImageIndex ? 'opacity-100' : 'opacity-0'
-								}`}
-								style={{ backgroundImage: `url('${src}')` }}
-								aria-hidden
-							/>
-						))}
+						{/* Desktop Images - Hidden on mobile */}
+						<div className="hidden md:block absolute inset-0">
+							{heroImagesDesktop.map((src, idx) => (
+								<div
+									key={src + idx}
+									className={`absolute inset-0 bg-center bg-cover transition-opacity duration-1000 ${
+										idx === currentImageIndex ? 'opacity-100' : 'opacity-0'
+									}`}
+									style={{ backgroundImage: `url('${src}')` }}
+									aria-hidden
+								/>
+							))}
+						</div>
+						
+						{/* Mobile Images - Hidden on desktop */}
+						<div className="block md:hidden absolute inset-0">
+							{heroImagesMobile.map((src, idx) => (
+								<div
+									key={src + idx}
+									className={`absolute inset-0 bg-center bg-cover transition-opacity duration-1000 ${
+										idx === (currentImageIndex % heroImagesMobile.length) ? 'opacity-100' : 'opacity-0'
+									}`}
+									style={{ backgroundImage: `url('${src}')` }}
+									aria-hidden
+								/>
+							))}
+						</div>
+						
 						{/* Dark overlay for readability */}
 						<div className="absolute inset-0 bg-black/60" aria-hidden />
 					</div>
@@ -301,30 +396,28 @@ export default function Home() {
 							>
 								{/* Top row - 2 images */}
 								<div className="flex gap-4">
-									<div className="flex-1 aspect-[3/2] bg-gradient-to-br from-gray-700 to-gray-800 rounded-3xl shadow-2xl hover:shadow-cyan-500/20 transition-all duration-500 border border-gray-600">
-										<div className="w-full h-full flex items-center justify-center text-gray-400">
-											<span className="text-sm opacity-50">Drone 1</span>
+									{droneImageLocation.slice(0, 2).map((imageSrc, index) => (
+										<div key={index} className="flex-1 aspect-[3/2] bg-gradient-to-br from-gray-700 to-gray-800 rounded-3xl shadow-2xl hover:shadow-cyan-500/20 transition-all duration-500 border border-gray-600 overflow-hidden">
+											<img 
+												src={imageSrc} 
+												alt={`Drone ${index + 1}`}
+												className="w-full h-full object-cover"
+											/>
 										</div>
-									</div>
-									<div className="flex-1 aspect-[3/2] bg-gradient-to-br from-gray-700 to-gray-800 rounded-3xl shadow-2xl hover:shadow-cyan-500/20 transition-all duration-500 border border-gray-600">
-										<div className="w-full h-full flex items-center justify-center text-gray-400">
-											<span className="text-sm opacity-50">Drone 2</span>
-										</div>
-									</div>
+									))}
 								</div>
 								
 								{/* Bottom row - 2 images */}
 								<div className="flex gap-4">
-									<div className="flex-1 aspect-[3/2] bg-gradient-to-br from-gray-700 to-gray-800 rounded-3xl shadow-2xl hover:shadow-cyan-500/20 transition-all duration-500 border border-gray-600">
-										<div className="w-full h-full flex items-center justify-center text-gray-400">
-											<span className="text-sm opacity-50">Drone 3</span>
+									{droneImageLocation.slice(2, 4).map((imageSrc, index) => (
+										<div key={index + 2} className="flex-1 aspect-[3/2] bg-gradient-to-br from-gray-700 to-gray-800 rounded-3xl shadow-2xl hover:shadow-cyan-500/20 transition-all duration-500 border border-gray-600 overflow-hidden">
+											<img 
+												src={imageSrc} 
+												alt={`Drone ${index + 3}`}
+												className="w-full h-full object-cover"
+											/>
 										</div>
-									</div>
-									<div className="flex-1 aspect-[3/2] bg-gradient-to-br from-gray-700 to-gray-800 rounded-3xl shadow-2xl hover:shadow-cyan-500/20 transition-all duration-500 border border-gray-600">
-										<div className="w-full h-full flex items-center justify-center text-gray-400">
-											<span className="text-sm opacity-50">Drone 4</span>
-										</div>
-									</div>
+									))}
 								</div>
 							</motion.div>
 						</motion.div>
@@ -360,42 +453,30 @@ export default function Home() {
 								viewport={{ once: false, amount: 0.5 }}
 								className="order-2 lg:order-1 space-y-4"
 							>
-								{/* Top row - 3 images */}
-								<div className="flex gap-3">
-									<div className="flex-1 aspect-[4/3] bg-gradient-to-br from-purple-800/30 to-blue-800/30 rounded-3xl shadow-2xl hover:shadow-blue-500/20 transition-all duration-500 border border-gray-600">
-										<div className="w-full h-full flex items-center justify-center text-gray-400">
-											<span className="text-sm opacity-50">RC 1</span>
+								{/* Top row - 2 images */}
+								<div className="flex gap-4">
+									{planeImageLocation.slice(0, 2).map((imageSrc, index) => (
+										<div key={index} className="flex-1 aspect-[4/3] bg-gradient-to-br from-purple-800/30 to-blue-800/30 rounded-3xl shadow-2xl hover:shadow-blue-500/20 transition-all duration-500 border border-gray-600 overflow-hidden">
+											<img 
+												src={imageSrc} 
+												alt={`RC Plane ${index + 1}`}
+												className="w-full h-full object-cover"
+											/>
 										</div>
-									</div>
-									<div className="flex-1 aspect-[4/3] bg-gradient-to-br from-purple-800/30 to-blue-800/30 rounded-3xl shadow-2xl hover:shadow-blue-500/20 transition-all duration-500 border border-gray-600">
-										<div className="w-full h-full flex items-center justify-center text-gray-400">
-											<span className="text-sm opacity-50">RC 2</span>
-										</div>
-									</div>
-									<div className="flex-1 aspect-[4/3] bg-gradient-to-br from-purple-800/30 to-blue-800/30 rounded-3xl shadow-2xl hover:shadow-blue-500/20 transition-all duration-500 border border-gray-600">
-										<div className="w-full h-full flex items-center justify-center text-gray-400">
-											<span className="text-sm opacity-50">RC 3</span>
-										</div>
-									</div>
+									))}
 								</div>
 								
-								{/* Bottom row - 3 images */}
-								<div className="flex gap-3">
-									<div className="flex-1 aspect-[4/3] bg-gradient-to-br from-purple-800/30 to-blue-800/30 rounded-3xl shadow-2xl hover:shadow-blue-500/20 transition-all duration-500 border border-gray-600">
-										<div className="w-full h-full flex items-center justify-center text-gray-400">
-											<span className="text-sm opacity-50">RC 4</span>
+								{/* Bottom row - 2 images */}
+								<div className="flex gap-4">
+									{planeImageLocation.slice(2, 4).map((imageSrc, index) => (
+										<div key={index + 2} className="flex-1 aspect-[4/3] bg-gradient-to-br from-purple-800/30 to-blue-800/30 rounded-3xl shadow-2xl hover:shadow-blue-500/20 transition-all duration-500 border border-gray-600 overflow-hidden">
+											<img 
+												src={imageSrc} 
+												alt={`RC Plane ${index + 3}`}
+												className="w-full h-full object-cover"
+											/>
 										</div>
-									</div>
-									<div className="flex-1 aspect-[4/3] bg-gradient-to-br from-purple-800/30 to-blue-800/30 rounded-3xl shadow-2xl hover:shadow-blue-500/20 transition-all duration-500 border border-gray-600">
-										<div className="w-full h-full flex items-center justify-center text-gray-400">
-											<span className="text-sm opacity-50">RC 5</span>
-										</div>
-									</div>
-									<div className="flex-1 aspect-[4/3] bg-gradient-to-br from-purple-800/30 to-blue-800/30 rounded-3xl shadow-2xl hover:shadow-blue-500/20 transition-all duration-500 border border-gray-600">
-										<div className="w-full h-full flex items-center justify-center text-gray-400">
-											<span className="text-sm opacity-50">RC 6</span>
-										</div>
-									</div>
+									))}
 								</div>
 							</motion.div>
 							
@@ -474,8 +555,12 @@ export default function Home() {
 						>
 							{/* Drone Webfiesta */}
 							<div className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-3xl shadow-2xl hover:shadow-cyan-500/20 transition-all duration-500 overflow-hidden border border-gray-600 group">
-								<div className="aspect-video bg-gradient-to-br from-cyan-800/30 to-blue-800/30 flex items-center justify-center group-hover:scale-105 transition-transform duration-500">
-									<span className="text-gray-400 text-sm opacity-50">Event Image</span>
+								<div className="aspect-video bg-gradient-to-br from-cyan-800/30 to-blue-800/30 overflow-hidden group-hover:scale-105 transition-transform duration-500">
+									<img 
+										src={techspardhaImageLocation.dronewebfiesta} 
+										alt="Drone Webfiesta"
+										className="w-full h-full object-cover"
+									/>
 								</div>
 								<div className="p-6">
 									<h3 
@@ -485,15 +570,19 @@ export default function Home() {
 										Drone Webfiesta
 									</h3>
 									<p className="text-gray-300 text-sm leading-relaxed">
-										Short description placeholder for Drone Webfiesta event details.
+										Design, build, and take your drones to the skies in thrilling competitions.
 									</p>
 								</div>
 							</div>
 
 							{/* High Sky */}
 							<div className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-3xl shadow-2xl hover:shadow-blue-500/20 transition-all duration-500 overflow-hidden border border-gray-600 group">
-								<div className="aspect-video bg-gradient-to-br from-blue-800/30 to-purple-800/30 flex items-center justify-center group-hover:scale-105 transition-transform duration-500">
-									<span className="text-gray-400 text-sm opacity-50">Event Image</span>
+								<div className="aspect-video bg-gradient-to-br from-blue-800/30 to-purple-800/30 overflow-hidden group-hover:scale-105 transition-transform duration-500">
+									<img 
+										src={techspardhaImageLocation.highsky} 
+										alt="High Sky"
+										className="w-full h-full object-cover"
+									/>
 								</div>
 								<div className="p-6">
 									<h3 
@@ -503,33 +592,41 @@ export default function Home() {
 										High Sky
 									</h3>
 									<p className="text-gray-300 text-sm leading-relaxed">
-										Short description placeholder for High Sky event details.
+										RC planes in perfect flight, thrilling every spectator.
 									</p>
 								</div>
 							</div>
 
 							{/* DRL */}
 							<div className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-3xl shadow-2xl hover:shadow-purple-500/20 transition-all duration-500 overflow-hidden border border-gray-600 group">
-								<div className="aspect-video bg-gradient-to-br from-purple-800/30 to-cyan-800/30 flex items-center justify-center group-hover:scale-105 transition-transform duration-500">
-									<span className="text-gray-400 text-sm opacity-50">Event Image</span>
+								<div className="aspect-video bg-gradient-to-br from-purple-800/30 to-cyan-800/30 overflow-hidden group-hover:scale-105 transition-transform duration-500">
+									<img 
+										src={techspardhaImageLocation.drl} 
+										alt="DRL"
+										className="w-full h-full object-cover"
+									/>
 								</div>
 								<div className="p-6">
 									<h3 
 										className="text-2xl font-bold text-white mb-4"
 										style={{ fontFamily: 'Bebas Neue, sans-serif' }}
 									>
-										DRL
+										Drone Racing League
 									</h3>
 									<p className="text-gray-300 text-sm leading-relaxed">
-										Short description placeholder for DRL event details.
+										Mini drones, maximum speed — race to the finish line!
 									</p>
 								</div>
 							</div>
 
 							{/* SimSky */}
 							<div className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-3xl shadow-2xl hover:shadow-cyan-500/20 transition-all duration-500 overflow-hidden border border-gray-600 group">
-								<div className="aspect-video bg-gradient-to-br from-cyan-800/30 to-blue-800/30 flex items-center justify-center group-hover:scale-105 transition-transform duration-500">
-									<span className="text-gray-400 text-sm opacity-50">Event Image</span>
+								<div className="aspect-video bg-gradient-to-br from-cyan-800/30 to-blue-800/30 overflow-hidden group-hover:scale-105 transition-transform duration-500">
+									<img 
+										src={techspardhaImageLocation.simsky} 
+										alt="SimSky"
+										className="w-full h-full object-cover"
+									/>
 								</div>
 								<div className="p-6">
 									<h3 
@@ -539,7 +636,7 @@ export default function Home() {
 										SimSky
 									</h3>
 									<p className="text-gray-300 text-sm leading-relaxed">
-										Short description placeholder for SimSky event details.
+										Virtual drone racing that tests speed and strategy.
 									</p>
 								</div>
 							</div>
@@ -601,35 +698,28 @@ export default function Home() {
 							>
 								{/* Top row - 2 images */}
 								<div className="flex gap-4">
-									<div className="flex-1 aspect-[4/3] bg-gradient-to-br from-purple-800/30 to-cyan-800/30 rounded-3xl shadow-2xl hover:shadow-purple-500/20 transition-all duration-500 border border-gray-600">
-										<div className="w-full h-full flex items-center justify-center text-gray-400">
-											<span className="text-sm opacity-50">Workshop 1</span>
+									{skyforgeImageLocation.slice(0, 2).map((imageSrc, index) => (
+										<div key={index} className="flex-1 aspect-[4/3] bg-gradient-to-br from-purple-800/30 to-cyan-800/30 rounded-3xl shadow-2xl hover:shadow-purple-500/20 transition-all duration-500 border border-gray-600 overflow-hidden">
+											<img 
+												src={imageSrc} 
+												alt={`Skyforge Workshop ${index + 1}`}
+												className="w-full h-full object-cover"
+											/>
 										</div>
-									</div>
-									<div className="flex-1 aspect-[4/3] bg-gradient-to-br from-purple-800/30 to-cyan-800/30 rounded-3xl shadow-2xl hover:shadow-purple-500/20 transition-all duration-500 border border-gray-600">
-										<div className="w-full h-full flex items-center justify-center text-gray-400">
-											<span className="text-sm opacity-50">Workshop 2</span>
-										</div>
-									</div>
+									))}
 								</div>
 								
-								{/* Bottom row - 3 images */}
-								<div className="flex gap-3">
-									<div className="flex-1 aspect-square bg-gradient-to-br from-cyan-800/30 to-blue-800/30 rounded-3xl shadow-2xl hover:shadow-cyan-500/20 transition-all duration-500 border border-gray-600">
-										<div className="w-full h-full flex items-center justify-center text-gray-400">
-											<span className="text-sm opacity-50">Workshop 3</span>
+								{/* Bottom row - 2 images */}
+								<div className="flex gap-4">
+									{skyforgeImageLocation.slice(2, 4).map((imageSrc, index) => (
+										<div key={index + 2} className="flex-1 aspect-[4/3] bg-gradient-to-br from-cyan-800/30 to-blue-800/30 rounded-3xl shadow-2xl hover:shadow-cyan-500/20 transition-all duration-500 border border-gray-600 overflow-hidden">
+											<img 
+												src={imageSrc} 
+												alt={`Skyforge Workshop ${index + 3}`}
+												className="w-full h-full object-cover"
+											/>
 										</div>
-									</div>
-									<div className="flex-1 aspect-square bg-gradient-to-br from-cyan-800/30 to-blue-800/30 rounded-3xl shadow-2xl hover:shadow-cyan-500/20 transition-all duration-500 border border-gray-600">
-										<div className="w-full h-full flex items-center justify-center text-gray-400">
-											<span className="text-sm opacity-50">Workshop 4</span>
-										</div>
-									</div>
-									<div className="flex-1 aspect-square bg-gradient-to-br from-cyan-800/30 to-blue-800/30 rounded-3xl shadow-2xl hover:shadow-cyan-500/20 transition-all duration-500 border border-gray-600">
-										<div className="w-full h-full flex items-center justify-center text-gray-400">
-											<span className="text-sm opacity-50">Workshop 5</span>
-										</div>
-									</div>
+									))}
 								</div>
 							</motion.div>
 						</motion.div>
@@ -736,195 +826,58 @@ export default function Home() {
 									Meet Our Team
 								</span>
 							</h2>
-							<p 
-								className="text-xl md:text-2xl text-gray-300 max-w-4xl mx-auto leading-relaxed"
-								style={{ fontFamily: 'Headland One, serif' }}
-							>
-								The passionate leaders driving innovation and excellence in aeromodelling
-							</p>
 						</motion.div>
 
 						{/* Team Grid */}
 						<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-							{/* President */}
-							<motion.div 
-								initial={{ opacity: 0, y: 30 }}
-								whileInView={{ opacity: 1, y: 0 }}
-								transition={{ duration: 0.6, delay: 0.1 }}
-								viewport={{ once: true }}
-								className="group"
-							>
-								<div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-3xl shadow-2xl border border-gray-600 overflow-hidden hover:shadow-cyan-500/20 hover:-translate-y-2 transition-all duration-500">
-									{/* Profile Image */}
-									<div className="aspect-square bg-gradient-to-br from-cyan-800/30 to-blue-800/30 relative overflow-hidden">
-										<div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-										<div className="w-full h-full flex items-center justify-center text-gray-400">
-											<div className="text-center">
-												<div className="w-16 h-16 mx-auto mb-3 bg-cyan-500/20 rounded-full flex items-center justify-center">
-													<div className="w-8 h-8 bg-cyan-400 rounded-full"></div>
+							{postHolders.map((member, index) => {
+								const colors = [
+									{ bg: 'from-cyan-800/30 to-blue-800/30', badge: 'bg-cyan-500/20 text-cyan-400 border-cyan-500/30', shadow: 'hover:shadow-cyan-500/20' },
+									{ bg: 'from-blue-800/30 to-indigo-800/30', badge: 'bg-blue-500/20 text-blue-400 border-blue-500/30', shadow: 'hover:shadow-blue-500/20' },
+									{ bg: 'from-purple-800/30 to-violet-800/30', badge: 'bg-purple-500/20 text-purple-400 border-purple-500/30', shadow: 'hover:shadow-purple-500/20' },
+									{ bg: 'from-emerald-800/30 to-teal-800/30', badge: 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30', shadow: 'hover:shadow-emerald-500/20' }
+								];
+								const colorScheme = colors[index % colors.length];
+								
+								return (
+									<motion.div 
+										key={member.name}
+										initial={{ opacity: 0, y: 30 }}
+										whileInView={{ opacity: 1, y: 0 }}
+										transition={{ duration: 0.6, delay: (index + 1) * 0.1 }}
+										viewport={{ once: true }}
+										className="group"
+									>
+										<div className={`bg-gradient-to-br from-gray-800 to-gray-900 rounded-3xl shadow-2xl border border-gray-600 overflow-hidden ${colorScheme.shadow} hover:-translate-y-2 transition-all duration-500`}>
+											{/* Profile Image */}
+											<div className={`aspect-square bg-gradient-to-br ${colorScheme.bg} relative overflow-hidden`}>
+												<div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+												<img 
+													src={member.image} 
+													alt={`${member.name} - ${member.position}`}
+													className="w-full h-full object-cover"
+												/>
+											</div>
+											
+											{/* Profile Info */}
+											<div className="p-6 text-center">
+												{/* Role Badge */}
+												<div className={`inline-block ${colorScheme.badge} px-4 py-2 rounded-full text-sm font-semibold mb-4 border`}>
+													{member.position}
 												</div>
-												<span className="text-sm opacity-70">Profile Photo</span>
+												
+												{/* Name */}
+												<h3 
+													className="text-xl font-bold text-white mb-3"
+													style={{ fontFamily: 'Bebas Neue, sans-serif' }}
+												>
+													{member.name}
+												</h3>
 											</div>
 										</div>
-									</div>
-									
-									{/* Profile Info */}
-									<div className="p-6 text-center">
-										{/* Role Badge */}
-										<div className="inline-block bg-cyan-500/20 text-cyan-400 px-4 py-2 rounded-full text-sm font-semibold mb-4 border border-cyan-500/30">
-											President
-										</div>
-										
-										{/* Name Placeholder */}
-										<h3 
-											className="text-xl font-bold text-white mb-3"
-											style={{ fontFamily: 'Bebas Neue, sans-serif' }}
-										>
-											[President Name]
-										</h3>
-										
-										{/* Description */}
-										<p className="text-sm text-gray-300 leading-relaxed">
-											Leading the club's vision and strategic direction
-										</p>
-									</div>
-								</div>
-							</motion.div>
-
-							{/* Vice President */}
-							<motion.div 
-								initial={{ opacity: 0, y: 30 }}
-								whileInView={{ opacity: 1, y: 0 }}
-								transition={{ duration: 0.6, delay: 0.2 }}
-								viewport={{ once: true }}
-								className="group"
-							>
-								<div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-3xl shadow-2xl border border-gray-600 overflow-hidden hover:shadow-blue-500/20 hover:-translate-y-2 transition-all duration-500">
-									{/* Profile Image */}
-									<div className="aspect-square bg-gradient-to-br from-blue-800/30 to-indigo-800/30 relative overflow-hidden">
-										<div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-										<div className="w-full h-full flex items-center justify-center text-gray-400">
-											<div className="text-center">
-												<div className="w-16 h-16 mx-auto mb-3 bg-blue-500/20 rounded-full flex items-center justify-center">
-													<div className="w-8 h-8 bg-blue-400 rounded-full"></div>
-												</div>
-												<span className="text-sm opacity-70">Profile Photo</span>
-											</div>
-										</div>
-									</div>
-									
-									{/* Profile Info */}
-									<div className="p-6 text-center">
-										{/* Role Badge */}
-										<div className="inline-block bg-blue-500/20 text-blue-400 px-4 py-2 rounded-full text-sm font-semibold mb-4 border border-blue-500/30">
-											Vice President
-										</div>
-										
-										{/* Name Placeholder */}
-										<h3 
-											className="text-xl font-bold text-white mb-3"
-											style={{ fontFamily: 'Bebas Neue, sans-serif' }}
-										>
-											[Vice President Name]
-										</h3>
-										
-										{/* Description */}
-										<p className="text-sm text-gray-300 leading-relaxed">
-											Supporting leadership and operational excellence
-										</p>
-									</div>
-								</div>
-							</motion.div>
-
-							{/* Secretary */}
-							<motion.div 
-								initial={{ opacity: 0, y: 30 }}
-								whileInView={{ opacity: 1, y: 0 }}
-								transition={{ duration: 0.6, delay: 0.3 }}
-								viewport={{ once: true }}
-								className="group"
-							>
-								<div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-3xl shadow-2xl border border-gray-600 overflow-hidden hover:shadow-purple-500/20 hover:-translate-y-2 transition-all duration-500">
-									{/* Profile Image */}
-									<div className="aspect-square bg-gradient-to-br from-purple-800/30 to-violet-800/30 relative overflow-hidden">
-										<div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-										<div className="w-full h-full flex items-center justify-center text-gray-400">
-											<div className="text-center">
-												<div className="w-16 h-16 mx-auto mb-3 bg-purple-500/20 rounded-full flex items-center justify-center">
-													<div className="w-8 h-8 bg-purple-400 rounded-full"></div>
-												</div>
-												<span className="text-sm opacity-70">Profile Photo</span>
-											</div>
-										</div>
-									</div>
-									
-									{/* Profile Info */}
-									<div className="p-6 text-center">
-										{/* Role Badge */}
-										<div className="inline-block bg-purple-500/20 text-purple-400 px-4 py-2 rounded-full text-sm font-semibold mb-4 border border-purple-500/30">
-											Secretary
-										</div>
-										
-										{/* Name Placeholder */}
-										<h3 
-											className="text-xl font-bold text-white mb-3"
-											style={{ fontFamily: 'Bebas Neue, sans-serif' }}
-										>
-											[Secretary Name]
-										</h3>
-										
-										{/* Description */}
-										<p className="text-sm text-gray-300 leading-relaxed">
-											Managing communications and documentation
-										</p>
-									</div>
-								</div>
-							</motion.div>
-
-							{/* Additional Secretary */}
-							<motion.div 
-								initial={{ opacity: 0, y: 30 }}
-								whileInView={{ opacity: 1, y: 0 }}
-								transition={{ duration: 0.6, delay: 0.4 }}
-								viewport={{ once: true }}
-								className="group"
-							>
-								<div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-3xl shadow-2xl border border-gray-600 overflow-hidden hover:shadow-emerald-500/20 hover:-translate-y-2 transition-all duration-500">
-									{/* Profile Image */}
-									<div className="aspect-square bg-gradient-to-br from-emerald-800/30 to-teal-800/30 relative overflow-hidden">
-										<div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-										<div className="w-full h-full flex items-center justify-center text-gray-400">
-											<div className="text-center">
-												<div className="w-16 h-16 mx-auto mb-3 bg-emerald-500/20 rounded-full flex items-center justify-center">
-													<div className="w-8 h-8 bg-emerald-400 rounded-full"></div>
-												</div>
-												<span className="text-sm opacity-70">Profile Photo</span>
-											</div>
-										</div>
-									</div>
-									
-									{/* Profile Info */}
-									<div className="p-6 text-center">
-										{/* Role Badge */}
-										<div className="inline-block bg-emerald-500/20 text-emerald-400 px-4 py-2 rounded-full text-sm font-semibold mb-4 border border-emerald-500/30">
-											Additional Secretary
-										</div>
-										
-										{/* Name Placeholder */}
-										<h3 
-											className="text-xl font-bold text-white mb-3"
-											style={{ fontFamily: 'Bebas Neue, sans-serif' }}
-										>
-											[Additional Secretary Name]
-										</h3>
-										
-										{/* Description */}
-										<p className="text-sm text-gray-300 leading-relaxed">
-											Assisting with administrative tasks and coordination
-										</p>
-									</div>
-								</div>
-							</motion.div>
+									</motion.div>
+								);
+							})}
 						</div>
 					</div>
 				</section>
