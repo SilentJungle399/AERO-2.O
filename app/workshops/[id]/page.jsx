@@ -1,5 +1,5 @@
 "use client";
-import { useMemo, useState, useEffect } from "react";
+import { useMemo, useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
 import { useRouter, useParams } from "next/navigation";
 import { jwtDecode } from "jwt-decode";
@@ -41,6 +41,7 @@ const WorkshopDetailsPage = () => {
 	const [event, setEvent] = useState(null);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState(null);
+	const [registrationStatus, setRegistrationStatus] = useState(null);
 
 	useEffect(() => {
 		let aborted = false;
@@ -110,8 +111,44 @@ const WorkshopDetailsPage = () => {
 			return;
 		}
 
-		router.push(`/workshops/${id}/register`);
+		if (registrationStatus) {
+			router.push(`/workshops/${id}/team`);
+		} else {
+			router.push(`/workshops/${id}/register`);
+		}
 	};
+
+	const getRegistrationStatus = useCallback(async () => {
+		const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+		if (!token || isTokenExpired(token)) return null;
+
+		try {
+			const response = await fetch(
+				`${API_BASE}/api/users/workshop/${id}/registration-status`,
+				{
+					method: "GET",
+					headers: {
+						Authorization: `Bearer ${token}`,
+						"Content-Type": "application/json",
+					},
+				}
+			);
+			if (response.ok) {
+				const data = await response.json();
+				setRegistrationStatus(data.isRegistered || null);
+			}
+		} catch (error) {
+			console.error("Error fetching registration status:", error);
+			return null;
+		}
+		return null;
+	}, [API_BASE, id]);
+
+	useEffect(() => {
+		if (event && registrationOpen) {
+			getRegistrationStatus();
+		}
+	}, [event, registrationOpen, getRegistrationStatus]);
 
 	if (loading) {
 		return (
@@ -214,11 +251,17 @@ const WorkshopDetailsPage = () => {
 							aria-disabled={!registrationOpen}
 							title={
 								registrationOpen
-									? "Register for this workshop"
-									: "Registration closed"
+									? registrationStatus
+										? "Manage your team for this workshop"
+										: "Register for this workshop"
+									: "Registration Closed"
 							}
 						>
-							{registrationOpen ? "Register" : "Registration Closed"}
+							{registrationOpen
+								? registrationStatus
+									? "Manage team"
+									: "Register"
+								: "Registration Closed"}
 						</motion.button>
 
 						<button
