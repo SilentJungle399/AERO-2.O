@@ -18,8 +18,8 @@ const getOrdinalSuffix = (day) => {
 	}
 };
 
-const formatTime = (time) => {
-	const date = new Date(time);
+const formatTime = (_date, time = false) => {
+	const date = new Date(_date);
 	if (isNaN(date.getTime())) return "N/A";
 
 	const day = date.getDate();
@@ -29,7 +29,10 @@ const formatTime = (time) => {
 	const minutes = date.getMinutes().toString().padStart(2, "0");
 	const ampm = hours >= 12 ? "PM" : "AM";
 	const formattedHour = hours % 12 || 12;
-	return `${day}${getOrdinalSuffix(day)} ${month} ${year}, ${formattedHour}:${minutes} ${ampm}`;
+	return (
+		`${day}${getOrdinalSuffix(day)} ${month} ${year}` +
+		(time ? `, ${formattedHour}:${minutes} ${ampm}` : "")
+	);
 };
 
 const WorkshopDetailsPage = () => {
@@ -184,7 +187,7 @@ const WorkshopDetailsPage = () => {
 							<p className="mt-1 text-sm text-gray-300">{event?.E_domain}</p>
 						</div>
 						<div className="text-right">
-							<p className="text-sm text-gray-300">Dates</p>
+							<p className="text-sm text-gray-300">Date</p>
 							<p className="font-semibold">{formatTime(event?.E_date)}</p>
 						</div>
 					</div>
@@ -216,7 +219,7 @@ const WorkshopDetailsPage = () => {
 									<strong className="text-gray-100">
 										Registration deadline:
 									</strong>{" "}
-									{formatTime(event?.deadline)}
+									{formatTime(event?.deadline, true)}
 								</li>
 								<li>
 									<strong className="text-gray-100">Status:</strong>{" "}
