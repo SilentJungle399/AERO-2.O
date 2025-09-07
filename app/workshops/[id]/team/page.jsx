@@ -18,6 +18,7 @@ const TeamPage = () => {
 	const [user, setUser] = useState(null);
 	const [teamInfo, setTeamInfo] = useState(null);
 	const [joinTeamCode, setJoinTeamCode] = useState("");
+	const [teamName, setTeamName] = useState("");
 
 	// Loading states for actions
 	const [creatingTeam, setCreatingTeam] = useState(false);
@@ -201,6 +202,11 @@ const TeamPage = () => {
 
 	// Team action functions
 	const createTeam = async () => {
+		if (!teamName.trim()) {
+			alert("Please enter a team name.");
+			return;
+		}
+
 		const token = validateAuth();
 		if (!token) return;
 
@@ -209,11 +215,13 @@ const TeamPage = () => {
 			const response = await fetch(`${API_BASE}/api/users/workshop/${id}/create-team`, {
 				method: "POST",
 				headers: getAuthHeaders(token),
+				body: JSON.stringify({ team_name: teamName.trim() }),
 			});
 
 			const data = await response.json();
 
 			if (response.ok && data.success) {
+				setTeamName(""); // Clear the input
 				await fetchTeamInfo(); // Refresh team info instead of page reload
 			} else {
 				alert(data.message || "Failed to create team. Please try again.");
@@ -487,12 +495,26 @@ const TeamPage = () => {
 									Start your own team and get a unique team code to share with
 									your teammates.
 								</p>
+								<div className="space-y-3 mb-4">
+									<input
+										type="text"
+										value={teamName}
+										onChange={(e) => setTeamName(e.target.value)}
+										placeholder="Enter team name"
+										className="w-full bg-gray-800 border border-gray-600 text-white px-4 py-3 rounded-lg focus:outline-none focus:border-blue-500 placeholder-gray-400 text-sm sm:text-base"
+										maxLength={50}
+									/>
+								</div>
 								<motion.button
 									onClick={createTeam}
-									disabled={creatingTeam}
+									disabled={creatingTeam || !teamName.trim()}
 									className="w-full sm:w-auto bg-blue-600 hover:bg-blue-500 disabled:bg-blue-800 disabled:cursor-not-allowed text-white font-semibold py-3 px-6 rounded-lg shadow-lg transition-colors flex items-center justify-center gap-2 text-sm sm:text-base"
-									whileHover={{ scale: creatingTeam ? 1 : 1.02 }}
-									whileTap={{ scale: creatingTeam ? 1 : 0.98 }}
+									whileHover={{
+										scale: creatingTeam || !teamName.trim() ? 1 : 1.02,
+									}}
+									whileTap={{
+										scale: creatingTeam || !teamName.trim() ? 1 : 0.98,
+									}}
 								>
 									{creatingTeam ? (
 										<>
