@@ -133,13 +133,7 @@ class GoogleSheetsService {
 			await this.createWorksheetIfNotExists(worksheetName);
 
 			// Prepare header row
-			const headers = [
-				"Registration ID",
-				"User ID",
-				"Token Number",
-				"Registration Date",
-				"Status",
-			];
+			const headers = ["Registration ID", "User ID", "Registration Date", "Status"];
 
 			// Add form question headers
 			if (registrationData.form_responses && registrationData.form_responses.length > 0) {
@@ -236,13 +230,7 @@ class GoogleSheetsService {
 			await this.createWorksheetIfNotExists(worksheetName);
 
 			// Prepare headers based on the first registration
-			const headers = [
-				"Registration ID",
-				"User ID",
-				"Token Number",
-				"Registration Date",
-				"Status",
-			];
+			const headers = ["Registration ID", "User ID", "Registration Date", "Status"];
 
 			// Add form question headers from the first registration
 			if (registrations[0].form_responses && registrations[0].form_responses.length > 0) {
