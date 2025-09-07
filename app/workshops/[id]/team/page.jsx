@@ -27,7 +27,7 @@ const TeamPage = () => {
 
 	// Derived values
 	const whatsappGroupLink =
-		event?.whatsapp_group_link || "https://chat.whatsapp.com/placeholder-link";
+		event?.whatsapp_group_link || "https://chat.whatsapp.com/FcT8BTnLmmrBstdCTGZgYY";
 	const isTeamLeader =
 		teamInfo?.user_role === "leader" || teamInfo?.team_leader?._id === user?._id;
 
