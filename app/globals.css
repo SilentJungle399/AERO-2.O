@@ -1,6 +1,173 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Enable smooth scrolling globally */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  /* Ensure smooth scrolling works with modern browsers */
+  * {
+    scroll-behavior: smooth;
+  }
+}
+
+/* Custom intermediate gray shades for flowing sections */
+@layer utilities {
+  .bg-gray-825 {
+    --tw-bg-opacity: 1;
+    background-color: rgb(41 41 46 / var(--tw-bg-opacity));
+  }
+  .bg-gray-850 {
+    --tw-bg-opacity: 1;
+    background-color: rgb(35 35 39 / var(--tw-bg-opacity));
+  }
+  .bg-gray-875 {
+    --tw-bg-opacity: 1;
+    background-color: rgb(29 29 32 / var(--tw-bg-opacity));
+  }
+  
+  /* Smooth flowing background transitions */
+  .section-flow-bg {
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .section-flow-bg::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+      135deg,
+      rgba(6, 182, 212, 0.02) 0%,
+      rgba(59, 130, 246, 0.015) 25%,
+      rgba(147, 51, 234, 0.01) 50%,
+      rgba(6, 182, 212, 0.008) 75%,
+      transparent 100%
+    );
+    animation: parallax-drift 20s ease-in-out infinite;
+    pointer-events: none;
+    z-index: 1;
+  }
+  
+  .section-flow-bg::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(
+      ellipse at 20% 30%,
+      rgba(6, 182, 212, 0.025) 0%,
+      transparent 60%
+    ),
+    radial-gradient(
+      ellipse at 80% 70%,
+      rgba(147, 51, 234, 0.02) 0%,
+      transparent 60%
+    );
+    pointer-events: none;
+    z-index: 1;
+  }
+  
+  /* Parallax animation */
+  @keyframes parallax-drift {
+    0%, 100% {
+      transform: translate(0, 0) rotate(0deg);
+    }
+    33% {
+      transform: translate(-10px, -15px) rotate(1deg);
+    }
+    66% {
+      transform: translate(15px, -10px) rotate(-1deg);
+    }
+  }
+  
+  /* Smooth gradient transitions between sections */
+  .gradient-transition-top {
+    background: linear-gradient(
+      to bottom,
+      transparent 0%,
+      rgba(0, 0, 0, 0.03) 20%,
+      rgba(0, 0, 0, 0.05) 100%
+    );
+    height: 100px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 2;
+  }
+  
+  .gradient-transition-bottom {
+    background: linear-gradient(
+      to top,
+      transparent 0%,
+      rgba(0, 0, 0, 0.03) 20%,
+      rgba(0, 0, 0, 0.05) 100%
+    );
+    height: 100px;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 2;
+  }
+  
+  /* Scroll progress bar glow effect */
+  .progress-glow {
+    box-shadow: 
+      0 0 20px rgba(6, 182, 212, 0.3),
+      0 0 40px rgba(59, 130, 246, 0.2),
+      0 0 60px rgba(147, 51, 234, 0.1);
+  }
+  
+  /* Active section highlight effect */
+  .section-active {
+    position: relative;
+  }
+  
+  .section-active::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+      135deg,
+      rgba(6, 182, 212, 0.08) 0%,
+      rgba(59, 130, 246, 0.06) 50%,
+      rgba(147, 51, 234, 0.08) 100%
+    );
+    opacity: 0;
+    animation: section-highlight 0.8s ease-out forwards;
+    pointer-events: none;
+    z-index: 0;
+  }
+  
+  @keyframes section-highlight {
+    0% {
+      opacity: 0;
+      transform: scale(0.98);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1.01);
+    }
+    100% {
+      opacity: 0.7;
+      transform: scale(1);
+    }
+  }
+}
+
 @keyframes blob {
   0% {
     transform: translate(0px, 0px) scale(1);
