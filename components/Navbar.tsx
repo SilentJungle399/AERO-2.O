@@ -212,7 +212,7 @@ const Navbar: React.FC = () => {
           {label} <FaCaretDown className="ml-1 w-5 h-5"/>
         </button>
         <div
-          className={`absolute left-0 top-full pt-2 w-48 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 backdrop-blur-md ${
+          className={`absolute left-0 top-full pt-2 w-48 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 backdrop-blur-md z-50 ${
             isMobile
               ? open
                 ? ""
