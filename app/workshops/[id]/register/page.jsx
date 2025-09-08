@@ -498,6 +498,14 @@ const WorkshopDetailsPage = () => {
 				body: JSON.stringify(formDataToSubmit),
 			});
 
+			if (response.status === 413) {
+				alert(
+					"Maximum size exceeded for file upload. Please reduce file size and try again. (Limit: 10MB)"
+				);
+				setSubmitting(false);
+				return;
+			}
+
 			const data = await response.json();
 
 			if (response.ok && data.success) {
