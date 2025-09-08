@@ -45,6 +45,7 @@ const WorkshopDetailsPage = () => {
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState(null);
 	const [registrationStatus, setRegistrationStatus] = useState(null);
+	const [registrationOpen, setEventRunning] = useState(true);
 
 	useEffect(() => {
 		let aborted = false;
@@ -64,9 +65,11 @@ const WorkshopDetailsPage = () => {
 				const data = await res.json();
 				if (!aborted) {
 					setEvent(data.event);
-					if (!data.event.is_workshop || !data.event.active_status) {
+					if (!data.event.is_workshop) {
 						router.replace("/workshops");
 						return;
+					} else if (!data.event.active_status) {
+						setEventRunning(false);
 					}
 				}
 			} catch (err) {
@@ -97,8 +100,6 @@ const WorkshopDetailsPage = () => {
 			return true;
 		}
 	}
-
-	const registrationOpen = event?.active_status ?? true;
 
 	const handleRegister = () => {
 		const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;

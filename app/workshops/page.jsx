@@ -37,11 +37,9 @@ const WorkshopCard = ({ event, index }) => {
 				className="mb-2 w-full bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-2 px-4 rounded-lg shadow-sm text-center disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-700 disabled:text-gray-300"
 				whileHover={{ scale: 1.02 }}
 				whileTap={{ scale: 0.98 }}
-				disabled={!event.active_status}
-				aria-disabled={!event.active_status}
-				title={event.active_status ? "View details" : "Registration closed"}
+				title="View details"
 			>
-				{event.active_status ? "View Details" : "Registration Closed"}
+				View details
 			</motion.button>
 		</motion.div>
 	);
