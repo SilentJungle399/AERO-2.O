@@ -264,8 +264,8 @@ const WorkshopDetailsPage = () => {
 							{registrationStatus
 								? "Manage team"
 								: registrationOpen
-								? "Registration Closed"
-								: "Register"}
+								? "Register"
+								: "Registration Closed"}
 						</motion.button>
 
 						<button
