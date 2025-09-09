@@ -250,9 +250,9 @@ const WorkshopDetailsPage = () => {
 							onClick={handleRegister}
 							className="bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-2 px-4 rounded-lg shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
 							whileHover={{
-								scale: registrationStatus && registrationOpen ? 1.02 : 1,
+								scale: registrationStatus || registrationOpen ? 1.02 : 1,
 							}}
-							whileTap={{ scale: registrationStatus && registrationOpen ? 0.98 : 1 }}
+							whileTap={{ scale: registrationStatus || registrationOpen ? 0.98 : 1 }}
 							disabled={!registrationStatus && !registrationOpen}
 							aria-disabled={!registrationStatus && !registrationOpen}
 							title={
