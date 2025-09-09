@@ -254,18 +254,18 @@ const WorkshopDetailsPage = () => {
 							disabled={!registrationOpen}
 							aria-disabled={!registrationOpen}
 							title={
-								registrationOpen
-									? registrationStatus
-										? "Manage your team for this workshop"
-										: "Register for this workshop"
-									: "Registration Closed"
+								registrationStatus
+									? "Manage your team for this workshop"
+									: registrationOpen
+									? "Register for this workshop"
+									: "Registration is closed for this workshop"
 							}
 						>
-							{registrationOpen
-								? registrationStatus
-									? "Manage team"
-									: "Register"
-								: "Registration Closed"}
+							{registrationStatus
+								? "Manage team"
+								: registrationOpen
+								? "Registration Closed"
+								: "Register"}
 						</motion.button>
 
 						<button
