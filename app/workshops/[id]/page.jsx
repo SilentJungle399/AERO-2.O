@@ -65,6 +65,8 @@ const WorkshopDetailsPage = () => {
 				const data = await res.json();
 				if (!aborted) {
 					setEvent(data.event);
+					getRegistrationStatus();
+
 					if (!data.event.is_workshop) {
 						router.replace("/workshops");
 						return;
@@ -110,14 +112,13 @@ const WorkshopDetailsPage = () => {
 			return;
 		}
 
-		if (!registrationOpen) {
-			alert("Registration is closed for this workshop.");
-			return;
-		}
-
 		if (registrationStatus) {
 			router.push(`/workshops/${id}/team`);
 		} else {
+			if (!registrationOpen) {
+				alert("Registration is closed for this workshop.");
+				return;
+			}
 			router.push(`/workshops/${id}/register`);
 		}
 	};
@@ -147,12 +148,6 @@ const WorkshopDetailsPage = () => {
 		}
 		return null;
 	}, [API_BASE, id]);
-
-	useEffect(() => {
-		if (event && registrationOpen) {
-			getRegistrationStatus();
-		}
-	}, [event, registrationOpen, getRegistrationStatus]);
 
 	if (loading) {
 		return (
