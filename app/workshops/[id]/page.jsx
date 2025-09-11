@@ -248,21 +248,24 @@ const WorkshopDetailsPage = () => {
 								scale: registrationStatus || registrationOpen ? 1.02 : 1,
 							}}
 							whileTap={{ scale: registrationStatus || registrationOpen ? 0.98 : 1 }}
-							disabled={!registrationStatus && !registrationOpen}
-							aria-disabled={!registrationStatus && !registrationOpen}
+							disabled={!registrationOpen}
+							// disabled={!registrationStatus && !registrationOpen}
+							aria-disabled={!registrationOpen}
 							title={
-								registrationStatus
-									? "Manage your team for this workshop"
-									: registrationOpen
-									? "Register for this workshop"
-									: "Registration is closed for this workshop"
+								// registrationStatus
+								// 	? "Manage your team for this workshop"
+								// 	: registrationOpen
+								// 	? "Register for this workshop"
+								// 	: "Registration is closed for this workshop"
+								"Registration is closed for this workshop"
 							}
 						>
-							{registrationStatus
+							{/* {registrationStatus
 								? "Manage team"
 								: registrationOpen
 								? "Register"
-								: "Registration Closed"}
+								: "Registration Closed"} */}
+							Registration Closed
 						</motion.button>
 
 						<button

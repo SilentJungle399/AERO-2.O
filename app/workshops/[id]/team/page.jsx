@@ -105,7 +105,8 @@ const TeamPage = () => {
 
 			const data = await response.json();
 
-			if (response.ok && data.success && data.isRegistered) {
+			// if (response.ok && data.success && data.isRegistered) {
+			if (false) {
 				setRegistrationData({
 					success: true,
 					eventName: data.eventName,
