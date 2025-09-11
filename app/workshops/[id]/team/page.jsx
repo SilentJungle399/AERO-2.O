@@ -105,6 +105,8 @@ const TeamPage = () => {
 
 			const data = await response.json();
 
+			fetchEventAndUser();
+
 			// if (response.ok && data.success && data.isRegistered) {
 			if (false) {
 				setRegistrationData({
@@ -112,7 +114,6 @@ const TeamPage = () => {
 					eventName: data.eventName,
 					registrationDate: data.registration?.registrationDate,
 				});
-				fetchEventAndUser();
 			} else {
 				router.push(`/workshops/${id}`);
 			}
