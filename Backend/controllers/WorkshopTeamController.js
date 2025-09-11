@@ -27,7 +27,7 @@ const checkUserRegistration = async (userId, eventId) => {
 		event_id: eventId,
 	});
 
-	if (!registration) {
+	if (!registration || !registration.shortlisted) {
 		throw new Error("User is not registered for this workshop");
 	}
 
