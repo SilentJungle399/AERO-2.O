@@ -42,6 +42,10 @@ const workshopRegistrationSchema = new mongoose.Schema(
 			enum: ["registered", "attended", "cancelled"],
 			default: "registered",
 		},
+		shortlisted: {
+			type: Boolean,
+			default: false,
+		},
 	},
 	{
 		timestamps: true,

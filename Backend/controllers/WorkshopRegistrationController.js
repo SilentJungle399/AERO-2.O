@@ -160,12 +160,12 @@ const getRegistrationStatus = async (req, res) => {
 			event_id: eventId,
 		});
 
-		const isRegistered = !!registration;
+		const isRegistered = !!registration && registration.shortlisted;
 
 		res.status(200).json({
 			success: true,
 			isRegistered,
-			registration: registration
+			registration: isRegistered
 				? {
 						registrationDate: registration.registration_date,
 						status: registration.status,

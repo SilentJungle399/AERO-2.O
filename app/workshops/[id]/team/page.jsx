@@ -113,9 +113,7 @@ const TeamPage = () => {
 				});
 				fetchEventAndUser();
 			} else {
-				router.push(
-					data.isRegistered === false ? `/workshops/${id}/register` : `/workshops/${id}`
-				);
+				router.push(`/workshops/${id}`);
 			}
 		} catch (error) {
 			console.error("Error checking registration status:", error);
