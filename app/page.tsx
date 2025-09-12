@@ -326,10 +326,10 @@ export default function Home() {
 						className="relative z-10 text-center px-6 md:px-8 max-w-6xl"
 					>
 						<h1
-							className="text-white tracking-tight mb-6 text-7xl sm:text-7xl md:text-8xl lg:text-8xl font-bold"
+							className="text-white mb-6 text-7xl sm:text-7xl md:text-8xl lg:text-8xl font-bold"
 							style={{ fontFamily: 'Bebas Neue, sans-serif' }}
 						>
-							<span className="bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-400 bg-clip-text text-transparent">
+							<span className="bg-[#24d1ee]  bg-clip-text text-transparent">
 								Aeromodelling Club
 							</span>
 						</h1>
