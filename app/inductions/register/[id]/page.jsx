@@ -118,7 +118,9 @@ const InductionRegistrationPage = () => {
 	// Fetch current user data
 	const fetchUser = useCallback(async () => {
 		const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
-		if (!token || isTokenExpired(token)) return;
+		if (!token || isTokenExpired(token)) {
+			router.push("/login");
+		}
 
 		try {
 			const decoded = jwtDecode(token);
@@ -135,9 +137,12 @@ const InductionRegistrationPage = () => {
 			if (response.ok) {
 				const data = await response.json();
 				setUser(data.user || data);
+			} else {
+				router.push("/login");
 			}
 		} catch (error) {
 			console.error("Error fetching user:", error);
+			router.push("/login");
 		}
 	}, [API_BASE]);
 
