@@ -1,506 +1,714 @@
 "use client";
+import { useMemo, useState, useEffect, useCallback, useRef } from "react";
+import { motion } from "framer-motion";
+import { useRouter, useParams } from "next/navigation";
+import { jwtDecode } from "jwt-decode";
 
-import React, {useEffect, useState} from "react";
-import Message from "@/components/Message";
-import {useParams} from "next/navigation";
-import {FaArrowLeft, FaArrowRight, FaBrain, FaCogs, FaPlane, FaRocket,} from "react-icons/fa";
+const InductionRegistrationPage = () => {
+	const router = useRouter();
+	const params = useParams();
+	const id = params.id;
 
-const InductionForm = () => {
-  const params = useParams();
-  const id = params.id;
+	const API_BASE = process.env.NODE_ENV === "development" ? "http://localhost:5000" : "";
+	const [event, setEvent] = useState(null);
+	const [user, setUser] = useState(null);
+	const [loading, setLoading] = useState(true);
+	const [error, setError] = useState(null);
+	const [formData, setFormData] = useState({});
+	const [submitting, setSubmitting] = useState(false);
+	const [draftSaved, setDraftSaved] = useState(false);
+	const [savingDraft, setSavingDraft] = useState(false);
+	const draftTimeoutRef = useRef(null);
 
-  const [submiting, setSubmiting] = useState(false);
+	const formFields = [
+		{
+			key: "name",
+			question: "Name",
+			type: "short",
+			space: "half",
+		},
+		{
+			key: "rollNo",
+			question: "Roll No",
+			type: "short",
+			space: "half",
+		},
+		{
+			key: "branch",
+			question: "Branch",
+			type: "short",
+			space: "half",
+		},
+		{
+			key: "email",
+			question: "Email",
+			type: "short",
+			space: "half",
+		},
+		{
+			key: "phone",
+			question: "Phone Number",
+			type: "short",
+			space: "full",
+		},
+		{
+			key: "teamPreference",
+			question: "Team Preference",
+			type: "option",
+			options: ["Drones", "RC Planes"],
+			space: "half",
+		},
+		{
+			key: "subTeamPreference",
+			question: "Sub Team Preference",
+			type: "option",
+			options: ["Media", "Web Development"],
+			space: "half",
+		},
+	];
 
-  const [_1stPass, _set1stPass] = useState(true);
-  const [_2ndPass, _set2ndPass] = useState(true);
-  const [_3rdPass, _set3rdPass] = useState(true);
+	useEffect(() => {
+		let aborted = false;
+		const controller = new AbortController();
 
-  const [Error, setError] = useState(false);
-  const [Sucess, setSucess] = useState(false);
+		const fetchEvent = async () => {
+			setLoading(true);
+			setError(null);
+			try {
+				const res = await fetch(`${API_BASE}/api/users/getinduction/${id}`, {
+					method: "GET",
+					signal: controller.signal,
+				});
+				if (!res.ok) {
+					throw new Error(`Failed to fetch event: ${res.status}`);
+				}
+				const data = await res.json();
+				if (!aborted) {
+					setEvent(data.event || data);
+				}
+			} catch (err) {
+				if (!aborted) {
+					console.error(err);
+					setError(err.message || "Failed to load event");
+				}
+			} finally {
+				if (!aborted) setLoading(false);
+			}
+		};
 
-  const [files, setFiles] = useState([]);
+		fetchEvent();
 
-  const [formData, setFormData] = useState({
-    uid: "",
-    name: "",
-    email: "",
-    rollNumber: "",
-    branch: "",
-    year: "",
-    phoneNumber: "",
-    answers: [],
-    queries: "",
-    team_preference: "",
-    hobbies: "",
-    skills: "",
-    experience: "",
-    expectations: "",
-  });
-  const [induction, setInduction] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [currentStage, setCurrentStage] = useState(0);
-  const [previews, setPreviews] = useState([]);
+		return () => {
+			aborted = true;
+			controller.abort();
+		};
+	}, [API_BASE, id]);
 
-  useEffect(() => {
-    const storedId = localStorage.getItem("_id");
-    setFormData((prev) => ({...prev, uid: storedId}));
-    if (id) {
-      fetchInductionDetails();
-    }
-  }, [id]);
+	function isTokenExpired(token) {
+		try {
+			if (!token || typeof token !== "string") return true;
+			const decodedToken = jwtDecode(token);
+			const currentTime = Math.floor(Date.now() / 1000);
+			return Number(decodedToken.exp) < currentTime;
+		} catch (error) {
+			return true;
+		}
+	}
 
-  const fetchInductionDetails = async () => {
-    try {
-      const baseUrl =
-        process.env.NODE_ENV === "production"
-          ? ""
-          : "http://localhost:5000";
-      const response = await fetch(`${baseUrl}/api/users/getinduction/${id}`);
-      if (!response.ok) throw new Error("Failed to fetch induction details");
-      const data = await response.json();
-      setInduction(data);
-      setFormData((prev) => ({
-        ...prev,
-        answers: data.questions.map((q) => ({
-          question: q.question,
-          answer: "",
-        })),
-      }));
-      setLoading(false);
-    } catch (error) {
-      console.error("Error fetching induction details:", error);
-      setLoading(false);
-    }
-  };
+	// Fetch current user data
+	const fetchUser = useCallback(async () => {
+		const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+		if (!token || isTokenExpired(token)) return;
 
-  const handleInputChange = (e, index) => {
-    const {name, value, files} = e.target;
-    if (name === "answer") {
-      const newAnswers = [...formData.answers];
-      newAnswers[index] = {...newAnswers[index], answer: value};
-      setFormData((prev) => ({...prev, answers: newAnswers}));
-    } else if (name === "ppt") {
-      handlePreviewFileInputChange(e);
-      setFiles(files);
-    } else {
-      setFormData((prev) => ({...prev, [name]: value}));
-    }
-  };
+		try {
+			const decoded = jwtDecode(token);
+			const userId = decoded.id;
 
-  const handlePreviewFileInputChange = (event) => {
-    const files = Array.from(event.target.files);
-    const newPreviews = [];
+			const response = await fetch(`${API_BASE}/api/users/${userId}`, {
+				method: "GET",
+				headers: {
+					Authorization: `Bearer ${token}`,
+					"Content-Type": "application/json",
+				},
+			});
 
-    files.forEach((file) => {
-      const reader = new FileReader();
+			if (response.ok) {
+				const data = await response.json();
+				setUser(data.user || data);
+			}
+		} catch (error) {
+			console.error("Error fetching user:", error);
+		}
+	}, [API_BASE]);
 
-      reader.onload = (e) => {
-        if (file.type.startsWith('image/')) {
-          newPreviews.push({type: 'image', src: e.target.result});
-        } else if (file.type === 'application/pdf') {
-          newPreviews.push({type: 'pdf', name: file.name});
-        } else if (file.type.startsWith('video/')) {
-          newPreviews.push({type: 'video', src: URL.createObjectURL(file)});
-        }
+	// Load draft data from backend
+	const loadDraft = useCallback(async () => {
+		const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+		if (!token || isTokenExpired(token)) return;
 
-        if (newPreviews.length === files.length) {
-          setPreviews(newPreviews);
-        }
-      };
+		try {
+			const response = await fetch(`${API_BASE}/api/users/induction-draft/${id}`, {
+				method: "GET",
+				headers: {
+					Authorization: `Bearer ${token}`,
+					"Content-Type": "application/json",
+				},
+			});
 
-      if (file.type.startsWith('image/') || file.type === 'application/pdf') {
-        reader.readAsDataURL(file);
-      } else if (file.type.startsWith('video/')) {
-        reader.readAsArrayBuffer(file);
-      }
-    });
-  };
+			if (response.ok) {
+				const data = await response.json();
+				if (data.success && data.draft) {
+					setFormData(data.draft);
+					setDraftSaved(true);
+				}
+			}
+		} catch (error) {
+			console.error("Error loading draft:", error);
+		}
+	}, [API_BASE, id]);
 
-  const [message, setMessage] = useState("");
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (
-      currentStage == 2 &&
-      !formData.queries &&
-      !formData.team_preference &&
-      !formData.hobbies &&
-      !formData.skills &&
-      !formData.experience &&
-      !formData.expectations
-    ) {
-      _set3rdPass(false);
-      return;
-    } else _set3rdPass(true);
-    setSubmiting(true);
-    try {
-      const accessToken = document.cookie
-        .split("; ")
-        .find((row) => row.startsWith("token="))
-        .split("=")[1];
+	// Save draft data to backend with debouncing
+	const saveDraftToBackend = useCallback(
+		async (formDataToSave) => {
+			const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+			if (!token || isTokenExpired(token)) return;
 
-      const formDataToSubmit = {...formData, In_id: id};
-      const formDataObject = new FormData();
-      Object.keys(formDataToSubmit).forEach((key) => {
-        if (key === "answers") {
-          formDataToSubmit.answers.forEach((answer, index) => {
-            formDataObject.append(
-              `answers[${index}][question]`,
-              answer.question
-            );
-            formDataObject.append(`answers[${index}][answer]`, answer.answer);
-          });
-        } else {
-          formDataObject.append(key, formDataToSubmit[key]);
-        }
-      });
-      Array.from(files).forEach((file) => {
-        formDataObject.append("ppt", file);
-      });
-      const baseUrl =
-        process.env.NODE_ENV === "production"
-          ? ""
-          : "http://localhost:5000";
-      const response = await fetch(`${baseUrl}/api/users/register/${id}`, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-        body: formDataObject,
-      });
-      const message = await response.text();
-      setMessage(message);
-      if (!response.ok) throw new Error("Failed to submit form");
-      setSucess(true);
-      alert("Application submitted successfully!");
-      window.location.href = "/";
-    } catch (error) {
-      setError(true);
-    } finally {
-      setSubmiting(false);
-    }
-  };
+			// Don't save empty form data
+			if (Object.keys(formDataToSave).length === 0) return;
 
-  const nextStage = () => {
-    if (
-      currentStage === 0 &&
-      (!formData.name || formData.name.trim() === '') ||
-      (!formData.email || formData.email.trim() === '') ||
-      (!formData.rollNumber || formData.rollNumber.trim() === '') ||
-      (!formData.branch || formData.branch.trim() === '') ||
-      (!formData.year || formData.year.trim() === '') ||
-      (!formData.phoneNumber || formData.phoneNumber.trim() === '')
-    ) {
-      _set1stPass(false);
-      return;
-    } else _set1stPass(true);
-    if (
-      currentStage == 1 &&
-      formData.answers.some((item) => item.answer === "")
-    ) {
-      _set2ndPass(true); //should be false but here to check for 2Pass input
-      return;
-    } else _set2ndPass(true);
-    setCurrentStage((prev) => Math.min(prev + 1, 2));
-  };
+			setSavingDraft(true);
+			try {
+				const response = await fetch(`${API_BASE}/api/users/induction-draft/save`, {
+					method: "POST",
+					headers: {
+						Authorization: `Bearer ${token}`,
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify({
+						eventId: id,
+						formData: formDataToSave,
+						formType: "induction",
+					}),
+				});
 
-  const prevStage = () => {
-    setCurrentStage((prev) => Math.max(prev - 1, 0));
-  };
+				if (response.ok) {
+					setDraftSaved(true);
+					setTimeout(() => setDraftSaved(false), 2000); // Hide "saved" indicator after 2 seconds
+				}
+			} catch (error) {
+				console.error("Error saving draft:", error);
+			} finally {
+				setSavingDraft(false);
+			}
+		},
+		[API_BASE, id]
+	);
 
-  const handleNext = (e) => {
-    e.preventDefault();
-    nextStage();
-  };
+	// Debounced draft saving
+	const debouncedSaveDraft = useCallback(
+		(formDataToSave) => {
+			if (draftTimeoutRef.current) {
+				clearTimeout(draftTimeoutRef.current);
+			}
 
-  const handlePrevious = (e) => {
-    e.preventDefault();
-    prevStage();
-  };
+			draftTimeoutRef.current = setTimeout(() => {
+				saveDraftToBackend(formDataToSave);
+			}, 1000); // Save 1 second after user stops typing
+		},
+		[saveDraftToBackend]
+	);
 
-  if (loading)
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-blue-500"></div>
-      </div>
-    );
-  if (!induction)
-    return (
-      <div className="text-center text-2xl mt-28 text-gray-200">
-        Induction not found
-      </div>
-    );
+	// Delete draft when form is successfully submitted
+	const deleteDraft = useCallback(async () => {
+		const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+		if (!token || isTokenExpired(token)) return;
 
-  const renderStage = () => {
-    switch (currentStage) {
-      case 0:
-        return (
-          <div className="bg-gray-900 p-6 rounded-lg">
-            {!_1stPass && (
-              <p className="text-sm text-red-500">
-                **Please fill all fields...
-              </p>
-            )}
-            <h2 className="text-2xl font-semibold text-blue-400 mb-4 flex items-center">
-              <FaRocket className="mr-2 text-yellow-500"/>
-              Personal Information
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <input
-                type="text"
-                name="name"
-                placeholder="Full Name"
-                value={formData.name}
-                onChange={handleInputChange}
-                className="w-full p-3 rounded bg-gray-800 text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                required
-              />
-              <input
-                type="email"
-                name="email"
-                placeholder="Email Address"
-                value={formData.email}
-                onChange={handleInputChange}
-                className="w-full p-3 rounded bg-gray-800 text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                required
-              />
-              <input
-                type="text"
-                name="rollNumber"
-                placeholder="Roll Number"
-                value={formData.rollNumber}
-                onChange={handleInputChange}
-                className="w-full p-3 rounded bg-gray-800 text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                required
-              />
-              <input
-                type="text"
-                name="branch"
-                placeholder="Branch"
-                value={formData.branch}
-                onChange={handleInputChange}
-                className="w-full p-3 rounded bg-gray-800 text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                required
-              />
-              <select
-                name="year"
-                value={formData.year}
-                onChange={handleInputChange}
-                className="w-full p-3 rounded bg-gray-800 text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                required
-              >
-                <option value="" disabled>
-                  Year of Study
-                </option>
-                <option value="1st">1st Year</option>
-                <option value="2nd">2nd Year</option>
-                <option value="3rd">3rd Year</option>
-                <option value="4th">4th Year</option>
-              </select>
+		try {
+			await fetch(`${API_BASE}/api/users/induction-draft/${id}`, {
+				method: "DELETE",
+				headers: {
+					Authorization: `Bearer ${token}`,
+					"Content-Type": "application/json",
+				},
+			});
+		} catch (error) {
+			console.error("Error deleting draft:", error);
+		}
+	}, [API_BASE, id]);
 
-              <input
-                type="tel"
-                name="phoneNumber"
-                placeholder="Phone Number"
-                value={formData.phoneNumber}
-                onChange={handleInputChange}
-                className="w-full p-3 rounded bg-gray-800 text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                required
-              />
-            </div>
-          </div>
-        );
-      case 1:
-        return (
-          <div className="bg-gray-900 p-6 rounded-lg">
-            {!_2ndPass && (
-              <p className="text-sm text-red-500">
-                **Please fill all fields...
-              </p>
-            )}
-            <h2 className="text-2xl font-semibold text-green-400 mb-4 flex items-center">
-              <FaBrain className="mr-2 "/>
-              Aeromodelling Questionnaire
-            </h2>
-            {formData.answers.map((answer, index) => (
-              <div key={index} className="space-y-2 mb-6">
-                <label className="block text-gray-300 font-semibold">
-                  {answer.question}
-                </label>
-                <textarea
-                  className="w-full p-3 rounded bg-gray-800 text-gray-200 focus:outline-none focus:ring-2 focus:ring-green-500"
-                  rows="3"
-                  name="answer"
-                  value={answer.answer}
-                  onChange={(e) => handleInputChange(e, index)}
-                  required
-                ></textarea>
-              </div>
-            ))}
-          </div>
-        );
-      case 2:
-        return (
-          <div className="bg-gray-900 p-6 rounded-lg">
-            {!_3rdPass && (
-              <p className="text-sm text-red-500">
-                **Please fill all fields...
-              </p>
-            )}
-            <h2 className="text-2xl font-semibold text-purple-400 mb-4 flex items-center">
-              <FaCogs className="mr-2 text-purple-500"/>
-              Additional Information
-            </h2>
-            <div className="w-full space-y-4">
-              <label className="block text-gray-200 mb-2">
-                Please upload any image, PDF, or video showcasing your skill: (optional)
-              </label>
-              <input
-                type="file"
-                name="ppt"
-                onChange={handleInputChange}
-                className="w-full p-3 rounded bg-gray-800 text-gray-200 focus:outline-none focus:ring-2 focus:ring-purple-500"
-                multiple
-                accept="image/*,application/pdf,video/*"
-              />
-              {previews.length > 0 && (
-                <div className="mt-4 space-y-2">
-                  <h3 className="text-lg font-semibold text-gray-200">File Previews:</h3>
-                  <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                    {previews.map((preview, index) => (
-                      <div key={index} className="border border-gray-600 rounded p-2">
-                        {preview.type === 'image' && (
-                          <img src={preview.src} alt="Preview" className="w-full h-40 object-cover"/>
-                        )}
-                        {preview.type === 'pdf' && (
-                          <div className="flex items-center justify-center h-40 bg-gray-700">
-                            <p className="text-gray-200">{preview.name}</p>
-                          </div>
-                        )}
-                        {preview.type === 'video' && (
-                          <video src={preview.src} controls className="w-full h-40 object-cover"/>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-              <select
-                name="team_preference"
-                value={formData.team_preference}
-                onChange={handleInputChange}
-                className="w-full p-3 rounded bg-gray-800 text-gray-200 focus:outline-none focus:ring-2 focus:ring-purple-500"
-              >
-                <option value="" disabled>
-                  Select Team Preference
-                </option>
-                <option value="Drones">Drones</option>
-                <option value="Rc Planes">RC Planes</option>
-              </select>
+	const getRegistrationStatus = useCallback(async () => {
+		const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+		if (!token || isTokenExpired(token)) return null;
 
-            </div>
-          </div>
-        );
-      default:
-        return null;
-    }
-  };
+		try {
+			const response = await fetch(
+				`${API_BASE}/api/users/induction/${id}/registration-status`,
+				{
+					method: "GET",
+					headers: {
+						Authorization: `Bearer ${token}`,
+						"Content-Type": "application/json",
+					},
+				}
+			);
+			if (response.ok) {
+				const data = await response.json();
 
-  return (
-    <div className="min-h-screen bg-gray-950 text-gray-200 relative overflow-hidden">
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="stars"></div>
-        <div className="twinkling"></div>
-        <div className="clouds"></div>
-      </div>
+				if (data.isRegistered) {
+					router.push(`/inductions/${id}/success`);
+				}
+			}
+		} catch (error) {
+			console.error("Error fetching registration status:", error);
+			return null;
+		}
+		return null;
+	}, [API_BASE, id]);
 
-      <div className="max-w-7xl mx-auto px-4 py-16 relative z-10">
-        <div className="text-center mb-12">
-          <FaPlane className="text-6xl text-blue-500 mx-auto mb-4"/>
-          <h1 className="text-4xl monoton md:text-6xl  text-white mb-2">
-            Aeromodeling&nbsp;&nbsp; Club
-          </h1>
-          <h3 className="text-xl monoton md:text-4xl text-gray-300">
-            Induction &nbsp;&nbsp; Sessions
-          </h3>
-          <h2 className="text-2xl monoton md:text-3xl  text-blue-400 mb-8">
-            NIT&nbsp;&nbsp; Kurukshetra
-          </h2>
-        </div>
+	// Fetch user data on component mount
+	useEffect(() => {
+		getRegistrationStatus();
+		fetchUser();
+	}, [fetchUser]);
 
-        <div className="bg-gray-900 rounded-lg shadow-2xl overflow-hidden border border-blue-500">
-          <div className="p-8">
-            <h1 className="text-4xl  monoton text-blue-400 mb-2 flex items-center">
-              {induction.I_name}
-            </h1>
-            <p className="text-orange-600 text-l mb-8">
-              Soar to New Heights with NIT Kurukshetra!
-            </p>
+	// Load draft after event is loaded
+	useEffect(() => {
+		if (event && !loading) {
+			loadDraft();
+		}
+	}, [event, loading, loadDraft]);
 
-            <form onSubmit={handleSubmit} className="space-y-8">
-              {renderStage()}
-              {(Error || Sucess) && (
-                <Message error={Error} success={Sucess} message={message}/>
-              )}
-              <div className="flex justify-between">
-                {currentStage > 0 && (
-                  <button
-                    type="button"
-                    onClick={handlePrevious}
-                    className="bg-gray-700 m-2 text-gray-200 py-2 px-4 rounded-lg hover:bg-gray-600 transition duration-300 flex items-center"
-                  >
-                    <FaArrowLeft className="mr-2"/>
-                    Previous
-                  </button>
-                )}
-                {currentStage < 2 ? (
-                  <button
-                    type="button"
-                    onClick={handleNext}
-                    className="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-300 flex items-center ml-auto"
-                  >
-                    Next
-                    <FaArrowRight className="ml-2"/>
-                  </button>
-                ) : (
-                  <button
-                    type="submit"
-                    className={`bg-green-600 m-2 text-white py-2 px-4 rounded-lg hover:bg-green-700 transition duration-300 flex items-center ml-auto ${!induction.I_active_status ? "cursor-not-allowed opacity-50" : ""
-                    }`}
-                    disabled={submiting || !induction.I_active_status}
-                  >
-                    {submiting ? (
-                      <div
-                        className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-e-transparent align-[-0.125em] text-surface motion-reduce:animate-[spin_1.5s_linear_infinite] dark:text-white"
-                        role="status"
-                      >
-                        <span
-                          className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">
-                          Loading...
-                        </span>
-                      </div>
-                    ) : (
-                      <FaPlane className="m-2"/>
-                    )}
-                    &nbsp;Submit Application
-                  </button>
-                )}
-              </div>
-            </form>
-          </div>
-        </div>
-        {/* Progress Indicator */}
-        <div className="mt-8 flex justify-center">
-          {[0, 1, 2].map((stage) => (
-            <div
-              key={stage}
-              className={`w-4 h-4 rounded-full mx-2 ${currentStage >= stage ? "bg-blue-500" : "bg-gray-600"
-              }`}
-            ></div>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
+	// Auto-populate email field with user data
+	useEffect(() => {
+		if (user && user.email) {
+			setFormData((prev) => ({
+				...prev,
+				email: user.email,
+			}));
+		}
+	}, [user]);
+
+	// Cleanup timeout on unmount
+	useEffect(() => {
+		return () => {
+			if (draftTimeoutRef.current) {
+				clearTimeout(draftTimeoutRef.current);
+			}
+		};
+	}, []);
+
+	const registrationOpen = event?.active_status ?? true;
+
+	// Helper function to check if field is auto-filled
+	const isAutoFilledField = (formField) => {
+		const fieldKey = formField.key;
+		return fieldKey === "email";
+	};
+
+	// Group form fields for half-width layout
+	const groupedFields = useMemo(() => {
+		const grouped = [];
+		let currentGroup = [];
+
+		formFields.forEach((field, index) => {
+			if (field.space === "half") {
+				currentGroup.push({ ...field, originalIndex: index });
+
+				// If we have 2 half-width fields or this is the last field, create a group
+				if (currentGroup.length === 2 || index === formFields.length - 1) {
+					grouped.push({ type: "half-group", fields: currentGroup });
+					currentGroup = [];
+				}
+			} else {
+				// If we have pending half-width fields, close the group first
+				if (currentGroup.length > 0) {
+					grouped.push({ type: "half-group", fields: currentGroup });
+					currentGroup = [];
+				}
+				// Add full-width field
+				grouped.push({ type: "full", field: { ...field, originalIndex: index } });
+			}
+		});
+
+		return grouped;
+	}, []);
+
+	const renderFormField = (formField) => {
+		const fieldKey = formField.key;
+		const isEmailField = fieldKey === "email";
+
+		if (formField.type === "short") {
+			return (
+				<div className="relative">
+					<input
+						type={isEmailField ? "email" : fieldKey === "phone" ? "tel" : "text"}
+						value={formData[fieldKey] || ""}
+						onChange={(e) => handleInputChange(fieldKey, e.target.value)}
+						disabled={isEmailField}
+						className={`w-full px-4 py-2 bg-gray-800 border border-none rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+							isEmailField ? "bg-gray-700 cursor-not-allowed text-white/50" : ""
+						}`}
+						placeholder={
+							isEmailField ? "Auto-filled from your profile" : "Enter your answer..."
+						}
+						required
+					/>
+					{isEmailField && (
+						<div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+							<svg
+								className="w-4 h-4 text-green-400"
+								fill="currentColor"
+								viewBox="0 0 20 20"
+							>
+								<path
+									fillRule="evenodd"
+									d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+									clipRule="evenodd"
+								/>
+							</svg>
+						</div>
+					)}
+				</div>
+			);
+		} else if (formField.type === "long") {
+			return (
+				<textarea
+					value={formData[fieldKey] || ""}
+					onChange={(e) => handleInputChange(fieldKey, e.target.value)}
+					rows={4}
+					className="w-full px-4 py-2 bg-gray-800 border border-none rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-vertical"
+					placeholder="Enter your answer..."
+					required
+				/>
+			);
+		} else if (formField.type === "option") {
+			return (
+				<div className="space-y-3">
+					{(formField.options || []).map((option, optionIndex) => (
+						<label key={optionIndex} className="flex items-center cursor-pointer">
+							<input
+								type="radio"
+								name={`question-${fieldKey}`}
+								value={option}
+								checked={formData[fieldKey] === option}
+								onChange={(e) => handleInputChange(fieldKey, e.target.value)}
+								className="w-4 h-4 text-blue-600 bg-gray-800 border-gray-600 cursor-pointer outline-none"
+								required
+							/>
+							<span className="ml-3 text-gray-200">{option}</span>
+						</label>
+					))}
+				</div>
+			);
+		} else if (formField.type === "file") {
+			return (
+				<div className="space-y-2">
+					<input
+						type="file"
+						onChange={(e) => handleInputChange(fieldKey, e.target.files[0])}
+						className="w-full px-4 py-2 bg-gray-800 border border-none rounded-lg text-white file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-500 file:cursor-pointer"
+						required
+					/>
+					{formData[fieldKey] && (
+						<div className="text-sm text-gray-400">
+							{formData[fieldKey] instanceof File ? (
+								<p>Selected: {formData[fieldKey].name}</p>
+							) : typeof formData[fieldKey] === "string" &&
+							  formData[fieldKey].startsWith("data:") ? (
+								<div>
+									<p>Draft saved with file</p>
+									{formData[fieldKey].startsWith("data:image/") && (
+										<img
+											src={formData[fieldKey]}
+											alt="Preview"
+											className="mt-2 max-w-32 max-h-32 object-cover rounded border border-gray-600"
+										/>
+									)}
+								</div>
+							) : (
+								<p>File selected</p>
+							)}
+						</div>
+					)}
+				</div>
+			);
+		} else {
+			return <p className="text-red-400">Unsupported field type: {formField.type}</p>;
+		}
+	};
+
+	const handleInputChange = async (fieldKey, value) => {
+		console.log(fieldKey, value);
+
+		let processedValue = value;
+
+		// If it's a file, convert to data URI for draft saving
+		if (value && value instanceof File) {
+			try {
+				processedValue = await new Promise((resolve, reject) => {
+					const reader = new FileReader();
+					reader.onload = () => resolve(reader.result);
+					reader.onerror = reject;
+					reader.readAsDataURL(value);
+				});
+			} catch (error) {
+				console.error("Error converting file to data URI:", error);
+				processedValue = value; // Keep original file object if conversion fails
+			}
+		}
+		setFormData({
+			...formData,
+			[fieldKey]: value, // Keep original file object in state for form operations
+		});
+
+		// Auto-save draft with processed value (data URI for files)
+		const draftData = {
+			...formData,
+			[fieldKey]: processedValue,
+		};
+		debouncedSaveDraft(draftData);
+	};
+
+	const handleSubmit = async (e) => {
+		e.preventDefault();
+
+		const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+		const expired = isTokenExpired(token);
+		if (!token || expired) {
+			alert(!token ? "Please log in to register." : "Session expired — please log in again.");
+			router.push("/login");
+			return;
+		}
+
+		if (!registrationOpen) {
+			alert("Registration is closed for this induction.");
+			return;
+		}
+
+		// Validate form
+		const missingAnswers = formFields.some((field) => {
+			const value = formData[field.key];
+			console.log(field.key, value);
+			if (field.type === "file") {
+				// Accept both File objects and data URI strings
+				return (
+					!value ||
+					(!(value instanceof File) &&
+						!(typeof value === "string" && value.startsWith("data:")))
+				);
+			}
+			return !value || (typeof value === "string" && !value.trim());
+		});
+
+		if (missingAnswers) {
+			alert("Please fill in all required fields.");
+			return;
+		}
+
+		setSubmitting(true);
+		try {
+			// Prepare form data with file conversion to data URI
+			const formDataToSubmit = {};
+
+			// Process all form fields
+			for (const field of formFields) {
+				const value = formData[field.key];
+				if (field.type === "file" && value) {
+					// Convert file to data URI
+					const dataUri = await new Promise((resolve, reject) => {
+						const reader = new FileReader();
+						reader.onload = () => resolve(reader.result);
+						reader.onerror = reject;
+						reader.readAsDataURL(value);
+					});
+					formDataToSubmit[field.key] = dataUri;
+				} else if (value) {
+					formDataToSubmit[field.key] = value;
+				}
+			}
+
+			const response = await fetch(`${API_BASE}/api/users/induction/${id}/register`, {
+				method: "POST",
+				headers: {
+					Authorization: `Bearer ${token}`,
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify(formDataToSubmit),
+			});
+
+			if (response.status === 413) {
+				alert(
+					"Maximum size exceeded for file upload. Please reduce file size and try again. (Limit: 10MB)"
+				);
+				setSubmitting(false);
+				return;
+			}
+
+			const data = await response.json();
+
+			if (response.ok && data.success) {
+				// Delete draft after successful submission
+				await deleteDraft();
+
+				// Store registration data for the success page
+				const registrationData = {
+					success: true,
+					eventName: data.registrationData?.event_name || event?.E_name,
+					userName: data.registrationData?.user_name,
+					userEmail: data.registrationData?.user_email,
+					registrationDate: data.registrationData?.registration_date,
+					registrationId: data.registrationId,
+				};
+
+				if (typeof window !== "undefined") {
+					sessionStorage.setItem(
+						"inductionRegistrationSuccess",
+						JSON.stringify(registrationData)
+					);
+				}
+
+				router.push(`/inductions/${id}/success`);
+			} else {
+				throw new Error(data.error || "Registration failed");
+			}
+		} catch (error) {
+			console.error("Registration error:", error);
+			alert(`Registration failed: ${error.message}`);
+		} finally {
+			setSubmitting(false);
+		}
+	};
+
+	if (loading) {
+		return (
+			<div className="min-h-screen flex items-center justify-center bg-gray-900 text-gray-100">
+				<p>Loading induction...</p>
+			</div>
+		);
+	}
+
+	if (error) {
+		return (
+			<div className="min-h-screen flex items-center justify-center bg-gray-900 text-red-400">
+				<p>Error: {error}</p>
+			</div>
+		);
+	}
+
+	return (
+		<div className="min-h-screen bg-gray-900 text-gray-100 p-6">
+			<div className="max-w-4xl my-[100px] mx-auto bg-black bg-opacity-60 rounded-xl shadow-xl overflow-hidden">
+				<div className="w-full">
+					<img
+						src={event?.I_banner_img}
+						alt={event?.E_name}
+						className="w-full h-64 object-cover"
+					/>
+				</div>
+				<div className="p-6 space-y-6">
+					<div className="text-center">
+						<h1 className="text-3xl font-bold text-blue-200 mb-2">
+							Register for {event?.E_name}
+						</h1>
+						<p className="text-gray-300">
+							Please fill out the form below to register for inductions.
+						</p>
+
+						{/* Draft Status Indicator */}
+						<div className="mt-3 flex justify-center items-center gap-2">
+							{savingDraft && (
+								<div className="flex items-center gap-2 text-yellow-400 text-sm">
+									<div className="animate-spin h-3 w-3 border border-yellow-400 border-t-transparent rounded-full"></div>
+									<span>Saving draft...</span>
+								</div>
+							)}
+							{draftSaved && !savingDraft && (
+								<div className="flex items-center gap-2 text-green-400 text-sm">
+									<svg
+										className="h-3 w-3"
+										fill="currentColor"
+										viewBox="0 0 20 20"
+									>
+										<path
+											fillRule="evenodd"
+											d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+											clipRule="evenodd"
+										/>
+									</svg>
+									<span>Draft saved</span>
+								</div>
+							)}
+						</div>
+					</div>
+
+					<form onSubmit={handleSubmit} className="space-y-6">
+						{/* Dynamic Form Fields */}
+						{groupedFields.map((group, groupIndex) => {
+							if (group.type === "half-group") {
+								return (
+									<div
+										key={`group-${groupIndex}`}
+										className="grid grid-cols-1 md:grid-cols-2 gap-4"
+									>
+										{group.fields.map((formField) => (
+											<div key={formField.key} className="space-y-2">
+												<label className="block text-sm font-medium text-gray-200">
+													{formField.question}
+													<span className="text-red-400 ml-1">*</span>
+												</label>
+												{renderFormField(formField)}
+											</div>
+										))}
+									</div>
+								);
+							} else {
+								const formField = group.field;
+								return (
+									<div key={formField.key} className="space-y-2">
+										<label className="block text-sm font-medium text-gray-200">
+											{formField.question}
+											<span className="text-red-400 ml-1">*</span>
+											{isAutoFilledField(formField) && (
+												<span className="ml-2 text-xs text-green-400 font-normal">
+													(Auto-filled from profile)
+												</span>
+											)}
+										</label>
+										{renderFormField(formField)}
+									</div>
+								);
+							}
+						})}
+
+						{/* Submit Button */}
+						<div className="flex items-center gap-4 pt-4">
+							<motion.button
+								type="submit"
+								disabled={!registrationOpen || submitting}
+								className="bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-2 px-6 rounded-lg shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
+								whileHover={{ scale: registrationOpen && !submitting ? 1.02 : 1 }}
+								whileTap={{ scale: registrationOpen && !submitting ? 0.98 : 1 }}
+							>
+								{submitting
+									? "Submitting..."
+									: registrationOpen
+									? "Submit Registration"
+									: "Registration Closed"}
+							</motion.button>
+
+							<button
+								type="button"
+								onClick={() => router.push(`/inductions/${id}`)}
+								className="bg-gray-700 hover:bg-gray-600 text-white font-medium py-2 px-4 rounded-lg"
+							>
+								Back to Details
+							</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	);
 };
 
-export default InductionForm;
+export default InductionRegistrationPage;

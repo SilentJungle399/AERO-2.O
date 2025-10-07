@@ -10,6 +10,9 @@ const {
 	getInductionforSelections,
 	sendNotification,
 	fetchInductie,
+	registerForInduction,
+	getInductionRegistrationStatus,
+	exportInductionRegistrationsToSheets,
 } = require("../controllers/InductionController");
 const {
 	create_meet,
@@ -116,6 +119,26 @@ userRoutes.post(
 	galleryUploadMiddleware,
 	sendNotification
 );
+
+// New Induction Registration Routes
+userRoutes.post(
+	"/induction/:id/register",
+	authMiddleware(["admin", "user", "member"]),
+	registerForInduction
+);
+userRoutes.get(
+	"/induction/:id/registration-status",
+	authMiddleware(["admin", "user", "member"]),
+	getInductionRegistrationStatus
+);
+
+// Induction Export Routes (Admin only)
+userRoutes.post(
+	"/induction/:id/export-to-sheets",
+	authMiddleware(["admin"]),
+	exportInductionRegistrationsToSheets
+);
+
 userRoutes.post("/contactus");
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -364,6 +387,20 @@ userRoutes.get("/order/getorders", authMiddleware(["admin"]), getOrders);
 userRoutes.post("/draft/save", saveDraft);
 userRoutes.get("/draft/:eventId", getDraft);
 userRoutes.delete("/draft/:eventId", deleteDraft);
+
+// Induction Draft Routes (separate from workshop drafts)
+userRoutes.post("/induction-draft/save", (req, res) => {
+	req.body.formType = "induction";
+	saveDraft(req, res);
+});
+userRoutes.get("/induction-draft/:eventId", (req, res) => {
+	req.query.formType = "induction";
+	getDraft(req, res);
+});
+userRoutes.delete("/induction-draft/:eventId", (req, res) => {
+	req.query.formType = "induction";
+	deleteDraft(req, res);
+});
 
 // Workshop Registration Routes
 userRoutes.post("/workshop/:eventId/register", submitRegistration);
